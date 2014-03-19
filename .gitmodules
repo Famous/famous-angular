@@ -19,8 +19,14 @@
 [submodule "app/scripts/famous/transitions"]
 	path = app/scripts/famous/transitions
 	url = git@github.com:Famous/famous-transitions.git
+[submodule "app/scripts/famous-transitions"]
+	path = app/scripts/famous-transitions
+	url = git@github.com:Famous/famous-transitions.git
 [submodule "app/scripts/famous/utilities"]
 	path = app/scripts/famous/utilities
+	url = git@github.com:Famous/famous-utilities.git
+[submodule "app/scripts/famous-utilities"]
+	path = app/scripts/famous-utilities
 	url = git@github.com:Famous/famous-utilities.git
 [submodule "app/scripts/famous/views"]
 	path = app/scripts/famous/views
