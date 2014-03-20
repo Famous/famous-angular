@@ -1,20 +1,49 @@
 'use strict';
 
-
+var requirements = [
+  "famous/core/Engine",
+  "famous/core/Surface"
+]
 
 require.config({
   baseUrl: 'scripts'
 })
 
-require([
-    "famous/core/Engine",
-    "famous/core/Surface"
-  ], function(famousCoreEngine, famousCoreSurface){
-    alert('loaded!');
+//declare the module before the async callback so that
+//it will be accessible to other synchronously loaded angular
+//components
+var ngFameApp = angular.module('famous-angular', []);
+
+require(requirements, function(/*args*/){
     //TODO:  give the context and the angular app separate divs to do their things
-    //TODO:  write an angular provider that can accept all of these famous modules
-    //       and store them away for future use by other app components
-    angular.module('ngFame', []);
-    //angular.bootstrap(document, ['ngFame'])
-    var context = famousCoreEngine.createContext();
+
+    //capture 'arguments' in a variable that will exist in
+    //child scopes
+    var required = arguments;
+    
+    //Declare this provider inside this file to avoid needing to deal with
+    //AMD on any other angular files.  Alternative would be to
+    //wrap other angular components in define() blocks (not the end of the world)
+    ngFameApp.provider('famous', function () {
+      // hash for storing modules
+      var _modules = {};
+
+      this.registerModule = function (key, module) {
+        _modules[key] = module;
+      };
+
+      // Method that gets called when the 'famous'
+      // service is injected in the normal course of the app
+      this.$get = function () {
+        return _modules;
+      };
+    });
+
+    ngFameApp.config(function(famousProvider){
+      for(var i = 0; i < requirements.length; i++)
+        famousProvider.registerModule(requirements[i], required[i]);
+    });
+
+    angular.bootstrap(document, ['famous-angular'])
+    var context = arguments[0].createContext();
   })
