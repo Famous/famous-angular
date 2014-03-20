@@ -1,15 +1,20 @@
 'use strict';
 
-//angular.module('ngFameApp', []);
+
 
 require.config({
   baseUrl: 'scripts'
 })
 
-define(function(require, exports, module) {
-  alert('loaded');
-  var Engine = require('famous/core/Engine');
-  var Surface = require('famous/core/Surface');
-
-	var mainContext = Engine.createContext();
-});
+require([
+    "famous/core/Engine",
+    "famous/core/Surface"
+  ], function(famousCoreEngine, famousCoreSurface){
+    alert('loaded!');
+    //TODO:  give the context and the angular app separate divs to do their things
+    //TODO:  write an angular provider that can accept all of these famous modules
+    //       and store them away for future use by other app components
+    angular.module('ngFame', []);
+    //angular.bootstrap(document, ['ngFame'])
+    var context = famousCoreEngine.createContext();
+  })
