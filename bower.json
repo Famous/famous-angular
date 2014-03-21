@@ -1,5 +1,5 @@
 {
-  "name": "ng-fame",
+  "name": "integration",
   "version": "0.0.0",
   "dependencies": {
     "angular": "1.2.6",

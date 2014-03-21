@@ -1,10 +1,7 @@
 'use strict';
 
-angular.module('ngFameApp')
-  .controller('MainCtrl', function ($scope) {
-    $scope.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
+angular.module('integrationApp')
+  .controller('MainCtrl', function ($scope, famous) {
+    var Engine = famous['famous/core/Engine'];
+    $scope.context = Engine.createContext();
   });

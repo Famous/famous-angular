@@ -25,6 +25,25 @@ module.exports = function (grunt) {
       dist: 'dist'
     },
 
+    'sails-linker': {
+      defaultOptions: {
+        options: {
+          startTag: '<!--SCRIPTS-->',
+          endTag: '<!--SCRIPTS END-->',
+          fileTmpl: '<script src="%s"></script>',
+          appRoot: 'app/'
+        },
+        files: {
+          // Target-specific file lists and/or options go here.
+          'app/index.html': ['app/scripts/**/*.js',
+            '!app/scripts/famous.angular.js',
+            '!app/scripts/famous/**/*.js',
+            '!app/scripts/famous-utilities/**/*.js',
+            '!app/scripts/famous-transitions/**/*.js']
+        },
+      },
+    },
+
     // Watches files for changes and runs tasks based on the changed files
     watch: {
       js: {

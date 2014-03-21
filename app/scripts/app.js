@@ -1,4 +1,5 @@
+angular.module('integrationApp',['famous.angular']);
+
 window.famousAngularBootstrap = function(){
-  angular.module('integrationApp',['famous-angular'])
-  var context = arguments[0].createContext();
+  angular.bootstrap(document, ['integrationApp']);
 } 

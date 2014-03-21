@@ -9,7 +9,7 @@ var requirements = [
 //declare the module before the async callback so that
 //it will be accessible to other synchronously loaded angular
 //components
-var ngFameApp = angular.module('famous-angular', []);
+var ngFameApp = angular.module('famous.angular', []);
 
 require(requirements, function(/*args*/){
     //TODO:  give the context and the angular app separate divs to do their things
