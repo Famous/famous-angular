@@ -5,9 +5,9 @@ angular.module('integrationApp')
     return {
       controller: function($scope){
         $scope.surfaceType = "surface";
-        var types = ['cat', 'mermaid', 'whale', 'rock', 'surface'];
+        $scope.types = ['cat', 'mermaid', 'whale', 'rock', 'surface', 'shark', 'kangaroo'];
         setInterval(function(){
-            $scope.surfaceType = types[Math.floor(types.length * Math.random())];
+            $scope.surfaceType = $scope.types[Math.floor($scope.types.length * Math.random())];
             if(!$scope.$$phase)
               $scope.$apply();
           }, 1000)
@@ -28,9 +28,10 @@ angular.module('integrationApp')
             scope.updateContent = function(){
               console.log('updateContent');
               //TODO:   There may be a more efficient way to do this than to 
-              //        $interpolate and then string-compare
+              //        $interpolate and then string-compare.  Is there a way to
+              //        anchor-link a div directly, for example?
               var prospectiveContent = $interpolate(element.html())(scope);
-              if(scope.currentContent !== prospectiveContent){
+              if(scope.currentContent !== prospectiveContent){ //this is a potentially large string-compare
                 console.log('updating famous surface');
                 scope.currentContent = prospectiveContent;
                 scope.surface.setContent(prospectiveContent);
