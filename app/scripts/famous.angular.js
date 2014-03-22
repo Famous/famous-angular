@@ -1,8 +1,13 @@
 'use strict';
 
 var requirements = [
-  "famous/core/Engine",
-  "famous/core/Surface"
+  "famous/core/engine",
+  "famous/core/surface",
+  "famous/core/view",
+  "famous/core/modifier",
+  "famous/core/transform",
+  "famous/input/genericsync",
+  "famous/transitions/transitionable"
 ]
 
 
