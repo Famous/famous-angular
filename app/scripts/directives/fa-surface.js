@@ -7,10 +7,10 @@ angular.module('integrationApp')
         $scope.surfaceType = "surface";
         var types = ['cat', 'mermaid', 'whale', 'rock', 'surface'];
         setInterval(function(){
-          $scope.surfaceType = types[Math.floor(types.length * Math.random())];
-          if(!$scope.$$phase)
-            $scope.$apply();
-        }, 1000)
+            $scope.surfaceType = types[Math.floor(types.length * Math.random())];
+            if(!$scope.$$phase)
+              $scope.$apply();
+          }, 1000)
       },
       compile: function(scope){
         console.log('compiling surface');
@@ -26,21 +26,23 @@ angular.module('integrationApp')
           },
           post: function(scope, element, attrs){
             scope.updateContent = function(){
+              console.log('updateContent');
+              //TODO:   this is getting fired on every digest.
+              //        Every time it fires, it triggers a repaint in famo.us
+              //        Should only setContent if the new content is different from
+              //        the old content.  Implement that.
               scope.surface.setContent($interpolate(element.html())(scope));
-              console.log('post digest');
-              // scope.$evalAsync(function(){
-              //   scope.$$postDigest(scope.updateContent);
-              // });
             };
 
-            //ugly as fuck. performance will probably suck for surfaces with
-            //complex content, as this is both interpolating and then running
-            //string equality.  Is there a way to hook into $$postDigest?
-            //scope.$$postDigest(scope.updateContent);
-            scope.$watch(function(){return $interpolate(element.html())(scope);}, scope.updateContent);
-            
-            console.log('surf post');
-            console.log(scope.$parent);
+            //listener-free scope.$watch will fire any time a $digest occurs
+            scope.$watch(function(old, n){
+              console.log('old',old);
+              console.log('new',n);
+              scope.updateContent();
+            })
+
+            scope.updateContent();
+
             scope.$parent.view._add(scope.surface);
           }
         }

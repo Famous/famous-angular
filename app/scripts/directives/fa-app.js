@@ -11,8 +11,6 @@ angular.module('integrationApp')
         return {
           pre: function(scope, element, attrs){
             var View = famous['famous/core/view'];
-            console.log('app pre');
-            console.log('app post');
             element.append('<div class="famous-angular-container" style="height: 400px;"></div>');
             var famousContainer = $(element.find('.famous-angular-container'))[0];
             var Engine = famous['famous/core/engine'];
