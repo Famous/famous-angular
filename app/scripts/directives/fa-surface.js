@@ -27,17 +27,18 @@ angular.module('integrationApp')
           post: function(scope, element, attrs){
             scope.updateContent = function(){
               console.log('updateContent');
-              //TODO:   this is getting fired on every digest.
-              //        Every time it fires, it triggers a repaint in famo.us
-              //        Should only setContent if the new content is different from
-              //        the old content.  Implement that.
-              scope.surface.setContent($interpolate(element.html())(scope));
+              //TODO:   There may be a more efficient way to do this than to 
+              //        $interpolate and then string-compare
+              var prospectiveContent = $interpolate(element.html())(scope);
+              if(scope.currentContent !== prospectiveContent){
+                console.log('updating famous surface');
+                scope.currentContent = prospectiveContent;
+                scope.surface.setContent(prospectiveContent);
+              }
             };
 
             //listener-free scope.$watch will fire any time a $digest occurs
             scope.$watch(function(old, n){
-              console.log('old',old);
-              console.log('new',n);
               scope.updateContent();
             })
 
