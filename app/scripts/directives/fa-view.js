@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('integrationApp')
-  .directive('faApp', ["famous", function (famous) {
+  .directive('faView', ["famous", function (famous) {
     return {
-      template: '<div style="display: none;" ng-transclude></div>',
+      template: '<div></div>',
       transclude: true,
       restrict: 'EA',
       compile: function(tElement, tAttrs, transclude){
@@ -13,23 +13,18 @@ angular.module('integrationApp')
             var View = famous['famous/core/view'];
             //TODO:  add custom classes from attrs (or just pass through all attrs?) to
             //       the container element.
-            element.append('<div class="famous-angular-container"></div>');
-            var famousContainer = $(element.find('.famous-angular-container'))[0];
-            var Engine = famous['famous/core/engine'];
-            scope.context = Engine.createContext(famousContainer);
 
-            function AppView(){
+            function FaView(){
               View.apply(this, arguments);
             }
 
-            AppView.prototype = Object.create(View.prototype);
-            AppView.prototype.constructor = AppView;
+            FaView.prototype = Object.create(View.prototype);
+            FaView.prototype.constructor = FaView;
 
-            scope.view = new AppView();
+            scope.view = new FaView();
             scope.context.add(scope.view);
 
             scope.$on('registerChild', function(evt, data){
-              // console.log('view', scope.view)
               if(data.mod && data.view){
                 scope.view._add(data.mod).add(data.view);
               }else if(data.view){
@@ -39,7 +34,10 @@ angular.module('integrationApp')
             })
           },
           post: function(scope, element, attrs){
-            
+            scope.$emit('registerChild', {view: scope.surface, mod: scope.modifier});
+            transclude(scope, function(clone) {
+              element.find('div').append(clone);
+            });
           }
         }
       }

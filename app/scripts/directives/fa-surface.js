@@ -60,7 +60,7 @@ angular.module('integrationApp')
 
             scope.updateContent();
 
-            scope.$emit('registerChild', {surf: scope.surface, mod: scope.modifier});
+            scope.$emit('registerChild', {view: scope.surface, mod: scope.modifier});
 
             transclude(scope, function(clone) {
               element.find('div').append(clone);
