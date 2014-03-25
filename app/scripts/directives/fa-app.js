@@ -3,7 +3,7 @@
 angular.module('integrationApp')
   .directive('faApp', ["famous", function (famous) {
     return {
-      template: '<div style="display: none;"></div>',
+      template: '<div style="display: none;"><div></div></div>',
       transclude: true,
       restrict: 'EA',
       scope: true,
@@ -44,7 +44,7 @@ angular.module('integrationApp')
           },
           post: function(scope, element, attrs){
             transclude(scope, function(clone) {
-              element.find('div').append(clone);
+              element.find('div div').append(clone);
             });
           }
         }
