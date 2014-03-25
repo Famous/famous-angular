@@ -6,7 +6,6 @@ angular.module('integrationApp')
       template: '<div></div>',
       transclude: true,
       restrict: 'EA',
-      scope: true,
       compile: function(tElement, tAttrs, transclude){
         console.log('compiling app');
         return {
@@ -23,6 +22,17 @@ angular.module('integrationApp')
             FaView.prototype.constructor = FaView;
 
             scope.view = new FaView();
+
+            var properties = {
+                backgroundColor: scope["faBackgroundColor"],
+            };
+            var modifiers = {
+               origin: scope["faOrigin"],
+               transform: scope["faTranslate"] ? 
+                  famous['famous/core/transform'].translate.apply(this, scope["faTranslate"]) :
+                  undefined,
+            };
+            scope.modifier = new famous['famous/core/modifier'](modifiers);
 
             scope.$on('registerChild', function(evt, data){
               if(evt.targetScope.$$id != scope.$$id){
@@ -44,6 +54,9 @@ angular.module('integrationApp')
             scope.$emit('registerChild', {view: scope.view, mod: scope.modifier});
           }
         }
+      },
+      scope: {
+               "faTranslate": '=',
       }
     };
   }]);
