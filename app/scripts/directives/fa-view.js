@@ -25,18 +25,22 @@ angular.module('integrationApp')
             scope.view = new FaView();
 
             scope.$on('registerChild', function(evt, data){
-              if(data.mod && data.view){
-                scope.view._add(data.mod).add(data.view);
-              }else if(data.view){
-                scope.view._add(data.view);
+              if(evt.targetScope.$$id != scope.$$id){
+                console.log('app regchild', evt);
+                if(data.mod && data.view){
+                  scope.view._add(data.mod).add(data.view);
+                }else if(data.view){
+                  scope.view._add(data.view);
+                }
+                evt.stopPropagation();
               }
-              evt.stopPropagation();
             })
           },
           post: function(scope, element, attrs){
             transclude(scope, function(clone) {
               element.find('div').append(clone);
             });
+            console.log('emitting register', scope)
             scope.$emit('registerChild', {view: scope.view, mod: scope.modifier});
           }
         }
