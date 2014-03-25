@@ -34,10 +34,10 @@ angular.module('integrationApp')
             })
           },
           post: function(scope, element, attrs){
-            scope.$emit('registerChild', {view: scope.view, mod: scope.modifier});
+            transclude(scope, function(clone) {
               element.find('div').append(clone);
             });
-            transclude(scope, function(clone) {
+            scope.$emit('registerChild', {view: scope.view, mod: scope.modifier});
           }
         }
       }
