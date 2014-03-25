@@ -31,6 +31,7 @@ angular.module('integrationApp')
 
 
             scope.$on('registerChild', function(evt, data){
+              console.log("app registered", data);
               if(data.mod && data.view){
                 scope.view._add(data.mod).add(data.view);
               }else if(data.view){

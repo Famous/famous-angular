@@ -34,15 +34,25 @@ angular.module('integrationApp')
             };
             scope.modifier = new famous['famous/core/modifier'](modifiers);
 
+            var Transform = famous['famous/core/transform']
+
+            window.right = function() {
+              scope.modifier.setTransform(Transform.translate(100, 0, 0), {
+                            duration: 300,
+                            curve: 'easeOut'
+              });
+            };
+
             scope.$on('registerChild', function(evt, data){
-              console.log('event',evt);
-              if(evt.currentScope.$$id != scope.$$id){
-                console.log('app regchild', evt);
+              console.log('view saw', data);
+              if(evt.targetScope.$id != scope.$id){
+                console.log('view registered', data);
                 if(data.mod && data.view){
                   scope.view._add(data.mod).add(data.view);
                 }else if(data.view){
                   scope.view._add(data.view);
                 }
+                console.log("stopping propagation");
                 evt.stopPropagation();
               }
             })
@@ -51,7 +61,6 @@ angular.module('integrationApp')
             transclude(scope, function(clone) {
               element.find('div').append(clone);
             });
-            console.log('emitting register', scope)
             scope.$emit('registerChild', {view: scope.view, mod: scope.modifier});
           }
         }
