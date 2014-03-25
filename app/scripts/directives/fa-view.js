@@ -6,6 +6,11 @@ angular.module('integrationApp')
       template: '<div></div>',
       transclude: true,
       restrict: 'EA',
+      controller: function($scope) {
+
+        $scope.angle = -Math.PI / 6;
+
+      },
       compile: function(tElement, tAttrs, transclude){
         console.log('compiling app');
         return {
@@ -26,18 +31,27 @@ angular.module('integrationApp')
             var properties = {
                 backgroundColor: scope["faBackgroundColor"],
             };
+
+            var getTransform = function() {
+              var Transform = famous['famous/core/transform']
+              if (scope["faTranslate"])
+                return Transform.translate.apply(this, scope["faTranslate"]);
+              if (scope["faRotateZ"])
+                return Transform.rotateZ(scope["faRotateZ"]);
+
+            };
+
+
             var modifiers = {
                origin: scope["faOrigin"],
-               transform: scope["faTranslate"] ? 
-                  famous['famous/core/transform'].translate.apply(this, scope["faTranslate"]) :
-                  undefined,
+               transform: getTransform()
             };
             scope.modifier = new famous['famous/core/modifier'](modifiers);
 
             var Transform = famous['famous/core/transform']
 
             window.right = function() {
-              scope.modifier.setTransform(Transform.translate(100, 0, 0), {
+              scope.modifier.setTransform(Transform.translate(276, 0, 0), {
                             duration: 300,
                             curve: 'easeOut'
               });
@@ -67,6 +81,7 @@ angular.module('integrationApp')
       },
       scope: {
                "faTranslate": '=',
+               "faRotateZ": '='
       }
     };
   }]);

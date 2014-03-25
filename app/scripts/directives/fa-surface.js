@@ -11,11 +11,20 @@ angular.module('integrationApp')
             var properties = {
                 backgroundColor: scope["faBackgroundColor"],
             };
+
+            var getTransform = function() {
+              var Transform = famous['famous/core/transform']
+              if (scope["faTranslate"])
+                return Transform.translate.apply(this, scope["faTranslate"]);
+              if (scope["faRotateZ"])
+                return Transform.rotateZ(scope["faRotateZ"]);
+
+            };
+
+
             var modifiers = {
                origin: scope["faOrigin"],
-               transform: scope["faTranslate"] ? 
-                  famous['famous/core/transform'].translate.apply(this, scope["faTranslate"]) :
-                  undefined,
+               transform: getTransform()
             };
             // console.log('surf pre', scope["faSize"], properties, modifiers);
             scope.surface = new famous['famous/core/surface']({
@@ -62,6 +71,7 @@ angular.module('integrationApp')
                "faOrigin": '=',
                "faBackgroundColor": '=',
                "faTranslate": '=',
+               "faRotateZ": '='
              },
       transclude: true,
       template: '<div></div>',
