@@ -25,6 +25,7 @@ angular.module('integrationApp')
             scope.modifier = new famous['famous/core/modifier'](modifiers);
           },
           post: function(scope, element, attrs){
+            console.log('surface post');
             scope.updateContent = function(){
               //TODO:   There may be a more efficient way to do this than to 
               //        $interpolate and then string-compare.  Is there a way to
@@ -48,9 +49,7 @@ angular.module('integrationApp')
             scope.$watch(function(){
               scope.updateContent();
             })
-
             scope.updateContent();
-
 
             transclude(scope, function(clone) {
               element.find('div').append(clone);

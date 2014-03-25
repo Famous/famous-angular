@@ -3,9 +3,10 @@
 angular.module('integrationApp')
   .directive('faApp', ["famous", function (famous) {
     return {
-      template: '<div style="display: none;" ng-transclude></div>',
+      template: '<div style="display: none;"></div>',
       transclude: true,
       restrict: 'EA',
+      scope: true,
       compile: function(tElement, tAttrs, transclude){
         console.log('compiling app');
         return {
@@ -28,6 +29,8 @@ angular.module('integrationApp')
             scope.view = new AppView();
             scope.context.add(scope.view);
 
+            console.log('app pre');
+
             scope.$on('registerChild', function(evt, data){
               // console.log('view', scope.view)
               console.log('app regchild', data);
@@ -40,7 +43,9 @@ angular.module('integrationApp')
             })
           },
           post: function(scope, element, attrs){
-            
+            transclude(scope, function(clone) {
+              element.find('div').append(clone);
+            });
           }
         }
       }
