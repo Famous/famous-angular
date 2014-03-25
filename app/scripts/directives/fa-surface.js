@@ -11,19 +11,23 @@ angular.module('integrationApp')
             if(!$scope.$$phase)
               $scope.$apply();
           }, 1000)
+
       },
       compile: function(scope){
         console.log('compiling surface');
 
         return {
           pre: function(scope, element, attrs){
-            console.log('surf pre');
             var properties = {
                 backgroundColor: scope["faBackgroundColor"],
             };
             var modifiers = {
-                origin: scope["faOrigin"],
+               origin: scope["faOrigin"],
+               transform: scope["faTranslate"] ? 
+                  famous['famous/core/transform'].translate.apply(this, scope["faTranslate"]) :
+                  undefined,
             };
+            console.log('surf pre', scope["faSize"], properties, modifiers);
             scope.surface = new famous['famous/core/surface']({
               size: scope["faSize"],
               properties: properties
@@ -61,6 +65,7 @@ angular.module('integrationApp')
                "faSize": '=',
                "faOrigin": '=',
                "faBackgroundColor": '=',
+               "faTranslate": '=',
              },
       transclude: true,
       template: '<div ng-transclude></div>',
