@@ -1,29 +1,29 @@
-<fa-app>
+  <fa-app ng-click="click()">
 
-<fa-view fa-translate="[0, 200, 0]" >
-    <fa-surface fa-size="[300, 30]" fa-rotate-z="angle" fa-background-color="'black'">
-      &nbsp;
-    </fa-surface>
-  </fa-view>
+    <fa-view fa-translate="[0, 200, 0]">
+      <fa-surface  fa-size="[300, 30]" fa-rotate-z="0" fa-background-color="'black'">
+        &nbsp;
+      </fa-surface>
+    </fa-view>
 
-  <!-- header -->
-  <fa-view fa-translate="[276, 0, 0]">
-    <fa-surface fa-size="[320, 520]" fa-translate="[0, 44, 0]">
-      <img width="320" src="images/body.png" />
-    </fa-surface>
-    <fa-surface fa-size="[undefined, 44]" fa-background-color="'black'">
-    </fa-surface>
-    <fa-surface fa-size="[44, 44]">
-      <img width="44" src="images/hamburger.png" />
-    </fa-surface>
-    <fa-surface fa-size="[232, 44]" fa-origin="[0.5, 0]">
-      <img width="232" src="images/search.png" />
-    </fa-surface>
-    <fa-surface fa-size="[44, 44]" fa-origin="[1, 0]">
-      <img width="44" src="images/icon.png" />
-    </fa-surface>
-  </fa-view>
-  <!-- end header -->
+    <!-- header -->
+    <fa-view fa-translate="[$parent.x(), 0, 0]">
+      <fa-surface fa-size="[320, 520]" fa-translate="[0, 44, 0]">
+        <img width="320" src="images/body.png" />
+      </fa-surface>
+      <fa-surface fa-size="[undefined, 44]" fa-background-color="'black'">
+      </fa-surface>
+      <fa-surface fa-size="[44, 44]">
+        <img width="44" src="images/hamburger.png" />
+      </fa-surface>
+      <fa-surface fa-size="[232, 44]" fa-origin="[0.5, 0]">
+        <img width="232" src="images/search.png" />
+      </fa-surface>
+      <fa-surface fa-size="[44, 44]" fa-origin="[1, 0]">
+        <img width="44" src="images/icon.png" />
+      </fa-surface>
+    </fa-view>
+    <!-- end header -->
 
 
-</fa-app>
+  </fa-app>

@@ -6,11 +6,6 @@ angular.module('integrationApp')
       template: '<div></div>',
       transclude: true,
       restrict: 'EA',
-      controller: function($scope) {
-
-        $scope.angle = -Math.PI / 6;
-
-      },
       compile: function(tElement, tAttrs, transclude){
         console.log('compiling app');
         return {
@@ -47,6 +42,15 @@ angular.module('integrationApp')
                transform: getTransform()
             };
             scope.modifier = new famous['famous/core/modifier'](modifiers);
+
+            scope.$watch("faTranslate", function(newTranslate) {
+              console.log("new translate", newTranslate);
+              scope.modifier.setTransform(Transform.translate.apply(this, scope["faTranslate"]), {
+                            duration: 300,
+                            curve: 'easeOut'
+              });
+            });
+
 
             var Transform = famous['famous/core/transform']
 
