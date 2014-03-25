@@ -3,6 +3,9 @@
 angular.module('integrationApp')
   .directive('faSurface', function (famous, $interpolate) {
     return {
+      controller: function($scope){
+        $scope.stripText = "This is data-bound text"
+      },
       compile: function(tElem, tAttrs, transclude){
         console.log('compiling surface');
 
@@ -10,6 +13,7 @@ angular.module('integrationApp')
           pre: function(scope, element, attrs){
             var properties = {
                 backgroundColor: scope["faBackgroundColor"],
+                color: scope["faColor"]
             };
 
             var getTransform = function() {
@@ -70,6 +74,7 @@ angular.module('integrationApp')
                "faSize": '=',
                "faOrigin": '=',
                "faBackgroundColor": '=',
+               "faColor": '=',
                "faTranslate": '=',
                "faRotateZ": '='
              },
