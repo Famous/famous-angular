@@ -2,6 +2,7 @@
 
 angular.module('integrationApp')
   .controller('MainCtrl', function ($scope, famous) {
+    $scope.angle = -Math.PI / 6
     $scope.open = false
     $scope.click = function() {
       $scope.open = !$scope.open;
