@@ -14,10 +14,14 @@ angular.module('integrationApp')
 
             var getTransform = function() {
               var Transform = famous['famous/core/transform']
+              var transforms = [];
               if (scope["faTranslate"])
-                return Transform.translate.apply(this, scope["faTranslate"]);
+                transforms.push(Transform.translate.apply(this, scope["faTranslate"]));
               if (scope["faRotateZ"])
-                return Transform.rotateZ(scope["faRotateZ"]);
+                transforms.push(Transform.rotateZ(scope["faRotateZ"]));
+              if (scope["faSkew"])
+                transforms.push(Transform.skew(0, 0, scope["faSkew"]));
+              return Transform.multiply.apply(this, transforms);
 
             };
 
@@ -71,7 +75,8 @@ angular.module('integrationApp')
                "faOrigin": '=',
                "faBackgroundColor": '=',
                "faTranslate": '=',
-               "faRotateZ": '='
+               "faRotateZ": '=',
+               "faSkew": '='
              },
       transclude: true,
       template: '<div></div>',
