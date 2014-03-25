@@ -35,7 +35,8 @@ angular.module('integrationApp')
             scope.modifier = new famous['famous/core/modifier'](modifiers);
 
             scope.$on('registerChild', function(evt, data){
-              if(evt.targetScope.$$id != scope.$$id){
+              console.log('event',evt);
+              if(evt.currentScope.$$id != scope.$$id){
                 console.log('app regchild', evt);
                 if(data.mod && data.view){
                   scope.view._add(data.mod).add(data.view);
