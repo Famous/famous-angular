@@ -27,6 +27,16 @@ angular.module('integrationApp')
 
             scope.view = new AppView();
             scope.context.add(scope.view);
+
+            scope.$on('registerChild', function(evt, data){
+              console.log('view', scope.view)
+              if(data.mod && data.surf){
+                scope.view._add(data.mod).add(data.surf);
+              }else if(data.surf){
+                scope.view._add(data.surf);
+              }
+              evt.stopPropagation();
+            })
           },
           post: function(scope, element, attrs){
             

@@ -17,8 +17,6 @@ var requirements = [
 var ngFameApp = angular.module('famous.angular', []);
 
 require(requirements, function(/*args*/){
-    //TODO:  give the context and the angular app separate divs to do their things
-
     //capture 'arguments' in a variable that will exist in
     //child scopes
     var required = arguments;
