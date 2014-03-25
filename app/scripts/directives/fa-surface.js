@@ -31,7 +31,7 @@ angular.module('integrationApp')
               size: scope["faSize"],
               properties: properties
             });
-            scope.modifiers = new famous['famous/core/modifier'](modifiers);
+            scope.modifier = new famous['famous/core/modifier'](modifiers);
           },
           post: function(scope, element, attrs){
             scope.updateContent = function(){
@@ -75,7 +75,6 @@ angular.module('integrationApp')
                "faTranslate": '=',
              },
       transclude: true,
-      scope: true,
       template: '<div></div>',
       restrict: 'EA'
     };
