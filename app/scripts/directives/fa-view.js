@@ -6,6 +6,7 @@ angular.module('integrationApp')
       template: '<div></div>',
       transclude: true,
       restrict: 'EA',
+      scope: true,
       compile: function(tElement, tAttrs, transclude){
         console.log('compiling app');
         return {
@@ -22,7 +23,6 @@ angular.module('integrationApp')
             FaView.prototype.constructor = FaView;
 
             scope.view = new FaView();
-            scope.context.add(scope.view);
 
             scope.$on('registerChild', function(evt, data){
               if(data.mod && data.view){
@@ -34,10 +34,10 @@ angular.module('integrationApp')
             })
           },
           post: function(scope, element, attrs){
-            scope.$emit('registerChild', {view: scope.surface, mod: scope.modifier});
-            transclude(scope, function(clone) {
+            scope.$emit('registerChild', {view: scope.view, mod: scope.modifier});
               element.find('div').append(clone);
             });
+            transclude(scope, function(clone) {
           }
         }
       }

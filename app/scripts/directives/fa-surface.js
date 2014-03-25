@@ -3,15 +3,6 @@
 angular.module('integrationApp')
   .directive('faSurface', function (famous, $interpolate) {
     return {
-      controller: function($scope){
-        $scope.surfaceType = "surface";
-        $scope.types = ['cat', 'mermaid', 'whale', 'rock', 'surface', 'shark', 'kangaroo'];
-        setInterval(function(){
-            $scope.surfaceType = $scope.types[Math.floor($scope.types.length * Math.random())];
-            if(!$scope.$$phase)
-              $scope.$apply();
-          }, 1000)
-      },
       compile: function(tElem, tAttrs, transclude){
         console.log('compiling surface');
 
@@ -26,7 +17,7 @@ angular.module('integrationApp')
                   famous['famous/core/transform'].translate.apply(this, scope["faTranslate"]) :
                   undefined,
             };
-            console.log('surf pre', scope["faSize"], properties, modifiers);
+            // console.log('surf pre', scope["faSize"], properties, modifiers);
             scope.surface = new famous['famous/core/surface']({
               size: scope["faSize"],
               properties: properties
@@ -60,11 +51,11 @@ angular.module('integrationApp')
 
             scope.updateContent();
 
-            scope.$emit('registerChild', {view: scope.surface, mod: scope.modifier});
 
             transclude(scope, function(clone) {
               element.find('div').append(clone);
             });
+            scope.$emit('registerChild', {view: scope.surface, mod: scope.modifier});
           }
         }
       },
