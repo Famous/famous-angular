@@ -29,11 +29,8 @@ angular.module('integrationApp')
             scope.view = new AppView();
             scope.context.add(scope.view);
 
-            console.log('app pre');
 
             scope.$on('registerChild', function(evt, data){
-              // console.log('view', scope.view)
-              console.log('app regchild', data);
               if(data.mod && data.view){
                 scope.view._add(data.mod).add(data.view);
               }else if(data.view){
