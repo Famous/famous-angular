@@ -18,11 +18,17 @@ angular.module('integrationApp')
         return {
           pre: function(scope, element, attrs){
             console.log('surf pre');
+            var properties = {
+                backgroundColor: scope["faBackgroundColor"],
+            };
+            var modifiers = {
+                origin: scope["faOrigin"],
+            };
             scope.surface = new famous['famous/core/surface']({
-              properties: {
-                backgroundColor: '#FF0000'
-              }
+              size: scope["faSize"],
+              properties: properties
             });
+            scope.modifiers = new famous['famous/core/modifier'](modifiers);
           },
           post: function(scope, element, attrs){
             scope.updateContent = function(){
@@ -45,10 +51,17 @@ angular.module('integrationApp')
 
             scope.updateContent();
 
-            scope.$parent.view._add(scope.surface);
+            console.log("adding", scope.surface, scope.modifiers);
+
+            scope.$parent.view._add(scope.modifiers).add(scope.surface);
           }
         }
       },
+      scope: {
+               "faSize": '=',
+               "faOrigin": '=',
+               "faBackgroundColor": '=',
+             },
       transclude: true,
       template: '<div ng-transclude></div>',
       restrict: 'EA'
