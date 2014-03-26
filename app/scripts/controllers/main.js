@@ -10,7 +10,6 @@ angular.module('integrationApp')
     $scope.x = function() {
       return $scope.open ? 276 : 0;
     };
-
     $scope.strips = ["These", "are", "data-bound", "strips"];
   })
   .controller('strip', function ($scope, famous) {

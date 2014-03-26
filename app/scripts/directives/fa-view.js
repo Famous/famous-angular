@@ -21,6 +21,13 @@ angular.module('integrationApp')
             FaView.prototype = Object.create(View.prototype);
             FaView.prototype.constructor = FaView;
 
+            var spec = [];
+
+            FaView.prototype.render = function() {
+              return spec;
+            };
+
+
             scope.view = new FaView();
 
             var properties = {
@@ -52,24 +59,19 @@ angular.module('integrationApp')
             });
 
 
-            var Transform = famous['famous/core/transform']
 
-            window.right = function() {
-              scope.modifier.setTransform(Transform.translate(276, 0, 0), {
-                            duration: 300,
-                            curve: 'easeOut'
-              });
-            };
+
+            var Transform = famous['famous/core/transform']
 
             scope.$on('registerChild', function(evt, data){
               console.log('view saw', data);
               if(evt.targetScope.$id != scope.$id){
                 console.log('view registered', data);
-                if(data.mod && data.view){
-                  scope.view._add(data.mod).add(data.view);
-                }else if(data.view){
-                  scope.view._add(data.view);
-                }
+                spec.push({
+                  origin: data.mod.origin,
+                  transform: data.mod.transform,
+                  target: data.view.render()
+                });
                 console.log("stopping propagation");
                 evt.stopPropagation();
               }

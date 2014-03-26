@@ -39,7 +39,7 @@ angular.module('integrationApp')
               size: scope["faSize"],
               properties: properties
             });
-            scope.modifier = new famous['famous/core/modifier'](modifiers);
+            scope.modifier = (modifiers);
           },
           post: function(scope, element, attrs){
             scope.updateContent = function(){
