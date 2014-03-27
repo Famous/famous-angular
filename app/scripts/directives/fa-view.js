@@ -62,7 +62,6 @@ angular.module('integrationApp')
                   transform: data.mod.transform,
                   target: data.view.render()
                 });
-                console.log("stopping propagation");
                 evt.stopPropagation();
               }
             })

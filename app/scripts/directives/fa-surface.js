@@ -41,7 +41,6 @@ angular.module('integrationApp')
             }
           },
           post: function(scope, element, attrs){
-            console.log('post faController', scope);
             if(scope.faController)
               console.log('ctrl', $controller(scope.faController, {'$scope': scope}));
             scope.updateContent = function(){

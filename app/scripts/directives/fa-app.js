@@ -16,7 +16,7 @@ angular.module('integrationApp')
             //       the container element.
             element.append('<div class="famous-angular-container"></div>');
             var famousContainer = $(element.find('.famous-angular-container'))[0];
-            var Engine = famous['famous/core/engine'];
+            window.Engine = famous['famous/core/engine'];
             scope.context = Engine.createContext(famousContainer);
 
             function AppView(){
@@ -65,6 +65,7 @@ angular.module('integrationApp')
 
 
             scope.$on('registerChild', function(evt, data){
+              console.log("app registered", data);
               _children.push(data);
               evt.stopPropagation();
             })
