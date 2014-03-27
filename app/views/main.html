@@ -1,6 +1,6 @@
   <fa-app id="TimbreAngular" ng-click="click()" fa-controller="MainCtrl">
 
-    <fa-view id="StripsView"
+    <fa-scroll-view id="StripsView"
       fa-controller="StripsCtrl">
       <fa-modifier
         fa-translate="[0,200,1]">
@@ -13,7 +13,7 @@
         fa-color="'white'">
         {{$parent.strip}}
       </fa-surface>
-    </fa-view>
+    </fa-scroll-view>
 
     <fa-view id="MainPageView"
       fa-controller="MainPageCtrl">

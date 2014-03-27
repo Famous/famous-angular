@@ -1,35 +1,26 @@
 'use strict';
 
 angular.module('integrationApp')
-  .directive('faScrollView', function (famous) {
+  .directive('faScrollView', function (famous, $controller) {
     return {
       template: '<div></div>',
       restrict: 'E',
       transclude: true,
-      link: function postLink(scope, element, attrs) {
-      },
+      priority: 100,
       compile: function(tElem, tAttrs, transclude){
         return  {
           pre: function(scope, element, attrs){
+            console.log("scroll view pre");
 
             var ScrollView = famous["famous/views/scrollview"];
             var ViewSequence = famous['famous/core/viewsequence'];
             var Surface = famous['famous/core/surface'];
 
-            var surfaces = new ViewSequence();
-
-            for(var i = 0; i < 50; i++) {
-                surfaces.push(new Surface({content: 'Item ' + i, size:[100, 20]}));
-            }
-
             var _children = [];
-
-            console.log("surfaces", surfaces)
 
             scope.view = new ScrollView({
               itemSpacing: 1 
             });
-
 
             window.Engine.pipe(scope.view);
 
@@ -41,9 +32,17 @@ angular.module('integrationApp')
                 evt.stopPropagation();
               };
             });
-            scope.modifier = {};
+            scope._modifier = {};
+            scope.modifier = function(){
+              return scope._modifier;
+            };
           },
           post: function(scope, element, attrs){
+            if(scope.faController)
+              $controller(scope.faController, {'$scope': scope})
+
+            console.log("scroll view post");
+
             transclude(scope, function(clone) {
               element.find('div').append(clone);
             });
@@ -51,6 +50,8 @@ angular.module('integrationApp')
           }
         };
       },
-      scope: {}
+      scope: { 
+        "faController": '@'
+      }
     };
   });
