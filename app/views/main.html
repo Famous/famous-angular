@@ -1,55 +1,62 @@
-  <fa-app id="TimbreAngular" ng-click="click()" fa-controller="MainCtrl">
+<div ng-controller="MainCtrl">
+  <fa-app id="TimbreAngular" ng-click="click()"
+          fa-pipe-to="enginePipe">
 
-    <fa-scroll-view id="StripsView"
-      fa-controller="StripsCtrl">
+      <fa-scroll-view id="StripsView"
+                      fa-controller="StripsCtrl"
+                      fa-pipe-from="$parent.enginePipe">
 
-      <fa-view ng-repeat="strip in stripContents"
-               fa-name="'strip view ' + $index"
-               fa-size="[300, 50]">
+        <fa-view ng-repeat="strip in stripContents"
+                fa-name="'strip view ' + $index"
+                fa-size="[300, 50]">
+
+          <fa-surface
+            fa-size="[350, 50]"
+            fa-translate="[0, 100, 1]"
+            fa-rotate-z="$parent.$parent.angle"
+            fa-skew="$parent.$parent.angle"
+            fa-background-color="'black'">
+          </fa-surface>
+
+          <fa-surface
+            fa-rotate-z="$parent.$parent.angle"
+            fa-color="'white'"
+            fa-size="[350, 50]"
+            fa-translate="[20, 110, 1]">
+            {{$parent.$parent.strip}}
+          </fa-surface>
+
+        </fa-view>
+      </fa-scroll-view>
+
+      <fa-view id="MainPageView"
+        fa-controller="MainPageCtrl">
+
+        <fa-modifier
+          fa-translate="[xTransitionable, 0, 5]">
+        </fa-modifier>
 
         <fa-surface
-          fa-rotate-z="$parent.$parent.angle">
-          {{$parent.$parent.strip}}
+          fa-pipe-to="eventHandler"
+          fa-size="[320, 520]"
+          fa-translate="[0, 44, 0]">
+          <img width="320" src="images/body.png" />
         </fa-surface>
-
         <fa-surface
-          fa-size="[350, 50]"
-          fa-translate="[0, 100, 1]"
-          fa-rotate-z="$parent.$parent.angle"
-          fa-skew="$parent.$parent.angle"
-          fa-background-color="'black'"
-          fa-color="'white'">
+          fa-size="[undefined, 44]"
+          fa-background-color="'black'">
         </fa-surface>
+        <fa-surface fa-size="[44, 44]">
+          <img width="44" src="images/hamburger.png" />
+        </fa-surface>
+        <fa-surface fa-size="[232, 44]" fa-origin="[0.5, 0]">
+          <img width="232" src="images/search.png" />
+        </fa-surface>
+        <fa-surface fa-size="[44, 44]" fa-origin="[1, 0]">
+          <img width="44" src="images/icon.png" />
+        </fa-surface>
+        
       </fa-view>
-    </fa-scroll-view>
 
-    <fa-view id="MainPageView"
-      fa-controller="MainPageCtrl">
-
-      <fa-modifier
-        fa-translate="[xTransitionable, 0, 5]">
-      </fa-modifier>
-
-      <fa-surface
-        fa-pipe-to="eventHandler"
-        fa-size="[320, 520]"
-        fa-translate="[0, 44, 0]">
-        <img width="320" src="images/body.png" />
-      </fa-surface>
-      <fa-surface
-        fa-size="[undefined, 44]"
-        fa-background-color="'black'">
-      </fa-surface>
-      <fa-surface fa-size="[44, 44]">
-        <img width="44" src="images/hamburger.png" />
-      </fa-surface>
-      <fa-surface fa-size="[232, 44]" fa-origin="[0.5, 0]">
-        <img width="232" src="images/search.png" />
-      </fa-surface>
-      <fa-surface fa-size="[44, 44]" fa-origin="[1, 0]">
-        <img width="44" src="images/icon.png" />
-      </fa-surface>
-      
-    </fa-view>
-
-  </fa-app>
+    </fa-app>
+</div>

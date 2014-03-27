@@ -6,17 +6,24 @@ angular.module('integrationApp')
       template: '<div style="display: none;"><div></div></div>',
       transclude: true,
       restrict: 'EA',
-      scope: true,
+      scope: {
+        "faPipeTo": '='
+      },
       compile: function(tElement, tAttrs, transclude){
-        console.log('compiling app');
         return {
           pre: function(scope, element, attrs){
+            console.log('app pre', scope);
             var View = famous['famous/core/view'];
 
             element.append('<div class="famous-angular-container"></div>');
             var famousContainer = $(element.find('.famous-angular-container'))[0];
-            window.Engine = famous['famous/core/engine'];
+            var Engine = famous['famous/core/engine'];
             scope.context = Engine.createContext(famousContainer);
+
+            if (scope["faPipeTo"]) {
+              Engine.pipe(scope["faPipeTo"])
+            }
+
 
             function AppView(){
               View.apply(this, arguments);

@@ -10,7 +10,7 @@ angular.module('integrationApp')
       compile: function(tElem, tAttrs, transclude){
         return  {
           pre: function(scope, element, attrs){
-            console.log("scroll view pre");
+            console.log("scroll view pre", scope);
 
             var ScrollView = famous["famous/views/scrollview"];
             var ViewSequence = famous['famous/core/viewsequence'];
@@ -22,7 +22,9 @@ angular.module('integrationApp')
               itemSpacing: 10
             });
 
-            window.Engine.pipe(scope.view);
+            if (scope["faPipeFrom"]) {
+              scope["faPipeFrom"].pipe(scope.view);
+            }
 
             scope.$on('registerChild', function(evt, data){
               if(evt.targetScope.$id != scope.$id){
@@ -32,10 +34,12 @@ angular.module('integrationApp')
                 evt.stopPropagation();
               };
             });
+
             scope._modifier = {};
             scope.modifier = function(){
               return scope._modifier;
             };
+
           },
           post: function(scope, element, attrs){
             if(scope.faController)
@@ -51,7 +55,8 @@ angular.module('integrationApp')
         };
       },
       scope: { 
-        "faController": '@'
+        "faController": '@',
+        "faPipeFrom": '='
       }
     };
   });
