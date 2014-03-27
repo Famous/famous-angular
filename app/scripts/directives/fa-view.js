@@ -40,26 +40,14 @@ angular.module('integrationApp')
                 return Transform.translate.apply(this, scope["faTranslate"]);
               if (scope["faRotateZ"])
                 return Transform.rotateZ(scope["faRotateZ"]);
-
             };
 
 
             var modifiers = {
                origin: scope["faOrigin"],
-               transform: getTransform()
+               translate: scope["faTranslate"]
             };
-            scope.modifier = new famous['famous/core/modifier'](modifiers);
-
-            scope.$watch("faTranslate", function(newTranslate) {
-              console.log("new translate", newTranslate);
-              scope.modifier.setTransform(Transform.translate.apply(this, scope["faTranslate"]), {
-                            duration: 300,
-                            curve: 'easeOut'
-              });
-            });
-
-
-
+            scope.modifier = modifiers;
 
             var Transform = famous['famous/core/transform']
 
@@ -67,6 +55,9 @@ angular.module('integrationApp')
               console.log('view saw', data);
               if(evt.targetScope.$id != scope.$id){
                 console.log('view registered', data);
+
+
+
                 spec.push({
                   origin: data.mod.origin,
                   transform: data.mod.transform,

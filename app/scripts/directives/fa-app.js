@@ -26,17 +26,46 @@ angular.module('integrationApp')
             AppView.prototype = Object.create(View.prototype);
             AppView.prototype.constructor = AppView;
 
+            var _children = [];
+
+            AppView.prototype.render = function() {
+
+              var getOrValue = function(x) {
+                return x.get ? x.get() : x;
+              };
+
+              var getTransform = function(data) {
+                var Transform = famous['famous/core/transform']
+                var transforms = [];
+                if (data.mod.translate) {
+                  var values = data.mod.translate.map(getOrValue)
+                  transforms.push(Transform.translate.apply(this, values));
+                }
+                if (scope["faRotateZ"])
+                  transforms.push(Transform.rotateZ(scope["faRotateZ"]));
+                if (scope["faSkew"])
+                  transforms.push(Transform.skew(0, 0, scope["faSkew"]));
+                return Transform.multiply.apply(this, transforms);
+
+              };
+
+              var spec = _children.map(function(data) {
+                return {
+                  origin: data.mod.origin,
+                  transform: getTransform(data),
+                  target: data.view.render()
+                }
+              });
+
+              return spec;
+            };
+
             scope.view = new AppView();
             scope.context.add(scope.view);
 
 
             scope.$on('registerChild', function(evt, data){
-              console.log("app registered", data);
-              if(data.mod && data.view){
-                scope.view._add(data.mod).add(data.view);
-              }else if(data.view){
-                scope.view._add(data.view);
-              }
+              _children.push(data);
               evt.stopPropagation();
             })
           },
