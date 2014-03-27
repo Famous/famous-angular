@@ -1,20 +1,27 @@
   <fa-app ng-click="click()">
 
-    <fa-view  fa-translate="[0, 200, 0]">
-      <fa-surface fa-controller="TestControllerCtrl" fa-translate="[0, 50, 0]" fa-skew="$parent.angle" fa-size="[300, 30]" fa-rotate-z="$parent.angle" fa-background-color="'black'" fa-color="'white'">
-        {{stripTextTest}}
-      </fa-surface>
-      <fa-surface fa-translate="[0, 100, 0]" fa-skew="$parent.angle" fa-size="[300, 30]" fa-rotate-z="$parent.angle" fa-background-color="'black'" fa-color="'white'">
-        {{stripText}}
+    <fa-view fa-controller="StripsCtrl" fa-translate="[0, 200, 1]">
+      <fa-surface
+        ng-repeat="strip in stripContents"
+        fa-translate="[0, 50 * $index, 1]"
+        fa-size="[300, 30]"
+        fa-background-color="'black'"
+        fa-color="'white'">
+        {{$parent.strip}}
       </fa-surface>
     </fa-view>
 
-    <!-- header -->
-    <fa-view fa-translate="[xTransitionable, 0, 0]">
-      <fa-surface fa-pipe-to="$parent.eventHandler" fa-size="[320, 520]" fa-translate="[0, 44, 0]">
+    <fa-view
+      fa-translate="[xTransitionable, 0, 5]">
+      <fa-surface
+        fa-pipe-to="$parent.eventHandler"
+        fa-size="[320, 520]"
+        fa-translate="[0, 44, 0]">
         <img width="320" src="images/body.png" />
       </fa-surface>
-      <fa-surface fa-size="[undefined, 44]" fa-background-color="'black'">
+      <fa-surface
+        fa-size="[undefined, 44]"
+        fa-background-color="'black'">
       </fa-surface>
       <fa-surface fa-size="[44, 44]">
         <img width="44" src="images/hamburger.png" />
@@ -26,7 +33,5 @@
         <img width="44" src="images/icon.png" />
       </fa-surface>
     </fa-view>
-    <!-- end header -->
-
 
   </fa-app>

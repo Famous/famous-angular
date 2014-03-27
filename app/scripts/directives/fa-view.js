@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('integrationApp')
-  .directive('faView', ["famous", function (famous) {
+  .directive('faView', ["famous", "$controller", function (famous, $controller) {
     return {
       template: '<div></div>',
       transclude: true,
@@ -21,10 +21,16 @@ angular.module('integrationApp')
             FaView.prototype = Object.create(View.prototype);
             FaView.prototype.constructor = FaView;
 
-            var spec = [];
+            scope.children = [];
 
             FaView.prototype.render = function() {
-              return spec;
+              return scope.children.map(function(data){
+                return {
+                  origin: data.mod.origin,
+                  transform: data.mod.transform,
+                  target: data.view.render()
+                }
+              });
             };
 
 
@@ -55,19 +61,15 @@ angular.module('integrationApp')
               if(evt.targetScope.$id != scope.$id){
                 console.log('view registered', data);
 
-
-
-                spec.push({
-                  origin: data.mod.origin,
-                  transform: data.mod.transform,
-                  target: data.view.render()
-                });
-                console.log("stopping propagation");
+                scope.children.push(data);
                 evt.stopPropagation();
               }
             })
           },
           post: function(scope, element, attrs){
+            if(scope.faController)
+              $controller(scope.faController, {'$scope': scope})
+            
             transclude(scope, function(clone) {
               element.find('div').append(clone);
             });
@@ -76,8 +78,9 @@ angular.module('integrationApp')
         }
       },
       scope: {
-               "faTranslate": '=',
-               "faRotateZ": '='
+        "faTranslate": '=',
+        "faRotateZ": '=',
+        "faController": '@'
       }
     };
   }]);

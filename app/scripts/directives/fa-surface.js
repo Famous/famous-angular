@@ -3,6 +3,7 @@
 angular.module('integrationApp')
   .directive('faSurface', function (famous, $interpolate, $controller) {
     return {
+        
       compile: function(tElem, tAttrs, transclude){
         console.log('compiling surface');
 
@@ -41,7 +42,6 @@ angular.module('integrationApp')
             }
           },
           post: function(scope, element, attrs){
-            console.log('post faController', scope);
             if(scope.faController)
               console.log('ctrl', $controller(scope.faController, {'$scope': scope}));
             scope.updateContent = function(){
@@ -55,10 +55,12 @@ angular.module('integrationApp')
               //        3. evaluate all of those expressions and keep track of the values
               //        4. compare all of these values of interest on each pass here,
               //           -- only update the surface if one of those values changes    
-              var prospectiveContent = $interpolate(element.find('div').html())(scope);
-              if(scope.currentContent !== prospectiveContent){ //this is a potentially large string-compare
-                scope.currentContent = prospectiveContent;
-                scope.surface.setContent(prospectiveContent);
+              if(element.find('div') && element.find('div').html()){
+                var prospectiveContent = $interpolate(element.find('div').html())(scope);
+                if(scope.currentContent !== prospectiveContent){ //this is a potentially large string-compare
+                  scope.currentContent = prospectiveContent;
+                  scope.surface.setContent(prospectiveContent);
+                }
               }
               
             };
@@ -72,21 +74,22 @@ angular.module('integrationApp')
             transclude(scope, function(clone) {
               element.find('div').append(clone);
             });
+            console.log('registering ', element.html())
             scope.$emit('registerChild', {view: scope.surface, mod: scope.modifier});
           }
         }
       },
       scope: {
-               "faSize": '=',
-               "faOrigin": '=',
-               "faBackgroundColor": '=',
-               "faColor": '=',
-               "faTranslate": '=',
-               "faRotateZ": '=',
-               "faSkew": '=',
-               "faPipeTo": '=',
-               "faController": '@'
-             },
+        "faSize": '=',
+        "faOrigin": '=',
+        "faBackgroundColor": '=',
+        "faColor": '=',
+        "faTranslate": '=',
+        "faRotateZ": '=',
+        "faSkew": '=',
+        "faPipeTo": '=',
+        "faController": '@'
+      },
       transclude: true,
       template: '<div></div>',
       restrict: 'EA'
