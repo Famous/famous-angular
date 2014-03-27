@@ -1,11 +1,8 @@
 'use strict';
 
 angular.module('integrationApp')
-  .directive('faSurface', function (famous, $interpolate) {
+  .directive('faSurface', function (famous, $interpolate, $controller) {
     return {
-      controller: function($scope){
-        $scope.stripText = "This is data-bound text"
-      },
       compile: function(tElem, tAttrs, transclude){
         console.log('compiling surface');
 
@@ -26,9 +23,7 @@ angular.module('integrationApp')
               if (scope["faSkew"])
                 transforms.push(Transform.skew(0, 0, scope["faSkew"]));
               return Transform.multiply.apply(this, transforms);
-
             };
-
 
             var modifiers = {
                origin: scope["faOrigin"],
@@ -46,6 +41,9 @@ angular.module('integrationApp')
             }
           },
           post: function(scope, element, attrs){
+            console.log('post faController', scope);
+            if(scope.faController)
+              console.log('ctrl', $controller(scope.faController, {'$scope': scope}));
             scope.updateContent = function(){
               //TODO:   There may be a more efficient way to do this than to 
               //        $interpolate and then string-compare.  Is there a way to
@@ -87,6 +85,7 @@ angular.module('integrationApp')
                "faRotateZ": '=',
                "faSkew": '=',
                "faPipeTo": '=',
+               "faController": '@'
              },
       transclude: true,
       template: '<div></div>',
