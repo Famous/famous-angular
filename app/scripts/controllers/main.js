@@ -8,10 +8,6 @@ angular.module('integrationApp')
     var EventHandler = famous['famous/core/eventhandler']
 
     $scope.angle = -Math.PI / 6
-    $scope.open = false
-
-    $scope.click = function() {
-    };
 
     var sync = new GenericSync(function() {
       return $scope.xTransitionable.get(0);
