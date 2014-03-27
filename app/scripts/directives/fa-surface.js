@@ -3,6 +3,7 @@
 angular.module('integrationApp')
   .directive('faSurface', function (famous, $interpolate, $controller) {
     return {
+        
       compile: function(tElem, tAttrs, transclude){
         console.log('compiling surface');
 
@@ -29,7 +30,6 @@ angular.module('integrationApp')
                origin: scope["faOrigin"],
                transform: getTransform()
             };
-            // console.log('surf pre', scope["faSize"], properties, modifiers);
             scope.surface = new famous['famous/core/surface']({
               size: scope["faSize"],
               properties: properties
@@ -42,7 +42,7 @@ angular.module('integrationApp')
           },
           post: function(scope, element, attrs){
             if(scope.faController)
-              console.log('ctrl', $controller(scope.faController, {'$scope': scope}));
+              $controller(scope.faController, {'$scope': scope});
             scope.updateContent = function(){
               //TODO:   There may be a more efficient way to do this than to 
               //        $interpolate and then string-compare.  Is there a way to
@@ -54,10 +54,12 @@ angular.module('integrationApp')
               //        3. evaluate all of those expressions and keep track of the values
               //        4. compare all of these values of interest on each pass here,
               //           -- only update the surface if one of those values changes    
-              var prospectiveContent = $interpolate(element.find('div').html())(scope);
-              if(scope.currentContent !== prospectiveContent){ //this is a potentially large string-compare
-                scope.currentContent = prospectiveContent;
-                scope.surface.setContent(prospectiveContent);
+              if(element.find('div') && element.find('div').html()){
+                var prospectiveContent = $interpolate(element.find('div').html())(scope);
+                if(scope.currentContent !== prospectiveContent){ //this is a potentially large string-compare
+                  scope.currentContent = prospectiveContent;
+                  scope.surface.setContent(prospectiveContent);
+                }
               }
               
             };
@@ -76,16 +78,16 @@ angular.module('integrationApp')
         }
       },
       scope: {
-               "faSize": '=',
-               "faOrigin": '=',
-               "faBackgroundColor": '=',
-               "faColor": '=',
-               "faTranslate": '=',
-               "faRotateZ": '=',
-               "faSkew": '=',
-               "faPipeTo": '=',
-               "faController": '@'
-             },
+        "faSize": '=',
+        "faOrigin": '=',
+        "faBackgroundColor": '=',
+        "faColor": '=',
+        "faTranslate": '=',
+        "faRotateZ": '=',
+        "faSkew": '=',
+        "faPipeTo": '=',
+        "faController": '@'
+      },
       transclude: true,
       template: '<div></div>',
       restrict: 'EA'

@@ -12,8 +12,7 @@ angular.module('integrationApp')
         return {
           pre: function(scope, element, attrs){
             var View = famous['famous/core/view'];
-            //TODO:  add custom classes from attrs (or just pass through all attrs?) to
-            //       the container element.
+
             element.append('<div class="famous-angular-container"></div>');
             var famousContainer = $(element.find('.famous-angular-container'))[0];
             window.Engine = famous['famous/core/engine'];
@@ -26,47 +25,43 @@ angular.module('integrationApp')
             AppView.prototype = Object.create(View.prototype);
             AppView.prototype.constructor = AppView;
 
-            var _children = [];
+            scope.children = [];
+
+            var getOrValue = function(x) {
+              return x.get ? x.get() : x;
+            };
+
+            var getTransform = function(data) {
+              var Transform = famous['famous/core/transform']
+              var transforms = [];
+              if (data.mod().translate && data.mod().translate.length) {
+                var values = data.mod().translate.map(getOrValue)
+                transforms.push(Transform.translate.apply(this, values));
+              }
+              if (scope["faRotateZ"])
+                transforms.push(Transform.rotateZ(scope["faRotateZ"]));
+              if (scope["faSkew"])
+                transforms.push(Transform.skew(0, 0, scope["faSkew"]));
+              return Transform.multiply.apply(this, transforms);
+            };
 
             AppView.prototype.render = function() {
-
-              var getOrValue = function(x) {
-                return x.get ? x.get() : x;
-              };
-
-              var getTransform = function(data) {
-                var Transform = famous['famous/core/transform']
-                var transforms = [];
-                if (data.mod.translate) {
-                  var values = data.mod.translate.map(getOrValue)
-                  transforms.push(Transform.translate.apply(this, values));
-                }
-                if (scope["faRotateZ"])
-                  transforms.push(Transform.rotateZ(scope["faRotateZ"]));
-                if (scope["faSkew"])
-                  transforms.push(Transform.skew(0, 0, scope["faSkew"]));
-                return Transform.multiply.apply(this, transforms);
-
-              };
-
-              var spec = _children.map(function(data) {
+              if(!scope.readyToRender)
+                return [];
+              return scope.children.map(function(child) {
                 return {
-                  origin: data.mod.origin,
-                  transform: getTransform(data),
-                  target: data.view.render()
+                  origin: child.mod().origin,
+                  transform: getTransform(child),
+                  target: child.view.render()
                 }
               });
-
-              return spec;
             };
 
             scope.view = new AppView();
             scope.context.add(scope.view);
 
-
             scope.$on('registerChild', function(evt, data){
-              console.log("app registered", data);
-              _children.push(data);
+              scope.children.push(data);
               evt.stopPropagation();
             })
           },
@@ -74,6 +69,7 @@ angular.module('integrationApp')
             transclude(scope, function(clone) {
               element.find('div div').append(clone);
             });
+            scope.readyToRender = true;
           }
         }
       }

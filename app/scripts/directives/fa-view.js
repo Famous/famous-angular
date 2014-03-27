@@ -1,11 +1,12 @@
 'use strict';
 
 angular.module('integrationApp')
-  .directive('faView', ["famous", function (famous) {
+  .directive('faView', ["famous", "$controller", function (famous, $controller) {
     return {
       template: '<div></div>',
       transclude: true,
       restrict: 'EA',
+      priority: 100,
       compile: function(tElement, tAttrs, transclude){
         console.log('compiling app');
         return {
@@ -21,62 +22,64 @@ angular.module('integrationApp')
             FaView.prototype = Object.create(View.prototype);
             FaView.prototype.constructor = FaView;
 
-            var spec = [];
+            scope.children = [];
 
             FaView.prototype.render = function() {
-              return spec;
+              if(!scope.readyToRender)
+                return [];
+              return scope.children.map(function(data){
+                return {
+                  origin: data.mod.origin,
+                  transform: data.mod.transform,
+                  target: data.view.render()
+                }
+              });
             };
-
 
             scope.view = new FaView();
-
-            var properties = {
-                backgroundColor: scope["faBackgroundColor"],
-            };
-
-            var getTransform = function() {
-              var Transform = famous['famous/core/transform']
-              if (scope["faTranslate"])
-                return Transform.translate.apply(this, scope["faTranslate"]);
-              if (scope["faRotateZ"])
-                return Transform.rotateZ(scope["faRotateZ"]);
-            };
-
-
-            var modifiers = {
-               origin: scope["faOrigin"],
-               translate: scope["faTranslate"]
-            };
-            scope.modifier = modifiers;
 
             var Transform = famous['famous/core/transform']
 
             scope.$on('registerChild', function(evt, data){
               if(evt.targetScope.$id != scope.$id){
                 console.log('view registered', data);
-
-
-
-                spec.push({
-                  origin: data.mod.origin,
-                  transform: data.mod.transform,
-                  target: data.view.render()
-                });
+                scope.children.push(data);
                 evt.stopPropagation();
               }
             })
+
+            scope._modifier = {};
+            scope.modifier = function(){
+              return scope._modifier;
+            };
+
+            scope.$on('registerModifier', function(evt, data){
+              console.log('caught registerModifier', data);
+              scope._modifier = data;
+            });
           },
           post: function(scope, element, attrs){
+            if(scope.faController)
+              $controller(scope.faController, {'$scope': scope})
+
+            // var modifiers = {
+            //    faOrigin: scope["faOrigin"],
+            //    translate: scope["faTranslate"]
+            // };
+            // scope.modifier = modifiers;
+            
             transclude(scope, function(clone) {
               element.find('div').append(clone);
             });
             scope.$emit('registerChild', {view: scope.view, mod: scope.modifier});
+            scope.readyToRender = true;
           }
         }
       },
       scope: {
-               "faTranslate": '=',
-               "faRotateZ": '='
+        "faTranslate": '=',
+        "faRotateZ": '=',
+        "faController": '@'
       }
     };
   }]);
