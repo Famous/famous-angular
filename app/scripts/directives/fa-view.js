@@ -24,6 +24,8 @@ angular.module('integrationApp')
             scope.children = [];
 
             FaView.prototype.render = function() {
+              if(!scope.readyToRender)
+                return [];
               return scope.children.map(function(data){
                 return {
                   origin: data.mod.origin,
@@ -33,27 +35,7 @@ angular.module('integrationApp')
               });
             };
 
-
             scope.view = new FaView();
-
-            var properties = {
-                backgroundColor: scope["faBackgroundColor"],
-            };
-
-            var getTransform = function() {
-              var Transform = famous['famous/core/transform']
-              if (scope["faTranslate"])
-                return Transform.translate.apply(this, scope["faTranslate"]);
-              if (scope["faRotateZ"])
-                return Transform.rotateZ(scope["faRotateZ"]);
-            };
-
-
-            var modifiers = {
-               origin: scope["faOrigin"],
-               translate: scope["faTranslate"]
-            };
-            scope.modifier = modifiers;
 
             var Transform = famous['famous/core/transform']
 
@@ -67,11 +49,18 @@ angular.module('integrationApp')
           post: function(scope, element, attrs){
             if(scope.faController)
               $controller(scope.faController, {'$scope': scope})
+
+            var modifiers = {
+               origin: scope["faOrigin"],
+               translate: scope["faTranslate"]
+            };
+            scope.modifier = modifiers;
             
             transclude(scope, function(clone) {
               element.find('div').append(clone);
             });
             scope.$emit('registerChild', {view: scope.view, mod: scope.modifier});
+            scope.readyToRender = true;
           }
         }
       },

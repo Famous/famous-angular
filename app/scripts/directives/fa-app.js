@@ -34,7 +34,7 @@ angular.module('integrationApp')
             var getTransform = function(data) {
               var Transform = famous['famous/core/transform']
               var transforms = [];
-              if (data.mod.translate) {
+              if (data.mod.translate && data.mod.translate.length) {
                 var values = data.mod.translate.map(getOrValue)
                 transforms.push(Transform.translate.apply(this, values));
               }
@@ -43,10 +43,11 @@ angular.module('integrationApp')
               if (scope["faSkew"])
                 transforms.push(Transform.skew(0, 0, scope["faSkew"]));
               return Transform.multiply.apply(this, transforms);
-
             };
 
             AppView.prototype.render = function() {
+              if(!scope.readyToRender)
+                return [];
               return scope.children.map(function(child) {
                 return {
                   origin: child.mod.origin,
@@ -68,6 +69,7 @@ angular.module('integrationApp')
             transclude(scope, function(clone) {
               element.find('div div').append(clone);
             });
+            scope.readyToRender = true;
           }
         }
       }

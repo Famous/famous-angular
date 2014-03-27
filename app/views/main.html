@@ -1,6 +1,8 @@
   <fa-app ng-click="click()">
 
-    <fa-view fa-controller="StripsCtrl" fa-translate="[0, 200, 1]">
+    <fa-view
+      fa-controller="StripsCtrl"
+      fa-translate="[0, 200, 1]">
       <fa-surface
         ng-repeat="strip in stripContents"
         fa-translate="[0, 50 * $index, 1]"
@@ -12,6 +14,7 @@
     </fa-view>
 
     <fa-view
+      fa-controller="MainPageCtrl"
       fa-translate="[xTransitionable, 0, 5]">
       <fa-surface
         fa-pipe-to="$parent.eventHandler"
