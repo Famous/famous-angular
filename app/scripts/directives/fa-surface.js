@@ -40,6 +40,10 @@ angular.module('integrationApp')
               properties: properties
             });
             scope.modifier = (modifiers);
+
+            if (scope["faPipeTo"]) {
+              scope.surface.pipe(scope["faPipeTo"]);
+            }
           },
           post: function(scope, element, attrs){
             scope.updateContent = function(){
@@ -81,7 +85,8 @@ angular.module('integrationApp')
                "faColor": '=',
                "faTranslate": '=',
                "faRotateZ": '=',
-               "faSkew": '='
+               "faSkew": '=',
+               "faPipeTo": '=',
              },
       transclude: true,
       template: '<div></div>',

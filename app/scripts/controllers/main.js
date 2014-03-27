@@ -4,20 +4,27 @@ angular.module('integrationApp')
   .controller('MainCtrl', function ($scope, famous) {
 
     var Transitionable = famous['famous/transitions/transitionable']
+    var GenericSync = famous['famous/input/genericsync']
+    var EventHandler = famous['famous/core/eventhandler']
 
     $scope.angle = -Math.PI / 6
     $scope.open = false
 
     $scope.click = function() {
-      if ($scope.open) {
-        $scope.open = false;
-        $scope.slideLeft();
-      }
-      else {
-        $scope.open = true;
-        $scope.slideRight();
-      }
     };
+
+    var sync = new GenericSync(function() {
+      return $scope.xTransitionable.get(0);
+    }, {direction: GenericSync.DIRECTION_X});
+
+    sync.on('update', function(data) {
+      console.log("sync update");
+      $scope.xTransitionable.set(data.p);
+    }.bind(this));
+
+    $scope.eventHandler = new EventHandler();
+
+    $scope.eventHandler.pipe(sync);
 
     $scope.slideLeft = function() {
       $scope.xTransitionable.set(0, {
