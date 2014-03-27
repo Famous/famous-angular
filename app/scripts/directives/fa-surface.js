@@ -32,7 +32,9 @@ angular.module('integrationApp')
 
             var modifiers = {
                origin: scope["faOrigin"],
-               translate: scope["faTranslate"]
+               translate: scope["faTranslate"],
+               rotateZ: scope["faRotateZ"],
+               skew: scope["faSkew"],
             };
             scope.surface = new famous['famous/core/surface']({
               size: scope["faSize"],

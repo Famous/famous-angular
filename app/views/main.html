@@ -5,18 +5,20 @@
 
       <fa-view ng-repeat="strip in stripContents"
                fa-name="'strip view ' + $index"
-               fa-size="[300, 30]">
-
-        <fa-modifier
-            fa-translate="[0, 0, 1]">
-        </fa-modifier>
+               fa-size="[300, 50]">
 
         <fa-surface
-          fa-size="[300, 30]"
-          fa-skew="angle"
+          fa-rotate-z="$parent.$parent.angle">
+          {{$parent.$parent.strip}}
+        </fa-surface>
+
+        <fa-surface
+          fa-size="[350, 50]"
+          fa-translate="[0, 100, 1]"
+          fa-rotate-z="$parent.$parent.angle"
+          fa-skew="$parent.$parent.angle"
           fa-background-color="'black'"
           fa-color="'white'">
-          {{$parent.$parent.strip}}
         </fa-surface>
       </fa-view>
     </fa-scroll-view>

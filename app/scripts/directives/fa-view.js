@@ -38,10 +38,10 @@ angular.module('integrationApp')
                 var values = mod.translate.map(getOrValue)
                 transforms.push(Transform.translate.apply(this, values));
               }
-              if (mod["faRotateZ"])
-                transforms.push(Transform.rotateZ(mod["faRotateZ"]));
-              if (mod["faSkew"])
-                transforms.push(Transform.skew(0, 0, mod["faSkew"]));
+              if (mod.rotateZ)
+                transforms.push(Transform.rotateZ(mod.rotateZ));
+              if (mod.skew)
+                transforms.push(Transform.skew(0, 0, mod.skew));
               return Transform.multiply.apply(this, transforms);
             };
 

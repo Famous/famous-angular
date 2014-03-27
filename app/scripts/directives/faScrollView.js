@@ -19,7 +19,7 @@ angular.module('integrationApp')
             var _children = [];
 
             scope.view = new ScrollView({
-              itemSpacing: 5 
+              itemSpacing: 10
             });
 
             window.Engine.pipe(scope.view);
