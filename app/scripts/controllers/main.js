@@ -18,9 +18,31 @@ angular.module('integrationApp')
     }, {direction: GenericSync.DIRECTION_X});
 
     sync.on('update', function(data) {
-      console.log("sync update");
-      $scope.xTransitionable.set(data.p);
-    }.bind(this));
+      $scope.xTransitionable.set(Math.max(0, data.p));
+    });
+
+    var posThreshold = 138;
+    var velThreshold = 0.75;
+
+    sync.on('end', function(data) {
+
+      var velocity = data.v;
+      var position = $scope.xTransitionable.get();
+
+      if(position > posThreshold) {
+        if(velocity < -velThreshold) {
+          $scope.slideLeft();
+        } else {
+          $scope.slideRight();
+        }
+      } else {
+        if(velocity > velThreshold) {
+          $scope.slideRight();
+        } else {
+          $scope.slideLeft();
+        }
+      }
+    });
 
     $scope.eventHandler = new EventHandler();
 
