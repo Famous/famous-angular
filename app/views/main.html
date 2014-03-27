@@ -1,8 +1,10 @@
-  <fa-app ng-click="click()" fa-controller="MainCtrl">
+  <fa-app id="TimbreAngular" ng-click="click()" fa-controller="MainCtrl">
 
-    <fa-view
-      fa-controller="StripsCtrl"
-      fa-translate="[0, 200, 1]">
+    <fa-view id="StripsView"
+      fa-controller="StripsCtrl">
+      <fa-modifier
+        fa-translate="[0,200,1]">
+      </fa-modifier>
       <fa-surface
         ng-repeat="strip in stripContents"
         fa-translate="[0, 50 * $index, 1]"
@@ -13,11 +15,15 @@
       </fa-surface>
     </fa-view>
 
-    <fa-view
-      fa-controller="MainPageCtrl"
-      fa-translate="[0, 0, 5]">
+    <fa-view id="MainPageView"
+      fa-controller="MainPageCtrl">
+
+      <fa-modifier
+        fa-translate="[xTransitionable, 0, 5]">
+      </fa-modifier>
+
       <fa-surface
-        fa-pipe-to="$parent.eventHandler"
+        fa-pipe-to="eventHandler"
         fa-size="[320, 520]"
         fa-translate="[0, 44, 0]">
         <img width="320" src="images/body.png" />
@@ -35,6 +41,7 @@
       <fa-surface fa-size="[44, 44]" fa-origin="[1, 0]">
         <img width="44" src="images/icon.png" />
       </fa-surface>
+      
     </fa-view>
 
   </fa-app>

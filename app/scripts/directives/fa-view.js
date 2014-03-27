@@ -46,16 +46,26 @@ angular.module('integrationApp')
                 evt.stopPropagation();
               }
             })
+
+            scope._modifier = {};
+            scope.modifier = function(){
+              return scope._modifier;
+            };
+
+            scope.$on('registerModifier', function(evt, data){
+              console.log('caught registerModifier', data);
+              scope._modifier = data;
+            });
           },
           post: function(scope, element, attrs){
             if(scope.faController)
               $controller(scope.faController, {'$scope': scope})
 
-            var modifiers = {
-               origin: scope["faOrigin"],
-               translate: scope["faTranslate"]
-            };
-            scope.modifier = modifiers;
+            // var modifiers = {
+            //    faOrigin: scope["faOrigin"],
+            //    translate: scope["faTranslate"]
+            // };
+            // scope.modifier = modifiers;
             
             transclude(scope, function(clone) {
               element.find('div').append(clone);

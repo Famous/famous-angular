@@ -34,8 +34,8 @@ angular.module('integrationApp')
             var getTransform = function(data) {
               var Transform = famous['famous/core/transform']
               var transforms = [];
-              if (data.mod.translate && data.mod.translate.length) {
-                var values = data.mod.translate.map(getOrValue)
+              if (data.mod().translate && data.mod().translate.length) {
+                var values = data.mod().translate.map(getOrValue)
                 transforms.push(Transform.translate.apply(this, values));
               }
               if (scope["faRotateZ"])
@@ -50,7 +50,7 @@ angular.module('integrationApp')
                 return [];
               return scope.children.map(function(child) {
                 return {
-                  origin: child.mod.origin,
+                  origin: child.mod().origin,
                   transform: getTransform(child),
                   target: child.view.render()
                 }
