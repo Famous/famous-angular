@@ -1,0 +1,11 @@
+<fa-app >
+  <fa-scroll-view fa-controller="DemoCtrl">
+    <fa-surface
+      fa-pipe-to="eventHandler"
+      ng-repeat="surf in surfs"
+      fa-size="[undefined, surf.height]"
+      fa-background-color="surf.bgColor">
+      {{$parent.surf.content}}
+    </fa-surface>
+  </fa-scroll-view>
+</fa-app>
