@@ -14,6 +14,10 @@ angular.module('integrationApp')
                 color: scope["faColor"]
             };
 
+            var getOrValue = function(x) {
+              return x.get ? x.get() : x;
+            };
+
             var getTransform = function() {
               var Transform = famous['famous/core/transform']
               var transforms = [];
@@ -28,13 +32,15 @@ angular.module('integrationApp')
 
             var modifiers = {
                origin: scope["faOrigin"],
-               transform: getTransform()
+               translate: scope["faTranslate"]
             };
             scope.surface = new famous['famous/core/surface']({
               size: scope["faSize"],
               properties: properties
             });
-            scope.modifier = (modifiers);
+            scope.modifier = function() {
+              return (modifiers);
+            };
 
             if (scope["faPipeTo"]) {
               scope.surface.pipe(scope["faPipeTo"]);

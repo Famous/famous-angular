@@ -22,27 +22,52 @@ angular.module('integrationApp')
             FaView.prototype = Object.create(View.prototype);
             FaView.prototype.constructor = FaView;
 
+            FaView.name = scope["faName"];
+
             scope.children = [];
+
+            var getOrValue = function(x) {
+              return x.get ? x.get() : x;
+            };
+
+            var getTransform = function(data) {
+              var Transform = famous['famous/core/transform']
+              var transforms = [];
+              var mod = data.mod();
+              if (mod.translate && mod.translate.length) {
+                var values = mod.translate.map(getOrValue)
+                transforms.push(Transform.translate.apply(this, values));
+              }
+              if (mod["faRotateZ"])
+                transforms.push(Transform.rotateZ(mod["faRotateZ"]));
+              if (mod["faSkew"])
+                transforms.push(Transform.skew(0, 0, mod["faSkew"]));
+              return Transform.multiply.apply(this, transforms);
+            };
 
             FaView.prototype.render = function() {
               if(!scope.readyToRender)
                 return [];
               return scope.children.map(function(data){
                 return {
-                  origin: data.mod.origin,
-                  transform: data.mod.transform,
+                  origin: data.mod().origin,
+                  transform: getTransform(data),
                   target: data.view.render()
                 }
               });
             };
 
-            scope.view = new FaView();
+            scope.view = new FaView({
+              name: scope["faName"],
+              size: scope["faSize"] || [undefined, undefined]
+            });
 
             var Transform = famous['famous/core/transform']
 
             scope.$on('registerChild', function(evt, data){
               if(evt.targetScope.$id != scope.$id){
                 console.log('view registered', data);
+                scope.view._add(data.view);
                 scope.children.push(data);
                 evt.stopPropagation();
               }
@@ -79,7 +104,9 @@ angular.module('integrationApp')
       scope: {
         "faTranslate": '=',
         "faRotateZ": '=',
-        "faController": '@'
+        "faSize": '=',
+        "faController": '@',
+        "faName": '='
       }
     };
   }]);

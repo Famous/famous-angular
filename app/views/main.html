@@ -2,17 +2,23 @@
 
     <fa-scroll-view id="StripsView"
       fa-controller="StripsCtrl">
-      <fa-modifier
-        fa-translate="[0,200,1]">
-      </fa-modifier>
-      <fa-surface
-        ng-repeat="strip in stripContents"
-        fa-translate="[0, 50 * $index, 1]"
-        fa-size="[300, 30]"
-        fa-background-color="'black'"
-        fa-color="'white'">
-        {{$parent.strip}}
-      </fa-surface>
+
+      <fa-view ng-repeat="strip in stripContents"
+               fa-name="'strip view ' + $index"
+               fa-size="[300, 30]">
+
+        <fa-modifier
+            fa-translate="[0, 0, 1]">
+        </fa-modifier>
+
+        <fa-surface
+          fa-size="[300, 30]"
+          fa-skew="angle"
+          fa-background-color="'black'"
+          fa-color="'white'">
+          {{$parent.$parent.strip}}
+        </fa-surface>
+      </fa-view>
     </fa-scroll-view>
 
     <fa-view id="MainPageView"
