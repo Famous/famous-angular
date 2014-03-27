@@ -30,7 +30,6 @@ angular.module('integrationApp')
                origin: scope["faOrigin"],
                transform: getTransform()
             };
-            // console.log('surf pre', scope["faSize"], properties, modifiers);
             scope.surface = new famous['famous/core/surface']({
               size: scope["faSize"],
               properties: properties
@@ -43,7 +42,7 @@ angular.module('integrationApp')
           },
           post: function(scope, element, attrs){
             if(scope.faController)
-              console.log('ctrl', $controller(scope.faController, {'$scope': scope}));
+              $controller(scope.faController, {'$scope': scope});
             scope.updateContent = function(){
               //TODO:   There may be a more efficient way to do this than to 
               //        $interpolate and then string-compare.  Is there a way to
@@ -74,7 +73,6 @@ angular.module('integrationApp')
             transclude(scope, function(clone) {
               element.find('div').append(clone);
             });
-            console.log('registering ', element.html())
             scope.$emit('registerChild', {view: scope.surface, mod: scope.modifier});
           }
         }
