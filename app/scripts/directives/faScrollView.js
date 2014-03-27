@@ -22,19 +22,22 @@ angular.module('integrationApp')
                 surfaces.push(new Surface({content: 'Item ' + i, size:[100, 20]}));
             }
 
+            var _children = [];
+
             console.log("surfaces", surfaces)
 
             scope.view = new ScrollView({
               itemSpacing: 1 
             });
 
-            scope.view.sequenceFrom(surfaces);
 
             window.Engine.pipe(scope.view);
 
             scope.$on('registerChild', function(evt, data){
               if(evt.targetScope.$id != scope.$id){
                 console.log("scroll view registered", data);
+                _children.push(data.view);
+                scope.view.sequenceFrom(_children);
                 evt.stopPropagation();
               };
             });
