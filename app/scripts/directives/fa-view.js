@@ -6,6 +6,7 @@ angular.module('integrationApp')
       template: '<div></div>',
       transclude: true,
       restrict: 'EA',
+      priority: 100,
       compile: function(tElement, tAttrs, transclude){
         console.log('compiling app');
         return {

@@ -1,4 +1,4 @@
-  <fa-app ng-click="click()">
+  <fa-app ng-click="click()" fa-controller="MainCtrl">
 
     <fa-view
       fa-controller="StripsCtrl"
@@ -15,7 +15,7 @@
 
     <fa-view
       fa-controller="MainPageCtrl"
-      fa-translate="[xTransitionable, 0, 5]">
+      fa-translate="[0, 0, 5]">
       <fa-surface
         fa-pipe-to="$parent.eventHandler"
         fa-size="[320, 520]"
