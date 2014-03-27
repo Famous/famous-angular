@@ -52,7 +52,6 @@ angular.module('integrationApp')
             var Transform = famous['famous/core/transform']
 
             scope.$on('registerChild', function(evt, data){
-              console.log('view saw', data);
               if(evt.targetScope.$id != scope.$id){
                 console.log('view registered', data);
 
