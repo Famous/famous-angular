@@ -10,6 +10,10 @@ angular.module('integrationApp',['famous.angular', 'ui.router'])
       .state("demo", {
         url: "/demo",
         templateUrl: "views/demo.html"
+      })
+      .state("mainscroll", {
+        url: "/main-scroll",
+        templateUrl: "views/main-scroll.html"
       });
     });
 

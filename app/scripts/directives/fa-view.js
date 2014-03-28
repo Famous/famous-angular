@@ -12,6 +12,8 @@ angular.module('integrationApp')
         return {
           pre: function(scope, element, attrs){
             var View = famous['famous/core/view'];
+            var Engine = famous['famous/core/engine'];
+            
             //TODO:  add custom classes from attrs (or just pass through all attrs?) to
             //       the container element.
 
@@ -29,6 +31,10 @@ angular.module('integrationApp')
             var getOrValue = function(x) {
               return x.get ? x.get() : x;
             };
+
+            if (scope["faPipeTo"]) {
+              Engine.pipe(scope["faPipeTo"])
+            }
 
             var getTransform = function(data) {
               var Transform = famous['famous/core/transform']
@@ -103,6 +109,7 @@ angular.module('integrationApp')
       },
       scope: {
         "faTranslate": '=',
+        "faPipeTo": '=',
         "faRotateZ": '=',
         "faSize": '=',
         "faController": '@',

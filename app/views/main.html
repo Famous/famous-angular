@@ -29,34 +29,35 @@
         </fa-view>
       </fa-scroll-view>
 
-      <fa-view id="MainPageView"
-        fa-controller="MainPageCtrl">
+        <fa-view id="MainPageView"
+          fa-controller="MainPageCtrl">
 
-        <fa-modifier
-          fa-translate="[xTransitionable, 0, 5]">
-        </fa-modifier>
-
-        <fa-surface
-          fa-pipe-to="eventHandler"
-          fa-size="[320, 520]"
-          fa-translate="[0, 44, 0]">
-          <img width="320" src="images/body.png" />
-        </fa-surface>
-        <fa-surface
-          fa-size="[undefined, 44]"
-          fa-background-color="'black'">
-        </fa-surface>
-        <fa-surface fa-size="[44, 44]">
-          <img width="44" src="images/hamburger.png" />
-        </fa-surface>
-        <fa-surface fa-size="[232, 44]" fa-origin="[0.5, 0]">
-          <img width="232" src="images/search.png" />
-        </fa-surface>
-        <fa-surface fa-size="[44, 44]" fa-origin="[1, 0]">
-          <img width="44" src="images/icon.png" />
-        </fa-surface>
-        
-      </fa-view>
+          <fa-modifier
+            fa-translate="[xTransitionable, 0, 5]">
+          </fa-modifier>
+          <!-- <fa-scroll-view fa-pipe-from="$parent.$parent.enginePipe"> -->
+              <fa-surface
+                fa-pipe-to="eventHandler"
+                fa-size="[320, 520]"
+                fa-translate="[0, 44, 0]">
+                <img width="320" src="images/body.png" />
+              </fa-surface>
+          <!-- </fa-scroll-view> -->
+          <fa-surface
+            fa-size="[undefined, 44]"
+            fa-background-color="'black'">
+          </fa-surface>
+          <fa-surface fa-size="[44, 44]">
+            <img width="44" src="images/hamburger.png" />
+          </fa-surface>
+          <fa-surface fa-size="[232, 44]" fa-origin="[0.5, 0]">
+            <img width="232" src="images/search.png" />
+          </fa-surface>
+          <fa-surface fa-size="[44, 44]" fa-origin="[1, 0]">
+            <img width="44" src="images/icon.png" />
+          </fa-surface>
+          
+        </fa-view>
 
     </fa-app>
 </div>
