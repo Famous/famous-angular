@@ -34,11 +34,11 @@ angular.module('integrationApp')
       "famo.us"
     ]
 
-     setInterval(function(){
-       for(var i = 0; i < $scope.stripContents.length; i++){
-         $scope.stripContents[i].text = _.sample(newStripContents);
-       }
-       if(!$scope.$$phase)
-         $scope.$apply();
-     }, 333);
+     // setInterval(function(){
+     //   for(var i = 0; i < $scope.stripContents.length; i++){
+     //     $scope.stripContents[i].text = _.sample(newStripContents);
+     //   }
+     //   if(!$scope.$$phase)
+     //     $scope.$apply();
+     // }, 333);
   });
