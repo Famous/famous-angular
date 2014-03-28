@@ -9,31 +9,35 @@
         <fa-view ng-repeat="strip in stripContents"
                 fa-name="'strip view ' + $index"
                 fa-size="[300, 50]">
+          <fa-view fa-size="[300, 50]">
+            <fa-modifier
+              fa-translate="[$parent.$parent.$parent.xPosition, 0, 0]">
 
-          <fa-surface
-            fa-size="[350, 50]"
-            fa-translate="[0, 80, 1]"
-            fa-rotate-z="$parent.$parent.angle"
-            fa-skew="$parent.$parent.angle"
-            fa-background-color="'black'">
-          </fa-surface>
+            <fa-surface
+              fa-size="[350, 50]"
+              fa-translate="[0, 80, 1]"
+              fa-rotate-z="$parent.$parent.$parent.angle"
+              fa-skew="$parent.$parent.angle"
+              fa-background-color="'black'">
+            </fa-surface>
 
-          <fa-surface
-            fa-rotate-z="$parent.$parent.angle"
-            fa-color="'white'"
-            fa-size="[350, 50]"
-            fa-translate="[20, 83, 1]">
+            <fa-surface
+              fa-rotate-z="$parent.$parent.$parent.angle"
+              fa-color="'white'"
+              fa-size="[350, 50]"
+              fa-translate="[20, 83, 1]">
 
-            <img width="30" src="images/strip-icons/{{$parent.$parent.strip}}.png" />
-          </fa-surface>
+              <img width="30" src="images/strip-icons/{{$parent.$parent.$parent.strip}}.png" />
+            </fa-surface>
 
-          <fa-surface
-            fa-rotate-z="$parent.$parent.angle"
-            fa-color="'white'"
-            fa-size="[350, 50]"
-            fa-translate="[60, 78, 1]">
-            {{$parent.$parent.strip}}
-          </fa-surface>
+            <fa-surface
+              fa-rotate-z="$parent.$parent.$parent.angle"
+              fa-color="'white'"
+              fa-size="[350, 50]"
+              fa-translate="[60, 78, 1]">
+              {{$parent.$parent.$parent.strip}}
+            </fa-surface>
+          </fa-view>
 
         </fa-view>
       </fa-scroll-view>
