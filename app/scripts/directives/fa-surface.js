@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('integrationApp')
-  .directive('faSurface', function (famous, $interpolate, $controller) {
+  .directive('faSurface', function (famous, $interpolate, $controller, $compile) {
     return {
         
       compile: function(tElem, tAttrs, transclude){
@@ -52,6 +52,8 @@ angular.module('integrationApp')
             if(scope.faController)
               $controller(scope.faController, {'$scope': scope});
             scope.updateContent = function(){
+              //TODO:  fill with other properties
+              scope.surface.setProperties({'backgroundColor':  scope.faBackgroundColor});
               //TODO:   There may be a more efficient way to do this than to 
               //        $interpolate and then string-compare.  Is there a way to
               //        anchor-link a div directly, for example?
@@ -66,7 +68,9 @@ angular.module('integrationApp')
                 var prospectiveContent = $interpolate(element.find('div').html())(scope);
                 if(scope.currentContent !== prospectiveContent){ //this is a potentially large string-compare
                   scope.currentContent = prospectiveContent;
-                  scope.surface.setContent(prospectiveContent);
+                  //var compiledContent = $compile(element.find('div').contents())(scope).html();
+                  //scope.surface.setContent($interpolate(compiledContent)(scope));
+                  scope.surface.setContent(scope.currentContent);
                 }
               }
               

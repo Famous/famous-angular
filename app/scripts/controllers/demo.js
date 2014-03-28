@@ -7,24 +7,41 @@ angular.module('integrationApp')
     var EventHandler = famous['famous/core/eventhandler']
 
     var colors = [
-      '#FF0000',
-      '#00FF00',
-      '#0000FF'
+      '#869B40',
+      '#C2B02E',
+      '#629286',
+      '#B58963',
+      '#9E9B8C'
     ];
+    $scope.test = "mrow"
+
+    $scope.$watch('test', function(a){console.log(a)});
+
     var strings = [
       'famo.us',
       'angular',
       'javascript',
-      'cat'
+      'san francisco',
+      'web'
     ];
 
-    $scope.surfs = _.map(_.range(20), function(i){
+    var elements = 750;
+
+    $scope.surfs = _.map(_.range(elements), function(i){
       return {
         content: _.sample(strings),
         bgColor: _.sample(colors),
-        height: 15 + Math.random() * 25
       }
     });
+
+    // setInterval(function(){
+    //   for(var i = 0; i < elements; i++){
+    //     $scope.surfs[i].content = _.sample(strings);
+    //     $scope.surfs[i].bgColor = _.sample(colors);
+    //   }
+    //   if(!$scope.$$phase)
+    //     $scope.$apply();
+    // }, 333);
 
 
     $scope.yTransitionable = new Transitionable(0);
