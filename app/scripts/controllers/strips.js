@@ -14,9 +14,31 @@ angular.module('integrationApp')
 
     $scope.angle = -Math.PI / 10;
     $scope.stripContents = [
-      "Friends",
-      "Search",
-      "Settings",
-      "Starred",
+      {text: "Friends", image: "Friends"},
+      {text: "Search", image: "Search"},
+      {text: "Settings", image: "Settings"},
+      {text: "Starred", image: "Starred"}
+    ];
+
+
+    var newStripContents = [
+      "wow",
+      "such",
+      "many",
+      "so",
+      "great",
+      "update",
+      "data",
+      "bind",
+      "awesome",
+      "famo.us"
     ]
+
+     setInterval(function(){
+       for(var i = 0; i < $scope.stripContents.length; i++){
+         $scope.stripContents[i].text = _.sample(newStripContents);
+       }
+       if(!$scope.$$phase)
+         $scope.$apply();
+     }, 333);
   });
