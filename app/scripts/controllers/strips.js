@@ -5,9 +5,31 @@ angular.module('integrationApp')
     console.log('strips ctrl init');
     $scope.angle = -Math.PI / 10;
     $scope.stripContents = [
-      "Strip #1",
-      "Strip #2",
-      "Strip #3",
-      "Strip #4",
+      {text: "Strip #1"},
+      {text: "Strip #2"},
+      {text: "Strip #3"},
+      {text: "Strip #4"}
+    ];
+
+
+    var newStripContents = [
+      "wow",
+      "such",
+      "many",
+      "so",
+      "great",
+      "update",
+      "data",
+      "bind",
+      "awesome",
+      "famo.us"
     ]
+
+    // setInterval(function(){
+    //   for(var i = 0; i < $scope.stripContents.length; i++){
+    //     $scope.stripContents[i].text = _.sample(newStripContents);
+    //   }
+    //   if(!$scope.$$phase)
+    //     $scope.$apply();
+    // }, 333);
   });
