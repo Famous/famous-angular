@@ -1,12 +1,12 @@
 <div ng-controller="MainCtrl">
   <fa-app id="TimbreAngular" ng-click="click()"
-          fa-pipe-to="enginePipe">
+          >
 
       <fa-scroll-view id="StripsView"
                       fa-controller="StripsCtrl"
-                      fa-pipe-from="$parent.enginePipe">
+                      fa-pipe-from="enginePipe">
 
-        <fa-view ng-repeat="strip in stripContents"
+        <fa-view fa-pipe-to="$parent.enginePipe" ng-repeat="strip in stripContents"
                 fa-name="'strip view ' + $index"
                 fa-size="[300, 50]">
 
@@ -22,16 +22,7 @@
             fa-rotate-z="$parent.$parent.angle"
             fa-color="'white'"
             fa-size="[350, 50]"
-            fa-translate="[20, 83, 1]">
-
-            <img width="30" src="images/strip-icons/{{$parent.$parent.strip}}.png" />
-          </fa-surface>
-
-          <fa-surface
-            fa-rotate-z="$parent.$parent.angle"
-            fa-color="'white'"
-            fa-size="[350, 50]"
-            fa-translate="[60, 78, 1]">
+            fa-translate="[20, 90, 1]">
             {{$parent.$parent.strip}}
           </fa-surface>
 
@@ -44,12 +35,14 @@
           <fa-modifier
             fa-translate="[xTransitionable, 0, 5]">
           </fa-modifier>
-            <fa-surface
-              fa-pipe-to="eventHandler"
-              fa-size="[320, 520]"
-              fa-translate="[0, 44, 0]">
-              <img width="320" src="images/body.png" />
-            </fa-surface>
+          <fa-scroll-view fa-pipe-from="$parent.enginePipe">
+              <fa-surface
+                fa-pipe-to="$parent.eventHandler"
+                fa-size="[320, 520]"
+                fa-translate="[0, 44, 0]">
+                <img width="320" src="images/body.png" />
+              </fa-surface>
+          </fa-scroll-view>
           <fa-surface
             fa-size="[undefined, 44]"
             fa-background-color="'black'">

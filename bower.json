@@ -9,6 +9,8 @@
   "devDependencies": {
     "angular-mocks": "1.2.6",
     "angular-scenario": "1.2.6",
-    "requirejs": "~2.1.11"
+    "requirejs": "~2.1.11",
+    "angular-ui-router": "~0.2.10",
+    "underscore": "~1.6.0"
   }
 }
