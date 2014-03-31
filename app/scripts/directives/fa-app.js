@@ -68,6 +68,7 @@ angular.module('integrationApp')
             scope.context.add(scope.view);
 
             scope.$on('registerChild', function(evt, data){
+              console.log("app registered child", data);
               scope.children.push(data);
               evt.stopPropagation();
             })

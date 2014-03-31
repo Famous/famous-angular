@@ -14,6 +14,14 @@ angular.module('integrationApp',['famous.angular', 'ui.router'])
       .state("mainscroll", {
         url: "/main-scroll",
         templateUrl: "views/main-scroll.html"
+      })
+      .state("modifiers", {
+        url: "/modifiers",
+        templateUrl: "views/modifiers.html"
+      })
+      .state("reading", {
+        url: "/reading",
+        templateUrl: "views/reading.html"
       });
     });
 

@@ -8,6 +8,7 @@ var requirements = [
   "famous/core/transform",
   "famous/core/eventhandler",
   "famous/inputs/genericsync",
+  "famous/core/rendernode",
   "famous/transitions/transitionable",
   "famous/views/scrollview",
   "famous/core/viewsequence"
