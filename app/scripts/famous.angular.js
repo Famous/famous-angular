@@ -7,7 +7,7 @@ var requirements = [
   "famous/core/modifier",
   "famous/core/transform",
   "famous/core/eventhandler",
-  "famous/input/genericsync",
+  "famous/inputs/genericsync",
   "famous/transitions/transitionable",
   "famous/views/scrollview",
   "famous/core/viewsequence"
