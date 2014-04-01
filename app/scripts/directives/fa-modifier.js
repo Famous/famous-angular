@@ -19,7 +19,6 @@ angular.module('integrationApp')
             var Modifier = famous['famous/core/modifier']
 
             var getTransform = function() {
-              console.log("getting transform");
               var Transform = famous['famous/core/transform']
               var transforms = [];
               if (scope["faTranslate"])
