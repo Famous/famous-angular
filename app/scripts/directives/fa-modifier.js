@@ -13,8 +13,8 @@ angular.module('integrationApp')
           pre: function(scope, element, attrs){
           },
           post: function(scope, elemetn, attrs){
-            var Modifier = famous['famous/core/modifier']
-            var Transform = famous['famous/core/transform']
+            var Modifier = famous['famous/core/Modifier']
+            var Transform = famous['famous/core/Transform']
 
             var transforms = [];
             if(scope.faTranslate){

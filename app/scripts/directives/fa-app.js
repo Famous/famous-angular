@@ -12,12 +12,12 @@ angular.module('integrationApp')
       compile: function(tElement, tAttrs, transclude){
         return {
           pre: function(scope, element, attrs){
-            console.log('app pre', scope);
-            var View = famous['famous/core/view'];
+            var View = famous['famous/core/View'];
+            var Engine = famous['famous/core/Engine'];
+            var Transform = famous['famous/core/Transform']
 
             element.append('<div class="famous-angular-container"></div>');
             var famousContainer = $(element.find('.famous-angular-container'))[0];
-            var Engine = famous['famous/core/engine'];
             scope.context = Engine.createContext(famousContainer);
 
             if (scope["faPipeTo"]) {
@@ -39,7 +39,6 @@ angular.module('integrationApp')
             };
 
             var getTransform = function(data) {
-              var Transform = famous['famous/core/transform']
               var transforms = [];
               if (data.mod().translate && data.mod().translate.length) {
                 var values = data.mod().translate.map(getOrValue)

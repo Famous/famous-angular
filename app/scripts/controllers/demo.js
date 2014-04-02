@@ -2,9 +2,9 @@
 
 angular.module('integrationApp')
   .controller('DemoCtrl', function ($scope, famous) {
-    var GenericSync = famous['famous/input/genericsync'];
-    var Transitionable = famous['famous/transitions/transitionable']
-    var EventHandler = famous['famous/core/eventhandler']
+    var GenericSync = famous['famous/inputs/GenericSync'];
+    var Transitionable = famous['famous/transitions/Transitionable']
+    var EventHandler = famous['famous/core/EventHandler']
 
     var colors = [
       '#869B40',

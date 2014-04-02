@@ -2,9 +2,9 @@
 
 angular.module('integrationApp')
   .controller('MainPageCtrl', function ($scope, famous) {
-    var Transitionable = famous['famous/transitions/transitionable']
-    var GenericSync = famous['famous/input/genericsync']
-    var EventHandler = famous['famous/core/eventhandler']
+    var Transitionable = famous['famous/transitions/Transitionable']
+    var GenericSync = famous['famous/inputs/GenericSync']
+    var EventHandler = famous['famous/core/EventHandler']
 
     $scope.angle = -Math.PI / 6
     $scope.open = false

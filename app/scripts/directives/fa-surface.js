@@ -9,6 +9,9 @@ angular.module('integrationApp')
 
         return {
           pre: function(scope, element, attrs){
+            var Surface = famous['famous/core/Surface'];
+            var Transform = famous['famous/core/Transform']
+            
             var properties = {
                 backgroundColor: scope["faBackgroundColor"],
                 color: scope["faColor"]
@@ -19,7 +22,6 @@ angular.module('integrationApp')
             };
 
             var getTransform = function() {
-              var Transform = famous['famous/core/transform']
               var transforms = [];
               if (scope["faTranslate"])
                 transforms.push(Transform.translate.apply(this, scope["faTranslate"]));
@@ -36,7 +38,7 @@ angular.module('integrationApp')
                rotateZ: scope["faRotateZ"],
                skew: scope["faSkew"],
             };
-            scope.surface = new famous['famous/core/surface']({
+            scope.surface = new Surface({
               size: scope["faSize"],
               properties: properties
             });
