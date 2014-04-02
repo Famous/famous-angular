@@ -6,6 +6,9 @@ angular.module('integrationApp')
       template: '<div style="display: none;"><div></div></div>',
       transclude: true,
       restrict: 'EA',
+      scope: {
+        "faPipeTo": '='
+      },
       compile: function(tElement, tAttrs, transclude){
         return {
           pre: function(scope, element, attrs){
@@ -17,10 +20,10 @@ angular.module('integrationApp')
             var famousContainer = $(element.find('.famous-angular-container'))[0];
             scope.context = Engine.createContext(famousContainer);
 
-            attrs.$observe('faPipeTo', function(val){
-              var pipeTo = scope.$eval(val);
-              Engine.pipe(pipeTo);
-            })
+            if (scope["faPipeTo"]) {
+              Engine.pipe(scope["faPipeTo"])
+            }
+
 
             function AppView(){
               View.apply(this, arguments);
