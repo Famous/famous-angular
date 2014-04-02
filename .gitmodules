@@ -1,31 +1,6 @@
-[submodule "app/scripts/famous/core"]
-	path = app/scripts/famous/core
+[submodule "app/scripts/famous"]
+	path = app/scripts/famous
 	url = git@github.com:Famous/famous.git
-[submodule "app/scripts/famous/input"]
-	path = app/scripts/famous/input
-	url = git@github.com:Famous/famous-sync.git
-[submodule "app/scripts/famous/math"]
-	path = app/scripts/famous/math
-	url = git@github.com:Famous/math.git
-[submodule "app/scripts/famous/modifiers"]
-	path = app/scripts/famous/modifiers
-	url = git@github.com:Famous/famous-modifiers.git
-[submodule "app/scripts/famous/physics"]
-	path = app/scripts/famous/physics
-	url = git@github.com:Famous/famous-physics.git
-[submodule "app/scripts/famous/surfaces"]
-	path = app/scripts/famous/surfaces
-	url = git@github.com:Famous/famous-surfaces.git
-[submodule "app/scripts/famous/transitions"]
-	path = app/scripts/famous/transitions
-	url = git@github.com:Famous/famous-transitions.git
-[submodule "app/scripts/famous/utilities"]
-	path = app/scripts/famous/utilities
-	url = git@github.com:Famous/famous-utilities.git
-[submodule "app/scripts/famous/views"]
-	path = app/scripts/famous/views
-	url = git@github.com:Famous/famous-views.git
-[submodule "app/scripts/famous/widgets"]
-	path = app/scripts/famous/widgets
-	url = git@github.com:Famous/famous-widgets.git
-
+[submodule "app/scripts/lib"]
+	path = app/scripts/lib
+	url = git@github.com:Famous/lib.git

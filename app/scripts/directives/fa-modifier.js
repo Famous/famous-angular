@@ -11,20 +11,19 @@ angular.module('integrationApp')
       },
       compile: function(tElement, tAttrs, transclude){
 
-        var RenderNode = famous['famous/core/rendernode']
+        var RenderNode = famous['famous/core/RenderNode']
         var node = new RenderNode();
 
         return {
           pre: function(scope, element, attrs){
-            console.log("modifier pre");
-            var Modifier = famous['famous/core/modifier']
+            var Modifier = famous['famous/core/Modifier']
+            var Transform = famous['famous/core/Transform']
 
             var getOrValue = function(x) {
               return x.get ? x.get() : x;
             };
 
             var getTransform = function() {
-              var Transform = famous['famous/core/transform']
               var transforms = [Transform.translate(0, 0, 0)];
               if (scope["faTranslate"]) {
                 var values = scope["faTranslate"].map(getOrValue)

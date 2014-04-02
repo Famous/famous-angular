@@ -11,9 +11,9 @@ angular.module('integrationApp')
         return  {
           pre: function(scope, element, attrs){
 
-            var ScrollView = famous["famous/views/scrollview"];
-            var ViewSequence = famous['famous/core/viewsequence'];
-            var Surface = famous['famous/core/surface'];
+            var ScrollView = famous["famous/views/ScrollView"];
+            var ViewSequence = famous['famous/core/ViewSequence'];
+            var Surface = famous['famous/core/Surface'];
 
             var _children = [];
 

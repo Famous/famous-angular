@@ -11,8 +11,9 @@ angular.module('integrationApp')
         console.log('compiling app');
         return {
           pre: function(scope, element, attrs){
-            var View = famous['famous/core/view'];
-            var Engine = famous['famous/core/engine'];
+            var View = famous['famous/core/View'];
+            var Engine = famous['famous/core/Engine'];
+            var Transform = famous['famous/core/Transform']
             
             //TODO:  add custom classes from attrs (or just pass through all attrs?) to
             //       the container element.
@@ -37,7 +38,6 @@ angular.module('integrationApp')
             }
 
             var getTransform = function(data) {
-              var Transform = famous['famous/core/transform']
               var transforms = [];
               var mod = data.mod();
               if (mod.translate && mod.translate.length) {
@@ -55,8 +55,6 @@ angular.module('integrationApp')
               name: scope["faName"],
               size: scope["faSize"] || [undefined, undefined]
             });
-
-            var Transform = famous['famous/core/transform']
 
             scope.$on('registerChild', function(evt, data){
               if(evt.targetScope.$id != scope.$id){

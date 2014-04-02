@@ -2,7 +2,7 @@
 
 angular.module('integrationApp')
   .controller('StripsCtrl', function ($scope, famous) {
-    var Transitionable = famous["famous/transitions/transitionable"];
+    var Transitionable = famous["famous/transitions/Transitionable"];
     console.log('strips ctrl init');
     $scope.xPosition = new Transitionable(0);
 
