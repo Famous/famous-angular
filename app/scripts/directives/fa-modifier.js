@@ -7,7 +7,10 @@ angular.module('integrationApp')
       transclude: true,
       scope: {
         "faTranslate": '=',
-        "faOrigin": '='
+        "faRotateZ": '=',
+        "faSkew": '=',
+        "faOrigin": '=',
+        "faSize": '=',
       },
       compile: function(tElement, tAttrs, transclude){
 
@@ -36,7 +39,9 @@ angular.module('integrationApp')
               return Transform.multiply.apply(this, transforms);
             };
 
-            var modifier = new Modifier({transform: getTransform, origin: scope["faOrigin"]});
+            var modifier = new Modifier({transform: getTransform,
+                                         size: scope["faSize"],
+                                         origin: scope["faOrigin"]});
             var modifierNode = node.add(modifier);
             
             console.log("creating modifier with", {transform: getTransform, origin: scope["faOrigin"]});

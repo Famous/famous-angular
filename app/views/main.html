@@ -6,44 +6,48 @@
                       fa-controller="StripsCtrl"
                       fa-pipe-from="$parent.enginePipe">
 
-        <fa-modifier>
-
           <fa-view ng-repeat="strip in stripContents"
                   fa-name="'strip view ' + $index"
                   fa-size="[300, 50]">
 
-            <fa-view fa-size="[300, 50]">
-
-
-              <fa-surface
+              <fa-modifier
                 fa-size="[350, 50]"
-                fa-translate="[0, 80, 1]"
-                fa-rotate-z="$parent.$parent.$parent.angle"
                 fa-skew="$parent.$parent.angle"
-                fa-background-color="'black'">
-              </fa-surface>
+                fa-translate="[0, 80, 1]"
+                fa-rotate-z="$parent.$parent.angle">
+                <fa-surface
+                  fa-size="[350, 50]"
+                  fa-background-color="'black'">
+                </fa-surface>
+              </fa-modifier>
 
-              <fa-surface
-                fa-rotate-z="$parent.$parent.$parent.angle"
-                fa-color="'white'"
+              <fa-modifier
                 fa-size="[350, 50]"
+                fa-rotate-z="$parent.$parent.angle"
                 fa-translate="[20, 83, 1]">
+                <fa-surface
+                  fa-color="'white'"
+                  fa-size="[350, 50]">
 
-                <img width="30" src="images/strip-icons/{{$parent.$parent.$parent.strip.image}}.png" />
+                  <img width="30" src="images/strip-icons/{{$parent.$parent.$parent.strip.image}}.png" />
 
-              </fa-surface>
+                </fa-surface>
+              </fa-modifier>
 
-              <fa-surface
-                fa-rotate-z="$parent.$parent.$parent.angle"
-                fa-color="'white'"
+              <fa-modifier
                 fa-size="[350, 50]"
+                fa-rotate-z="$parent.$parent.angle"
                 fa-translate="[60, 78, 1]">
+                <fa-surface
+                  fa-color="'white'"
+                  fa-size="[350, 50]">
 
-                {{$parent.$parent.$parent.strip.text}}
-              </fa-surface>
+                  {{$parent.$parent.$parent.strip.text}}
+                </fa-surface>
+              </fa-modifier>
+
             </fa-view>
           </fa-view>
-        </fa-modifier>
       </fa-scroll-view>
 
       <fa-view

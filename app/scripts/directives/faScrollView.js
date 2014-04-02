@@ -18,7 +18,7 @@ angular.module('integrationApp')
             var _children = [];
 
             scope.view = new ScrollView({
-              itemSpacing: 10
+              itemSpacing: 100
             });
 
             if (scope["faPipeFrom"]) {
@@ -31,16 +31,6 @@ angular.module('integrationApp')
                 scope.view.sequenceFrom(_children);
                 evt.stopPropagation();
               };
-            });
-
-            scope._modifier = {};
-            scope.modifier = function(){
-              return scope._modifier;
-            };
-
-            scope.$on('registerModifier', function(evt, data){
-              console.log('caught registerModifier', data);
-              scope._modifier = data;
             });
 
           },

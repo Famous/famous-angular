@@ -9,7 +9,7 @@ angular.module('integrationApp')
     $scope.angle = -Math.PI / 6
     $scope.open = false
 
-    $scope.xTransitionable = new Transitionable(0);
+    $scope.xTransitionable = new Transitionable(272);
 
     var sync = new GenericSync(function() {
       return $scope.xTransitionable.get(0);
