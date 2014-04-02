@@ -51,18 +51,6 @@ angular.module('integrationApp')
               return Transform.multiply.apply(this, transforms);
             };
 
-            FaView.prototype.render = function() {
-              if(!scope.readyToRender)
-                return [];
-              return scope.children.map(function(data){
-                return {
-                  origin: data.mod().origin,
-                  transform: getTransform(data),
-                  target: data.view.render()
-                }
-              });
-            };
-
             scope.view = new FaView({
               name: scope["faName"],
               size: scope["faSize"] || [undefined, undefined]
@@ -72,9 +60,8 @@ angular.module('integrationApp')
 
             scope.$on('registerChild', function(evt, data){
               if(evt.targetScope.$id != scope.$id){
-                console.log('view registered', data);
-                scope.view._add(data.view);
-                scope.children.push(data);
+                console.log("view registered", data);
+                scope.view.add(data.view);
                 evt.stopPropagation();
               }
             })
@@ -83,11 +70,6 @@ angular.module('integrationApp')
             scope.modifier = function(){
               return scope._modifier;
             };
-
-            scope.$on('registerModifier', function(evt, data){
-              console.log('caught registerModifier', data);
-              scope._modifier = data;
-            });
           },
           post: function(scope, element, attrs){
             if(scope.faController)

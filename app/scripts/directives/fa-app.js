@@ -32,8 +32,6 @@ angular.module('integrationApp')
             AppView.prototype = Object.create(View.prototype);
             AppView.prototype.constructor = AppView;
 
-            scope.children = [];
-
             var getOrValue = function(x) {
               return x.get ? x.get() : x;
             };
@@ -52,24 +50,12 @@ angular.module('integrationApp')
               return Transform.multiply.apply(this, transforms);
             };
 
-            AppView.prototype.render = function() {
-              if(!scope.readyToRender)
-                return [];
-              return scope.children.map(function(child) {
-                return {
-                  origin: child.mod().origin,
-                  transform: getTransform(child),
-                  target: child.view.render()
-                }
-              });
-            };
-
             scope.view = new AppView();
             scope.context.add(scope.view);
 
             scope.$on('registerChild', function(evt, data){
               console.log("app registered child", data);
-              scope.children.push(data);
+              scope.view.add(data.view);
               evt.stopPropagation();
             })
           },

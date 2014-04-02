@@ -6,7 +6,8 @@ angular.module('integrationApp')
       restrict: 'E',
       transclude: true,
       scope: {
-        "faTranslate": '='
+        "faTranslate": '=',
+        "faOrigin": '='
       },
       compile: function(tElement, tAttrs, transclude){
 
@@ -18,11 +19,17 @@ angular.module('integrationApp')
             console.log("modifier pre");
             var Modifier = famous['famous/core/modifier']
 
+            var getOrValue = function(x) {
+              return x.get ? x.get() : x;
+            };
+
             var getTransform = function() {
               var Transform = famous['famous/core/transform']
-              var transforms = [];
-              if (scope["faTranslate"])
-                transforms.push(Transform.translate.apply(this, scope["faTranslate"]));
+              var transforms = [Transform.translate(0, 0, 0)];
+              if (scope["faTranslate"]) {
+                var values = scope["faTranslate"].map(getOrValue)
+                transforms.push(Transform.translate.apply(this, values));
+              }
               if (scope["faRotateZ"])
                 transforms.push(Transform.rotateZ(scope["faRotateZ"]));
               if (scope["faSkew"])
@@ -30,8 +37,10 @@ angular.module('integrationApp')
               return Transform.multiply.apply(this, transforms);
             };
 
-            var modifier = new Modifier({transform: getTransform});
+            var modifier = new Modifier({transform: getTransform, origin: scope["faOrigin"]});
             var modifierNode = node.add(modifier);
+            
+            console.log("creating modifier with", {transform: getTransform, origin: scope["faOrigin"]});
 
             scope.$on('registerChild', function(evt, data){
               console.log("modifier heard child", data);

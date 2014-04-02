@@ -3,7 +3,7 @@
 angular.module('integrationApp')
   .controller('MainPageCtrl', function ($scope, famous) {
     var Transitionable = famous['famous/transitions/transitionable']
-    var GenericSync = famous['famous/input/genericsync']
+    var GenericSync = famous['famous/inputs/genericsync']
     var EventHandler = famous['famous/core/eventhandler']
 
     $scope.angle = -Math.PI / 6
