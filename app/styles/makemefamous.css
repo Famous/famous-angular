@@ -1,0 +1,42 @@
+.container {
+  width: 100%;
+  height: 100%;
+}
+
+.makemefamous {
+  background : rgba(240, 75, 106, 1);
+  width: 100%;
+  height: 100%;
+  padding-top: 18pt;
+}
+
+h1 {
+  font-family : "Periodico Display";
+  font-weight: 900;
+  font-style: italic;
+  font-size : 22px;
+  line-height : 1em;
+  color: #243540;
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: -1em;
+  text-align: center;
+}
+
+h2 {
+  font-family: Helvetica;
+  font-size: 14px;
+  font-weight: lighter;
+  line-height: 1;
+  letter-spacing: 0.7px;
+  color: rgb(36, 53, 64);
+  margin-top: 8pt;
+  margin-bottom: 0;
+  text-align: center;
+}
+
+.images {
+  position: relative;
+  margin-top: 2em;
+}
+
