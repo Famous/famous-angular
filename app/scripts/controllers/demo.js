@@ -22,7 +22,7 @@ angular.module('integrationApp')
       'web'
     ];
 
-    var elements = 7;
+    var elements = 70;
 
     $scope.surfs = _.map(_.range(elements), function(i){
       return {

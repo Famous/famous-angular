@@ -5,22 +5,19 @@ angular.module('integrationApp')
     return {
       restrict: 'E',
       transclude: true,
-      scope: {
-        "faTranslate": '=',
-        "faRotateZ": '=',
-        "faSkew": '=',
-        "faOrigin": '=',
-        "faSize": '=',
-      },
       compile: function(tElement, tAttrs, transclude){
-
-        var RenderNode = famous['famous/core/RenderNode']
-        var node = new RenderNode();
 
         return {
           pre: function(scope, element, attrs){
+            scope.isolate = scope.isolate || {};
+            scope.isolate[scope.$id] = scope.isolate[scope.$id] || {};
+            var isolate = scope.isolate[scope.$id];
+
+            var RenderNode = famous['famous/core/RenderNode']
             var Modifier = famous['famous/core/Modifier']
             var Transform = famous['famous/core/Transform']
+
+            isolate.node = new RenderNode();
 
             var getOrValue = function(x) {
               return x.get ? x.get() : x;
@@ -28,23 +25,23 @@ angular.module('integrationApp')
 
             var getTransform = function() {
               var transforms = [Transform.translate(0, 0, 0)];
-              if (scope["faTranslate"]) {
-                var values = scope["faTranslate"].map(getOrValue)
+              if (attrs.faTranslate) {
+                var values = scope.$eval(attrs.faTranslate).map(getOrValue)
                 transforms.push(Transform.translate.apply(this, values));
               }
-              if (scope["faRotateZ"])
-                transforms.push(Transform.rotateZ(scope["faRotateZ"]));
-              if (scope["faSkew"])
-                transforms.push(Transform.skew(0, 0, scope["faSkew"]));
+              if (attrs.faRotateZ)
+                transforms.push(Transform.rotateZ(scope.$eval(attrs.faRotateZ)));
+              if (attrs.faSkew)
+                transforms.push(Transform.skew(0, 0, scope.$eval(attrs.faSkew)));
               return Transform.multiply.apply(this, transforms);
             };
 
             var modifier = new Modifier({transform: getTransform,
-                                         size: scope["faSize"],
-                                         origin: scope["faOrigin"]});
-            var modifierNode = node.add(modifier);
+                                         size: scope.$eval(attrs.faSize),
+                                         origin: scope.$eval(attrs.faOrigin)});
+            var modifierNode = isolate.node.add(modifier);
             
-            console.log("creating modifier with", {transform: getTransform, origin: scope["faOrigin"]});
+            console.log("creating modifier with", {transform: getTransform, origin: scope.$eval(attrs.faOrigin)});
 
             scope.$on('registerChild', function(evt, data){
               console.log("modifier heard child", data);
@@ -56,16 +53,19 @@ angular.module('integrationApp')
               }
             })
 
-            if(scope.faTranslate){
+            if(attrs.faTranslate){
             }
           },
           post: function(scope, element, attrs){
+            scope.isolate = scope.isolate || {};
+            scope.isolate[scope.$id] = scope.isolate[scope.$id] || {};
+            var isolate = scope.isolate[scope.$id];
 
             transclude(scope, function(clone) {
               element.find('div div').append(clone);
             });
 
-            scope.$emit('registerChild', {view: node, mod: function() { return {origin: ""}; }});
+            scope.$emit('registerChild', {view: isolate.node, mod: function() { return {origin: ""}; }});
 
           }
 
