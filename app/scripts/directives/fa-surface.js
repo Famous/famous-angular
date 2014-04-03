@@ -24,17 +24,6 @@ angular.module('integrationApp')
               return x.get ? x.get() : x;
             };
 
-            var getTransform = function() {
-              var transforms = [];
-              if (attrs.faTranslate)
-                transforms.push(Transform.translate.apply(this, scope.$eval(attrs.faTranslate)));
-              if (attrs.faRotateZ)
-                transforms.push(Transform.rotateZ(scope.$eval(attrs.faRotateZ)));
-              if (attrs.faSkew)
-                transforms.push(Transform.skew(0, 0, scope.$eval(attrs.faSkew)));
-              return Transform.multiply.apply(this, transforms);
-            };
-
             var modifiers = {
                origin: scope.$eval(attrs.faOrigin),
                translate: scope.$eval(attrs.faTranslate),
