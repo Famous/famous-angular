@@ -5,9 +5,13 @@ angular.module('integrationApp')
     return {
         
       compile: function(tElem, tAttrs, transclude){
-        var isolate = {};
         return {
+
           pre: function(scope, element, attrs){
+            scope.isolate = scope.isolate || {};
+            scope.isolate[scope.$id] = scope.isolate[scope.$id] || {};
+            var isolate = scope.isolate[scope.$id];
+
             var Surface = famous['famous/core/Surface'];
             var Transform = famous['famous/core/Transform']
             
@@ -50,6 +54,7 @@ angular.module('integrationApp')
             }
           },
           post: function(scope, element, attrs){
+            var isolate = scope.isolate[scope.$id];
             // if(scope.faController)
             //   $controller(scope.faController, {'$scope': scope});
             var updateContent = function(){
@@ -68,7 +73,6 @@ angular.module('integrationApp')
               //           -- only update the surface if one of those values changes    
               if(element.find('div') && element.find('div').html()){
                 var prospectiveContent = $interpolate(element.find('div').html())(scope);
-                console.log('prospectiveContent', prospectiveContent)
                 if(isolate.currentContent !== prospectiveContent){ //this is a potentially large string-compare
                   isolate.currentContent = prospectiveContent;
                   //var compiledContent = $compile(element.find('div').contents())(scope).html();

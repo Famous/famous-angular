@@ -8,11 +8,13 @@ angular.module('integrationApp')
       restrict: 'EA',
       priority: 100,
       compile: function(tElement, tAttrs, transclude){
-        var isolate = {}; //data container for attributes belonging
-                          //to this instance of this directive
         console.log('compiling app');
         return {
           pre: function(scope, element, attrs){
+            scope.isolate = scope.isolate || {};
+            scope.isolate[scope.$id] = scope.isolate[scope.$id] || {};
+            var isolate = scope.isolate[scope.$id];
+            
             var View = famous['famous/core/View'];
             var Engine = famous['famous/core/Engine'];
             var Transform = famous['famous/core/Transform']
@@ -92,6 +94,7 @@ angular.module('integrationApp')
             });
           },
           post: function(scope, element, attrs){
+            var isolate = scope.isolate[scope.$id];
             // if(scope.faController)
             //   $controller(scope.faController, {'$scope': scope})
 

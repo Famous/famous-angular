@@ -13,9 +13,6 @@ angular.module('integrationApp')
       '#B58963',
       '#9E9B8C'
     ];
-    $scope.test = "mrow"
-
-    $scope.$watch('test', function(a){console.log(a)});
 
     var strings = [
       'famo.us',
@@ -25,7 +22,7 @@ angular.module('integrationApp')
       'web'
     ];
 
-    var elements = 3;
+    var elements = 7;
 
     $scope.surfs = _.map(_.range(elements), function(i){
       return {
