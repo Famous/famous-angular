@@ -19,6 +19,10 @@ angular.module('integrationApp',['famous.angular', 'ui.router'])
         url: "/modifiers",
         templateUrl: "views/modifiers.html"
       })
+      .state("makemefamous", {
+        url: "/makemefamous",
+        templateUrl: "views/makemefamous.html"
+      })
       .state("reading", {
         url: "/reading",
         templateUrl: "views/reading.html"
