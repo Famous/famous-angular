@@ -62,9 +62,9 @@ angular.module('integrationApp')
                 return [];
               return isolate.children.map(function(data){
                 return {
-                  origin: data.mod().origin,
-                  transform: getTransform(data),
-                  target: data.view.render()
+                  // origin: data.mod().origin,
+                  // transform: getTransform(data),
+                  // target: data.view.render()
                 }
               });
             };

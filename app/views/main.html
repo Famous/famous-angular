@@ -12,9 +12,9 @@
 
               <fa-modifier
                 fa-size="[350, 50]"
-                fa-skew="$parent.$parent.angle"
+                fa-skew="angle"
                 fa-translate="[0, 80, 1]"
-                fa-rotate-z="$parent.$parent.angle">
+                fa-rotate-z="angle">
                 <fa-surface
                   fa-size="[350, 50]"
                   fa-background-color="'black'">
@@ -23,26 +23,26 @@
 
               <fa-modifier
                 fa-size="[350, 50]"
-                fa-rotate-z="$parent.$parent.angle"
+                fa-rotate-z="angle"
                 fa-translate="[20, 83, 1]">
                 <fa-surface
                   fa-color="'white'"
                   fa-size="[350, 50]">
 
-                  <img width="30" src="images/strip-icons/{{$parent.$parent.$parent.strip.image}}.png" />
+                  <img width="30" src="images/strip-icons/{{strip.image}}.png" />
 
                 </fa-surface>
               </fa-modifier>
 
               <fa-modifier
                 fa-size="[350, 50]"
-                fa-rotate-z="$parent.$parent.angle"
+                fa-rotate-z="angle"
                 fa-translate="[60, 78, 1]">
                 <fa-surface
                   fa-color="'white'"
                   fa-size="[350, 50]">
 
-                  {{$parent.$parent.$parent.strip.text}}
+                  {{strip.text}}
                 </fa-surface>
               </fa-modifier>
 
@@ -60,7 +60,7 @@
             <fa-modifier
               fa-translate="[0, 44, 0]">
               <fa-surface
-                fa-pipe-to="$parent.$parent.$parent.eventHandler"
+                fa-pipe-to="eventHandler"
                 fa-size="[320, 520]">
                 <img width="320" src="images/body.png" />
               </fa-surface>
