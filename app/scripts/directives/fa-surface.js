@@ -50,6 +50,7 @@ angular.module('integrationApp')
             };
 
             if (attrs.faPipeTo) {
+              console.log('pipe surface scope', scope.$eval(attrs.faPipeTo))
               isolate.surface.pipe(scope.$eval(attrs.faPipeTo));
             }
           },

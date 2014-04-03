@@ -77,7 +77,7 @@ angular.module('integrationApp')
             scope.$on('registerChild', function(evt, data){
               if(evt.targetScope.$id != scope.$id){
                 console.log('view registered', data);
-                isolate.view._add(data.view);
+                isolate.view.add(data.view);
                 isolate.children.push(data);
                 evt.stopPropagation();
               }
