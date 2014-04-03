@@ -54,7 +54,7 @@ angular.module('integrationApp')
             //   $controller(scope.faController, {'$scope': scope});
             var updateContent = function(){
               //TODO:  fill with other properties
-              console.log('attrs.faBackgroundColor', scope.$eval(attrs.faBackgroundColor))
+              // console.log('attrs.faBackgroundColor', scope.$eval(attrs.faBackgroundColor))
               isolate.surface.setProperties({'backgroundColor':  scope.$eval(attrs.faBackgroundColor)});
               //TODO:   There may be a more efficient way to do this than to 
               //        $interpolate and then string-compare.  Is there a way to
@@ -68,7 +68,7 @@ angular.module('integrationApp')
               //           -- only update the surface if one of those values changes    
               if(element.find('div') && element.find('div').html()){
                 var prospectiveContent = $interpolate(element.find('div').html())(scope);
-                console.log('prospectiveContent', prospectiveContent);
+                console.log('prospectiveContent', prospectiveContent)
                 if(isolate.currentContent !== prospectiveContent){ //this is a potentially large string-compare
                   isolate.currentContent = prospectiveContent;
                   //var compiledContent = $compile(element.find('div').contents())(scope).html();

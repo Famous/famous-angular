@@ -37,7 +37,8 @@ angular.module('integrationApp')
 
             attrs.$observe('faPipeTo', function(val){
               var pipeTo = scope.$eval(val);
-              Engine.pipe(pipeTo);
+              if(pipeTo)
+                Engine.pipe(pipeTo);
             })
 
             var getTransform = function(data) {
@@ -74,8 +75,8 @@ angular.module('integrationApp')
             scope.$on('registerChild', function(evt, data){
               if(evt.targetScope.$id != scope.$id){
                 console.log('view registered', data);
-                scope.view._add(data.view);
-                scope.children.push(data);
+                isolate.view._add(data.view);
+                isolate.children.push(data);
                 evt.stopPropagation();
               }
             })
@@ -104,7 +105,7 @@ angular.module('integrationApp')
               element.find('div').append(clone);
             });
             scope.$emit('registerChild', {view: isolate.view, mod: isolate.modifier});
-            scope.readyToRender = true;
+            isolate.readyToRender = true;
           }
         }
       }

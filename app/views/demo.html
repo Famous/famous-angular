@@ -1,14 +1,15 @@
   <fa-app fa-pipe-to="enginePipe" ng-controller="MainCtrl">
     <fa-view fa-pipe-to="enginePipe" fa-background-color="'black'">
-      <fa-scroll-view fa-pipe-from="enginePipe" fa-controller="DemoCtrl">
+      <fa-view fa-pipe-from="enginePipe" ng-controller="DemoCtrl">
         <fa-surface
           fa-pipe-to="$parent.eventHandler"
           ng-repeat="surf in surfs"
           fa-size="[undefined, 75]"
+          fa-translate="[0, $index * 75, 0]"
           fa-background-color="surf.bgColor">
           {{surf.content}}
           Index: {{$index}}
         </fa-surface>
-      </fa-scroll-view>
+      </fa-view>
     </fa-view>
   </fa-app>
