@@ -12,14 +12,36 @@ angular.module('integrationApp')
     var height = 115;
 
     var Transitionable = famous["famous/transitions/Transitionable"];
+    var GenericSync = famous['famous/inputs/GenericSync']
+    var EventHandler = famous['famous/core/EventHandler']
 
-    $scope.visible = new Transitionable(0);
+    $scope.visible = new Transitionable(115);
+
+    var sync = new GenericSync(function() {
+      return $scope.visible.get(1);
+    }, {direction: GenericSync.DIRECTION_Y});
+
+    sync.on('update', function(data) {
+      $scope.visible.set(data.p);
+    });
+
+    $scope.eventHandler = new EventHandler();
+    $scope.eventHandler.pipe(sync);
 
     $scope.offset = function() {
-      return ($scope.visible.get() - 1) * height;
+      return ($scope.visible.get() - height);
     };
 
     $scope.images = [];
+
+    var flat = function(n) {
+      return (n * height) < $scope.visible.get();
+    };
+
+    var rotating = function(n) {
+      var visiblePics = $scope.visible.get() / height;
+      return Math.floor(visiblePics) === n;
+    };
 
     $scope.addImage = function() {
       var n = $scope.images.length;
@@ -27,19 +49,26 @@ angular.module('integrationApp')
       $scope.images.push({
         url: pic,
         y: function() {
-          if ((Math.floor($scope.visible.get()) === n)) return 30;
+          if (rotating(n)) return 30;
           return -(height * n) + 30 + $scope.offset();
         },
         xRotation: function() {
-          if (! (Math.floor($scope.visible.get()) === n)) return 0;
-          var visibleHeight = ($scope.visible.get() % 1) * height;
-          var theta = (Math.PI / 2) - Math.asin( visibleHeight / height);
-          return theta;
+          if (rotating(n)) {
+            var visibleHeight = ($scope.visible.get() % height);
+            var theta = (Math.PI / 2) - Math.asin( visibleHeight / height);
+            return theta;
+          }
+          if (flat(n)) return 0;
+          return Math.PI / 2;
         }
       });
-      $scope.visible.set($scope.visible.get() + 1, {duration: 300, curve: 'easeOut'})
     };
 
+    $scope.addImage();
+    $scope.addImage();
+    $scope.addImage();
+    $scope.addImage();
+    $scope.addImage();
     $scope.addImage();
 
 

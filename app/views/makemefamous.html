@@ -1,7 +1,7 @@
 <div class="makemefamous" ng-controller='MakeMeFamousCtrl' ng-click="addImage()">
   <h1><span class="hashtag">#</span> Famous</h1>
   <h2>Go ahead, make someone  famous</h2>
-  <div class="images" fa-app>
+  <div class="images" fa-app fa-pipe-to="eventHandler">
       <fa-modifier ng-repeat="image in $parent.images"
                    fa-translate="[30, image.y, 0]"
                    fa-rotate-x="image.xRotation">
