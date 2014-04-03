@@ -25,7 +25,7 @@ angular.module('integrationApp')
       'web'
     ];
 
-    var elements = 1000;
+    var elements = 3;
 
     $scope.surfs = _.map(_.range(elements), function(i){
       return {
