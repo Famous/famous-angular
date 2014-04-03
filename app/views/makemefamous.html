@@ -2,9 +2,11 @@
   <h1><span class="hashtag">#</span> Famous</h1>
   <h2>Go ahead, make someone  famous</h2>
   <div class="images" fa-app>
-    <fa-modifier fa-translate="[0, $parent.offset, 0]">
+    <fa-modifier fa-translate="[0, $parent.offset, 100]">
       <fa-modifier ng-repeat="image in $parent.$parent.images"
-                  fa-translate="[30, image.y, 0]">
+                   fa-translate="[30, image.y, 0]"
+                   fa-rotate-x="image.xRotation"
+      >
         <fa-surface
         fa-size="[115, 115]">
           <img width="115" src="{{$parent.$parent.image.url}}">

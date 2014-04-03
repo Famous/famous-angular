@@ -15,15 +15,19 @@ angular.module('integrationApp')
 
     $scope.offset = new Transitionable(0);
 
-    $scope.images = [{y: 30, url: $scope.profilesPics[0]}];
+    $scope.images = [{xRotation: new Transitionable(0), y: 30, url: $scope.profilesPics[0]}];
 
     $scope.addImage = function() {
       var n = $scope.images.length;
       var pic = $scope.profilesPics[n % $scope.profilesPics.length];
+      var rotation = new Transitionable(-Math.PI/2);
+      window.rotation = rotation;
       $scope.images.push({
         y: -(height * n) + 30,
-        url: pic
+        url: pic,
+        xRotation: rotation,
       });
+      rotation.set(0, {duration: 300, curve: 'easeOut'});
       $scope.offset.set((n * height) + 30, {duration: 300, curve: 'easeOut'})
     };
 

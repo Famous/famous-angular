@@ -8,6 +8,8 @@ angular.module('integrationApp')
       scope: {
         "faTranslate": '=',
         "faRotateZ": '=',
+        "faRotateX": '=',
+        "faRotateY": '=',
         "faSkew": '=',
         "faOrigin": '=',
         "faSize": '=',
@@ -32,6 +34,10 @@ angular.module('integrationApp')
                 var values = scope["faTranslate"].map(getOrValue)
                 transforms.push(Transform.translate.apply(this, values));
               }
+              if (scope["faRotateX"])
+                transforms.push(Transform.rotateX(getOrValue(scope["faRotateX"])));
+              if (scope["faRotateY"])
+                transforms.push(Transform.rotateY(scope["faRotateY"]));
               if (scope["faRotateZ"])
                 transforms.push(Transform.rotateZ(scope["faRotateZ"]));
               if (scope["faSkew"])
