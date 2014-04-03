@@ -13,23 +13,34 @@ angular.module('integrationApp')
 
     var Transitionable = famous["famous/transitions/Transitionable"];
 
-    $scope.offset = new Transitionable(0);
+    $scope.visible = new Transitionable(0);
 
-    $scope.images = [{xRotation: new Transitionable(0), y: 30, url: $scope.profilesPics[0]}];
+    $scope.offset = function() {
+      return ($scope.visible.get() - 1) * height;
+    };
+
+    $scope.images = [];
 
     $scope.addImage = function() {
       var n = $scope.images.length;
       var pic = $scope.profilesPics[n % $scope.profilesPics.length];
-      var rotation = new Transitionable(-Math.PI/2);
-      window.rotation = rotation;
       $scope.images.push({
-        y: -(height * n) + 30,
         url: pic,
-        xRotation: rotation,
+        y: function() {
+          if ((Math.floor($scope.visible.get()) === n)) return 30;
+          return -(height * n) + 30 + $scope.offset();
+        },
+        xRotation: function() {
+          if (! (Math.floor($scope.visible.get()) === n)) return 0;
+          var visibleHeight = ($scope.visible.get() % 1) * height;
+          var theta = (Math.PI / 2) - Math.asin( visibleHeight / height);
+          return theta;
+        }
       });
-      rotation.set(0, {duration: 300, curve: 'easeOut'});
-      $scope.offset.set((n * height) + 30, {duration: 300, curve: 'easeOut'})
+      $scope.visible.set($scope.visible.get() + 1, {duration: 300, curve: 'easeOut'})
     };
+
+    $scope.addImage();
 
 
     $scope.positions = _.map($scope.profilePics, function(pic) {

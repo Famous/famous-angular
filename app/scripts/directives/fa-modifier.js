@@ -24,18 +24,19 @@ angular.module('integrationApp')
             var Modifier = famous['famous/core/Modifier']
             var Transform = famous['famous/core/Transform']
 
-            var getOrValue = function(x) {
+            var get = function(x) {
+              if (x instanceof Function) return x();
               return x.get ? x.get() : x;
             };
 
             var getTransform = function() {
               var transforms = [Transform.translate(0, 0, 0)];
               if (scope["faTranslate"]) {
-                var values = scope["faTranslate"].map(getOrValue)
+                var values = scope["faTranslate"].map(get)
                 transforms.push(Transform.translate.apply(this, values));
               }
               if (scope["faRotateX"])
-                transforms.push(Transform.rotateX(getOrValue(scope["faRotateX"])));
+                transforms.push(Transform.rotateX(get(scope["faRotateX"])));
               if (scope["faRotateY"])
                 transforms.push(Transform.rotateY(scope["faRotateY"]));
               if (scope["faRotateZ"])
