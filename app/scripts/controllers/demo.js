@@ -34,14 +34,14 @@ angular.module('integrationApp')
       }
     });
 
-    // setInterval(function(){
-    //   for(var i = 0; i < elements; i++){
-    //     $scope.surfs[i].content = _.sample(strings);
-    //     $scope.surfs[i].bgColor = _.sample(colors);
-    //   }
-    //   if(!$scope.$$phase)
-    //     $scope.$apply();
-    // }, 333);
+    setInterval(function(){
+      for(var i = 0; i < elements; i++){
+        $scope.surfs[i].content = _.sample(strings);
+        $scope.surfs[i].bgColor = _.sample(colors);
+      }
+      if(!$scope.$$phase)
+        $scope.$apply();
+    }, 333);
 
 
     $scope.yTransitionable = new Transitionable(0);
