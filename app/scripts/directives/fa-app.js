@@ -18,8 +18,10 @@ angular.module('integrationApp')
             scope.context = Engine.createContext(famousContainer);
 
             attrs.$observe('faPipeTo', function(val){
-              var pipeTo = scope.$eval(val);
-              Engine.pipe(pipeTo);
+              if(attrs.faPipeTo){
+                var pipeTo = scope.$eval(val);
+                Engine.pipe(pipeTo);
+              }
             })
 
             function AppView(){

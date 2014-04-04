@@ -17,9 +17,6 @@ angular.module('integrationApp')
             var View = famous['famous/core/View'];
             var Engine = famous['famous/core/Engine'];
             var Transform = famous['famous/core/Transform']
-            
-            //TODO:  add custom classes from attrs (or just pass through all attrs?) to
-            //       the container element.
 
             function FaView(){
               View.apply(this, arguments);
@@ -94,14 +91,6 @@ angular.module('integrationApp')
           },
           post: function(scope, element, attrs){
             var isolate = scope.isolate[scope.$id];
-            // if(scope.faController)
-            //   $controller(scope.faController, {'$scope': scope})
-
-            // var modifiers = {
-            //    faOrigin: scope["faOrigin"],
-            //    translate: scope["faTranslate"]
-            // };
-            // scope.modifier = modifiers;
             
             transclude(scope, function(clone) {
               element.find('div').append(clone);

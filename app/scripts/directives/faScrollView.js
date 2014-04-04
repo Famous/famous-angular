@@ -42,9 +42,6 @@ angular.module('integrationApp')
           },
           post: function(scope, element, attrs){
             var isolate = scope.isolate[scope.$id];
-            console.log('scroll isolate', isolate);
-            // if(scope.faController)
-            //   $controller(scope.faController, {'$scope': scope})
 
             transclude(scope, function(clone) {
               element.find('div').append(clone);
