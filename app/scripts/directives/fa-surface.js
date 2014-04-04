@@ -5,57 +5,52 @@ angular.module('integrationApp')
     return {
         
       compile: function(tElem, tAttrs, transclude){
-        console.log('compiling surface');
-
         return {
+
           pre: function(scope, element, attrs){
+            scope.isolate = scope.isolate || {};
+            scope.isolate[scope.$id] = scope.isolate[scope.$id] || {};
+            var isolate = scope.isolate[scope.$id];
+
             var Surface = famous['famous/core/Surface'];
             var Transform = famous['famous/core/Transform']
             
             var properties = {
-                backgroundColor: scope["faBackgroundColor"],
-                color: scope["faColor"]
+                backgroundColor: scope.$eval(attrs.faBackgroundColor),
+                color: scope.$eval(attrs.faColor)
             };
 
             var getOrValue = function(x) {
               return x.get ? x.get() : x;
             };
 
-            var getTransform = function() {
-              var transforms = [];
-              if (scope["faTranslate"])
-                transforms.push(Transform.translate.apply(this, scope["faTranslate"]));
-              if (scope["faRotateZ"])
-                transforms.push(Transform.rotateZ(scope["faRotateZ"]));
-              if (scope["faSkew"])
-                transforms.push(Transform.skew(0, 0, scope["faSkew"]));
-              return Transform.multiply.apply(this, transforms);
-            };
-
             var modifiers = {
-               origin: scope["faOrigin"],
-               translate: scope["faTranslate"],
-               rotateZ: scope["faRotateZ"],
-               skew: scope["faSkew"],
+               origin: scope.$eval(attrs.faOrigin),
+               translate: scope.$eval(attrs.faTranslate),
+               rotateZ: scope.$eval(attrs.faRotateZ),
+               skew: scope.$eval(attrs.faSkew)
             };
-            scope.surface = new Surface({
-              size: scope["faSize"],
+            isolate.surface = new Surface({
+              size: scope.$eval(attrs.faSize),
               properties: properties
             });
-            scope.modifier = function() {
-              return (modifiers);
+            isolate.modifier = function() {
+              return modifiers;
             };
 
-            if (scope["faPipeTo"]) {
-              scope.surface.pipe(scope["faPipeTo"]);
+            if (attrs.faPipeTo) {
+              console.log('pipe surface scope', scope.$eval(attrs.faPipeTo))
+              isolate.surface.pipe(scope.$eval(attrs.faPipeTo));
             }
           },
           post: function(scope, element, attrs){
-            if(scope.faController)
-              $controller(scope.faController, {'$scope': scope});
-            scope.updateContent = function(){
+            var isolate = scope.isolate[scope.$id];
+            // if(scope.faController)
+            //   $controller(scope.faController, {'$scope': scope});
+            var updateContent = function(){
               //TODO:  fill with other properties
-              scope.surface.setProperties({'backgroundColor':  scope.faBackgroundColor});
+              // console.log('attrs.faBackgroundColor', scope.$eval(attrs.faBackgroundColor))
+              isolate.surface.setProperties({'backgroundColor':  scope.$eval(attrs.faBackgroundColor)});
               //TODO:   There may be a more efficient way to do this than to 
               //        $interpolate and then string-compare.  Is there a way to
               //        anchor-link a div directly, for example?
@@ -68,11 +63,11 @@ angular.module('integrationApp')
               //           -- only update the surface if one of those values changes    
               if(element.find('div') && element.find('div').html()){
                 var prospectiveContent = $interpolate(element.find('div').html())(scope);
-                if(scope.currentContent !== prospectiveContent){ //this is a potentially large string-compare
-                  scope.currentContent = prospectiveContent;
+                if(isolate.currentContent !== prospectiveContent){ //this is a potentially large string-compare
+                  isolate.currentContent = prospectiveContent;
                   //var compiledContent = $compile(element.find('div').contents())(scope).html();
                   //scope.surface.setContent($interpolate(compiledContent)(scope));
-                  scope.surface.setContent(scope.currentContent);
+                  isolate.surface.setContent(isolate.currentContent);
                 }
               }
               
@@ -80,27 +75,16 @@ angular.module('integrationApp')
 
             //listener-free scope.$watch will fire any time a $digest occurs
             scope.$watch(function(){
-              scope.updateContent();
+              updateContent();
             })
-            scope.updateContent();
+            updateContent();
 
             transclude(scope, function(clone) {
               element.find('div').append(clone);
             });
-            scope.$emit('registerChild', {view: scope.surface, mod: scope.modifier});
+            scope.$emit('registerChild', {view: isolate.surface, mod: isolate.modifier});
           }
         }
-      },
-      scope: {
-        "faSize": '=',
-        "faOrigin": '=',
-        "faBackgroundColor": '=',
-        "faColor": '=',
-        "faTranslate": '=',
-        "faRotateZ": '=',
-        "faSkew": '=',
-        "faPipeTo": '=',
-        "faController": '@'
       },
       transclude: true,
       template: '<div></div>',

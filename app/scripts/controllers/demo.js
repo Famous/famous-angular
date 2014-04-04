@@ -13,9 +13,6 @@ angular.module('integrationApp')
       '#B58963',
       '#9E9B8C'
     ];
-    $scope.test = "mrow"
-
-    $scope.$watch('test', function(a){console.log(a)});
 
     var strings = [
       'famo.us',
@@ -25,7 +22,7 @@ angular.module('integrationApp')
       'web'
     ];
 
-    var elements = 1000;
+    var elements = 70;
 
     $scope.surfs = _.map(_.range(elements), function(i){
       return {
@@ -34,14 +31,14 @@ angular.module('integrationApp')
       }
     });
 
-    // setInterval(function(){
-    //   for(var i = 0; i < elements; i++){
-    //     $scope.surfs[i].content = _.sample(strings);
-    //     $scope.surfs[i].bgColor = _.sample(colors);
-    //   }
-    //   if(!$scope.$$phase)
-    //     $scope.$apply();
-    // }, 333);
+    setInterval(function(){
+      for(var i = 0; i < elements; i++){
+        $scope.surfs[i].content = _.sample(strings);
+        $scope.surfs[i].bgColor = _.sample(colors);
+      }
+      if(!$scope.$$phase)
+        $scope.$apply();
+    }, 333);
 
 
     $scope.yTransitionable = new Transitionable(0);
