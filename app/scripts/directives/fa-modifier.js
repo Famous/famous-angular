@@ -31,6 +31,7 @@ angular.module('integrationApp')
 
             var getTransform = function() {
               var transforms = [Transform.translate(0, 0, 0)];
+              transforms.push(Transform.perspective(-10));
               if (scope["faTranslate"]) {
                 var values = scope["faTranslate"].map(get)
                 transforms.push(Transform.translate.apply(this, values));

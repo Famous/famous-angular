@@ -52,6 +52,12 @@ angular.module('integrationApp')
           if (rotating(n)) return 30;
           return -(height * n) + 30 + $scope.offset();
         },
+        z: function() {
+          if (!rotating(n)) return 0;
+          var visibleHeight = ($scope.visible.get() % height);
+          var z = Math.sqrt((height * height) - (visibleHeight * visibleHeight));
+          return -z;
+        },
         xRotation: function() {
           if (rotating(n)) {
             var visibleHeight = ($scope.visible.get() % height);
