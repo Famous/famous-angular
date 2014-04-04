@@ -49,7 +49,6 @@ angular.module('integrationApp')
             
             scope.$on('registerChild', function(evt, data){
               console.debug("modifier heard child", data);
-              debugger;
               if(evt.targetScope.$id != scope.$id){
                 console.log("modifier registering child", data);
                 console.log('view registered', data);
