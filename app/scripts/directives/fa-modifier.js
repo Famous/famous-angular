@@ -43,11 +43,11 @@ angular.module('integrationApp')
               return Transform.multiply.apply(this, transforms);
             };
 
-            var modifier = new Modifier({transform: getTransform,
+            isolate.modifier = new Modifier({transform: getTransform,
                                          size: scope.$eval(attrs.faSize),
                                          origin: scope.$eval(attrs.faOrigin)});
 
-            var modifierNode = isolate.node.add(modifier);
+            var modifierNode = isolate.node.add(isolate.modifier);
             
             scope.$on('registerChild', function(evt, data){
               if(evt.targetScope.$id !== evt.currentScope.$id){

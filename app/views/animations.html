@@ -1,5 +1,5 @@
-<fa-app>
-  <fa-view id="EnvelopeView" ng-controller="AnimationsCtrl">
+<fa-app fa-controller="AnimationsCtrl">
+  <fa-view id="EnvelopeView">
     <fa-modifier id="topMod">
       <fa-surface id="top">
         Top
@@ -27,18 +27,18 @@
     </fa-modifier>
 
     <fa-animation timeline="functionThatReturnsATimelineValueBetween0And1">
-      <piece  targetMod="topMod"
-              transformField="rotateY"
-              startValue="0"
-              endValue="6.28"
-              timelineLowerBound=".25"
-              timelineUpperBound=".5" />
-      <piece  targetMod="rightMod"
-              transformField="rotateY"
-              startValue="0"
-              endValue="6.28"
-              timelineLowerBound="0"
-              timelineUpperBound=".25" />
+      <animate  targetModSelector="#topMod"
+                transformField="rotateY"
+                startValue="0"
+                endValue="6.28"
+                timelineLowerBound=".25"
+                timelineUpperBound=".5" />
+      <animate  targetModSelector="#rightMod"
+                transformField="rotateY"
+                startValue="0"
+                endValue="6.28"
+                timelineLowerBound="0"
+                timelineUpperBound=".25" />
     </fa-animation>
   </fa-view>
 </fa-app>

@@ -2,7 +2,7 @@
 
 angular.module('integrationApp')
   .controller('AnimationsCtrl', function ($scope, famous) {
-    var Transitionable = famous['famous/core/Transitionable'];
+    var Transitionable = famous['famous/transitions/Transitionable'];
 
     var t = new Transitionable(0);
     t.set(1, {
