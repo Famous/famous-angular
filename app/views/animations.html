@@ -1,5 +1,44 @@
 <fa-app>
-  <fa-surface>
-    Mrow
-  </fa-surface>
+  <fa-view id="EnvelopeView" ng-controller="AnimationsCtrl">
+    <fa-modifier id="topMod">
+      <fa-surface id="top">
+        Top
+      </fa-surface>
+    </fa-modifier>
+    <fa-modifier id="rightMod">
+      <fa-surface id="right">
+        Right
+      </fa-surface>
+    </fa-modifier>
+    <fa-modifier id="bottomMod">
+      <fa-surface id="bottom">
+        Bottom
+      </fa-surface>
+    </fa-modifier>
+    <fa-modifier id="leftMod">
+      <fa-surface id="left">
+        Left
+      </fa-surface>
+    </fa-modifier>
+    <fa-modifier id="contentMod">
+      <fa-surface id="content">
+        Content
+      </fa-surface>
+    </fa-modifier>
+
+    <fa-animation timeline="functionThatReturnsATimelineValueBetween0And1">
+      <piece  targetMod="topMod"
+              transformField="rotateY"
+              startValue="0"
+              endValue="6.28"
+              timelineLowerBound=".25"
+              timelineUpperBound=".5" />
+      <piece  targetMod="rightMod"
+              transformField="rotateY"
+              startValue="0"
+              endValue="6.28"
+              timelineLowerBound="0"
+              timelineUpperBound=".25" />
+    </fa-animation>
+  </fa-view>
 </fa-app>
