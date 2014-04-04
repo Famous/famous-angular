@@ -5,7 +5,7 @@ angular.module('integrationApp')
     $scope.profilesPics = [
     'https://pbs.twimg.com/profile_images/1816668959/champagne.jpg',
     'https://pbs.twimg.com/profile_images/430409211596386304/MpOjFGZB.jpeg',
-    'https://pbs.twimg.com/profile_images/2630739604/08d6cc231d487fd5d04566f8e149ee38.jpeg',
+    // 'https://pbs.twimg.com/profile_images/2630739604/08d6cc231d487fd5d04566f8e149ee38.jpeg',
     'https://pbs.twimg.com/profile_images/2580051838/gudyd1q8t66w60u036d5.jpeg',
     ];
 
@@ -70,12 +70,9 @@ angular.module('integrationApp')
       });
     };
 
-    $scope.addImage();
-    $scope.addImage();
-    $scope.addImage();
-    $scope.addImage();
-    $scope.addImage();
-    $scope.addImage();
+    _.each(_.range(60), function(i){
+      $scope.addImage();
+    });
 
 
     $scope.positions = _.map($scope.profilePics, function(pic) {

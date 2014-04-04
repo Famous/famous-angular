@@ -3,7 +3,10 @@
 angular.module('integrationApp')
   .directive('faSurface', function (famous, $interpolate, $controller, $compile) {
     return {
-        
+      scope: true,
+      transclude: true,
+      template: '<div></div>',
+      restrict: 'EA',
       compile: function(tElem, tAttrs, transclude){
         return {
 
@@ -45,8 +48,6 @@ angular.module('integrationApp')
           },
           post: function(scope, element, attrs){
             var isolate = scope.isolate[scope.$id];
-            // if(scope.faController)
-            //   $controller(scope.faController, {'$scope': scope});
             var updateContent = function(){
               //TODO:  fill with other properties
               // console.log('attrs.faBackgroundColor', scope.$eval(attrs.faBackgroundColor))
@@ -85,10 +86,6 @@ angular.module('integrationApp')
             scope.$emit('registerChild', {view: isolate.surface, mod: isolate.modifier});
           }
         }
-      },
-      scope: true,
-      transclude: true,
-      template: '<div></div>',
-      restrict: 'EA'
+      }
     };
   });
