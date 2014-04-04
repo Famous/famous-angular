@@ -34,8 +34,14 @@ angular.module('integrationApp')
             };
             isolate.surface = new Surface({
               size: scope.$eval(attrs.faSize),
+              class: scope.$eval(attrs.class),
               properties: properties
             });
+
+            //TODO:  support ng-class
+            if(attrs.class)
+              isolate.surface.setClasses(attrs['class'].split(' '));
+
             isolate.modifier = function() {
               return modifiers;
             };

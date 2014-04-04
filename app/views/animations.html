@@ -1,44 +1,52 @@
 <fa-app fa-controller="AnimationsCtrl">
   <fa-view id="EnvelopeView">
-    <fa-modifier id="topMod">
-      <fa-surface id="top">
-        Top
-      </fa-surface>
+
+    <fa-modifier fa-size="[2 * sizes.triangle, sizes.triangle]" fa-translate="positions.topTriangle" >
+      <fa-modifier id="topMod" fa-origin="[.5, 1]" fa-rotate-x='3.14' >
+        <fa-surface class="backface-visible">
+          <div class="top-triangle"></div>
+        </fa-surface>
+      </fa-modifier>
     </fa-modifier>
-    <fa-modifier id="rightMod">
-      <fa-surface id="right">
-        Right
-      </fa-surface>
+
+    <fa-modifier fa-size="[sizes.triangle, 2 * sizes.triangle]" fa-translate="positions.rightTriangle" >
+      <fa-modifier id="rightMod" fa-origin="[0, .5]" fa-rotate-y='3.14' >
+        <fa-surface class="backface-visible">
+          <div class="right-triangle"></div>
+        </fa-surface>
+      </fa-modifier>
     </fa-modifier>
-    <fa-modifier id="bottomMod">
+
+    <fa-modifier id="bottomMod" fa-translate="positions.bottomTriangle">>
       <fa-surface id="bottom">
-        Bottom
+        <div class="bottom-triangle"></div>
       </fa-surface>
     </fa-modifier>
-    <fa-modifier id="leftMod">
+    <fa-modifier id="leftMod" fa-translate="positions.leftTriangle">
       <fa-surface id="left">
-        Left
+        <div class="left-triangle"></div>
       </fa-surface>
     </fa-modifier>
-    <fa-modifier id="contentMod">
+    <!-- <fa-modifier id="contentMod">
       <fa-surface id="content">
         Content
       </fa-surface>
-    </fa-modifier>
-
-    <fa-animation timeline="functionThatReturnsATimelineValueBetween0And1">
-      <animate  targetModSelector="#topMod"
-                transformField="rotateY"
-                startValue="0"
-                endValue="6.28"
-                timelineLowerBound=".25"
-                timelineUpperBound=".5" />
-      <animate  targetModSelector="#rightMod"
-                transformField="rotateY"
-                startValue="0"
-                endValue="6.28"
-                timelineLowerBound="0"
-                timelineUpperBound=".25" />
-    </fa-animation>
+    </fa-modifier> -->
   </fa-view>
+
+  <fa-animation timeline="functionThatReturnsATimelineValueBetween0And1">
+    <animate  targetModSelector="#topMod"
+              transformField="rotateX"
+              startValue="3.14"
+              endValue="0"
+              timelineLowerBound=".25"
+              timelineUpperBound=".5" />
+    <animate  targetModSelector="#rightMod"
+              transformField="rotateY"
+              startValue="3.14"
+              endValue="0"
+              timelineLowerBound="0"
+              timelineUpperBound=".25" />
+  </fa-animation>
+
 </fa-app>
