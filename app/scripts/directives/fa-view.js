@@ -8,7 +8,6 @@ angular.module('integrationApp')
       restrict: 'EA',
       priority: 100,
       compile: function(tElement, tAttrs, transclude){
-        console.log('compiling app');
         return {
           pre: function(scope, element, attrs){
             scope.isolate = scope.isolate || {};

@@ -86,6 +86,7 @@ angular.module('integrationApp')
           }
         }
       },
+      scope: true,
       transclude: true,
       template: '<div></div>',
       restrict: 'EA'

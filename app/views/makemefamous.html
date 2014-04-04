@@ -5,11 +5,11 @@
       <fa-modifier ng-repeat="image in images"
                    fa-translate="[30, image.y, image.z]"
                    fa-rotate-x="image.xRotation">
-        <fa-surface
-        fa-background-color="red";
-        fa-size="[115, 115]">
-          <img width="115" src="{{image.url}}">
-        </fa-surface>
+          <fa-surface
+            fa-background-color="red";
+            fa-size="[115, 115]">
+            <img width="115" src="{{image.url}}">
+          </fa-surface>
       </fa-modifier>
   </div>
 </div>

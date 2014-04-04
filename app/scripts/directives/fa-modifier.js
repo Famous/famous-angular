@@ -1,12 +1,14 @@
 'use strict';
 
 angular.module('integrationApp')
-  .directive('faModifier', function (famous) {
+  .directive('faModifier', ["famous", function (famous) {
     return {
-      restrict: 'E',
+      template: '<div></div>',
       transclude: true,
+      restrict: 'EA',
+      priority: 100,
+      scope: true,
       compile: function(tElement, tAttrs, transclude){
-
         return {
           pre: function(scope, element, attrs){
             scope.isolate = scope.isolate || {};
@@ -48,9 +50,7 @@ angular.module('integrationApp')
             var modifierNode = isolate.node.add(modifier);
             
             scope.$on('registerChild', function(evt, data){
-              console.debug("modifier heard child", data);
-              if(evt.targetScope.$id != scope.$id){
-                console.log("modifier registering child", data);
+              if(evt.targetScope.$id !== evt.currentScope.$id){
                 console.log('view registered', data);
                 modifierNode.add(data.view);
                 evt.stopPropagation();
@@ -61,19 +61,15 @@ angular.module('integrationApp')
             }
           },
           post: function(scope, element, attrs){
-            scope.isolate = scope.isolate || {};
-            scope.isolate[scope.$id] = scope.isolate[scope.$id] || {};
             var isolate = scope.isolate[scope.$id];
 
             transclude(scope, function(clone) {
-              element.find('div div').append(clone);
+              element.find('div').append(clone);
             });
 
             scope.$emit('registerChild', {view: isolate.node, mod: function() { return {origin: ""}; }});
-
           }
-
         }
       }
     };
-  });
+  }]);

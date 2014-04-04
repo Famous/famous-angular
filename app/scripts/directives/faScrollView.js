@@ -6,6 +6,7 @@ angular.module('integrationApp')
       template: '<div></div>',
       restrict: 'E',
       transclude: true,
+      scope: true,
       priority: 100,
       compile: function(tElem, tAttrs, transclude){
         return  {
