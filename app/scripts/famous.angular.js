@@ -2,16 +2,17 @@
 
 var requirements = [
   "famous/core/Engine",
-  "famous/core/Surface",
-  "famous/core/View",
-  "famous/core/Modifier",
-  "famous/core/Transform",
   "famous/core/EventHandler",
+  "famous/core/Modifier",
   "famous/core/RenderNode",
+  "famous/core/Surface",
+  "famous/core/Transform",
+  "famous/core/View",
+  "famous/core/ViewSequence",
   "famous/inputs/GenericSync",
+  "famous/transitions/Easing",
   "famous/transitions/Transitionable",
-  "famous/views/ScrollView",
-  "famous/core/ViewSequence"
+  "famous/views/ScrollView"
 ]
 
 

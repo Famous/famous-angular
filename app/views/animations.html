@@ -2,7 +2,7 @@
   <fa-view id="EnvelopeView">
 
     <fa-modifier fa-size="[2 * sizes.triangle, sizes.triangle]" fa-translate="positions.topTriangle" >
-      <fa-modifier id="topMod" fa-origin="[.5, 1]" fa-rotate-x='3.14' >
+      <fa-modifier id="topMod" fa-origin="[.5, 1]"  >
         <fa-surface class="backface-visible">
           <div class="top-triangle"></div>
         </fa-surface>
@@ -10,28 +10,26 @@
     </fa-modifier>
 
     <fa-modifier fa-size="[sizes.triangle, 2 * sizes.triangle]" fa-translate="positions.rightTriangle" >
-      <fa-modifier id="rightMod" fa-origin="[0, .5]" fa-rotate-y='3.14' >
+      <fa-modifier id="rightMod" fa-origin="[0, .5]"  >
         <fa-surface class="backface-visible">
           <div class="right-triangle"></div>
         </fa-surface>
       </fa-modifier>
     </fa-modifier>
 
-    <fa-modifier id="bottomMod" fa-translate="positions.bottomTriangle">>
-      <fa-surface id="bottom">
-        <div class="bottom-triangle"></div>
-      </fa-surface>
+    <fa-modifier fa-size="[2 * sizes.triangle, sizes.triangle]" fa-translate="positions.bottomTriangle" >
+      <fa-modifier id="bottomMod" fa-origin="[.5, 0]"  >
+        <fa-surface class="backface-visible">
+          <div class="bottom-triangle"></div>
+        </fa-surface>
+      </fa-modifier>
     </fa-modifier>
+
     <fa-modifier id="leftMod" fa-translate="positions.leftTriangle">
       <fa-surface id="left">
         <div class="left-triangle"></div>
       </fa-surface>
     </fa-modifier>
-    <!-- <fa-modifier id="contentMod">
-      <fa-surface id="content">
-        Content
-      </fa-surface>
-    </fa-modifier> -->
   </fa-view>
 
   <fa-animation timeline="functionThatReturnsATimelineValueBetween0And1">
@@ -39,14 +37,23 @@
               transformField="rotateX"
               startValue="3.14"
               endValue="0"
+              curve="inQuad"
               timelineLowerBound=".25"
               timelineUpperBound=".5" />
     <animate  targetModSelector="#rightMod"
               transformField="rotateY"
               startValue="3.14"
               endValue="0"
+              curve="inQuad"
               timelineLowerBound="0"
               timelineUpperBound=".25" />
+    <animate  targetModSelector="#bottomMod"
+              transformField="rotateX"
+              startValue="3.14"
+              endValue="0"
+              curve="inQuad"
+              timelineLowerBound=.5
+              timelineUpperBound=".75" />
   </fa-animation>
 
 </fa-app>
