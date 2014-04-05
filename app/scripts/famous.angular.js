@@ -11,6 +11,7 @@ var requirements = [
   "famous/core/ViewSequence",
   "famous/inputs/GenericSync",
   "famous/transitions/Easing",
+  "famous/transitions/SpringTransition",
   "famous/transitions/Transitionable",
   "famous/views/ScrollView"
 ]

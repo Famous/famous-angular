@@ -13,8 +13,8 @@ angular.module('integrationApp')
     $scope.height = height;
 
     var Transitionable = famous["famous/transitions/Transitionable"];
-    var GenericSync = famous['famous/inputs/GenericSync']
-    var EventHandler = famous['famous/core/EventHandler']
+    var GenericSync = famous['famous/inputs/GenericSync'];
+    var EventHandler = famous['famous/core/EventHandler'];
 
     $scope.visible = new Transitionable(115);
 

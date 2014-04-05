@@ -28,14 +28,16 @@ angular.module('integrationApp')
                   var modScope = angular.element(animate.attributes['targetmodselector'].value).scope();
                   var modifier = modScope.isolate[modScope.$id].modifier;
 
-                  var curve = animate.attributes['curve'] 
+                  window.m = modifier;
+
+                  var curve = animate.attributes['curve'] && animate.attributes['curve'].value !== 'linear' 
                     ? Easing[animate.attributes['curve'].value]
                     : function(j) {return j;}; //linear
 
                   //assign the modifier functions
                   //TODO:  support multiple fields on a given modifier
-                  if(animate.attributes['transformfield']){
-                    var transformField = animate.attributes['transformfield'].value;
+                  if(animate.attributes['field']){
+                    var field = animate.attributes['field'].value;
                     var lowerBound = animate.attributes['timelinelowerbound']
                       ? parseFloat(animate.attributes['timelinelowerbound'].value)
                       : 0;
@@ -64,9 +66,15 @@ angular.module('integrationApp')
                       return startValue + curve(normalizedX) * (endValue - startValue);
                     };
 
-                    modifier.transformFrom(function(){
-                      return Transform[transformField](transformFunction());
-                    });
+                    if(field === 'opacity'){
+                      modifier.opacityFrom(function(){
+                        return transformFunction();
+                      });
+                    }else{ //transform field
+                      modifier.transformFrom(function(){
+                        return Transform[field](transformFunction());
+                      });
+                    }
                   }
                 }
               })();

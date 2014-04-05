@@ -27,7 +27,8 @@ angular.module('integrationApp')
             };
 
             var getTransform = function() {
-              var transforms = [Transform.translate(0, 0, 0)];
+              //var transforms = [Transform.translate(0, 0, 0)];
+              var transforms = [];
               if (attrs.faTranslate) {
                 var values = scope.$eval(attrs.faTranslate).map(get)
                 transforms.push(Transform.translate.apply(this, values));
@@ -40,11 +41,20 @@ angular.module('integrationApp')
                 transforms.push(Transform.rotateZ(get(scope.$eval(attrs.faRotateZ))));
               if (attrs.faSkew)
                 transforms.push(Transform.skew(0, 0, scope.$eval(attrs.faSkew)));
+              if(!transforms.length)
+                return undefined;
               return Transform.multiply.apply(this, transforms);
             };
 
+            var getOpacity = function(){
+              if (attrs.faOpacity)
+                return scope.$eval(attrs.faOpacity);
+              return 1;
+            }
+
             isolate.modifier = new Modifier({transform: getTransform,
                                          size: scope.$eval(attrs.faSize),
+                                         opacity: getOpacity,
                                          origin: scope.$eval(attrs.faOrigin)});
 
             var modifierNode = isolate.node.add(isolate.modifier);
