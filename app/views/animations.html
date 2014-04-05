@@ -2,6 +2,7 @@
   
     <fa-view id="EnvelopeView" fa-pipe-to="eventHandler">
       <fa-modifier id="wholeThing" fa-size="[sizes.width, sizes.height]" fa-origin="[.5, .5]">
+      
         <fa-modifier fa-translate="positions.centerSquare">
           <fa-surface class="center-square" fa-size="[2 * sizes.triangle, 2 * sizes.triangle]" ></fa-surface>
         </fa-modifier>
@@ -82,19 +83,16 @@
           </fa-modifier>
         </fa-modifier>
 
-
         <fa-modifier
-          fa-size="[2 * sizes.triangle, sizes.triangle]"
+          fa-size="[2 * sizes.triangle, 2 * sizes.triangle]"
           fa-translate="positions.centerContent"
-          fa-rotate-z="-.785"
-          fa-opacity="0">
+          fa-rotate-z="-.785">
           <fa-modifier id="contentMod">
-            <fa-surface>
-              What a lovely letter!
+            <fa-surface class="center-content">
+              opacity, yo
             </fa-surface>
           </fa-modifier>
         </fa-modifier>
-
 
       </fa-modifier>
     </fa-view>
@@ -102,14 +100,14 @@
 
   <fa-animation timeline="functionThatReturnsATimelineValueBetween0And1">
     <animate  targetModSelector="#topMod"
-              transformField="rotateX"
+              field="rotateX"
               startValue="3.1415"
               endValue="0"
               curve="inQuad"
               timelineLowerBound="0"
               timelineUpperBound=".25" />
     <animate  targetModSelector="#topModInner"
-              transformField="rotateX"
+              field="rotateX"
               startValue="0"
               endValue="3.1415"
               curve="inQuad"
@@ -117,14 +115,14 @@
               timelineUpperBound=".25" />
 
     <animate  targetModSelector="#rightMod"
-              transformField="rotateY"
+              field="rotateY"
               startValue="3.1415"
               endValue="0"
               curve="inQuad"
               timelineLowerBound=".1"
               timelineUpperBound=".35" />
     <animate  targetModSelector="#rightModInner"
-              transformField="rotateY"
+              field="rotateY"
               startValue="0"
               endValue="3.1415"
               curve="inQuad"
@@ -132,14 +130,14 @@
               timelineUpperBound=".35" />
 
     <animate  targetModSelector="#bottomMod"
-              transformField="rotateX"
+              field="rotateX"
               startValue="3.1415"
               endValue="0"
               curve="inQuad"
               timelineLowerBound=".2"
               timelineUpperBound=".45" />
     <animate  targetModSelector="#bottomModInner"
-              transformField="rotateX"
+              field="rotateX"
               startValue="0"
               endValue="3.1415"
               curve="inQuad"
@@ -147,14 +145,14 @@
               timelineUpperBound=".45" />
 
     <animate  targetModSelector="#leftMod"
-              transformField="rotateY"
+              field="rotateY"
               startValue="3.1415"
               endValue="0"
               curve="inQuad"
               timelineLowerBound=".3"
               timelineUpperBound=".55" />
     <animate  targetModSelector="#leftModInner"
-              transformField="rotateY"
+              field="rotateY"
               startValue="0"
               endValue="3.1415"
               curve="inQuad"
@@ -162,7 +160,7 @@
               timelineUpperBound=".55" />
 
     <animate  targetModSelector="#wholeThing"
-              transformField="rotateZ"
+              field="rotateZ"
               curve="outElastic"
               startValue="0"
               endValue=".785"
@@ -171,11 +169,11 @@
 
     <animate  targetModSelector="#contentMod"
               field="opacity"
-              curve="outElastic"
+              curve="outQuad"
               startValue="0"
               endValue="1"
               timelineLowerBound=".55"
-              timelineUpperBound=".75" />
+              timelineUpperBound="1" />
 
   </fa-animation>
 
