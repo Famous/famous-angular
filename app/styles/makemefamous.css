@@ -7,7 +7,7 @@
   background : rgba(240, 75, 106, 1);
   width: 100%;
   height: 100%;
-  padding-top: 18pt;
+  padding-top: 4pt;
 }
 
 h1 {
@@ -18,7 +18,7 @@ h1 {
   line-height : 1em;
   color: #243540;
   margin-top: 0;
-  margin-bottom: 0;
+  margin-bottom: 4pt;
   margin-left: -1em;
   text-align: center;
 }
@@ -37,6 +37,5 @@ h2 {
 
 .images {
   position: relative;
-  margin-top: 2em;
 }
 

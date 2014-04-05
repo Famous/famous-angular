@@ -69,8 +69,8 @@ angular.module('integrationApp')
           return column * height;
         },
         y: function() {
-          if (rotating(n)) return 30;
-          return -(height * row(n)) + 30 + $scope.offset() - columnOffset(n);
+          if (rotating(n)) return 0;
+          return -(height * row(n)) + $scope.offset() - columnOffset(n);
         },
         z: function() {
           if (!rotating(n)) return 0;
