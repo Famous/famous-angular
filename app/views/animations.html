@@ -10,8 +10,17 @@
           fa-size="[2 * sizes.triangle, sizes.triangle]"
           fa-translate="positions.topTriangle" >
           <fa-modifier id="topMod" fa-origin="[.5, 1]"  >
-            <fa-surface class="backface-visible">
-              <div class="top-triangle"></div>
+            <fa-surface>
+              <div class="top-triangle-light"></div>
+            </fa-surface>
+          </fa-modifier>
+        </fa-modifier>
+        <fa-modifier
+          fa-size="[2 * sizes.triangle, sizes.triangle]"
+          fa-translate="positions.topTriangleInner" >
+          <fa-modifier id="topModInner" fa-origin="[.5, 0]"  >
+            <fa-surface>
+              <div class="bottom-triangle"></div>
             </fa-surface>
           </fa-modifier>
         </fa-modifier>
@@ -20,8 +29,17 @@
           fa-size="[sizes.triangle, 2 * sizes.triangle]"
           fa-translate="positions.rightTriangle" >
           <fa-modifier id="rightMod" fa-origin="[0, .5]"  >
-            <fa-surface class="backface-visible">
-              <div class="right-triangle"></div>
+            <fa-surface>
+              <div class="right-triangle-light"></div>
+            </fa-surface>
+          </fa-modifier>
+        </fa-modifier>
+        <fa-modifier
+          fa-size="[sizes.triangle, 2 * sizes.triangle]"
+          fa-translate="positions.rightTriangleInner" >
+          <fa-modifier id="rightModInner" fa-origin="[1, .5]"  >
+            <fa-surface>
+              <div class="left-triangle"></div>
             </fa-surface>
           </fa-modifier>
         </fa-modifier>
@@ -30,8 +48,17 @@
           fa-size="[2 * sizes.triangle, sizes.triangle]"
           fa-translate="positions.bottomTriangle" >
           <fa-modifier id="bottomMod" fa-origin="[.5, 0]"  >
-            <fa-surface class="backface-visible">
-              <div class="bottom-triangle"></div>
+            <fa-surface>
+              <div class="bottom-triangle-light"></div>
+            </fa-surface>
+          </fa-modifier>
+        </fa-modifier>
+        <fa-modifier
+          fa-size="[2 * sizes.triangle, sizes.triangle]"
+          fa-translate="positions.bottomTriangleInner" >
+          <fa-modifier id="bottomModInner" fa-origin="[.5, 1]"  >
+            <fa-surface>
+              <div class="top-triangle"></div>
             </fa-surface>
           </fa-modifier>
         </fa-modifier>
@@ -40,11 +67,35 @@
           fa-size="[sizes.triangle, 2 * sizes.triangle]"
           fa-translate="positions.leftTriangle" >
           <fa-modifier id="leftMod" fa-origin="[1, .5]"  >
-            <fa-surface class="backface-visible">
-              <div class="left-triangle"></div>
+            <fa-surface>
+              <div class="left-triangle-light"></div>
             </fa-surface>
           </fa-modifier>
         </fa-modifier>
+        <fa-modifier
+          fa-size="[sizes.triangle, 2 * sizes.triangle]"
+          fa-translate="positions.leftTriangleInner" >
+          <fa-modifier id="leftModInner" fa-origin="[0, .5]"  >
+            <fa-surface>
+              <div class="right-triangle"></div>
+            </fa-surface>
+          </fa-modifier>
+        </fa-modifier>
+
+
+        <fa-modifier
+          fa-size="[2 * sizes.triangle, sizes.triangle]"
+          fa-translate="positions.centerContent"
+          fa-rotate-z="-.785"
+          fa-opacity="0">
+          <fa-modifier id="contentMod">
+            <fa-surface>
+              What a lovely letter!
+            </fa-surface>
+          </fa-modifier>
+        </fa-modifier>
+
+
       </fa-modifier>
     </fa-view>
   </fa-modifier>
@@ -52,39 +103,80 @@
   <fa-animation timeline="functionThatReturnsATimelineValueBetween0And1">
     <animate  targetModSelector="#topMod"
               transformField="rotateX"
-              startValue="3.14"
+              startValue="3.1415"
               endValue="0"
               curve="inQuad"
               timelineLowerBound="0"
               timelineUpperBound=".25" />
+    <animate  targetModSelector="#topModInner"
+              transformField="rotateX"
+              startValue="0"
+              endValue="3.1415"
+              curve="inQuad"
+              timelineLowerBound="0"
+              timelineUpperBound=".25" />
+
     <animate  targetModSelector="#rightMod"
               transformField="rotateY"
-              startValue="3.14"
+              startValue="3.1415"
               endValue="0"
               curve="inQuad"
               timelineLowerBound=".1"
               timelineUpperBound=".35" />
+    <animate  targetModSelector="#rightModInner"
+              transformField="rotateY"
+              startValue="0"
+              endValue="3.1415"
+              curve="inQuad"
+              timelineLowerBound=".1"
+              timelineUpperBound=".35" />
+
     <animate  targetModSelector="#bottomMod"
               transformField="rotateX"
-              startValue="3.14"
+              startValue="3.1415"
               endValue="0"
               curve="inQuad"
               timelineLowerBound=".2"
               timelineUpperBound=".45" />
+    <animate  targetModSelector="#bottomModInner"
+              transformField="rotateX"
+              startValue="0"
+              endValue="3.1415"
+              curve="inQuad"
+              timelineLowerBound=".2"
+              timelineUpperBound=".45" />
+
     <animate  targetModSelector="#leftMod"
               transformField="rotateY"
-              startValue="3.14"
+              startValue="3.1415"
               endValue="0"
               curve="inQuad"
               timelineLowerBound=".3"
               timelineUpperBound=".55" />
+    <animate  targetModSelector="#leftModInner"
+              transformField="rotateY"
+              startValue="0"
+              endValue="3.1415"
+              curve="inQuad"
+              timelineLowerBound=".3"
+              timelineUpperBound=".55" />
+
     <animate  targetModSelector="#wholeThing"
               transformField="rotateZ"
-              startValue="0"
               curve="outElastic"
+              startValue="0"
               endValue=".785"
               timelineLowerBound="0"
               timelineUpperBound=".66" />
+
+    <animate  targetModSelector="#contentMod"
+              field="opacity"
+              curve="outElastic"
+              startValue="0"
+              endValue="1"
+              timelineLowerBound=".55"
+              timelineUpperBound=".75" />
+
   </fa-animation>
 
 </fa-app>

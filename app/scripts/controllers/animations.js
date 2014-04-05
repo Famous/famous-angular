@@ -20,12 +20,16 @@ angular.module('integrationApp')
 
     $scope.positions = {
       topTriangle: [sizes.margins.left + sizes.triangle, sizes.margins.top, 500],
+      topTriangleInner: [sizes.margins.left + sizes.triangle, sizes.margins.top + sizes.triangle, 500],
       rightTriangle: [sizes.margins.left + 3 * sizes.triangle, sizes.margins.top + sizes.triangle, 500],
+      rightTriangleInner: [sizes.margins.left + 2 * sizes.triangle, sizes.margins.top + sizes.triangle, 500],
       bottomTriangle: [sizes.margins.left + sizes.triangle, sizes.margins.top + 3 * sizes.triangle, 500],
+      bottomTriangleInner: [sizes.margins.left + sizes.triangle, sizes.margins.top + 2 * sizes.triangle, 500],
       leftTriangle: [sizes.margins.left, sizes.margins.top + sizes.triangle, 500],
-      centerSquare: [sizes.margins.left + sizes.triangle, sizes.margins.top + sizes.triangle, -500]
+      leftTriangleInner: [sizes.margins.left + sizes.triangle, sizes.margins.top + sizes.triangle, 500],
+      centerSquare: [sizes.margins.left + sizes.triangle, sizes.margins.top + sizes.triangle, -500],
+      centerContent: [sizes.margins.left + sizes.triangle, sizes.margins.top + sizes.triangle, 1000]
     };
-
 
     var t = new Transitionable(0);
 
@@ -37,7 +41,6 @@ angular.module('integrationApp')
       var newVal = Math.max(0, Math.min(1, data.p / 800 + t.get()));
       t.set(newVal);
     });
-
 
     //t.set(1, {duration: 1000, curve: 'linear'});
 
