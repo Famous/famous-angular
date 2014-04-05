@@ -19,28 +19,27 @@ angular.module('integrationApp')
     };
 
     $scope.positions = {
-      topTriangle: [sizes.margins.left + sizes.triangle, sizes.margins.top, 0],
-      rightTriangle: [sizes.margins.left + 3 * sizes.triangle, sizes.margins.top + sizes.triangle, 0],
-      bottomTriangle: [sizes.margins.left + sizes.triangle, sizes.margins.top + 3 * sizes.triangle, 0],
-      leftTriangle: [sizes.margins.left, sizes.margins.top + sizes.triangle, 0]
+      topTriangle: [sizes.margins.left + sizes.triangle, sizes.margins.top, 500],
+      rightTriangle: [sizes.margins.left + 3 * sizes.triangle, sizes.margins.top + sizes.triangle, 500],
+      bottomTriangle: [sizes.margins.left + sizes.triangle, sizes.margins.top + 3 * sizes.triangle, 500],
+      leftTriangle: [sizes.margins.left, sizes.margins.top + sizes.triangle, 500],
+      centerSquare: [sizes.margins.left + sizes.triangle, sizes.margins.top + sizes.triangle, -500]
     };
 
 
     var t = new Transitionable(0);
-    // t.set(1, {
-    //     duration: 2000,
-    //     curve: "linear"
-    // });
-
 
     $scope.sync = new GenericSync(function(){
       return t.get();
     }, {direction: GenericSync.DIRECTION_Y});
 
     $scope.sync.on('update', function(data){
-      var newVal = Math.max(0, Math.min(1, data.p / 1000 + t.get()));
+      var newVal = Math.max(0, Math.min(1, data.p / 800 + t.get()));
       t.set(newVal);
     });
+
+
+    //t.set(1, {duration: 1000, curve: 'linear'});
 
     $scope.eventHandler = new EventHandler();
     $scope.eventHandler.pipe($scope.sync);

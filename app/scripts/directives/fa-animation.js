@@ -28,7 +28,9 @@ angular.module('integrationApp')
                   var modScope = angular.element(animate.attributes['targetmodselector'].value).scope();
                   var modifier = modScope.isolate[modScope.$id].modifier;
 
-                  var curve = animate.attributes['curve'] 
+                  window.m = modifier;
+
+                  var curve = animate.attributes['curve'] && animate.attributes['curve'].value !== 'linear' 
                     ? Easing[animate.attributes['curve'].value]
                     : function(j) {return j;}; //linear
 
