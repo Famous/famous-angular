@@ -5,11 +5,12 @@ angular.module('integrationApp')
     $scope.profilesPics = [
     'https://pbs.twimg.com/profile_images/1816668959/champagne.jpg',
     'https://pbs.twimg.com/profile_images/430409211596386304/MpOjFGZB.jpeg',
-    // 'https://pbs.twimg.com/profile_images/2630739604/08d6cc231d487fd5d04566f8e149ee38.jpeg',
+    'https://pbs.twimg.com/profile_images/2630739604/08d6cc231d487fd5d04566f8e149ee38.jpeg',
     'https://pbs.twimg.com/profile_images/2580051838/gudyd1q8t66w60u036d5.jpeg',
     ];
 
-    var height = 115;
+    var height = 320 / 3;
+    $scope.height = height;
 
     var Transitionable = famous["famous/transitions/Transitionable"];
     var GenericSync = famous['famous/inputs/GenericSync']
@@ -34,13 +35,28 @@ angular.module('integrationApp')
 
     $scope.images = [];
 
+    var row = function(n) {
+      var nColumns = 3;
+      return Math.floor(n / nColumns);
+    };
+
     var flat = function(n) {
-      return (n * height) < $scope.visible.get();
+      return (row(n) * height) < visible(n);
     };
 
     var rotating = function(n) {
-      var visiblePics = $scope.visible.get() / height;
-      return Math.floor(visiblePics) === n;
+      var col = n % 3;
+      var visibleRows = visible(n) / height;
+      return Math.floor(visibleRows) === row(n);
+    };
+
+    var columnOffset = function(n) {
+      return [0, 50, 20][n % 3];
+    };
+
+    var visible = function(n) {
+      var col = n % 3;
+      return $scope.visible.get() - columnOffset(n);
     };
 
     $scope.addImage = function() {
@@ -48,19 +64,23 @@ angular.module('integrationApp')
       var pic = $scope.profilesPics[n % $scope.profilesPics.length];
       $scope.images.push({
         url: pic,
+        x: function() {
+          var column = n % 3;
+          return column * height;
+        },
         y: function() {
           if (rotating(n)) return 30;
-          return -(height * n) + 30 + $scope.offset();
+          return -(height * row(n)) + 30 + $scope.offset() - columnOffset(n);
         },
         z: function() {
           if (!rotating(n)) return 0;
-          var visibleHeight = ($scope.visible.get() % height);
+          var visibleHeight = (visible(n) % height);
           var z = Math.sqrt((height * height) - (visibleHeight * visibleHeight));
           return -z;
         },
         xRotation: function() {
           if (rotating(n)) {
-            var visibleHeight = ($scope.visible.get() % height);
+            var visibleHeight = (visible(n) % height);
             var theta = (Math.PI / 2) - Math.asin( visibleHeight / height);
             return theta;
           }
