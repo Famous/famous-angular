@@ -27,7 +27,7 @@ angular.module('integrationApp')
 
     var t = new Transitionable(0);
     t.set(1, {
-        duration: 4000,
+        duration: 3000,
         curve: "easeOut"
     });
     $scope.functionThatReturnsATimelineValueBetween0And1 = function(){

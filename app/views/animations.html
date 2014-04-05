@@ -1,36 +1,41 @@
 <fa-app fa-controller="AnimationsCtrl">
-  <fa-view id="EnvelopeView">
+  
+    <fa-view id="EnvelopeView">
+      <fa-modifier id="wholeThing" fa-size="[sizes.width, sizes.height]" fa-origin="[.5, .5]">
+        <fa-modifier fa-size="[2 * sizes.triangle, sizes.triangle]" fa-translate="positions.topTriangle" >
+          <fa-modifier id="topMod" fa-origin="[.5, 1]"  >
+            <fa-surface class="backface-visible">
+              <div class="top-triangle"></div>
+            </fa-surface>
+          </fa-modifier>
+        </fa-modifier>
 
-    <fa-modifier fa-size="[2 * sizes.triangle, sizes.triangle]" fa-translate="positions.topTriangle" >
-      <fa-modifier id="topMod" fa-origin="[.5, 1]"  >
-        <fa-surface class="backface-visible">
-          <div class="top-triangle"></div>
-        </fa-surface>
+        <fa-modifier fa-size="[sizes.triangle, 2 * sizes.triangle]" fa-translate="positions.rightTriangle" >
+          <fa-modifier id="rightMod" fa-origin="[0, .5]"  >
+            <fa-surface class="backface-visible">
+              <div class="right-triangle"></div>
+            </fa-surface>
+          </fa-modifier>
+        </fa-modifier>
+
+        <fa-modifier fa-size="[2 * sizes.triangle, sizes.triangle]" fa-translate="positions.bottomTriangle" >
+          <fa-modifier id="bottomMod" fa-origin="[.5, 0]"  >
+            <fa-surface class="backface-visible">
+              <div class="bottom-triangle"></div>
+            </fa-surface>
+          </fa-modifier>
+        </fa-modifier>
+
+        <fa-modifier fa-size="[sizes.triangle, 2 * sizes.triangle]" fa-translate="positions.leftTriangle" >
+          <fa-modifier id="leftMod" fa-origin="[1, .5]"  >
+            <fa-surface class="backface-visible">
+              <div class="left-triangle"></div>
+            </fa-surface>
+          </fa-modifier>
+        </fa-modifier>
       </fa-modifier>
-    </fa-modifier>
-
-    <fa-modifier fa-size="[sizes.triangle, 2 * sizes.triangle]" fa-translate="positions.rightTriangle" >
-      <fa-modifier id="rightMod" fa-origin="[0, .5]"  >
-        <fa-surface class="backface-visible">
-          <div class="right-triangle"></div>
-        </fa-surface>
-      </fa-modifier>
-    </fa-modifier>
-
-    <fa-modifier fa-size="[2 * sizes.triangle, sizes.triangle]" fa-translate="positions.bottomTriangle" >
-      <fa-modifier id="bottomMod" fa-origin="[.5, 0]"  >
-        <fa-surface class="backface-visible">
-          <div class="bottom-triangle"></div>
-        </fa-surface>
-      </fa-modifier>
-    </fa-modifier>
-
-    <fa-modifier id="leftMod" fa-translate="positions.leftTriangle">
-      <fa-surface id="left">
-        <div class="left-triangle"></div>
-      </fa-surface>
-    </fa-modifier>
-  </fa-view>
+    </fa-view>
+  </fa-modifier>
 
   <fa-animation timeline="functionThatReturnsATimelineValueBetween0And1">
     <animate  targetModSelector="#topMod"
@@ -38,22 +43,37 @@
               startValue="3.14"
               endValue="0"
               curve="inQuad"
-              timelineLowerBound=".25"
-              timelineUpperBound=".5" />
+              timelineLowerBound="0"
+              timelineUpperBound=".25" />
     <animate  targetModSelector="#rightMod"
               transformField="rotateY"
               startValue="3.14"
               endValue="0"
               curve="inQuad"
-              timelineLowerBound="0"
-              timelineUpperBound=".25" />
+              timelineLowerBound=".1"
+              timelineUpperBound=".35" />
     <animate  targetModSelector="#bottomMod"
               transformField="rotateX"
               startValue="3.14"
               endValue="0"
               curve="inQuad"
-              timelineLowerBound=.5
-              timelineUpperBound=".75" />
+              timelineLowerBound=".2"
+              timelineUpperBound=".45" />
+    <animate  targetModSelector="#leftMod"
+              transformField="rotateY"
+              startValue="3.14"
+              endValue="0"
+              curve="inQuad"
+              timelineLowerBound=".3"
+              timelineUpperBound=".55" />
+    <animate  targetModSelector="#wholeThing"
+              transformField="rotateZ"
+              startValue="0"
+              endValue="6.28"
+              curve="inQuad"
+              timelineLowerBound="0"
+              timelineUpperBound="1" />
+
   </fa-animation>
 
 </fa-app>
