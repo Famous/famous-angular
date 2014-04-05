@@ -1,8 +1,10 @@
 <fa-app fa-controller="AnimationsCtrl">
   
-    <fa-view id="EnvelopeView">
+    <fa-view id="EnvelopeView" fa-pipe-to="eventHandler">
       <fa-modifier id="wholeThing" fa-size="[sizes.width, sizes.height]" fa-origin="[.5, .5]">
-        <fa-modifier fa-size="[2 * sizes.triangle, sizes.triangle]" fa-translate="positions.topTriangle" >
+        <fa-modifier
+          fa-size="[2 * sizes.triangle, sizes.triangle]"
+          fa-translate="positions.topTriangle" >
           <fa-modifier id="topMod" fa-origin="[.5, 1]"  >
             <fa-surface class="backface-visible">
               <div class="top-triangle"></div>
@@ -10,7 +12,9 @@
           </fa-modifier>
         </fa-modifier>
 
-        <fa-modifier fa-size="[sizes.triangle, 2 * sizes.triangle]" fa-translate="positions.rightTriangle" >
+        <fa-modifier
+          fa-size="[sizes.triangle, 2 * sizes.triangle]"
+          fa-translate="positions.rightTriangle" >
           <fa-modifier id="rightMod" fa-origin="[0, .5]"  >
             <fa-surface class="backface-visible">
               <div class="right-triangle"></div>
@@ -18,7 +22,9 @@
           </fa-modifier>
         </fa-modifier>
 
-        <fa-modifier fa-size="[2 * sizes.triangle, sizes.triangle]" fa-translate="positions.bottomTriangle" >
+        <fa-modifier
+          fa-size="[2 * sizes.triangle, sizes.triangle]"
+          fa-translate="positions.bottomTriangle" >
           <fa-modifier id="bottomMod" fa-origin="[.5, 0]"  >
             <fa-surface class="backface-visible">
               <div class="bottom-triangle"></div>
@@ -26,7 +32,9 @@
           </fa-modifier>
         </fa-modifier>
 
-        <fa-modifier fa-size="[sizes.triangle, 2 * sizes.triangle]" fa-translate="positions.leftTriangle" >
+        <fa-modifier
+          fa-size="[sizes.triangle, 2 * sizes.triangle]"
+          fa-translate="positions.leftTriangle" >
           <fa-modifier id="leftMod" fa-origin="[1, .5]"  >
             <fa-surface class="backface-visible">
               <div class="left-triangle"></div>
