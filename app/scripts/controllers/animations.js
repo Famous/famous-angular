@@ -6,16 +6,19 @@ angular.module('integrationApp')
     var GenericSync = famous['famous/inputs/GenericSync'];
     var EventHandler = famous['famous/core/EventHandler']
 
+    var _width = window.innerWidth;
+    var _height = window.innerHeight;
+    var _r = 75;
     var sizes = $scope.sizes = {
       margins: {
-        top: 134,
-        right: 10,
-        bottom: 134,
-        left: 10
+        top: (_height - 4 * _r) / 2,//134,
+        right: (_width - 4 * _r) / 2,
+        bottom: (_height - 4 * _r) / 2,
+        left: (_width - 4 * _r) / 2
       },
-      width: window.innerWidth, //320
-      height: window.innerHeight, //568
-      triangle: 75
+      width: _width, //320
+      height: _height, //568
+      triangle: _r
     };
 
     $scope.positions = {
@@ -39,10 +42,11 @@ angular.module('integrationApp')
 
     $scope.sync.on('update', function(data){
       var newVal = Math.max(0, Math.min(1, data.p / 800 + t.get()));
+      // alert('sync');
       t.set(newVal);
     });
 
-    //t.set(1, {duration: 1000, curve: 'linear'});
+    //t.set(1, {duration: 2000, curve: 'linear'});
 
     $scope.eventHandler = new EventHandler();
     $scope.eventHandler.pipe($scope.sync);
