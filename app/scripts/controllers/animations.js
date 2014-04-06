@@ -4,6 +4,8 @@ angular.module('integrationApp')
   .controller('AnimationsCtrl', function ($scope, famous) {
     var Transitionable = famous['famous/transitions/Transitionable'];
     var GenericSync = famous['famous/inputs/GenericSync'];
+    var RotateSync = famous['famous/inputs/RotateSync'];
+    var PinchSync = famous['famous/inputs/PinchSync'];
     var EventHandler = famous['famous/core/EventHandler']
 
     var _width = window.innerWidth;
@@ -36,12 +38,12 @@ angular.module('integrationApp')
 
     var t = new Transitionable(0);
 
-    $scope.sync = new GenericSync(function(){
+    $scope.sync = new PinchSync(function(){
       return t.get();
     }, {direction: GenericSync.DIRECTION_Y});
 
     $scope.sync.on('update', function(data){
-      var newVal = Math.max(0, Math.min(1, data.p / 800 + t.get()));
+      var newVal = Math.max(0, Math.min(1, data.p / 300 + t.get()));
       // alert('sync');
       t.set(newVal);
     });

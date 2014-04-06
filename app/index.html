@@ -23,6 +23,9 @@
     <!-- endbuild -->
   </head>
   <body >
+   <object id="tuio" type="application/x-tuio" style="width: 0px; height: 0px;">
+    Touch input plugin failed to load!
+  </object>
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
@@ -60,6 +63,7 @@
     <script src="scripts/directives/fa-animation.js"></script>
     <!--SCRIPTS END-->
         
+    <script src="vendor/magictouch.js"></script>
     <script src="vendor/require.js" data-main="scripts/famous.angular"></script>
 
 </body>
