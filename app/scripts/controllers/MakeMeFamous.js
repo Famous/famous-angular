@@ -1,22 +1,51 @@
 'use strict';
 
 angular.module('integrationApp')
-  .controller('MakeMeFamousCtrl', function ($scope, famous) {
-    $scope.profilesPics = [
-    'https://pbs.twimg.com/profile_images/1816668959/champagne.jpg',
-    'https://pbs.twimg.com/profile_images/430409211596386304/MpOjFGZB.jpeg',
-    'https://pbs.twimg.com/profile_images/2630739604/08d6cc231d487fd5d04566f8e149ee38.jpeg',
-    'https://pbs.twimg.com/profile_images/2580051838/gudyd1q8t66w60u036d5.jpeg',
-    ];
+  .controller('MakeMeFamousCtrl', function ($scope, $http, famous) {
+    $scope.profilePics = [];
+    var api = "/latest";
+    var tweets = $http.get(api);
+
+    var inThrees = function(array, fn) {
+      _.each(_.range(array.length / 3), function(i) {
+        fn(array[3*i], array[3*i+1], array[3*i+2]);
+      });
+    };
+
+    tweets.then(function(response) {
+      var ySoFar = 0;
+      inThrees(response.data, function(first, second, third) {
+
+        first.height = 2*height;
+        first.yOffset = ySoFar + 2*height;
+        first.xOffset = 0;
+
+        second.yOffset = ySoFar + height;
+        second.xOffset = 2*height;
+
+        third.yOffset = ySoFar + 2*height;
+        third.xOffset = 2*height;
+        ySoFar += height*2;
+
+        $scope.profilePics.push(first);
+        $scope.profilePics.push(second);
+        $scope.profilePics.push(third);
+      });
+    });
+
 
     var height = 320 / 3;
     $scope.height = height;
+
+    $scope.size = function(tweet) {
+      return tweet.height || height;
+    };
 
     var Transitionable = famous["famous/transitions/Transitionable"];
     var GenericSync = famous['famous/inputs/GenericSync'];
     var EventHandler = famous['famous/core/EventHandler'];
 
-    $scope.visible = new Transitionable(115);
+    $scope.visible = new Transitionable(height);
 
     var sync = new GenericSync(function() {
       return $scope.visible.get(1);
@@ -44,56 +73,50 @@ angular.module('integrationApp')
       return (row(n) * height) < visible(n);
     };
 
-    var rotating = function(n) {
-      var col = n % 3;
-      var visibleRows = visible(n) / height;
-      return Math.floor(visibleRows) === row(n);
+    var visible = function() {
+      return $scope.visible.get();
+    };
+
+    var rotating = function(tweet) {
+      var topOfPic = tweet.yOffset + height;
+      var bottomOfPic = tweet.yOffset;
+      return visible() > bottomOfPic && visible() < topOfPic;
     };
 
     var columnOffset = function(n) {
-      return [0, 50, 20][n % 3];
+      return 0;
     };
 
-    var visible = function(n) {
-      var col = n % 3;
-      return $scope.visible.get() - columnOffset(n);
-    };
+    //
+    // rotating - if the top of the visible area is between the top of
+    //            the picture and the bottom of the pictures
 
-    $scope.addImage = function() {
-      var n = $scope.images.length;
-      var pic = $scope.profilesPics[n % $scope.profilesPics.length];
-      $scope.images.push({
-        url: pic,
-        x: function() {
-          var column = n % 3;
-          return column * height;
-        },
-        y: function() {
-          if (rotating(n)) return 0;
-          return -(height * row(n)) + $scope.offset() - columnOffset(n);
-        },
-        z: function() {
-          if (!rotating(n)) return 0;
-          var visibleHeight = (visible(n) % height);
-          var z = Math.sqrt((height * height) - (visibleHeight * visibleHeight));
-          return -z;
-        },
-        xRotation: function() {
-          if (rotating(n)) {
-            var visibleHeight = (visible(n) % height);
-            var theta = (Math.PI / 2) - Math.asin( visibleHeight / height);
-            return theta;
-          }
-          if (flat(n)) return 0;
-          return Math.PI / 2;
+
+    $scope.grid = {
+      x: function(tweet) {
+        return tweet.xOffset;
+      },
+      y: function(tweet) {
+        if (rotating(tweet)) return 0;
+        return -(tweet.yOffset) + $scope.offset();
+      },
+      z: function(n, tweet) {
+        if (!rotating(tweet)) return 0;
+        var height = $scope.size(tweet);
+        var visibleHeight = (visible(n) % $scope.size(tweet));
+        var z = Math.sqrt((height * height) - (visibleHeight * visibleHeight));
+        return -z;
+      },
+      xRotation: function(n, tweet) {
+        if (rotating(tweet)) {
+          var visibleHeight = (visible(n) % $scope.size(tweet));
+          var theta = (Math.PI / 2) - Math.asin( visibleHeight / height);
+          return theta;
         }
-      });
+        if (flat(n)) return 0;
+        return Math.PI / 2;
+      }
     };
-
-    _.each(_.range(60), function(i){
-      $scope.addImage();
-    });
-
 
     $scope.positions = _.map($scope.profilePics, function(pic) {
     });

@@ -1,13 +1,13 @@
 <div class="makemefamous" ng-controller='MakeMeFamousCtrl'>
   <h1><span class="hashtag">#</span> Famous</h1>
   <div class="images" fa-app fa-pipe-to="eventHandler" style="-webkit-perspective: 800">
-      <fa-modifier ng-repeat="image in images"
-                   fa-translate="[image.x, image.y, image.z]"
-                   fa-rotate-x="image.xRotation">
+      <fa-modifier ng-repeat="tweet in profilePics track by $index"
+                   fa-translate="[grid.x(tweet), grid.y(tweet), grid.z($index, tweet)]"
+                   fa-rotate-x="grid.xRotation($index, tweet)">
           <fa-surface
             fa-background-color="red";
             fa-size="[115, 115]">
-            <img width="{{height}}" height="{{height}}" src="{{image.url}}">
+            <img width="{{size(tweet)}}" height="{{size(tweet)}}" src="{{tweet.profile_picture_original}}">
           </fa-surface>
       </fa-modifier>
   </div>
