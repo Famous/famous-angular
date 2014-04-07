@@ -60,23 +60,26 @@ angular.module('integrationApp')
                       lowerBound: lowerBound,
                       upperBound: upperBound,
                       startValue: startValue,
-                      endValue: endValue
+                      endValue: endValue,
+                      curve: curve
                     });
 
                     //Keep modDecs[field] sorted
                     segments.sort(function(a, b){
-                      return b.lowerBound - a.lowerBound;
+                      return a.lowerBound - b.lowerBound;
                     });
 
                     //Check domain overlap:
                     //after sorting by lowerBounds, if upperBounds are not monotonic,
                     //there's an overlap in domains, which is unsupportable.  Throw.
-                    var lastUp = segments[0].upperBound;
-                    for(var j = 1; j < modDecs[field].length; j++){
-                      var newUp = segments[j];
-                      if(newUp < lastUp)
-                        throw "Animate segments have overlapping domains for the same field (" + field + "). "
-                              + " At any point in the timeline, only one <animate> can affect a given field on the same modifier."
+                    for(var j = 1; j < segments.length; j++){
+                      var lower = segments[j].lowerBound;
+                      for(var k = 0; k < j; k++){
+                        if(lower < segments[k].upperBound){
+                          throw "Animate segments have overlapping domains for the same field (" + field + "). "
+                                + " At any point in the timeline, only one <animate> can affect a given field on the same modifier."
+                        }
+                      }
                     }
 
 
@@ -98,16 +101,40 @@ angular.module('integrationApp')
                     //_____|__________|_______________________|__________|_______
                     //     |x(0,0)    |x(0,1)                 |x(1,0)    |x(1,1)
 
-
                     //TODO:  in order to support nested fa-animation directives,
                     //       this function needs to be exposed somehow.
+                    //TODO:  if needed:  make this more efficient.  This is a hot-running
+                    //       function and we should be able to optimize and chop
+                    //       down complexity by an order of magnitude or so
                     var transformFunction = function(){
                       var x = timeline();
                       var relevantIndex = 0;
                       var relevantSegment = segments[relevantIndex];
-                      while(x < relevantSegment.upperBound && relevantIndex < segments.length){
-                        relevantIndex++;
-                        relevantSegment = segments[relevantIndex];
+                      // console.log('relevantSegment', relevantSegment);
+                      
+                      // while(x < relevantSegment.upperBound && relevantIndex < segments.length - 1){
+                      //   relevantIndex++;
+                      //   relevantSegment = segments[relevantIndex];
+                      // }
+                      // relevantSegment = segments[Math.max(0,relevantIndex - 1)];
+
+                      for(var j = 0; j < segments.length; j++){
+                        //this is the relevant segment if x is in the subdomain
+                        if(x >= segments[j].lowerBound && x <= segments[j].upperBound){
+                          relevantSegment = segments[j];
+                          break;
+                        }
+                        //this is the relevant segment if it is the last one
+                        if(j === segments.length - 1){
+                          relevantSegment = segments[j];
+                          break;
+                        }
+                        //this is the relevant segment if x is greater than its upper
+                        //bound but less than the next segment's lower bound
+                        if(x >= segments[j].upperBound && x < segments[j + 1].lowerBound){
+                          relevantSegment = segments[j];
+                          break;
+                        }
                       }
 
                       if(x <= relevantSegment.lowerBound)
@@ -118,7 +145,16 @@ angular.module('integrationApp')
                       var subDomain = (relevantSegment.upperBound - relevantSegment.lowerBound)
                       var normalizedX = (x - relevantSegment.lowerBound) / subDomain;
 
-                      return relevantSegment.startValue + curve(normalizedX) * (relevantSegment.endValue - relevantSegment.startValue);
+                      //Support interpolating multiple values, e.g. for a scale array [x,y,z]
+                      if(Array.isArray(relevantSegment.startValue)){
+                        var ret = [];
+                        for(var j = 0; j < relevantSegment.startValue.length; j++){
+                          ret.push(relevantSegment.startValue[j] + relevantSegment.curve(normalizedX) * (relevantSegment.endValue[j] - relevantSegment.startValue[j]));
+                        }
+                        return ret;
+                      }else{
+                        return relevantSegment.startValue + relevantSegment.curve(normalizedX) * (relevantSegment.endValue - relevantSegment.startValue);
+                      }
                     };
 
                     if(field === 'opacity'){
