@@ -20,8 +20,6 @@ angular.module('integrationApp')
               (function(){
                 var animate = animates[i];
 
-                console.log('animate', animate);
-
                 //DOM selector string that points to our mod of interest
                 if(animate.attributes['targetmodselector']){
                   //dig out the reference to our modifier
@@ -54,6 +52,8 @@ angular.module('integrationApp')
                       throw 'you must provide an end value for the animation'
                     var endValue = scope.$eval(animate.attributes['endValue'].value);
 
+                    //TODO:  in order to support nested fa-animation directives,
+                    //       this function needs to be exposed somehow.
                     var transformFunction = function(){
                       var x = timeline();
                       if(x <= lowerBound)
@@ -71,7 +71,16 @@ angular.module('integrationApp')
                       modifier.opacityFrom(function(){
                         return transformFunction();
                       });
+                    }else if (field === 'origin'){
+                      modifier.originFrom(function(){
+                        return transformFunction();
+                      });
+                    }else if (field === 'size'){
+                      modifier.sizeFrom(function(){
+                        return transformFunction();
+                      });
                     }else{ //transform field
+                      //TODO:  support multiple transform fields
                       modifier.transformFrom(function(){
                         return Transform[field](transformFunction());
                       });
