@@ -6,7 +6,7 @@ angular.module('integrationApp')
     var GenericSync = famous['famous/inputs/GenericSync'];
     var RotateSync = famous['famous/inputs/RotateSync'];
     var PinchSync = famous['famous/inputs/PinchSync'];
-    var EventHandler = famous['famous/core/EventHandler']
+    var EventHandler = famous['famous/core/EventHandler'];
 
     var _width = window.innerWidth;
     var _height = window.innerHeight;
@@ -33,12 +33,12 @@ angular.module('integrationApp')
       leftTriangle: [sizes.margins.left, sizes.margins.top + sizes.triangle, 500],
       leftTriangleInner: [sizes.margins.left + sizes.triangle, sizes.margins.top + sizes.triangle, 500],
       centerSquare: [sizes.margins.left + sizes.triangle, sizes.margins.top + sizes.triangle, -500],
-      centerContent: [sizes.margins.left + .6 * sizes.triangle, sizes.margins.top + 2 * sizes.triangle, 1000]
+      centerContent: [sizes.margins.left, sizes.margins.top + 2 * sizes.triangle, 1000]
     };
 
     var t = new Transitionable(0);
 
-    $scope.sync = new PinchSync(function(){
+    $scope.sync = new GenericSync(function(){
       return t.get();
     }, {direction: GenericSync.DIRECTION_Y});
 
@@ -52,6 +52,21 @@ angular.module('integrationApp')
 
     $scope.eventHandler = new EventHandler();
     $scope.eventHandler.pipe($scope.sync);
+
+    var _contents = ["Hey, I'm data-bound!", "Hey, I change my content!"]
+    var _contentIndex = 0;
+    var _content = _contents[_contentIndex];
+    $scope.getContent = function(){
+      return _content;
+    };
+
+    var toggleContent = function(){
+      _content = _contents[(_contentIndex++)%_contents.length];
+      if(!$scope.$$phase)
+        $scope.$apply();
+    };
+
+    setInterval(toggleContent, 1000);
     
     $scope.functionThatReturnsATimelineValueBetween0And1 = function(){
       return t.get();

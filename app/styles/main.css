@@ -45,3 +45,27 @@ body {
   border-width: 75px 75px 0 75px;
   border-color: #606060 transparent transparent transparent;
 }
+
+.top-triangle.light{
+  border-color: transparent transparent #A0A0A0 transparent;
+}
+
+.left-triangle.light{
+  border-color: transparent #A0A0A0 transparent transparent;
+}
+
+.right-triangle.light{
+  border-color: transparent transparent transparent #A0A0A0;
+}
+
+.bottom-triangle.light{
+  border-color: #A0A0A0 transparent transparent transparent;
+}
+
+.center-square {
+  background-color: #A0A0A0;
+}
+
+.center-content {
+  padding: 10pt;
+}
