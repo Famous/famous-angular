@@ -25,7 +25,8 @@ angular.module('integrationApp')
                 //DOM selector string that points to our mod of interest
                 if(animate.attributes['targetmodselector']){
                   //dig out the reference to our modifier
-                  var modScope = angular.element(animate.attributes['targetmodselector'].value).scope();
+                  var modElement = element.parent().find(animate.attributes['targetmodselector'].value);
+                  var modScope = angular.element(modElement).scope();
                   var modifier = modScope.isolate[modScope.$id].modifier;
 
                   window.m = modifier;
