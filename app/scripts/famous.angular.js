@@ -10,6 +10,8 @@ var requirements = [
   "famous/core/View",
   "famous/core/ViewSequence",
   "famous/inputs/GenericSync",
+  "famous/inputs/RotateSync",
+  "famous/inputs/PinchSync",
   "famous/transitions/Easing",
   "famous/transitions/SpringTransition",
   "famous/transitions/Transitionable",

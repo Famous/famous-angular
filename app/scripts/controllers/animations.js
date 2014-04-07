@@ -4,18 +4,23 @@ angular.module('integrationApp')
   .controller('AnimationsCtrl', function ($scope, famous) {
     var Transitionable = famous['famous/transitions/Transitionable'];
     var GenericSync = famous['famous/inputs/GenericSync'];
-    var EventHandler = famous['famous/core/EventHandler']
+    var RotateSync = famous['famous/inputs/RotateSync'];
+    var PinchSync = famous['famous/inputs/PinchSync'];
+    var EventHandler = famous['famous/core/EventHandler'];
 
+    var _width = window.innerWidth;
+    var _height = window.innerHeight;
+    var _r = 75;
     var sizes = $scope.sizes = {
       margins: {
-        top: 134,
-        right: 10,
-        bottom: 134,
-        left: 10
+        top: (_height - 4 * _r) / 2,//134,
+        right: (_width - 4 * _r) / 2,
+        bottom: (_height - 4 * _r) / 2,
+        left: (_width - 4 * _r) / 2
       },
-      width: window.innerWidth, //320
-      height: window.innerHeight, //568
-      triangle: 75
+      width: _width, //320
+      height: _height, //568
+      triangle: _r
     };
 
     $scope.positions = {
@@ -27,8 +32,8 @@ angular.module('integrationApp')
       bottomTriangleInner: [sizes.margins.left + sizes.triangle, sizes.margins.top + 2 * sizes.triangle, 500],
       leftTriangle: [sizes.margins.left, sizes.margins.top + sizes.triangle, 500],
       leftTriangleInner: [sizes.margins.left + sizes.triangle, sizes.margins.top + sizes.triangle, 500],
-      centerSquare: [sizes.margins.left + sizes.triangle, sizes.margins.top + sizes.triangle, -500],
-      centerContent: [sizes.margins.left + .6 * sizes.triangle, sizes.margins.top + 2 * sizes.triangle, 1000]
+      centerSquare: [sizes.margins.left + sizes.triangle - .5, sizes.margins.top + sizes.triangle - .5, -500],
+      centerContent: [sizes.margins.left, sizes.margins.top + 2 * sizes.triangle, 1000]
     };
 
     var t = new Transitionable(0);
@@ -38,14 +43,30 @@ angular.module('integrationApp')
     }, {direction: GenericSync.DIRECTION_Y});
 
     $scope.sync.on('update', function(data){
-      var newVal = Math.max(0, Math.min(1, data.p / 800 + t.get()));
+      var newVal = Math.max(0, Math.min(1, data.p / 300 + t.get()));
+      // alert('sync');
       t.set(newVal);
     });
 
-    //t.set(1, {duration: 1000, curve: 'linear'});
+    //t.set(1, {duration: 2000, curve: 'linear'});
 
     $scope.eventHandler = new EventHandler();
     $scope.eventHandler.pipe($scope.sync);
+
+    var _contents = ["Hey, I'm data-bound!", "Hey, I change my content!"]
+    var _contentIndex = 0;
+    var _content = _contents[_contentIndex];
+    $scope.getContent = function(){
+      return _content;
+    };
+
+    var toggleContent = function(){
+      _content = _contents[(_contentIndex++)%_contents.length];
+      if(!$scope.$$phase)
+        $scope.$apply();
+    };
+
+    setInterval(toggleContent, 1000);
     
     $scope.functionThatReturnsATimelineValueBetween0And1 = function(){
       return t.get();
