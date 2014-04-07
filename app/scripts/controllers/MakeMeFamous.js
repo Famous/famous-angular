@@ -2,7 +2,7 @@
 
 angular.module('integrationApp')
   .controller('MakeMeFamousCtrl', function ($scope, $http, famous) {
-    $scope.profilePics = [];
+    $scope.rows = [];
     var api = "/latest";
     var tweets = $http.get(api);
 
@@ -15,24 +15,54 @@ angular.module('integrationApp')
     tweets.then(function(response) {
       var ySoFar = 0;
       inThrees(response.data, function(first, second, third) {
-
-        first.height = 2*height;
-        first.yOffset = ySoFar + 2*height;
-        first.xOffset = 0;
-
-        second.yOffset = ySoFar + height;
-        second.xOffset = 2*height;
-
-        third.yOffset = ySoFar + 2*height;
-        third.xOffset = 2*height;
-        ySoFar += height*2;
-
-        $scope.profilePics.push(first);
-        $scope.profilePics.push(second);
-        $scope.profilePics.push(third);
+        if (Math.random()  < 0.5) {
+          $scope.rows.push({
+            height: 2*height,
+            y: ySoFar,
+            elements: [{
+              tweet: first,
+              size: 2*height,
+              x: 0,
+              y: 0
+            }, {
+              tweet: second,
+              size: height,
+              x: 2*height,
+              y: 0,
+            }, {
+              tweet: third,
+              size: height,
+              x: 2*height,
+              y: height,
+            }]
+          });
+          ySoFar += 2*height;
+        }
+        else {
+          $scope.rows.push({
+            height: height,
+            y: ySoFar,
+            elements: [{
+              tweet: first,
+              size: height,
+              x: 0,
+              y: 0
+            }, {
+              tweet: second,
+              size: height,
+              x: height,
+              y: 0,
+            }, {
+              tweet: third,
+              size: height,
+              x: 2*height,
+              y: 0,
+            }]
+          });
+          ySoFar += height;
+        }
       });
     });
-
 
     var height = 320 / 3;
     $scope.height = height;
@@ -45,7 +75,7 @@ angular.module('integrationApp')
     var GenericSync = famous['famous/inputs/GenericSync'];
     var EventHandler = famous['famous/core/EventHandler'];
 
-    $scope.visible = new Transitionable(height);
+    $scope.visible = new Transitionable(0);
 
     var sync = new GenericSync(function() {
       return $scope.visible.get(1);
@@ -59,28 +89,36 @@ angular.module('integrationApp')
     $scope.eventHandler.pipe(sync);
 
     $scope.offset = function() {
-      return ($scope.visible.get() - height);
+      return $scope.visible.get();
     };
 
     $scope.images = [];
+
+    $scope.toTop = function() {
+      console.log("click");
+      $scope.visible.set(0, {duration: 500, curve: "easeOut"});
+    };
 
     var row = function(n) {
       var nColumns = 3;
       return Math.floor(n / nColumns);
     };
 
-    var flat = function(n) {
-      return (row(n) * height) < visible(n);
+    var hidden = function(row) {
+      return row.y + row.height + $scope.offset() < 0;
+    };
+
+    var flat = function(row) {
+      return row.y + row.height < $scope.offset();
     };
 
     var visible = function() {
       return $scope.visible.get();
     };
 
-    var rotating = function(tweet) {
-      var topOfPic = tweet.yOffset + height;
-      var bottomOfPic = tweet.yOffset;
-      return visible() > bottomOfPic && visible() < topOfPic;
+    var rotating = function(row) {
+      return -$scope.offset() > row.y && -$scope.offset();
+      return -$scope.offset() > (row.y - row.height) && -$scope.offset() < row.y;
     };
 
     var columnOffset = function(n) {
@@ -96,27 +134,30 @@ angular.module('integrationApp')
       x: function(tweet) {
         return tweet.xOffset;
       },
-      y: function(tweet) {
-        if (rotating(tweet)) return 0;
-        return -(tweet.yOffset) + $scope.offset();
+      y: function(row) {
+        if (rotating(row)) return 0;
+        return row.y + $scope.offset();
       },
-      z: function(n, tweet) {
-        if (!rotating(tweet)) return 0;
-        var height = $scope.size(tweet);
-        var visibleHeight = (visible(n) % $scope.size(tweet));
+      z: function(row) {
+        if (!rotating(row)) return 0;
+        var height = row.height;
+        var visibleHeight = (row.y + row.height + $scope.offset());
         var z = Math.sqrt((height * height) - (visibleHeight * visibleHeight));
         return -z;
       },
-      xRotation: function(n, tweet) {
-        if (rotating(tweet)) {
-          var visibleHeight = (visible(n) % $scope.size(tweet));
-          var theta = (Math.PI / 2) - Math.asin( visibleHeight / height);
+      xRotation: function(row) {
+        if (rotating(row)) {
+          var visibleHeight = (row.y + row.height + $scope.offset());
+          var oppositeOverHypotenuse = visibleHeight / row.height;
+          var theta = (Math.PI / 2) - Math.asin( visibleHeight / row.height);
           return theta;
         }
-        if (flat(n)) return 0;
-        return Math.PI / 2;
+        if (hidden(row)) return Math.PI / 2;
+        return 0;
       }
     };
+
+    window.offset = $scope.offset;
 
     $scope.positions = _.map($scope.profilePics, function(pic) {
     });
