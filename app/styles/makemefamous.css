@@ -39,3 +39,7 @@ h2 {
   position: relative;
 }
 
+#tuio {
+  display: none;
+}
+
