@@ -15,6 +15,7 @@ var requirements = [
   "famous/transitions/Easing",
   "famous/transitions/SpringTransition",
   "famous/transitions/Transitionable",
+  "famous/utilities/Timer",
   "famous/views/ScrollView"
 ]
 

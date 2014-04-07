@@ -74,23 +74,50 @@ angular.module('integrationApp')
     var Transitionable = famous["famous/transitions/Transitionable"];
     var GenericSync = famous['famous/inputs/GenericSync'];
     var EventHandler = famous['famous/core/EventHandler'];
+    var ScrollView = famous['famous/views/ScrollView'];
+    var Timer = famous["famous/utilities/Timer"];
 
-    $scope.visible = new Transitionable(0);
-
-    var sync = new GenericSync(function() {
-      return $scope.visible.get(1);
-    }, {direction: GenericSync.DIRECTION_Y});
-
-    sync.on('update', function(data) {
-      $scope.visible.set(data.p);
-    });
-
-    $scope.eventHandler = new EventHandler();
-    $scope.eventHandler.pipe(sync);
+    var scrollView =  new ScrollView();
 
     $scope.offset = function() {
-      return $scope.visible.get();
+      return -scrollView.getPosition();
     };
+
+    var _handleEdge = function _handleEdge(edgeDetected) {
+      if(!this._onEdge && edgeDetected) {
+        this.sync.setOptions({scale: this.options.edgeGrip});
+        if(!this.touchCount && !this._springAttached) {
+          this._springAttached = true;
+          this.physicsEngine.attach([this.spring], this.particle);
+        }
+      }
+      else if(this._onEdge && !edgeDetected) {
+        this.sync.setOptions({scale: 1});
+        if(this._springAttached && Math.abs(this.getVelocity()) < 0.001) {
+          this.setVelocity(0);
+          this.setPosition(this._springPosition);
+          // reset agents, detaching the spring
+          _detachAgents.call(this);
+          _attachAgents.call(this);
+        }
+      }
+      this._onEdge = edgeDetected;
+    }
+
+    Timer.every(function() {
+      var offset = scrollView.getPosition();
+      if (offset < 0) {
+        _handleEdge.call(scrollView, true);
+      }
+      else {
+        scrollView._onEdge = 0;
+        _handleEdge.call(scrollView, false);
+      };
+
+    }, 20);
+
+    $scope.eventHandler = new EventHandler();
+    $scope.eventHandler.pipe(scrollView.rawInput);
 
     $scope.images = [];
 
