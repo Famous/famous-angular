@@ -46,6 +46,14 @@ h2 {
   border-bottom: 1px solid #CC3D57;
 }
 
+.showTweet- .tweet {
+  display: none;
+}
+
+.showTweet-true img {
+  display: none;
+}
+
 #tuio {
   display: none;
 }

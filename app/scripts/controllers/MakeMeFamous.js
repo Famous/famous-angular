@@ -17,6 +17,7 @@ angular.module('integrationApp')
     $scope.height = height;
     tweets.then(function(response) {
       var ySoFar = 0;
+
       inThrees(response.data, function(first, second, third) {
         if (Math.random()  < 0.5) {
           $scope.rows.push({
@@ -26,6 +27,7 @@ angular.module('integrationApp')
               tweet: first,
               size: 2*height + margin,
               x: margin,
+              showTweet: true,
               y: margin
             }, {
               tweet: second,

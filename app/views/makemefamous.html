@@ -9,7 +9,14 @@
             <fa-surface
               fa-background-color="red";
               fa-size="[115, 115]">
-              <img width="{{el.size}}" height="{{el.size}}" src="{{el.tweet.profile_picture_original}}">
+              <div>
+                <div class="showTweet-{{el.showTweet}}">
+                  <img width="{{el.size}}" height="{{el.size}}" src="{{el.tweet.profile_picture_original}}">
+                  <div style="width: {{el.size}}, height: {{el.size}}" class="tweet">
+                    {{el.tweet.content}}
+                  </div>
+                </div>
+              </div>
             </fa-surface>
           </fa-modifier>
       </fa-modifier>

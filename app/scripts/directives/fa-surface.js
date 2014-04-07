@@ -5,7 +5,7 @@ angular.module('integrationApp')
     return {
       scope: true,
       transclude: true,
-      template: '<div></div>',
+      template: '<div class="fa-surface"></div>',
       restrict: 'EA',
       compile: function(tElem, tAttrs, transclude){
         return {
@@ -69,10 +69,12 @@ angular.module('integrationApp')
               //UPDATE:  Mark confirms that being able to pass in an arbitrary DOM node
               //         to a surface is on the near-term roadmap.  This will enable more
               //         efficient updating here and also allow for two-way databinding.
-              if(element.find('div') && element.find('div').html()){
-                var prospectiveContent = $interpolate(element.find('div').html())(scope);
+              if(element.find('div.fa-surface') && element.find('div.fa-surface').html()){
+                var compiledEl = $compile(element.find('div.fa-surface').contents())(scope)
+                var prospectiveContent = compiledEl.toArray().map(function(el) { return el.innerHTML; }).join("");
                 if(isolate.currentContent !== prospectiveContent){ //this is a potentially large string-compare
                   isolate.currentContent = prospectiveContent;
+                  window.comp = compiledEl;
                   isolate.surface.setContent(isolate.currentContent);
                 }
               }
@@ -85,7 +87,7 @@ angular.module('integrationApp')
             updateContent();
 
             transclude(scope, function(clone) {
-              element.find('div').append(clone);
+              element.find('div.fa-surface').append(clone);
             });
             scope.$emit('registerChild', {view: isolate.surface, mod: isolate.modifier});
           }
