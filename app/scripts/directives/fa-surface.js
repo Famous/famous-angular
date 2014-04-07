@@ -73,7 +73,6 @@ angular.module('integrationApp')
                 var prospectiveContent = $interpolate(element.find('div').html())(scope);
                 if(isolate.currentContent !== prospectiveContent){ //this is a potentially large string-compare
                   isolate.currentContent = prospectiveContent;
-                  //var compiledContent = $compile(element.find('div').contents())(scope).html();
                   isolate.surface.setContent(isolate.currentContent);
                 }
               }

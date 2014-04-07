@@ -11,7 +11,10 @@ angular.module('integrationApp')
         fn(array[3*i], array[3*i+1], array[3*i+2]);
       });
     };
-
+    
+    var margin = 10;
+    var height = (320 - margin*4) / 3;
+    $scope.height = height;
     tweets.then(function(response) {
       var ySoFar = 0;
       inThrees(response.data, function(first, second, third) {
@@ -21,22 +24,22 @@ angular.module('integrationApp')
             y: ySoFar,
             elements: [{
               tweet: first,
-              size: 2*height,
-              x: 0,
-              y: 0
+              size: 2*height + margin,
+              x: margin,
+              y: margin
             }, {
               tweet: second,
               size: height,
-              x: 2*height,
-              y: 0,
+              x: 2*height + 3*margin,
+              y: margin,
             }, {
               tweet: third,
               size: height,
-              x: 2*height,
-              y: height,
+              x: 2*height + 3*margin,
+              y: height + 2*margin,
             }]
           });
-          ySoFar += 2*height;
+          ySoFar += (2*height + 2*margin);
         }
         else {
           $scope.rows.push({
@@ -45,27 +48,25 @@ angular.module('integrationApp')
             elements: [{
               tweet: first,
               size: height,
-              x: 0,
-              y: 0
+              x: margin,
+              y: margin
             }, {
               tweet: second,
               size: height,
-              x: height,
-              y: 0,
+              x: height + 2*margin,
+              y: margin,
             }, {
               tweet: third,
               size: height,
-              x: 2*height,
-              y: 0,
+              x: 2*height + 3*margin,
+              y: margin
             }]
           });
-          ySoFar += height;
+          ySoFar += (height + margin);
         }
       });
     });
 
-    var height = 320 / 3;
-    $scope.height = height;
 
     $scope.size = function(tweet) {
       return tweet.height || height;
