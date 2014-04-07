@@ -1,5 +1,4 @@
 <div class="makemefamous" ng-controller='MakeMeFamousCtrl'>
-  <h1><span class="hashtag" ng-click="topTop()">#</span> Famous</h1>
   <div class="images" fa-app fa-pipe-to="eventHandler" style="-webkit-perspective: 800">
       <fa-modifier ng-repeat="row in rows"
                    fa-translate="[0, grid.y(row), grid.z(row)]"
@@ -14,5 +13,8 @@
             </fa-surface>
           </fa-modifier>
       </fa-modifier>
+  </div>
+  <div class="header">
+    <h1><span class="hashtag" ng-click="topTop()">#</span> famous</h1>
   </div>
 </div>

@@ -11,16 +11,14 @@
 }
 
 h1 {
-  font-family : "Periodico Display";
-  font-weight: 900;
-  font-style: italic;
-  font-size : 22px;
+  font-family : Helvetica;
+  font-weight: 600;
+  font-size : 16px;
   line-height : 1em;
-  color: #243540;
-  margin-top: 0;
+  color: white;
+  margin-top: 20px;
   margin-bottom: 4pt;
-  margin-left: -1em;
-  text-align: center;
+  margin-left: 20px;
 }
 
 h2 {
@@ -37,6 +35,15 @@ h2 {
 
 .images {
   position: relative;
+}
+
+.header {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 45px;
+  background: #F04B6A;
+  border-bottom: 1px solid #CC3D57;
 }
 
 #tuio {
