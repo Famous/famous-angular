@@ -46,12 +46,34 @@ h2 {
   border-bottom: 1px solid #CC3D57;
 }
 
+.tweet {
+  border: 3px solid white;
+  color: white;
+  font-family: "Helvetica Neue";
+  font-weight: 200;
+}
+
+.tweet p {
+  padding: 1em;
+  margin: 0;
+}
+
 .showTweet- .tweet {
   display: none;
 }
 
-.showTweet-true img {
+.showTweet-true .profile {
   display: none;
+}
+
+.screen-name {
+  margin-left: 1em;
+  font-size: 18px;
+  font-weight: normal;
+}
+
+.twitter-bird {
+  width: 20px;
 }
 
 #tuio {

@@ -11,9 +11,16 @@
               fa-size="[115, 115]">
               <div>
                 <div class="showTweet-{{el.showTweet}}">
-                  <img width="{{el.size}}" height="{{el.size}}" src="{{el.tweet.profile_picture_original}}">
-                  <div style="width: {{el.size}}, height: {{el.size}}" class="tweet">
-                    {{el.tweet.content}}
+                  <img class="profile" width="{{el.size}}" height="{{el.size}}" src="{{el.tweet.profile_picture_original}}">
+                  <div style="width: {{el.size - 5}}px; height: {{el.size - 5}}px" class="tweet">
+                    <p>
+                      {{el.tweet.content}}<br>
+                      <div class="screen-name">
+                        <img class="twitter-bird" src="/images/bird.png">
+                        <span class="name">@{{el.tweet.screen_name}}</span>
+                      </div>
+
+                    </p>
                   </div>
                 </div>
               </div>

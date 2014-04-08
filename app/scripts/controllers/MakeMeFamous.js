@@ -19,7 +19,7 @@ angular.module('integrationApp')
       var ySoFar = 0;
 
       inThrees(response.data, function(first, second, third) {
-        if (Math.random()  < 0.5) {
+        if (Math.random()  < 0.3) {
           $scope.rows.push({
             height: 2*height,
             y: ySoFar,
