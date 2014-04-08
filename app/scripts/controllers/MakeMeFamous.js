@@ -3,7 +3,7 @@
 angular.module('integrationApp')
   .controller('MakeMeFamousCtrl', function ($scope, $http, famous) {
     $scope.rows = [];
-    var api = "/latest";
+    var api = "http://ec2-54-185-128-191.us-west-2.compute.amazonaws.com/latest";
     var tweets = $http.get(api);
 
     var inThrees = function(array, fn) {
