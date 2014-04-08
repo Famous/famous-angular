@@ -2,6 +2,7 @@
 
 angular.module('integrationApp')
   .controller('AnimationsCtrl', function ($scope, famous) {
+    window.s = $scope;
     var Transitionable = famous['famous/transitions/Transitionable'];
     var GenericSync = famous['famous/inputs/GenericSync'];
     var RotateSync = famous['famous/inputs/RotateSync'];
@@ -43,8 +44,7 @@ angular.module('integrationApp')
     }, {direction: GenericSync.DIRECTION_Y});
 
     $scope.sync.on('update', function(data){
-      var newVal = Math.max(0, Math.min(1, data.p / 300 + t.get()));
-      // alert('sync');
+      var newVal = Math.max(0, Math.min(1, data.p / 800 + t.get()));
       t.set(newVal);
     });
 
@@ -53,7 +53,7 @@ angular.module('integrationApp')
     $scope.eventHandler = new EventHandler();
     $scope.eventHandler.pipe($scope.sync);
 
-    var _contents = ["Hey, I'm data-bound!", "Hey, I change my content!"]
+    var _contents = ["Hey, I'm data-bound!", "Hey, I change my content!", "Hey, look at me!"];
     var _contentIndex = 0;
     var _content = _contents[_contentIndex];
     $scope.getContent = function(){

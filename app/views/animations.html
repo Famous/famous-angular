@@ -1,4 +1,4 @@
-<fa-app fa-controller="AnimationsCtrl" fa-pipe-to="eventHandler">
+<fa-app ng-controller="AnimationsCtrl" fa-pipe-to="eventHandler">
   <fa-view id="EnvelopeView" fa-pipe-to="eventHandler">
     <fa-modifier id="wholeThing" fa-size="[sizes.width, sizes.height]" fa-origin="[.5, .5]">
 
@@ -157,6 +157,15 @@
               timelineLowerBound=".3"
               timelineUpperBound=".55" />
 
+
+    <animate  targetModSelector="#wholeThing"
+              field="scale"
+              curve="inQuad"
+              startValue="[.55, .55, 1]"
+              endValue="[1, 1, 1]"
+              timelineLowerBound="0"
+              timelineUpperBound=".8" />
+
     <animate  targetModSelector="#wholeThing"
               field="rotateZ"
               curve="outElastic"
@@ -164,6 +173,7 @@
               endValue=".785"
               timelineLowerBound="0"
               timelineUpperBound=".66" />
+
 
     <animate  targetModSelector="#contentMod"
               field="opacity"

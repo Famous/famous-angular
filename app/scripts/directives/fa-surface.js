@@ -18,8 +18,8 @@ angular.module('integrationApp')
             var Transform = famous['famous/core/Transform']
             
             var properties = {
-                backgroundColor: scope.$eval(attrs.faBackgroundColor),
-                color: scope.$eval(attrs.faColor)
+              backgroundColor: scope.$eval(attrs.faBackgroundColor),
+              color: scope.$eval(attrs.faColor)
             };
 
             var getOrValue = function(x) {
@@ -27,10 +27,10 @@ angular.module('integrationApp')
             };
 
             var modifiers = {
-               origin: scope.$eval(attrs.faOrigin),
-               translate: scope.$eval(attrs.faTranslate),
-               rotateZ: scope.$eval(attrs.faRotateZ),
-               skew: scope.$eval(attrs.faSkew)
+              origin: scope.$eval(attrs.faOrigin),
+              translate: scope.$eval(attrs.faTranslate),
+              rotateZ: scope.$eval(attrs.faRotateZ),
+              skew: scope.$eval(attrs.faSkew)
             };
             isolate.surface = new Surface({
               size: scope.$eval(attrs.faSize),
