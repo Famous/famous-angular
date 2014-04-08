@@ -50,6 +50,12 @@ angular.module('integrationApp')
               console.log('pipe surface scope', scope.$eval(attrs.faPipeTo))
               isolate.surface.pipe(scope.$eval(attrs.faPipeTo));
             }
+
+            if (attrs.faClick) {
+              isolate.surface.on("click", function() {
+                scope.$eval(attrs.faClick);
+              });
+            }
           },
           post: function(scope, element, attrs){
             var isolate = scope.isolate[scope.$id];

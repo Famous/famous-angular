@@ -1,10 +1,21 @@
 'use strict';
 
 angular.module('integrationApp')
-  .controller('MakeMeFamousCtrl', function ($scope, $http, famous) {
+  .controller('MakeMeFamousCtrl', function ($scope, $http, $firebase, famous) {
     $scope.rows = [];
     var api = "http://ec2-54-185-128-191.us-west-2.compute.amazonaws.com/latest";
     var tweets = $http.get(api);
+
+    var promotedRef = new Firebase("https://resplendent-fire-5331.firebaseio.com/promoted");
+    var promoted = $firebase(promotedRef);
+
+    $scope.isPromoted = function(tweet) {
+      return promoted.$getIndex().indexOf(tweet.screen_name) > -1;
+    };
+
+    $scope.promote = function(tweet) {
+      promoted.$child(tweet.screen_name).$set({promoted: true});
+    }
 
     var inThrees = function(array, fn) {
       _.each(_.range(array.length / 3), function(i) {
