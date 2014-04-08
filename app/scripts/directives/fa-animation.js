@@ -57,6 +57,7 @@ angular.module('integrationApp')
                     var modDecs = declarations[modScope.$id] = declarations[modScope.$id] || {};
                     var segments = modDecs[field] = modDecs[field] || [];
                     segments.push({
+                      field: field,
                       lowerBound: lowerBound,
                       upperBound: upperBound,
                       startValue: startValue,
@@ -83,7 +84,7 @@ angular.module('integrationApp')
                     }
 
 
-                    //Domain:  timeline function bounded (0,1)
+                    //Domain:  timeline function bounded [0,1]
                     //Subdomains (between pipes):  specified subdomains from timeline segments
                     //Range:  output value, determined by interpolating startValue and endValue
                     //        through the easing curves
@@ -102,7 +103,8 @@ angular.module('integrationApp')
                     //     |x(0,0)    |x(0,1)                 |x(1,0)    |x(1,1)
 
                     //TODO:  in order to support nested fa-animation directives,
-                    //       this function needs to be exposed somehow.
+                    //       this function needs to be exposed somehow. (pass a reference into the directive;
+                    //       and then assign this function to that reference?)
                     //TODO:  if needed:  make this more efficient.  This is a hot-running
                     //       function and we should be able to optimize and chop
                     //       down complexity by an order of magnitude or so
@@ -110,13 +112,6 @@ angular.module('integrationApp')
                       var x = timeline();
                       var relevantIndex = 0;
                       var relevantSegment = segments[relevantIndex];
-                      // console.log('relevantSegment', relevantSegment);
-                      
-                      // while(x < relevantSegment.upperBound && relevantIndex < segments.length - 1){
-                      //   relevantIndex++;
-                      //   relevantSegment = segments[relevantIndex];
-                      // }
-                      // relevantSegment = segments[Math.max(0,relevantIndex - 1)];
 
                       for(var j = 0; j < segments.length; j++){
                         //this is the relevant segment if x is in the subdomain
@@ -157,6 +152,8 @@ angular.module('integrationApp')
                       }
                     };
 
+                    var transformComponents = modDecs.transformComponents = modDecs.transformComponents || [];
+
                     if(field === 'opacity'){
                       modifier.opacityFrom(function(){
                         return transformFunction();
@@ -171,8 +168,24 @@ angular.module('integrationApp')
                       });
                     }else{ //transform field
                       //TODO:  support multiple transform fields
+                      transformComponents.push({
+                        field: field,
+                        fn: transformFunction
+                      })
+
                       modifier.transformFrom(function(){
-                        return Transform[field](transformFunction());
+                        var mult = [];
+                        for(var j = 0; j < transformComponents.length; j++){
+                          ((function(){
+                            var transVal = transformComponents[j].fn();
+                            var f = transformComponents[j].field;
+                            if(Array.isArray(transVal))
+                              mult.push(Transform[f].apply(this, transVal));
+                            else
+                              mult.push(Transform[f](transVal));  
+                          })());
+                        }
+                        return Transform.multiply.apply(this, mult);
                       });
                     }
                   }
