@@ -78,7 +78,12 @@ angular.module('integrationApp')
     $scope.modalZ = -10;
 
     var scrollParticle = new ScrollParticle(function() { 
-      return scrollParticle.getPosition() < 0; 
+      var offset  = $scope.offset();
+      if (offset > 0) return 1;
+      if ((offset + totalHeight - 200) < 0) return -1;
+      return 0;
+    }, function() {
+      return totalHeight - 200;
     });
 
     $scope.eventHandler.pipe(scrollParticle.rawInput);
