@@ -16,16 +16,18 @@ angular.module('integrationApp')
     $scope.height = height;
     tweets.then(function(response) {
       var ySoFar = 0;
+      var i = 0;
 
-      inThrees(response.data, function(first, second, third) {
+      inThrees(response.data.slice(0, 20), function(first, second, third) {
         var row;
-        if (Math.random()  < 0.3) {
+        if (i % 2 != 0) {
           row = gridRows.bigLeft(height, margin, ySoFar, first, second, third);
         }
         else {
           row = gridRows.allSmall(height, margin, ySoFar, first, second, third);
         }
         $scope.rows.push(row);
+        i++;
         ySoFar += row.totalHeight;
       });
     });
@@ -53,7 +55,7 @@ angular.module('integrationApp')
     };
 
     // view state
-    
+
     var Transitionable = famous["famous/transitions/Transitionable"];
     var GenericSync = famous['famous/inputs/GenericSync'];
     var EventHandler = famous['famous/core/EventHandler'];
@@ -102,12 +104,12 @@ angular.module('integrationApp')
         $scope.modalOpacity.set(1, {duration: 300});
         $scope.modalZ = 35;
         $scope.xTransitionable.set(350);
-        $scope.xTransitionable.set(0, {duration: 300, curve: 'easeOut'});
+        $scope.xTransitionable.set(0, {duration: 500, curve: 'easeOut'});
       }
       else if (oldDetail) {
         $scope.eventHandler.pipe(scrollParticle.rawInput);
-        $scope.xTransitionable.set(-400, {duration: 300, curve: 'easeIn'});
-        $scope.modalOpacity.set(0, {duration: 300}, function(){
+        $scope.xTransitionable.set(-400, {duration: 400, curve: 'easeIn'});
+        $scope.modalOpacity.set(0, {duration: 400}, function(){
           $scope.modalZ = -10; 
         });
       }
