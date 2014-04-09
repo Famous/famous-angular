@@ -74,11 +74,6 @@ angular.module('integrationApp')
       });
     });
 
-
-    $scope.size = function(tweet) {
-      return tweet.height || height;
-    };
-
     var scrollParticle = new ScrollParticle(function() { 
       return scrollParticle.getPosition() < 0; 
     });
@@ -87,15 +82,6 @@ angular.module('integrationApp')
 
     $scope.offset = function() {
       return -scrollParticle.getPosition();
-    };
-
-
-
-    $scope.images = [];
-
-    $scope.toTop = function() {
-      console.log("click");
-      $scope.visible.set(0, {duration: 500, curve: "easeOut"});
     };
 
     $scope.grid = gridRows.positions($scope.offset);
