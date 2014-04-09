@@ -16,6 +16,7 @@ angular.module('integrationApp')
 
             var Surface = famous['famous/core/Surface'];
             var Transform = famous['famous/core/Transform']
+            var EventHandler = famous['famous/core/EventHandler'];
             
             var properties = {
               backgroundColor: scope.$eval(attrs.faBackgroundColor),
@@ -47,13 +48,27 @@ angular.module('integrationApp')
             };
 
             if (attrs.faPipeTo) {
-              console.log('pipe surface scope', scope.$eval(attrs.faPipeTo))
               isolate.surface.pipe(scope.$eval(attrs.faPipeTo));
             }
 
             if (attrs.faClick) {
               isolate.surface.on("click", function() {
                 scope.$eval(attrs.faClick);
+              });
+            }
+
+
+            if (attrs.faTap) {
+              var _dragging = false;
+
+              isolate.surface.on("touchmove", function(data) {
+                _dragging = true;
+                return data;
+              });
+
+              isolate.surface.on("touchend", function(data) {
+                if (!_dragging) scope.$eval(attrs.faTap);
+                _dragging = false
               });
             }
           },

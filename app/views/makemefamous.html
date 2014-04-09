@@ -7,7 +7,8 @@
             ng-repeat="el in row.elements"
             fa-translate="[el.x, el.y, 0]">
             <fa-surface
-              fa-click="showDetail(el.tweet)"
+              fa-pipe-to="eventHandler"
+              fa-tap="showDetail(el.tweet)"
               fa-background-color="red";
               fa-size="[115, 115]">
               <div>
@@ -20,7 +21,6 @@
                         <img class="twitter-bird" src="/images/bird.png">
                         <span class="name">@{{el.tweet.screen_name}}</span>
                       </div>
-
                     </p>
                   </div>
                 </div>
