@@ -14,22 +14,29 @@ angular.module('integrationApp')
     var margin = 10;
     var height = (320 - margin*4) / 3;
     $scope.height = height;
-    tweets.then(function(response) {
-      var ySoFar = 0;
-      var i = 0;
 
-      inThrees(response.data.slice(0, 20), function(first, second, third) {
+    var totalHeight = 0;
+    var tweetsShown = 24;
+
+    var addTweets = function(tweets) {
+      var i = 0;
+      inThrees(tweets, function(first, second, third) {
         var row;
         if (i % 2 != 0) {
-          row = gridRows.bigLeft(height, margin, ySoFar, first, second, third);
+          row = gridRows.bigLeft(height, margin, totalHeight, first, second, third);
         }
         else {
-          row = gridRows.allSmall(height, margin, ySoFar, first, second, third);
+          row = gridRows.allSmall(height, margin, totalHeight, first, second, third);
         }
         $scope.rows.push(row);
         i++;
-        ySoFar += row.totalHeight;
+        totalHeight += row.totalHeight;
       });
+    };
+
+    tweets.then(function(response) {
+      $scope.allTweets = response.data;
+      addTweets($scope.allTweets.slice(0, tweetsShown));
     });
 
     var promotedRef = new Firebase("https://resplendent-fire-5331.firebaseio.com/promoted");
@@ -44,7 +51,7 @@ angular.module('integrationApp')
     }
 
     $scope.shorten = function(text) {
-      return (text.length > 100) ? text.slice(0, 100) + " . . ." : text;
+      return (text && text.length > 100) ? text.slice(0, 100) + " . . ." : text;
     };
 
     $scope.hideDetail = function() {
@@ -101,6 +108,20 @@ angular.module('integrationApp')
 
 
     // app state - view state synchronization
+    
+    var maybeReload = function() {
+      var offset = $scope.offset();
+      if (-(offset - 400) > totalHeight) {
+        var newTweetsShown = tweetsShown + 12;
+        addTweets($scope.allTweets.slice(tweetsShown, newTweetsShown));
+        tweetsShown = newTweetsShown;
+        $scope.$apply();
+      }
+    };
+    
+    scrollParticle.scrollState.on("dragging", maybeReload);
+    scrollParticle.scrollState.on("gliding", maybeReload);
+    scrollParticle.scrollState.on("still", maybeReload);
 
     $scope.$watch("detail", function(newDetail, oldDetail) {
       if (newDetail) {
