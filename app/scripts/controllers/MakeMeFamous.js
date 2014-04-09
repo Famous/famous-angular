@@ -2,6 +2,13 @@
 
 angular.module('integrationApp')
   .controller('MakeMeFamousCtrl', function ($scope, $http, $firebase, famous) {
+
+    var Transitionable = famous["famous/transitions/Transitionable"];
+    var GenericSync = famous['famous/inputs/GenericSync'];
+    var EventHandler = famous['famous/core/EventHandler'];
+    var ScrollView = famous['famous/views/ScrollView'];
+    var Timer = famous["famous/utilities/Timer"];
+
     $scope.rows = [];
     var api = "http://ec2-54-185-128-191.us-west-2.compute.amazonaws.com/latest";
     var tweets = $http.get(api);
@@ -22,7 +29,34 @@ angular.module('integrationApp')
         fn(array[3*i], array[3*i+1], array[3*i+2]);
       });
     };
-    
+
+    $scope.eventHandler = new EventHandler();
+
+    $scope.xTransitionable = new Transitionable(350);
+
+    $scope.hideDetail = function() {
+      $scope.detail = null;
+
+      $scope.xTransitionable.set(-400, {duration: 300, curve: 'easeIn'});
+      $scope.modalOpacity.set(0, {duration: 300}, function(){
+        $scope.modalZ = -10; 
+      });
+    };
+
+    $scope.showDetail = function(tweet) {
+      if ($scope.detail) return;
+      $scope.detail = tweet;
+      $scope.$apply();
+
+      $scope.modalOpacity.set(1, {duration: 300});
+      $scope.modalZ = 5;
+      $scope.xTransitionable.set(350);
+      $scope.xTransitionable.set(0, {duration: 300, curve: 'easeOut'});
+    };
+
+    $scope.modalOpacity = new Transitionable(0);
+    $scope.modalZ = -10;
+
     var margin = 10;
     var height = (320 - margin*4) / 3;
     $scope.height = height;
@@ -85,13 +119,9 @@ angular.module('integrationApp')
       return tweet.height || height;
     };
 
-    var Transitionable = famous["famous/transitions/Transitionable"];
-    var GenericSync = famous['famous/inputs/GenericSync'];
-    var EventHandler = famous['famous/core/EventHandler'];
-    var ScrollView = famous['famous/views/ScrollView'];
-    var Timer = famous["famous/utilities/Timer"];
 
     var scrollView =  new ScrollView();
+    $scope.eventHandler.pipe(scrollView.rawInput);
 
     $scope.offset = function() {
       return -scrollView.getPosition();
@@ -130,8 +160,6 @@ angular.module('integrationApp')
 
     }, 20);
 
-    $scope.eventHandler = new EventHandler();
-    $scope.eventHandler.pipe(scrollView.rawInput);
 
     $scope.images = [];
 

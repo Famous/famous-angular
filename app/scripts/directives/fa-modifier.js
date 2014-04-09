@@ -54,7 +54,7 @@ angular.module('integrationApp')
 
             isolate.modifier = new Modifier({transform: getTransform,
                                          size: scope.$eval(attrs.faSize),
-                                         opacity: getOpacity,
+                                         opacity: scope.$eval(attrs.faOpacity),
                                          origin: scope.$eval(attrs.faOrigin)});
 
             var modifierNode = isolate.node.add(isolate.modifier);

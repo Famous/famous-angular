@@ -80,3 +80,36 @@ h2 {
   display: none;
 }
 
+.modal {
+  width: 100%;
+  height: 100%;
+  background-image: url("../images/modal-bg.png");
+  background-color: rgba(0, 0, 0, 0.5);
+  background-size: 20pt;
+}
+
+.content {
+  background: #F04B6A;
+  padding-top: 1em;
+  margin-left: 1em;
+  margin-right: 1em;
+  margin-top: 1em;
+  width: calc(100% - 2em);
+  height: calc(100% - 2em - 41px);
+  color: white;
+}
+
+.content h1 {
+  font-family: "Helvetica Neue";
+  font-size: 30pt;
+  text-decoration: underline;
+}
+
+.tweet-content {
+  font-family: "Periodico Display";
+  font-weight: 700;
+  font-style: italic;
+  padding-right: 1em;
+  margin-top: 2em;
+}
+
