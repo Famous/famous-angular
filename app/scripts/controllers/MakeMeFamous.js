@@ -81,12 +81,14 @@ angular.module('integrationApp')
 
     $scope.$watch("detail", function(newDetail, oldDetail) {
       if (newDetail) {
+        $scope.eventHandler.unpipe(scrollParticle.rawInput);
         $scope.modalOpacity.set(1, {duration: 300});
         $scope.modalZ = 35;
         $scope.xTransitionable.set(350);
         $scope.xTransitionable.set(0, {duration: 300, curve: 'easeOut'});
       }
       else if (oldDetail) {
+        $scope.eventHandler.pipe(scrollParticle.rawInput);
         $scope.xTransitionable.set(-400, {duration: 300, curve: 'easeIn'});
         $scope.modalOpacity.set(0, {duration: 300}, function(){
           $scope.modalZ = -10; 
