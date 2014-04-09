@@ -3,6 +3,7 @@
 var requirements = [
   "famous/core/Engine",
   "famous/core/EventHandler",
+  "famous/core/EventEmitter",
   "famous/core/Modifier",
   "famous/core/RenderNode",
   "famous/core/Surface",

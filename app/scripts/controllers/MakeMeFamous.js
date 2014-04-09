@@ -77,6 +77,23 @@ angular.module('integrationApp')
     $scope.grid = gridRows.positions($scope.offset);
 
 
+    // surface to capture click events while scrollParticle is gliding
+
+    $scope.maskZ = -1000;
+
+    $scope.scrollColor = function() {
+      return _maskZ < 0 ? 'red' : 'blue';
+    };
+
+    scrollParticle.scrollState.on("gliding", function() {
+      $scope.maskZ = 30;
+    });
+
+    scrollParticle.scrollState.on("still", function() {
+      $scope.maskZ = -1000;
+    });
+
+
     // app state - view state synchronization
 
     $scope.$watch("detail", function(newDetail, oldDetail) {
