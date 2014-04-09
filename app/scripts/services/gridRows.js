@@ -2,6 +2,10 @@
 
 angular.module('integrationApp')
   .factory('gridRows', function () {
+
+    // position helpers
+
+    
     return {
       bigLeft: function(height, margin, yOffset, first, second, third) {
         return {
@@ -50,5 +54,47 @@ angular.module('integrationApp')
             }]
         }
       },
+      positions: function(offsetFn) {
+
+        var hidden = function(row) {
+          return row.y + row.height + offsetFn() < 0;
+        };
+
+        var flat = function(row) {
+          return row.y + row.height < offsetFn();
+        };
+
+        var rotating = function(row) {
+          return -offsetFn() > row.y && -offsetFn();
+          return -offsetFn() > (row.y - row.height) && -offsetFn() < row.y;
+        };
+
+        return {
+          x: function(tweet) {
+            return tweet.xOffset;
+          },
+          y: function(row) {
+            if (rotating(row)) return 0;
+            return row.y + offsetFn();
+          },
+          z: function(row) {
+            if (!rotating(row)) return 0;
+            var height = row.height;
+            var visibleHeight = (row.y + row.height + offsetFn());
+            var z = Math.sqrt((height * height) - (visibleHeight * visibleHeight));
+            return -z;
+          },
+          xRotation: function(row) {
+            if (rotating(row)) {
+              var visibleHeight = (row.y + row.height + offsetFn());
+              var oppositeOverHypotenuse = visibleHeight / row.height;
+              var theta = (Math.PI / 2) - Math.asin( visibleHeight / row.height);
+              return theta;
+            }
+            if (hidden(row)) return Math.PI / 2;
+            return 0;
+          }
+        }
+      }
     };
   });

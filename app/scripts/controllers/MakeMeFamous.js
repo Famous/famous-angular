@@ -1,15 +1,14 @@
 'use strict';
 
 angular.module('integrationApp')
-  .controller('MakeMeFamousCtrl', function ($scope, $http, $firebase, famous, gridRows) {
+  .controller('MakeMeFamousCtrl', function ($scope, $http, $firebase, famous, ScrollParticle, gridRows) {
 
     var Transitionable = famous["famous/transitions/Transitionable"];
     var GenericSync = famous['famous/inputs/GenericSync'];
     var EventHandler = famous['famous/core/EventHandler'];
-    var ScrollView = famous['famous/views/ScrollView'];
-    var Timer = famous["famous/utilities/Timer"];
 
     $scope.rows = [];
+
     var api = "http://ec2-54-185-128-191.us-west-2.compute.amazonaws.com/latest";
     var tweets = $http.get(api);
 
@@ -31,7 +30,6 @@ angular.module('integrationApp')
     };
 
     $scope.eventHandler = new EventHandler();
-
     $scope.xTransitionable = new Transitionable(350);
 
     $scope.hideDetail = function() {
@@ -81,46 +79,16 @@ angular.module('integrationApp')
       return tweet.height || height;
     };
 
+    var scrollParticle = new ScrollParticle(function() { 
+      return scrollParticle.getPosition() < 0; 
+    });
 
-    var scrollView =  new ScrollView();
-    $scope.eventHandler.pipe(scrollView.rawInput);
+    $scope.eventHandler.pipe(scrollParticle.rawInput);
 
     $scope.offset = function() {
-      return -scrollView.getPosition();
+      return -scrollParticle.getPosition();
     };
 
-    var _handleEdge = function _handleEdge(edgeDetected) {
-      if(!this._onEdge && edgeDetected) {
-        this.sync.setOptions({scale: this.options.edgeGrip});
-        if(!this.touchCount && !this._springAttached) {
-          this._springAttached = true;
-          this.physicsEngine.attach([this.spring], this.particle);
-        }
-      }
-      else if(this._onEdge && !edgeDetected) {
-        this.sync.setOptions({scale: 1});
-        if(this._springAttached && Math.abs(this.getVelocity()) < 0.001) {
-          this.setVelocity(0);
-          this.setPosition(this._springPosition);
-          // reset agents, detaching the spring
-          _detachAgents.call(this);
-          _attachAgents.call(this);
-        }
-      }
-      this._onEdge = edgeDetected;
-    }
-
-    Timer.every(function() {
-      var offset = scrollView.getPosition();
-      if (offset < 0) {
-        _handleEdge.call(scrollView, true);
-      }
-      else {
-        scrollView._onEdge = 0;
-        _handleEdge.call(scrollView, false);
-      };
-
-    }, 20);
 
 
     $scope.images = [];
@@ -130,66 +98,6 @@ angular.module('integrationApp')
       $scope.visible.set(0, {duration: 500, curve: "easeOut"});
     };
 
-    var row = function(n) {
-      var nColumns = 3;
-      return Math.floor(n / nColumns);
-    };
+    $scope.grid = gridRows.positions($scope.offset);
 
-    var hidden = function(row) {
-      return row.y + row.height + $scope.offset() < 0;
-    };
-
-    var flat = function(row) {
-      return row.y + row.height < $scope.offset();
-    };
-
-    var visible = function() {
-      return $scope.visible.get();
-    };
-
-    var rotating = function(row) {
-      return -$scope.offset() > row.y && -$scope.offset();
-      return -$scope.offset() > (row.y - row.height) && -$scope.offset() < row.y;
-    };
-
-    var columnOffset = function(n) {
-      return 0;
-    };
-
-    //
-    // rotating - if the top of the visible area is between the top of
-    //            the picture and the bottom of the pictures
-
-
-    $scope.grid = {
-      x: function(tweet) {
-        return tweet.xOffset;
-      },
-      y: function(row) {
-        if (rotating(row)) return 0;
-        return row.y + $scope.offset();
-      },
-      z: function(row) {
-        if (!rotating(row)) return 0;
-        var height = row.height;
-        var visibleHeight = (row.y + row.height + $scope.offset());
-        var z = Math.sqrt((height * height) - (visibleHeight * visibleHeight));
-        return -z;
-      },
-      xRotation: function(row) {
-        if (rotating(row)) {
-          var visibleHeight = (row.y + row.height + $scope.offset());
-          var oppositeOverHypotenuse = visibleHeight / row.height;
-          var theta = (Math.PI / 2) - Math.asin( visibleHeight / row.height);
-          return theta;
-        }
-        if (hidden(row)) return Math.PI / 2;
-        return 0;
-      }
-    };
-
-    window.offset = $scope.offset;
-
-    $scope.positions = _.map($scope.profilePics, function(pic) {
-    });
   });
