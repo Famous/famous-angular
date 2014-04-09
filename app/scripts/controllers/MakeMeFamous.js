@@ -43,6 +43,10 @@ angular.module('integrationApp')
       promoted.$child(tweet.screen_name).$set({promoted: true});
     }
 
+    $scope.shorten = function(text) {
+      return (text.length > 100) ? text.slice(0, 100) + " . . ." : text;
+    };
+
     $scope.hideDetail = function() {
       $scope.detail = null;
       $scope.$apply();
