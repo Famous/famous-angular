@@ -58,19 +58,6 @@ angular.module('integrationApp')
             }
 
 
-            if (attrs.faTap) {
-              var _dragging = false;
-
-              isolate.surface.on("touchmove", function(data) {
-                _dragging = true;
-                return data;
-              });
-
-              isolate.surface.on("touchend", function(data) {
-                if (!_dragging) scope.$eval(attrs.faTap);
-                _dragging = false
-              });
-            }
           },
           post: function(scope, element, attrs){
             var isolate = scope.isolate[scope.$id];
