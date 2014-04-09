@@ -82,7 +82,7 @@ angular.module('integrationApp')
     $scope.$watch("detail", function(newDetail, oldDetail) {
       if (newDetail) {
         $scope.modalOpacity.set(1, {duration: 300});
-        $scope.modalZ = 5;
+        $scope.modalZ = 35;
         $scope.xTransitionable.set(350);
         $scope.xTransitionable.set(0, {duration: 300, curve: 'easeOut'});
       }
