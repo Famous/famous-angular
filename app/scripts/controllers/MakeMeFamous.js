@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('integrationApp')
-  .controller('MakeMeFamousCtrl', function ($scope, $http, $firebase, famous) {
+  .controller('MakeMeFamousCtrl', function ($scope, $http, $firebase, famous, gridRows) {
 
     var Transitionable = famous["famous/transitions/Transitionable"];
     var GenericSync = famous['famous/inputs/GenericSync'];
@@ -64,53 +64,15 @@ angular.module('integrationApp')
       var ySoFar = 0;
 
       inThrees(response.data, function(first, second, third) {
+        var row;
         if (Math.random()  < 0.3) {
-          $scope.rows.push({
-            height: 2*height,
-            y: ySoFar,
-            elements: [{
-              tweet: first,
-              size: 2*height + margin,
-              x: margin,
-              showTweet: true,
-              y: margin
-            }, {
-              tweet: second,
-              size: height,
-              x: 2*height + 3*margin,
-              y: margin,
-            }, {
-              tweet: third,
-              size: height,
-              x: 2*height + 3*margin,
-              y: height + 2*margin,
-            }]
-          });
-          ySoFar += (2*height + 2*margin);
+          row = gridRows.bigLeft(height, margin, ySoFar, first, second, third);
         }
         else {
-          $scope.rows.push({
-            height: height,
-            y: ySoFar,
-            elements: [{
-              tweet: first,
-              size: height,
-              x: margin,
-              y: margin
-            }, {
-              tweet: second,
-              size: height,
-              x: height + 2*margin,
-              y: margin,
-            }, {
-              tweet: third,
-              size: height,
-              x: 2*height + 3*margin,
-              y: margin
-            }]
-          });
-          ySoFar += (height + margin);
+          row = gridRows.allSmall(height, margin, ySoFar, first, second, third);
         }
+        $scope.rows.push(row);
+        ySoFar += row.totalHeight;
       });
     });
 
