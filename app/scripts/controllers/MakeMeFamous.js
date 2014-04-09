@@ -79,14 +79,14 @@ angular.module('integrationApp')
 
     // app state - view state synchronization
 
-    $scope.$watch("detail", function(newDetail) {
+    $scope.$watch("detail", function(newDetail, oldDetail) {
       if (newDetail) {
         $scope.modalOpacity.set(1, {duration: 300});
         $scope.modalZ = 5;
         $scope.xTransitionable.set(350);
         $scope.xTransitionable.set(0, {duration: 300, curve: 'easeOut'});
       }
-      else {
+      else if (oldDetail) {
         $scope.xTransitionable.set(-400, {duration: 300, curve: 'easeIn'});
         $scope.modalOpacity.set(0, {duration: 300}, function(){
           $scope.modalZ = -10; 
