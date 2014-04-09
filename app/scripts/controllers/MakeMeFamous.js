@@ -102,6 +102,10 @@ angular.module('integrationApp')
       $scope.maskZ = 30;
     });
 
+    scrollParticle.scrollState.on("dragging", function() {
+      $scope.maskZ = 30;
+    });
+
     scrollParticle.scrollState.on("still", function() {
       $scope.maskZ = -1000;
     });
