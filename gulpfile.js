@@ -63,7 +63,7 @@ gulp.task('watch', function(event) {
     };
 
     // Watch .js files
-    gulp.watch(['app/scripts/**/*.js', 'app/index.html', 'app/views/**/*.html'], ['scripts']).on('change', function(file){
+    gulp.watch(['app/scripts/*/**/*.js', 'app/index.html', 'app/views/**/*.html'], ['scripts']).on('change', function(file){
         server.changed(file.path);
     });
   });
