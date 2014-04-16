@@ -1,5 +1,3 @@
-'use strict';
-
 angular.module('integrationApp')
   .directive('faSurface', function (famous, $interpolate, $controller, $compile) {
     return {

@@ -1,5 +1,3 @@
-'use strict';
-
 angular.module('integrationApp')
   .directive('faController', function ($controller) {
     return {

@@ -1,5 +1,3 @@
-'use strict';
-
 angular.module('integrationApp')
   .directive('faAnimation', function (famous) {
     return {

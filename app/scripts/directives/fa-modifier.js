@@ -1,5 +1,3 @@
-'use strict';
-
 angular.module('integrationApp')
   .directive('faModifier', ["famous", function (famous) {
     return {

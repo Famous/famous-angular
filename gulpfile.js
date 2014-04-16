@@ -18,13 +18,13 @@ var gulp = require('gulp'),
 // Scripts
 gulp.task('scripts', function() {
   return gulp.src([
-        'app/scripts/stubs/angular.famous.0.js',
+        'app/scripts/stubs/famous.angular.0.js',
         'app/scripts/directives/**/*.js',
-        'app/scripts/stubs/angular.famous.1.js'
+        'app/scripts/stubs/famous.angular.1.js'
     ])
     .pipe(jshint('.jshintrc'))
     .pipe(jshint.reporter('default'))
-    .pipe(concat('main.js'))
+    .pipe(concat('famous.angular.js'))
     .pipe(gulp.dest('dist/scripts'))
     .pipe(livereload(server))
     .pipe(notify({ message: 'Scripts task complete' }));
@@ -51,7 +51,7 @@ gulp.task('watch', function() {
     };
 
     // Watch .js files
-    gulp.watch('src/scripts/**/*.js', ['scripts']);
+    gulp.watch('app/scripts/**/*.js', ['scripts']);
 
   });
 

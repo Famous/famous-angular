@@ -1,5 +1,3 @@
-'use strict';
-
 angular.module('integrationApp')
   .directive('faScrollView', function (famous, $controller) {
     return {

@@ -1,5 +1,3 @@
-'use strict';
-
 angular.module('integrationApp')
   .directive('faView', ["famous", "$controller", function (famous, $controller) {
     return {
