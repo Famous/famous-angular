@@ -63,18 +63,28 @@ gulp.task('watch', function(event) {
     };
 
     // Watch .js files
-    gulp.watch(['app/scripts/*/**/*.js', 'app/index.html', 'app/views/**/*.html'], ['scripts']).on('change', function(file){
-        server.changed(file.path);
-    });
+    gulp.watch(
+        [
+            'app/scripts/*/**/*.js',
+            'app/scripts/app.js',
+            '!app/scripts/famous.angular.js',
+            'app/index.html',
+            'app/views/**/*.html'
+        ],
+        ['scripts']
+    ).on('change',
+        function(file){
+            server.changed(file.path);
+        }
+    );
   });
 
 });
 
 
 // Default task
-gulp.task('default', ['clean'], function() {
+gulp.task('default', ['scripts', 'clean'], function() {
     startExpress();
-    gulp.start('scripts');
     gulp.start('watch');
 });
 
