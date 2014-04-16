@@ -53,7 +53,7 @@ module.exports = function (grunt) {
           '<%= grunt.template.today("yyyy-mm-dd") %> */',
       },
       dist: {
-        src: ['src/project.js'],
+        src: ['<%= yeoman.app %>/scripts/directives/**/*'],
         dest: 'dist/famous.angular.js',
       },
     },
