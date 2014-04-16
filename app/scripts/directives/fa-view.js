@@ -1,4 +1,4 @@
-angular.module('integrationApp')
+angular.module('famous.angular')
   .directive('faView', ["famous", "$controller", function (famous, $controller) {
     return {
       template: '<div></div>',

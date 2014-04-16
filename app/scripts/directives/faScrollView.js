@@ -1,4 +1,4 @@
-angular.module('integrationApp')
+angular.module('famous.angular')
   .directive('faScrollView', function (famous, $controller) {
     return {
       template: '<div></div>',

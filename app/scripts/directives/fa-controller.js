@@ -1,4 +1,4 @@
-angular.module('integrationApp')
+angular.module('famous.angular')
   .directive('faController', function ($controller) {
     return {
       restrict: 'A',

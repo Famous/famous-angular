@@ -1,3 +1,7 @@
+var EXPRESS_PORT = 4000;
+var EXPRESS_ROOT = __dirname + '/app';
+var LIVERELOAD_PORT = 35729;
+
 // Load plugins
 var gulp = require('gulp'),
     sass = require('gulp-ruby-sass'),
@@ -15,9 +19,23 @@ var gulp = require('gulp'),
     lr = require('tiny-lr'),
     server = lr();
 
+
+
+
+// Set up server
+
+function startExpress() {
+ 
+  var express = require('express');
+  var app = express();
+  app.use(require('connect-livereload')());
+  app.use(express.static(EXPRESS_ROOT));
+  app.listen(EXPRESS_PORT);
+}
+
 // Scripts
 gulp.task('scripts', function() {
-  return gulp.src([
+    return gulp.src([
         'app/scripts/stubs/famous.angular.0.js',
         'app/scripts/directives/**/*.js',
         'app/scripts/stubs/famous.angular.1.js'
@@ -36,23 +54,27 @@ gulp.task('clean', function() {
     .pipe(clean());
 });
 
-// Default task
-gulp.task('default', ['clean'], function() {
-    gulp.start('scripts');
-});
-
 // Watch
-gulp.task('watch', function() {
+gulp.task('watch', function(event) {
 
-  // Listen on port 3030
-  server.listen(3030, function (err) {
+  server.listen(LIVERELOAD_PORT, function (err) {
     if (err) {
       return console.log(err)
     };
 
     // Watch .js files
-    gulp.watch('app/scripts/**/*.js', ['scripts']);
-
+    gulp.watch(['app/scripts/**/*.js', 'app/index.html', 'app/views/**/*.html'], ['scripts']).on('change', function(file){
+        server.changed(file.path);
+    });
   });
 
 });
+
+
+// Default task
+gulp.task('default', ['clean'], function() {
+    startExpress();
+    gulp.start('scripts');
+    gulp.start('watch');
+});
+

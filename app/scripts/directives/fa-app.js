@@ -1,4 +1,4 @@
-angular.module('integrationApp')
+angular.module('famous.angular')
   .directive('faApp', ["famous", function (famous) {
     return {
       template: '<div style="display: none;"><div></div></div>',

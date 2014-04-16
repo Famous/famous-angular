@@ -1,4 +1,4 @@
-angular.module('integrationApp')
+angular.module('famous.angular')
   .directive('faSurface', function (famous, $interpolate, $controller, $compile) {
     return {
       scope: true,

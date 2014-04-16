@@ -1,4 +1,4 @@
-angular.module('integrationApp')
+angular.module('famous.angular')
   .directive('faAnimation', function (famous) {
     return {
       restrict: 'EA',
