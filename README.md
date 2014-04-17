@@ -1,6 +1,18 @@
 # famous-angular
 ### Thomas Street | Famo.us
 
+##Running
+
+####First time:
+`npm install`
+`npm install -g gulp`
+
+####Thereafter:
+`gulp`
+
+Running gulp will concatenate files into famous.angular.js, which is symlinked into the app folder.  It will also watch for changes inside app and livereload as necessary.
+
+
 ##Goals:
 
 Allow famo.us components to work seamlessly with other components inside existing or future Angular apps.
@@ -23,11 +35,6 @@ Work with the Famo.us team to make sure Famous-Angular supports Famo.us’ long-
 
 ##Development Roadmap:
 
-* Work with Famo.us engineering team to establish standards for code quality, developer experience, and performance so that the quality of Famous-Angular is as high as the core Famo.us project.
-* Refactor the existing proof-of-concept code, abstracting duplicated code, and positioning the library for future extension. 
-* With the knowledge we’ve gained from building this proof-of-concept, spend some extra time at the whiteboard and ensure that our path forward is clear and can progress side-by-side with Famo.us as it grows.
-* Abstract redundant directive features into a hybrid factory/delegate pattern
-  * A service holds the shared behavioral logic for different components
-  * Components that want to inherit logic pass their scope into the factory/delegate service. That service then mutates the scope, adding appropriate members to it.  This allows shared logic to exist in exactly one place, easing maintenance and extension.
-  * Clarify and clean up scope creation and structure to eliminate calls to $parent scopes from views, which is brittle in the face of refactoring/growth. Careful scope management on our part will eliminate the need for those calls.
-  * Continue creating declarative wrappers around as every famo.us component for which it makes sense to have a declarative representation --GridLayout, LightBox, Sync, EventHandler, Transitions, Physics, and on and on. No boilerplate should be needed for out-of-the-box, simple interactions between standard components.
+https://app.asana.com/0/11288022110976/11612210261574
+
+If you want to contribute, contact hello@thomasstreet.com for access to Asana.

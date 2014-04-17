@@ -13,6 +13,10 @@ body {
   bottom: 0;
 }
 
+.background-dark {
+  background-color: #303030;
+}
+
 
 .top-triangle {
   width: 0px;
@@ -49,26 +53,26 @@ body {
 }
 
 .top-triangle.light{
-  border-color: transparent transparent #303030 transparent;
+  border-color: transparent transparent rgb(245,250,250) transparent;
 }
 
 .left-triangle.light{
-  border-color: transparent #303030 transparent transparent;
+  border-color: transparent rgb(245,250,250) transparent transparent;
 }
 
 .right-triangle.light{
-  border-color: transparent transparent transparent #303030;
+  border-color: transparent transparent transparent rgb(245,250,250);
 }
 
 .bottom-triangle.light{
-  border-color: #303030 transparent transparent transparent;
+  border-color: rgb(245,250,250) transparent transparent transparent;
 }
 
 .center-square {
-  background-color: #303030;
+  background-color: rgb(245,250,250);
 }
 
 .center-content {
-  color: rgb(245,250,250);
+  color: #303030;
   padding: 10pt;
 }

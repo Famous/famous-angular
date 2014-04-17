@@ -1,6 +1,4 @@
-'use strict';
-
-angular.module('integrationApp')
+angular.module('famous.angular')
   .directive('faModifier', ["famous", function (famous) {
     return {
       template: '<div></div>',

@@ -10,9 +10,7 @@
   "latedef": true,
   "newcap": true,
   "noarg": true,
-  "quotmark": "single",
   "regexp": true,
-  "strict": true,
   "trailing": true,
   "smarttabs": true,
   "globals": {

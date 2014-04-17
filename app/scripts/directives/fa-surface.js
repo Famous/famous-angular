@@ -1,6 +1,4 @@
-'use strict';
-
-angular.module('integrationApp')
+angular.module('famous.angular')
   .directive('faSurface', function (famous, $interpolate, $controller, $compile) {
     return {
       scope: true,
@@ -78,11 +76,12 @@ angular.module('integrationApp')
               //         to a surface is on the near-term roadmap.  This will enable more
               //         efficient updating here and also allow for two-way databinding.
               if(element.find('div.fa-surface') && element.find('div.fa-surface').html()){
-                var compiledEl = $compile(element.find('div.fa-surface').contents())(scope)
-                var prospectiveContent = compiledEl.toArray().map(function(el) { return el.innerHTML; }).join("");
+                var compiledEl = isolate.compiledEl = isolate.compiledEl || $compile(element.find('div.fa-surface').contents())(scope)
+                var prospectiveContent = compiledEl.toArray().map(function(el) { return el.outerHTML; }).join("");
+                //var prospectiveContent = $interpolate(element.find('div.fa-surface').html())(scope);
                 if(isolate.currentContent !== prospectiveContent){ //this is a potentially large string-compare
                   isolate.currentContent = prospectiveContent;
-                  window.comp = compiledEl;
+                  //window.comp = compiledEl;
                   isolate.surface.setContent(isolate.currentContent);
                 }
               }

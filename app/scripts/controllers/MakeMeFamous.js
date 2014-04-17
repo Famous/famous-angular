@@ -8,7 +8,7 @@ angular.module('integrationApp')
 
     $scope.rows = [];
 
-    var api = "http://ec2-54-185-128-191.us-west-2.compute.amazonaws.com/latest";
+    var api = "/latest";
     var tweets = $http.get(api);
 
     var margin = 10;
@@ -35,7 +35,7 @@ angular.module('integrationApp')
     };
 
     tweets.then(function(response) {
-      $scope.allTweets = response.data;
+      $scope.allTweets = response.data.reverse();
       addTweets($scope.allTweets.slice(0, tweetsShown));
     });
 

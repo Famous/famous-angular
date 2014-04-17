@@ -44,6 +44,20 @@ module.exports = function (grunt) {
       },
     },
 
+
+    pkg: grunt.file.readJSON('package.json'),
+    concat: {
+      options: {
+        stripBanners: true,
+        banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
+          '<%= grunt.template.today("yyyy-mm-dd") %> */',
+      },
+      dist: {
+        src: ['<%= yeoman.app %>/scripts/directives/**/*'],
+        dest: 'dist/famous.angular.js',
+      },
+    },
+
     // Watches files for changes and runs tasks based on the changed files
     watch: {
       js: {
@@ -377,17 +391,10 @@ module.exports = function (grunt) {
     'clean:dist',
     'bower-install',
     'useminPrepare',
-    'concurrent:dist',
     'autoprefixer',
     'concat',
     'ngmin',
-    'copy:dist',
-    'cdnify',
-    'cssmin',
-    'uglify',
-    'rev',
-    'usemin',
-    'htmlmin'
+    'rev'
   ]);
 
   grunt.registerTask('default', [
