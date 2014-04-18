@@ -49,7 +49,8 @@
     "express": "^4.0.0",
     "connect-livereload": "^0.4.0",
     "gulp-ignore": "^1.0.0",
-    "karma-jasmine": "~0.1.5"
+    "karma-jasmine": "~0.2.0",
+    "grunt-contrib-jasmine": "~0.6.3"
   },
   "engines": {
     "node": ">=0.8.0"
