@@ -35,8 +35,8 @@
     "grunt-sails-linker": "^0.9.5",
     "gulp-rename": "^1.2.0",
     "tiny-lr": "0.0.5",
-    "gulp-minify-css": "^0.3.1",
-    "gulp-ruby-sass": "^0.4.3",
+    "gulp-minify-css": "~0.3.1",
+    "gulp-ruby-sass": "~0.4.3",
     "gulp-uglify": "^0.2.1",
     "gulp-concat": "^2.2.0",
     "gulp-clean": "^0.2.4",
@@ -48,7 +48,8 @@
     "gulp-imagemin": "^0.2.0",
     "express": "^4.0.0",
     "connect-livereload": "^0.4.0",
-    "gulp-ignore": "^1.0.0"
+    "gulp-ignore": "^1.0.0",
+    "karma-jasmine": "~0.1.5"
   },
   "engines": {
     "node": ">=0.8.0"
