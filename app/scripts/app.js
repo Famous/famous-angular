@@ -1,4 +1,4 @@
-angular.module('integrationApp',['famous.angular', 'ui.router', 'firebase'])
+angular.module('integrationApp',['famous.angular', 'ui.router'])
   .config(function($stateProvider, $urlRouterProvider){
 
     $urlRouterProvider.otherwise("/");
