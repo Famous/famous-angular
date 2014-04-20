@@ -41,7 +41,10 @@ angular.module('famous.angular')
                 transforms.push(Transform.skew(0, 0, scope.$eval(attrs.faSkew)));
               if(!transforms.length)
                 return undefined;
-              return Transform.multiply.apply(this, transforms);
+              else if (transforms.length === 1)
+                return transforms[0]
+              else
+                return Transform.multiply.apply(this, transforms);
             };
 
             var getOpacity = function(){

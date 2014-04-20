@@ -183,7 +183,10 @@ angular.module('famous.angular')
                               mult.push(Transform[f](transVal));  
                           })());
                         }
-                        return Transform.multiply.apply(this, mult);
+                        if(mult.length === 1)
+                          return mult[0]
+                        else
+                          return Transform.multiply.apply(this, mult);
                       });
                     }
                   }

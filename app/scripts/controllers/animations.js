@@ -44,7 +44,7 @@ angular.module('integrationApp')
     }, {direction: GenericSync.DIRECTION_Y});
 
     $scope.sync.on('update', function(data){
-      var newVal = Math.max(0, Math.min(1, data.p / 800 + t.get()));
+      var newVal = Math.max(0, Math.min(1, data.delta / 1400.0 + t.get()));
       t.set(newVal);
     });
 
