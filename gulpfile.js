@@ -19,13 +19,8 @@ var gulp = require('gulp'),
     lr = require('tiny-lr'),
     server = lr();
 
-
-
-
 // Set up server
-
 function startExpress() {
- 
   var express = require('express');
   var app = express();
   app.use(require('connect-livereload')());
@@ -56,7 +51,6 @@ gulp.task('clean', function() {
 
 // Watch
 gulp.task('watch', function(event) {
-
   server.listen(LIVERELOAD_PORT, function (err) {
     if (err) {
       return console.log(err)
@@ -81,10 +75,8 @@ gulp.task('watch', function(event) {
 
 });
 
-
 // Default task
 gulp.task('default', ['scripts', 'clean'], function() {
     startExpress();
     gulp.start('watch');
 });
-

@@ -4,7 +4,6 @@ angular.module('famous.angular')
       template: '<div></div>',
       transclude: true,
       restrict: 'EA',
-      priority: 100,
       compile: function(tElement, tAttrs, transclude){
         return {
           pre: function(scope, element, attrs){
@@ -93,7 +92,12 @@ angular.module('famous.angular')
             transclude(scope, function(clone) {
               element.find('div').append(clone);
             });
-            scope.$emit('registerChild', {view: isolate.view, mod: isolate.modifier});
+            
+            scope.$emit('registerChild', {
+              view: isolate.view,
+              mod: isolate.modifier
+            });
+
             isolate.readyToRender = true;
           }
         }
