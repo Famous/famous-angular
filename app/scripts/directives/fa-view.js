@@ -50,6 +50,7 @@ angular.module('famous.angular')
               return Transform.multiply.apply(this, transforms);
             };
 
+            //TODO:  determine if readyToRender flag is necessary anymore
             FaView.prototype.render = function() {
               if(!isolate.readyToRender)
                 return [];
