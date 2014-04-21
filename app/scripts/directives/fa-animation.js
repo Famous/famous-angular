@@ -31,6 +31,8 @@ angular.module('famous.angular')
                   var modScope = angular.element(modElement).scope();
                   var modifier = modScope.isolate[modScope.$id].modifier;
 
+                  //TODO:  won't need to special-case curve type 'linear'
+                  //       once/if it exists in Easing.js
                   var curve =
                     animate.attributes['curve'] &&
                     animate.attributes['curve'].value !== 'linear' 
@@ -40,14 +42,17 @@ angular.module('famous.angular')
                   //assign the modifier functions
                   if(animate.attributes['field']){
                     var field = animate.attributes['field'].value;
+
                     var lowerBound =
                     animate.attributes['timelinelowerbound']
                       ? parseFloat(animate.attributes['timelinelowerbound'].value)
                       : 0;
+
                     var upperBound =
                       animate.attributes['timelineupperbound']
                       ? parseFloat(animate.attributes['timelineupperbound'].value)
                       : 1;
+
                     if(!animate.attributes['startvalue'])
                       throw 'you must provide a start value for the animation'
                     var startValue = scope.$eval(animate.attributes['startvalue'].value);
@@ -77,8 +82,9 @@ angular.module('famous.angular')
                     });
 
                     //Check domain overlap:
-                    //after sorting by lowerBounds, if upperBounds are not monotonic,
-                    //there's an overlap in domains, which is unsupportable.  Throw.
+                    //after sorting by lowerBounds, if any segment's lower bound
+                    //is lower than the lower bound of any item before it, domains are
+                    //overlapping
                     for(var j = 1; j < segments.length; j++){
                       var lower = segments[j].lowerBound;
                       for(var k = 0; k < j; k++){
@@ -147,15 +153,14 @@ angular.module('famous.angular')
                       var subDomain = (relevantSegment.upperBound - relevantSegment.lowerBound)
                       var normalizedX = (x - relevantSegment.lowerBound) / subDomain;
 
-                      //Support interpolating multiple values, e.g. for a scale array [x,y,z]
+                      //Support interpolating multiple values, e.g. for a Scale array [x,y,z]
                       if(Array.isArray(relevantSegment.startValue)){
                         var ret = [];
                         for(var j = 0; j < relevantSegment.startValue.length; j++){
                           ret.push(
-                            relevantSegment.startValue[j]
-                            + relevantSegment.curve(normalizedX)
-                            * (relevantSegment.endValue[j]
-                            - relevantSegment.startValue[j])
+                            relevantSegment.startValue[j] + relevantSegment.curve(normalizedX)
+                            *
+                            (relevantSegment.endValue[j] - relevantSegment.startValue[j])
                           );
                         }
                         return ret;
@@ -188,6 +193,7 @@ angular.module('famous.angular')
                       })
 
                       modifier.transformFrom(function(){
+
                         var mult = [];
                         for(var j = 0; j < transformComponents.length; j++){
                           ((function(){
@@ -199,6 +205,8 @@ angular.module('famous.angular')
                               mult.push(Transform[f](transVal));  
                           })());
                         }
+
+                        //Transform.multiply fails on arrays of <=1 matricies
                         if(mult.length === 1)
                           return mult[0]
                         else

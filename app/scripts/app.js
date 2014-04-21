@@ -7,10 +7,6 @@ angular.module('integrationApp',['famous.angular', 'ui.router', 'firebase'])
         url: "/",
         templateUrl: "views/main.html"
       })
-      .state("demo", {
-        url: "/demo",
-        templateUrl: "views/demo.html"
-      })
       .state("modifiers", {
         url: "/modifiers",
         templateUrl: "views/modifiers.html"
