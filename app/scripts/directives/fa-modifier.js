@@ -93,7 +93,6 @@ angular.module('famous.angular')
             
             scope.$on('registerChild', function(evt, data){
               if(evt.targetScope.$id !== evt.currentScope.$id){
-                console.log('view registered', data);
                 modifierNode.add(data.view);
                 evt.stopPropagation();
               }

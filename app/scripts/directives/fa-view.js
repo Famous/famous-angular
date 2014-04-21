@@ -69,7 +69,6 @@ angular.module('famous.angular')
 
             scope.$on('registerChild', function(evt, data){
               if(evt.targetScope.$id != scope.$id){
-                console.log('view registered', data);
                 isolate.view.add(data.view);
                 isolate.children.push(data);
                 evt.stopPropagation();
@@ -82,7 +81,6 @@ angular.module('famous.angular')
             };
 
             scope.$on('registerModifier', function(evt, data){
-              console.log('caught registerModifier', data);
               isolate._modifier = data;
             });
           },
