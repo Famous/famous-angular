@@ -29,6 +29,8 @@ angular.module('integrationApp')
       triangle: _r
     };
 
+    $scope.twoWayTest = "test";
+
     $scope.positions = {
       topTriangle: [
         sizes.margins.left + sizes.triangle,

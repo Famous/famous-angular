@@ -70,24 +70,17 @@ angular.module('famous.angular')
             var updateContent = function(){
               //TODO:  fill with other properties
               isolate.surface.setProperties({'backgroundColor':  scope.$eval(attrs.faBackgroundColor)});
-              //TODO:   once binding a surface to an arbitrary DOM node is supported in core Famo.us,
-              // compile the element and pass the reference to that compiled element to
-              // the surface.  This should solve the redrawing problem and it should
-              // enable two-way databinding (which is not yet supported.)
-              if(element.find('div.fa-surface') && element.find('div.fa-surface').html()){
-                var compiledEl = isolate.compiledEl = isolate.compiledEl || $compile(element.find('div.fa-surface').contents())(scope)
-                var prospectiveContent = compiledEl.toArray().map(function(el) { return el.outerHTML; }).join("");
-                if(isolate.currentContent !== prospectiveContent){ //this is a potentially large string-compare
-                  isolate.currentContent = prospectiveContent;
-                  isolate.surface.setContent(isolate.currentContent);
-                }
-              }
+              var compiledEl = isolate.compiledEl = isolate.compiledEl || $compile(element.find('div.fa-surface').contents())(scope)
+              isolate.surface.setContent(isolate.compiledEl.context);
             };
 
             //listener-free scope.$watch will fire any time a $digest occurs
-            scope.$watch(function(){
+            
+            //TODO:  was this only needed when we were handling
+            // our own dirty-checking?
+            /*scope.$watch(function(){
               updateContent();
-            })
+            })*/
             updateContent();
 
             //boilerplate
