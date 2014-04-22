@@ -1,8 +1,6 @@
 # famous-angular
 
-&copy; 2014 Thomas Street LLC
-
-All Rights Reserved
+&copy; 2014 Thomas Street.  All Rights Reserved.
 
 ##Running
 
@@ -23,7 +21,7 @@ Allow famo.us components to work seamlessly with other components inside existin
 Maintain the same high standards of code-quality,  developer experience,  and performance as the core Famo.us project.
 Allow an Angular developer to write a Famo.us app while separating its view logic from the rest of its logic
 Create that view declaratively, using the DOM to represent the tree structure of an app -- bringing the declarative magic of Angular to Famo.us.
-Work with the Famo.us team to make sure Famous-Angular supports Famo.us’ long-term goals and vision.
+Work with the Famo.us team to make sure Famous-Angular supports Famo.us’s long-term goals and vision.
 
 ##Approach:
 
