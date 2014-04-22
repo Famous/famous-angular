@@ -22,8 +22,6 @@ angular.module('famous.angular')
             FaView.prototype = Object.create(View.prototype);
             FaView.prototype.constructor = FaView;
 
-            FaView.name = scope.$eval(attrs.faName);
-
             isolate.children = [];
 
             var getOrValue = function(x) {
@@ -64,7 +62,6 @@ angular.module('famous.angular')
             };
 
             isolate.view = new FaView({
-              name: scope.$eval(attrs.faName),
               size: scope.$eval(attrs.faSize) || [undefined, undefined]
             });
 
