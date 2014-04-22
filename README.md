@@ -1,10 +1,14 @@
 # famous-angular
-### Thomas Street | Famo.us
+
+&copy; 2014 Thomas Street LLC
+
+All Rights Reserved
 
 ##Running
 
 ####First time:
 `npm install`
+
 `npm install -g gulp`
 
 ####Thereafter:
