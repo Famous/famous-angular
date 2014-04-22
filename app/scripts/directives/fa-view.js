@@ -62,7 +62,6 @@ angular.module('famous.angular')
             };
 
             isolate.view = new FaView({
-              name: scope.$eval(attrs.faName),
               size: scope.$eval(attrs.faSize) || [undefined, undefined]
             });
 

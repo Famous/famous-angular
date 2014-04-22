@@ -1,8 +1,6 @@
 # famous-angular
 
-&copy; 2014 Thomas Street LLC
-
-All Rights Reserved
+&copy; 2014 Thomas Street.  All Rights Reserved.
 
 ##Running
 
@@ -12,10 +10,14 @@ All Rights Reserved
 `npm install -g gulp`
 
 ####Thereafter:
-`gulp`
+`gulp` 
 
 Running gulp will concatenate files into famous.angular.js, which is symlinked into the app folder.  It will also watch for changes inside app and livereload as necessary.
 
+As configured, you should be able to access the application at localhost:4000.
+
+##Overview:
+[Slide deck overview](http://thomas-street.s3.amazonaws.com/famous-angular-overview.pdf)
 
 ##Goals:
 
@@ -23,7 +25,7 @@ Allow famo.us components to work seamlessly with other components inside existin
 Maintain the same high standards of code-quality,  developer experience,  and performance as the core Famo.us project.
 Allow an Angular developer to write a Famo.us app while separating its view logic from the rest of its logic
 Create that view declaratively, using the DOM to represent the tree structure of an app -- bringing the declarative magic of Angular to Famo.us.
-Work with the Famo.us team to make sure Famous-Angular supports Famo.us’ long-term goals and vision.
+Work with the Famo.us team to make sure Famous-Angular supports Famo.us’s long-term goals and vision.
 
 ##Approach:
 
