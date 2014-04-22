@@ -1,3 +1,9 @@
+// 
+// © 2014 Thomas Street LLC. All rights reserved
+//
+
+
+
 //TODO:  the templates for the first and last segments of
 //       the compiled famous.angular.js file sit in separate
 //       files (in app/scripts/stubs.)  Rather than maintain

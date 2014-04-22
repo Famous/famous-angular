@@ -1,3 +1,7 @@
+// 
+// © 2014 Thomas Street LLC. All rights reserved
+//
+
 angular.module('famous.angular')
   .directive('faController', function ($controller) {
     return {
