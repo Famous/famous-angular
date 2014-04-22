@@ -10,10 +10,14 @@
 `npm install -g gulp`
 
 ####Thereafter:
-`gulp`
+`gulp` 
 
 Running gulp will concatenate files into famous.angular.js, which is symlinked into the app folder.  It will also watch for changes inside app and livereload as necessary.
 
+As configured, you should be able to access the application at localhost:4000.
+
+##Overview:
+[Slide deck overview](http://thomas-street.s3.amazonaws.com/famous-angular-overview.pdf)
 
 ##Goals:
 
