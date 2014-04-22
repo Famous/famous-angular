@@ -5,6 +5,10 @@ angular.module('integrationApp',['famous.angular', 'ui.router', 'firebase'])
     $stateProvider
       .state("main", {
         url: "/",
+        templateUrl: "views/animations.html"
+      })
+      .state("timbre", {
+        url: "/timbre",
         templateUrl: "views/main.html"
       })
       .state("modifiers", {
