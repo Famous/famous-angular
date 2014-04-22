@@ -25,35 +25,85 @@ angular.module('integrationApp')
     };
 
     $scope.positions = {
-      topTriangle: [sizes.margins.left + sizes.triangle, sizes.margins.top, 500],
-      topTriangleInner: [sizes.margins.left + sizes.triangle, sizes.margins.top + sizes.triangle, 500],
-      rightTriangle: [sizes.margins.left + 3 * sizes.triangle, sizes.margins.top + sizes.triangle, 500],
-      rightTriangleInner: [sizes.margins.left + 2 * sizes.triangle, sizes.margins.top + sizes.triangle, 500],
-      bottomTriangle: [sizes.margins.left + sizes.triangle, sizes.margins.top + 3 * sizes.triangle, 500],
-      bottomTriangleInner: [sizes.margins.left + sizes.triangle, sizes.margins.top + 2 * sizes.triangle, 500],
-      leftTriangle: [sizes.margins.left, sizes.margins.top + sizes.triangle, 500],
-      leftTriangleInner: [sizes.margins.left + sizes.triangle, sizes.margins.top + sizes.triangle, 500],
-      centerSquare: [sizes.margins.left + sizes.triangle - .5, sizes.margins.top + sizes.triangle - .5, 1],
-      centerContent: [sizes.margins.left, sizes.margins.top + 2 * sizes.triangle, 1000]
+      topTriangle: [
+        sizes.margins.left + sizes.triangle,
+        sizes.margins.top,
+        500
+      ],
+      topTriangleInner: [
+        sizes.margins.left + sizes.triangle,
+        sizes.margins.top + sizes.triangle,
+        500
+      ],
+      rightTriangle: [
+        sizes.margins.left + 3 * sizes.triangle,
+        sizes.margins.top + sizes.triangle,
+        500
+      ],
+      rightTriangleInner: [
+        sizes.margins.left + 2 * sizes.triangle,
+        sizes.margins.top + sizes.triangle,
+        500
+      ],
+      bottomTriangle: [
+        sizes.margins.left + sizes.triangle,
+        sizes.margins.top + 3 * sizes.triangle,
+        500
+      ],
+      bottomTriangleInner: [
+        sizes.margins.left + sizes.triangle,
+        sizes.margins.top + 2 * sizes.triangle,
+        500
+      ],
+      leftTriangle: [
+        sizes.margins.left,
+        sizes.margins.top + sizes.triangle,
+        500
+      ],
+      leftTriangleInner: [
+        sizes.margins.left + sizes.triangle,
+        sizes.margins.top + sizes.triangle,
+        500
+      ],
+      centerSquare: [
+        sizes.margins.left + sizes.triangle - .5,
+        sizes.margins.top + sizes.triangle - .5,
+        1
+      ],
+      centerContent: [
+        sizes.margins.left,
+        sizes.margins.top + 2 * sizes.triangle,
+        1000
+      ]
     };
 
-    var t = new Transitionable(0);
+    var tran = new Transitionable(0);
 
     $scope.sync = new GenericSync(function(){
-      return t.get();
+      return tran.get();
     }, {direction: GenericSync.DIRECTION_Y});
 
+    var SCROLL_SENSITIVITY = 1200; //inverse
     $scope.sync.on('update', function(data){
-      var newVal = Math.max(0, Math.min(1, data.p / 800 + t.get()));
-      t.set(newVal);
+      var newVal = Math.max(0,
+        Math.min(1, data.delta / SCROLL_SENSITIVITY + tran.get()));
+      tran.set(newVal);
     });
 
-    //t.set(1, {duration: 2000, curve: 'linear'});
+    //set tran to auto-animate transition
+    //tran.set(1, {duration: 2000, curve: 'linear'});
 
+    //TODO:  determine a more elegant (declarative?) way to
+    //       handle event handling and piping
     $scope.eventHandler = new EventHandler();
     $scope.eventHandler.pipe($scope.sync);
 
-    var _contents = ["Hey, I'm data-bound!", "Hey, I change my content!", "Hey, look at me!"];
+    var _contents = [
+      "Hey, I'm data-bound!",
+      "Hey, I change my content!",
+      "Hey, look at me!"
+    ];
+
     var _contentIndex = 0;
     var _content = _contents[_contentIndex];
     $scope.getContent = function(){
@@ -69,6 +119,6 @@ angular.module('integrationApp')
     setInterval(toggleContent, 1000);
     
     $scope.functionThatReturnsATimelineValueBetween0And1 = function(){
-      return t.get();
+      return tran.get();
     }
   });

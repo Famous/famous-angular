@@ -1,5 +1,15 @@
+//TODO:  the templates for the first and last segments of
+//       the compiled famous.angular.js file sit in separate
+//       files (in app/scripts/stubs.)  Rather than maintain
+//       this structure, probably should put together a
+//       placeholder-replacement step in gulp instead of 
+//       concatenating files like this.
+
 'use strict';
 
+//TODO:  Ensure that this list stays up-to-date with
+//       the filesystem (maybe write a bash script
+//       working around `ls -R1 app/scripts/famous` ?)
 var requirements = [
   "famous/core/Engine",
   "famous/core/EventHandler",
@@ -19,7 +29,6 @@ var requirements = [
   "famous/utilities/Timer",
   "famous/views/ScrollView"
 ]
-
 
 //declare the module before the async callback so that
 //it will be accessible to other synchronously loaded angular
@@ -75,25 +84,36 @@ angular.module('famous.angular')
                 //DOM selector string that points to our mod of interest
                 if(animate.attributes['targetmodselector']){
                   //dig out the reference to our modifier
-                  //TODO:  support passing a direct reference to a modifier instead of performing
-                  //       a DOM lookup
-                  var modElement = element.parent().find(animate.attributes['targetmodselector'].value);
+                  //TODO:  support passing a direct reference to a modifier
+                  //       instead of performing a DOM lookup
+                  var modElement = element.parent().find(
+                    animate.attributes['targetmodselector'].value
+                  );
                   var modScope = angular.element(modElement).scope();
                   var modifier = modScope.isolate[modScope.$id].modifier;
 
-                  var curve = animate.attributes['curve'] && animate.attributes['curve'].value !== 'linear' 
+                  //TODO:  won't need to special-case curve type 'linear'
+                  //       once/if it exists in Easing.js
+                  var curve =
+                    animate.attributes['curve'] &&
+                    animate.attributes['curve'].value !== 'linear' 
                     ? Easing[animate.attributes['curve'].value]
                     : function(j) {return j;}; //linear
 
                   //assign the modifier functions
                   if(animate.attributes['field']){
                     var field = animate.attributes['field'].value;
-                    var lowerBound = animate.attributes['timelinelowerbound']
+
+                    var lowerBound =
+                    animate.attributes['timelinelowerbound']
                       ? parseFloat(animate.attributes['timelinelowerbound'].value)
                       : 0;
-                    var upperBound = animate.attributes['timelineupperbound']
+
+                    var upperBound =
+                      animate.attributes['timelineupperbound']
                       ? parseFloat(animate.attributes['timelineupperbound'].value)
                       : 1;
+
                     if(!animate.attributes['startvalue'])
                       throw 'you must provide a start value for the animation'
                     var startValue = scope.$eval(animate.attributes['startvalue'].value);
@@ -102,9 +122,11 @@ angular.module('famous.angular')
                       throw 'you must provide an end value for the animation'
                     var endValue = scope.$eval(animate.attributes['endValue'].value);
 
-                    //Keep arrays of all declarations so that transformFunctions can handle
-                    //all of the appropriate segments
-                    var modDecs = declarations[modScope.$id] = declarations[modScope.$id] || {};
+                    //Keep arrays of all declarations so that transformFunctions
+                    //can handle all of the appropriate segments
+                    var modDecs =
+                      declarations[modScope.$id] =
+                      declarations[modScope.$id] || {};
                     var segments = modDecs[field] = modDecs[field] || [];
                     segments.push({
                       field: field,
@@ -121,23 +143,26 @@ angular.module('famous.angular')
                     });
 
                     //Check domain overlap:
-                    //after sorting by lowerBounds, if upperBounds are not monotonic,
-                    //there's an overlap in domains, which is unsupportable.  Throw.
+                    //after sorting by lowerBounds, if any segment's lower bound
+                    //is lower than the lower bound of any item before it, domains are
+                    //overlapping
                     for(var j = 1; j < segments.length; j++){
                       var lower = segments[j].lowerBound;
                       for(var k = 0; k < j; k++){
                         if(lower < segments[k].upperBound){
-                          throw "Animate segments have overlapping domains for the same field (" + field + "). "
-                                + " At any point in the timeline, only one <animate> can affect a given field on the same modifier."
+                          throw "Animate segments have overlapping \
+                            domains for the same field (" + field + "). \
+                            At any point in the timeline, only one <animate> \
+                            can affect a given field on the same modifier."
                         }
                       }
                     }
 
 
                     //Domain:  timeline function bounded [0,1]
-                    //Subdomains (between pipes):  specified subdomains from timeline segments
-                    //Range:  output value, determined by interpolating startValue and endValue
-                    //        through the easing curves
+                    //Subdomains (between pipes):  specified subdomains of timeline segments
+                    //Range:  output value, determined by interpolating startValue and
+                    //        endValue through the easing curves.
                     //     |          |                       |          |
                     //     |          |                       |          |
                     //     |          |                       |          |
@@ -156,8 +181,7 @@ angular.module('famous.angular')
                     //       this function needs to be exposed somehow. (pass a reference into the directive;
                     //       and then assign this function to that reference?)
                     //TODO:  if needed:  make this more efficient.  This is a hot-running
-                    //       function and we should be able to optimize and chop
-                    //       down complexity by an order of magnitude or so
+                    //       function and we should be able to optimize.
                     var transformFunction = function(){
                       var x = timeline();
                       var relevantIndex = 0;
@@ -190,15 +214,22 @@ angular.module('famous.angular')
                       var subDomain = (relevantSegment.upperBound - relevantSegment.lowerBound)
                       var normalizedX = (x - relevantSegment.lowerBound) / subDomain;
 
-                      //Support interpolating multiple values, e.g. for a scale array [x,y,z]
+                      //Support interpolating multiple values, e.g. for a Scale array [x,y,z]
                       if(Array.isArray(relevantSegment.startValue)){
                         var ret = [];
                         for(var j = 0; j < relevantSegment.startValue.length; j++){
-                          ret.push(relevantSegment.startValue[j] + relevantSegment.curve(normalizedX) * (relevantSegment.endValue[j] - relevantSegment.startValue[j]));
+                          ret.push(
+                            relevantSegment.startValue[j] + relevantSegment.curve(normalizedX)
+                            *
+                            (relevantSegment.endValue[j] - relevantSegment.startValue[j])
+                          );
                         }
                         return ret;
                       }else{
-                        return relevantSegment.startValue + relevantSegment.curve(normalizedX) * (relevantSegment.endValue - relevantSegment.startValue);
+                        return relevantSegment.startValue
+                          + relevantSegment.curve(normalizedX)
+                          * (relevantSegment.endValue
+                          - relevantSegment.startValue);
                       }
                     };
 
@@ -217,13 +248,13 @@ angular.module('famous.angular')
                         return transformFunction();
                       });
                     }else{ //transform field
-                      //TODO:  support multiple transform fields
                       transformComponents.push({
                         field: field,
                         fn: transformFunction
                       })
 
                       modifier.transformFrom(function(){
+
                         var mult = [];
                         for(var j = 0; j < transformComponents.length; j++){
                           ((function(){
@@ -235,7 +266,12 @@ angular.module('famous.angular')
                               mult.push(Transform[f](transVal));  
                           })());
                         }
-                        return Transform.multiply.apply(this, mult);
+
+                        //Transform.multiply fails on arrays of <=1 matricies
+                        if(mult.length === 1)
+                          return mult[0]
+                        else
+                          return Transform.multiply.apply(this, mult);
                       });
                     }
                   }
@@ -327,14 +363,20 @@ angular.module('famous.angular')
       compile: function(tElement, tAttrs, transclude) {
         return {
           pre: function(scope, element, attrs){
-            console.log('fa controller!')
+            //TODO:  fa-controller might be able to sit elsewhere
+            //  in the compilation cycle, probably right as the post-compile
+            //  fires. (probably call it at the beginning of each component's
+            //  post-compile fn)
+            //  This would give the advantage/feature of being able to address
+            //  elements by their identifiers using HTML selectors
+            //  (this may be a good way to pass references from
+            //  the views/DOM to the controllers)
             if(attrs.faController)
               $controller(attrs.faController, {'$scope': scope})
           },
           post: function(scope, element, attrs){
           }
         }
-
       }
     };
   });
@@ -372,17 +414,49 @@ angular.module('famous.angular')
                 var values = scope.$eval(attrs.faTranslate).map(get)
                 transforms.push(Transform.translate.apply(this, values));
               }
-              if (attrs.faRotateX)
-                transforms.push(Transform.rotateX(get(scope.$eval(attrs.faRotateX))));
-              if (attrs.faRotateY)
-                transforms.push(Transform.rotateY(get(scope.$eval(attrs.faRotateY))));
-              if (attrs.faRotateZ)
-                transforms.push(Transform.rotateZ(get(scope.$eval(attrs.faRotateZ))));
-              if (attrs.faSkew)
-                transforms.push(Transform.skew(0, 0, scope.$eval(attrs.faSkew)));
+
+              if (attrs.faRotateX){
+                transforms.push(
+                  Transform.rotateX(
+                    get(
+                      scope.$eval(attrs.faRotateX)
+                    )
+                  )
+                );
+              }
+
+              if (attrs.faRotateY) {
+                transforms.push(
+                  Transform.rotateY(
+                    get(
+                      scope.$eval(attrs.faRotateY)
+                    )
+                  )
+                );
+              }
+
+              if (attrs.faRotateZ) {
+                transforms.push(
+                  Transform.rotateZ(
+                    get(
+                      scope.$eval(attrs.faRotateZ)
+                    )
+                  )
+                );
+              }
+
+              if (attrs.faSkew) {
+                transforms.push(
+                  Transform.skew(0, 0, scope.$eval(attrs.faSkew))
+                );
+              }
+
               if(!transforms.length)
                 return undefined;
-              return Transform.multiply.apply(this, transforms);
+              else if (transforms.length === 1)
+                return transforms[0]
+              else
+                return Transform.multiply.apply(this, transforms);
             };
 
             var getOpacity = function(){
@@ -391,16 +465,17 @@ angular.module('famous.angular')
               return 1;
             }
 
-            isolate.modifier = new Modifier({transform: getTransform,
-                                         size: scope.$eval(attrs.faSize),
-                                         opacity: scope.$eval(attrs.faOpacity),
-                                         origin: scope.$eval(attrs.faOrigin)});
+            isolate.modifier = new Modifier({
+              transform: getTransform,
+              size: scope.$eval(attrs.faSize),
+              opacity: scope.$eval(attrs.faOpacity),
+              origin: scope.$eval(attrs.faOrigin)
+            });
 
             var modifierNode = isolate.node.add(isolate.modifier);
             
             scope.$on('registerChild', function(evt, data){
               if(evt.targetScope.$id !== evt.currentScope.$id){
-                console.log('view registered', data);
                 modifierNode.add(data.view);
                 evt.stopPropagation();
               }
@@ -416,12 +491,65 @@ angular.module('famous.angular')
               element.find('div').append(clone);
             });
 
-            scope.$emit('registerChild', {view: isolate.node, mod: function() { return {origin: ""}; }});
+            scope.$emit('registerChild', {
+              view: isolate.node,
+              mod: function() { return {origin: ""}; }
+            });
           }
         }
       }
     };
   }]);
+
+angular.module('famous.angular')
+  .directive('faScrollView', function (famous, $controller) {
+    return {
+      template: '<div></div>',
+      restrict: 'E',
+      transclude: true,
+      scope: true,
+      compile: function(tElem, tAttrs, transclude){
+        return  {
+          pre: function(scope, element, attrs){
+            scope.isolate = scope.isolate || {};
+            scope.isolate[scope.$id] = scope.isolate[scope.$id] || {};
+            var isolate = scope.isolate[scope.$id];
+
+            var ScrollView = famous["famous/views/ScrollView"];
+            var ViewSequence = famous['famous/core/ViewSequence'];
+            var Surface = famous['famous/core/Surface'];
+
+            var _children = [];
+
+            isolate.view = new ScrollView({
+              itemSpacing: 10
+            });
+
+            if (attrs.faPipeFrom) {
+              (scope.$eval(attrs.faPipeFrom)).pipe(isolate.view);
+            }
+
+            scope.$on('registerChild', function(evt, data){
+              if(evt.targetScope.$id != scope.$id){
+                _children.push(data.view);
+                isolate.view.sequenceFrom(_children);
+                evt.stopPropagation();
+              };
+            });
+
+          },
+          post: function(scope, element, attrs){
+            var isolate = scope.isolate[scope.$id];
+
+            transclude(scope, function(clone) {
+              element.find('div').append(clone);
+            });
+            scope.$emit('registerChild', {view: isolate.view, mod: isolate.modifier});
+          }
+        };
+      }
+    };
+  });
 
 angular.module('famous.angular')
   .directive('faSurface', function (famous, $interpolate, $controller, $compile) {
@@ -450,12 +578,17 @@ angular.module('famous.angular')
               return x.get ? x.get() : x;
             };
 
+            //TODO: $observe attributes and pass updated values
+            // into variables that are returned by functions that
+            // can then be passed into modifiers
+
             var modifiers = {
               origin: scope.$eval(attrs.faOrigin),
               translate: scope.$eval(attrs.faTranslate),
               rotateZ: scope.$eval(attrs.faRotateZ),
               skew: scope.$eval(attrs.faSkew)
             };
+
             isolate.surface = new Surface({
               size: scope.$eval(attrs.faSize),
               class: scope.$eval(attrs.class),
@@ -480,33 +613,21 @@ angular.module('famous.angular')
               });
             }
 
-
           },
           post: function(scope, element, attrs){
             var isolate = scope.isolate[scope.$id];
             var updateContent = function(){
               //TODO:  fill with other properties
               isolate.surface.setProperties({'backgroundColor':  scope.$eval(attrs.faBackgroundColor)});
-              //TODO:   There may be a more efficient way to do this than to 
-              //        $interpolate and then string-compare.  Is there a way to
-              //        anchor-link a div directly, for example?
-              //        direct DOM linking would probably need to be supported in
-              //        the famo.us engine, so for the time being, another approach could be:
-              //        1. take the raw template string before interpolating it
-              //        2. map all of the expressions inside {{}}'s into an array
-              //        3. evaluate all of those expressions and keep track of the values
-              //        4. compare all of these values of interest on each pass here,
-              //           -- only update the surface if one of those values changes    
-              //UPDATE:  Mark confirms that being able to pass in an arbitrary DOM node
-              //         to a surface is on the near-term roadmap.  This will enable more
-              //         efficient updating here and also allow for two-way databinding.
+              //TODO:   once binding a surface to an arbitrary DOM node is supported in core Famo.us,
+              // compile the element and pass the reference to that compiled element to
+              // the surface.  This should solve the redrawing problem and it should
+              // enable two-way databinding (which is not yet supported.)
               if(element.find('div.fa-surface') && element.find('div.fa-surface').html()){
                 var compiledEl = isolate.compiledEl = isolate.compiledEl || $compile(element.find('div.fa-surface').contents())(scope)
                 var prospectiveContent = compiledEl.toArray().map(function(el) { return el.outerHTML; }).join("");
-                //var prospectiveContent = $interpolate(element.find('div.fa-surface').html())(scope);
                 if(isolate.currentContent !== prospectiveContent){ //this is a potentially large string-compare
                   isolate.currentContent = prospectiveContent;
-                  //window.comp = compiledEl;
                   isolate.surface.setContent(isolate.currentContent);
                 }
               }
@@ -518,168 +639,13 @@ angular.module('famous.angular')
             })
             updateContent();
 
+            //boilerplate
             transclude(scope, function(clone) {
               element.find('div.fa-surface').append(clone);
             });
             scope.$emit('registerChild', {view: isolate.surface, mod: isolate.modifier});
           }
         }
-      }
-    };
-  });
-
-angular.module('famous.angular')
-  .directive('faView', ["famous", "$controller", function (famous, $controller) {
-    return {
-      template: '<div></div>',
-      transclude: true,
-      restrict: 'EA',
-      priority: 100,
-      compile: function(tElement, tAttrs, transclude){
-        return {
-          pre: function(scope, element, attrs){
-            scope.isolate = scope.isolate || {};
-            scope.isolate[scope.$id] = scope.isolate[scope.$id] || {};
-            var isolate = scope.isolate[scope.$id];
-            
-            var View = famous['famous/core/View'];
-            var Engine = famous['famous/core/Engine'];
-            var Transform = famous['famous/core/Transform']
-
-            function FaView(){
-              View.apply(this, arguments);
-            }
-
-            FaView.prototype = Object.create(View.prototype);
-            FaView.prototype.constructor = FaView;
-
-            FaView.name = scope.$eval(attrs.faName);
-
-            isolate.children = [];
-
-            var getOrValue = function(x) {
-              return x.get ? x.get() : x;
-            };
-
-            attrs.$observe('faPipeTo', function(val){
-              var pipeTo = scope.$eval(val);
-              if(pipeTo)
-                Engine.pipe(pipeTo);
-            })
-
-            var getTransform = function(data) {
-              var transforms = [];
-              var mod = data.mod();
-              if (mod.translate && mod.translate.length) {
-                var values = mod.translate.map(getOrValue)
-                transforms.push(Transform.translate.apply(this, values));
-              }
-              if (mod.rotateZ)
-                transforms.push(Transform.rotateZ(mod.rotateZ));
-              if (mod.skew)
-                transforms.push(Transform.skew(0, 0, mod.skew));
-              return Transform.multiply.apply(this, transforms);
-            };
-
-            FaView.prototype.render = function() {
-              if(!isolate.readyToRender)
-                return [];
-              return isolate.children.map(function(data){
-                return {
-                  // origin: data.mod().origin,
-                  // transform: getTransform(data),
-                  // target: data.view.render()
-                }
-              });
-            };
-
-            isolate.view = new FaView({
-              name: scope.$eval(attrs.faName),
-              size: scope.$eval(attrs.faSize) || [undefined, undefined]
-            });
-
-            scope.$on('registerChild', function(evt, data){
-              if(evt.targetScope.$id != scope.$id){
-                console.log('view registered', data);
-                isolate.view.add(data.view);
-                isolate.children.push(data);
-                evt.stopPropagation();
-              }
-            })
-
-            isolate._modifier = {};
-            isolate.modifier = function(){
-              return isolate._modifier;
-            };
-
-            scope.$on('registerModifier', function(evt, data){
-              console.log('caught registerModifier', data);
-              isolate._modifier = data;
-            });
-          },
-          post: function(scope, element, attrs){
-            var isolate = scope.isolate[scope.$id];
-            
-            transclude(scope, function(clone) {
-              element.find('div').append(clone);
-            });
-            scope.$emit('registerChild', {view: isolate.view, mod: isolate.modifier});
-            isolate.readyToRender = true;
-          }
-        }
-      }
-    };
-  }]);
-
-angular.module('famous.angular')
-  .directive('faScrollView', function (famous, $controller) {
-    return {
-      template: '<div></div>',
-      restrict: 'E',
-      transclude: true,
-      scope: true,
-      priority: 100,
-      compile: function(tElem, tAttrs, transclude){
-        return  {
-          pre: function(scope, element, attrs){
-            scope.isolate = scope.isolate || {};
-            scope.isolate[scope.$id] = scope.isolate[scope.$id] || {};
-            var isolate = scope.isolate[scope.$id];
-
-            var ScrollView = famous["famous/views/ScrollView"];
-            var ViewSequence = famous['famous/core/ViewSequence'];
-            var Surface = famous['famous/core/Surface'];
-
-            var _children = [];
-
-            isolate.view = new ScrollView({
-              itemSpacing: 10
-            });
-
-            if (attrs.faPipeFrom) {
-              console.log('attrs pipe', attrs)
-              console.log('attrs pipe', scope.$eval(attrs.faPipeFrom));
-              (scope.$eval(attrs.faPipeFrom)).pipe(isolate.view);
-            }
-
-            scope.$on('registerChild', function(evt, data){
-              if(evt.targetScope.$id != scope.$id){
-                _children.push(data.view);
-                isolate.view.sequenceFrom(_children);
-                evt.stopPropagation();
-              };
-            });
-
-          },
-          post: function(scope, element, attrs){
-            var isolate = scope.isolate[scope.$id];
-
-            transclude(scope, function(clone) {
-              element.find('div').append(clone);
-            });
-            scope.$emit('registerChild', {view: isolate.view, mod: isolate.modifier});
-          }
-        };
       }
     };
   });
@@ -716,6 +682,110 @@ angular.module('integrationApp')
       }
     };
   });
+
+angular.module('famous.angular')
+  .directive('faView', ["famous", "$controller", function (famous, $controller) {
+    return {
+      template: '<div></div>',
+      transclude: true,
+      restrict: 'EA',
+      compile: function(tElement, tAttrs, transclude){
+        return {
+          pre: function(scope, element, attrs){
+            scope.isolate = scope.isolate || {};
+            scope.isolate[scope.$id] = scope.isolate[scope.$id] || {};
+            var isolate = scope.isolate[scope.$id];
+            
+            var View = famous['famous/core/View'];
+            var Engine = famous['famous/core/Engine'];
+            var Transform = famous['famous/core/Transform']
+
+            function FaView(){
+              View.apply(this, arguments);
+            }
+
+            FaView.prototype = Object.create(View.prototype);
+            FaView.prototype.constructor = FaView;
+
+            isolate.children = [];
+
+            var getOrValue = function(x) {
+              return x.get ? x.get() : x;
+            };
+
+            attrs.$observe('faPipeTo', function(val){
+              var pipeTo = scope.$eval(val);
+              if(pipeTo)
+                Engine.pipe(pipeTo);
+            })
+
+            var getTransform = function(data) {
+              var transforms = [];
+              var mod = data.mod();
+              if (mod.translate && mod.translate.length) {
+                var values = mod.translate.map(getOrValue)
+                transforms.push(Transform.translate.apply(this, values));
+              }
+              if (mod.rotateZ)
+                transforms.push(Transform.rotateZ(mod.rotateZ));
+              if (mod.skew)
+                transforms.push(Transform.skew(0, 0, mod.skew));
+              return Transform.multiply.apply(this, transforms);
+            };
+
+            //TODO:  determine if readyToRender flag is necessary anymore
+            FaView.prototype.render = function() {
+              if(!isolate.readyToRender)
+                return [];
+              return isolate.children.map(function(data){
+                return {
+                  // origin: data.mod().origin,
+                  // transform: getTransform(data),
+                  // target: data.view.render()
+                }
+              });
+            };
+
+            isolate.view = new FaView({
+              name: scope.$eval(attrs.faName),
+              size: scope.$eval(attrs.faSize) || [undefined, undefined]
+            });
+
+            scope.$on('registerChild', function(evt, data){
+              if(evt.targetScope.$id != scope.$id){
+                isolate.view.add(data.view);
+                isolate.children.push(data);
+                evt.stopPropagation();
+              }
+            })
+
+            isolate._modifier = {};
+            isolate.modifier = function(){
+              return isolate._modifier;
+            };
+
+            scope.$on('registerModifier', function(evt, data){
+              isolate._modifier = data;
+            });
+          },
+          post: function(scope, element, attrs){
+            var isolate = scope.isolate[scope.$id];
+            
+            transclude(scope, function(clone) {
+              element.find('div').append(clone);
+            });
+            
+            scope.$emit('registerChild', {
+              view: isolate.view,
+              mod: isolate.modifier
+            });
+
+            isolate.readyToRender = true;
+          }
+        }
+      }
+    };
+  }]);
 
 
 

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('integrationApp')
-  .controller('MakeMeFamousCtrl', function ($scope, $http, $firebase, famous, ScrollParticle, gridRows) {
+  .controller('MakeMeFamousCtrl', function ($scope, $http,famous, ScrollParticle, gridRows) {
 
 
     // app state 
@@ -39,9 +39,6 @@ angular.module('integrationApp')
       addTweets($scope.allTweets.slice(0, tweetsShown));
     });
 
-    var promotedRef = new Firebase("https://resplendent-fire-5331.firebaseio.com/promoted");
-    var promoted = $firebase(promotedRef);
-
     $scope.isPromoted = function(tweet) {
       return promoted.$getIndex().indexOf(tweet.screen_name) > -1;
     };
@@ -77,6 +74,10 @@ angular.module('integrationApp')
     $scope.modalOpacity = new Transitionable(0);
     $scope.modalZ = -10;
 
+    $scope.offset = function() {
+      return -scrollParticle.getPosition();
+    };
+
     var scrollParticle = new ScrollParticle(function() { 
       var offset  = $scope.offset();
       if (offset > 0) return 1;
@@ -88,9 +89,6 @@ angular.module('integrationApp')
 
     $scope.eventHandler.pipe(scrollParticle.rawInput);
 
-    $scope.offset = function() {
-      return -scrollParticle.getPosition();
-    };
 
     $scope.grid = gridRows.positions($scope.offset);
 

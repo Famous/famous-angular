@@ -1,10 +1,12 @@
 <fa-app ng-controller="AnimationsCtrl" fa-pipe-to="eventHandler">
-  <fa-view id="EnvelopeView" fa-pipe-to="eventHandler">
-    <fa-surface fa-size="[undefined, undefined]" class="background-dark">
-      </fa-surface>
-    <fa-modifier id="wholeThing" fa-size="[sizes.width, sizes.height]" fa-origin="[.5, .5]">
-      
 
+  <fa-view id="EnvelopeView" fa-pipe-to="eventHandler">
+
+    <fa-surface fa-size="[undefined, undefined]" class="background-dark">
+    </fa-surface>
+
+    <fa-modifier id="wholeThing" fa-size="[sizes.width, sizes.height]" fa-origin="[.5, .5]">
+    
       <fa-modifier fa-translate="positions.centerSquare">
         <fa-surface class="center-square" fa-size="[2 * sizes.triangle + .5, 2 * sizes.triangle + .5]" ></fa-surface>
       </fa-modifier>
@@ -95,7 +97,6 @@
           </fa-surface>
         </fa-modifier>
       </fa-modifier>
-
     </fa-modifier>
   </fa-view>
 
@@ -160,7 +161,6 @@
               timelineLowerBound=".3"
               timelineUpperBound=".55" />
 
-
     <animate  targetModSelector="#wholeThing"
               field="scale"
               curve="outQuad"
@@ -168,15 +168,13 @@
               endValue="[1, 1, 1]"
               timelineLowerBound=".1"
               timelineUpperBound=".5" />
-
     <animate  targetModSelector="#wholeThing"
               field="rotateZ"
               curve="outElastic"
               startValue="0"
               endValue=".785"
               timelineLowerBound="0"
-              timelineUpperBound=".66" />
-
+              timelineUpperBound=".8" />
 
     <animate  targetModSelector="#contentMod"
               field="opacity"
@@ -185,6 +183,5 @@
               endValue="1"
               timelineLowerBound=".55"
               timelineUpperBound="1" />
-
   </fa-animation>
 </fa-app>

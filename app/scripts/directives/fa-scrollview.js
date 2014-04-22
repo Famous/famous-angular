@@ -5,7 +5,6 @@ angular.module('famous.angular')
       restrict: 'E',
       transclude: true,
       scope: true,
-      priority: 100,
       compile: function(tElem, tAttrs, transclude){
         return  {
           pre: function(scope, element, attrs){
@@ -24,8 +23,6 @@ angular.module('famous.angular')
             });
 
             if (attrs.faPipeFrom) {
-              console.log('attrs pipe', attrs)
-              console.log('attrs pipe', scope.$eval(attrs.faPipeFrom));
               (scope.$eval(attrs.faPipeFrom)).pipe(isolate.view);
             }
 

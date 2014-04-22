@@ -77,19 +77,19 @@ angular.module('integrationApp')
       var _scrollState = "still";
       var scrollStateEvents = new EventEmitter();
 
-      scrollView.eventInput.on('update', function(data) {
+      scrollView._eventInput.on('update', function(data) {
         var _scrollState = "dragging";
         scrollStateEvents.emit("dragging");
       }.bind(this));
 
-      scrollView.eventInput.on('end', function(data) {
+      scrollView._eventInput.on('end', function(data) {
         if (Math.abs(data.v) > 0) {
           _scrollState = "gliding";
           scrollStateEvents.emit("gliding");
         }
       }.bind(this));
 
-      scrollView.eventInput.on('end', function(data) {
+      scrollView._eventInput.on('end', function(data) {
         if (data.v == 0) {
           _scrollState = "still";
           scrollStateEvents.emit("still");
@@ -97,9 +97,9 @@ angular.module('integrationApp')
       }.bind(this));
 
       this.scrollState = scrollStateEvents;
-      this.particle = scrollView.particle;
+      this.particle = scrollView._particle;
       this.getPosition = scrollView.getPosition.bind(scrollView);
-      this.getVelocity = scrollView.particle.getVelocity.bind(scrollView.particle);
+      this.getVelocity = scrollView._particle.getVelocity.bind(scrollView.particle);
       this.rawInput = scrollView.rawInput;
 
 

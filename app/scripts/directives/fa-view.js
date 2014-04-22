@@ -4,7 +4,6 @@ angular.module('famous.angular')
       template: '<div></div>',
       transclude: true,
       restrict: 'EA',
-      priority: 100,
       compile: function(tElement, tAttrs, transclude){
         return {
           pre: function(scope, element, attrs){
@@ -22,8 +21,6 @@ angular.module('famous.angular')
 
             FaView.prototype = Object.create(View.prototype);
             FaView.prototype.constructor = FaView;
-
-            FaView.name = scope.$eval(attrs.faName);
 
             isolate.children = [];
 
@@ -51,6 +48,7 @@ angular.module('famous.angular')
               return Transform.multiply.apply(this, transforms);
             };
 
+            //TODO:  determine if readyToRender flag is necessary anymore
             FaView.prototype.render = function() {
               if(!isolate.readyToRender)
                 return [];
@@ -70,7 +68,6 @@ angular.module('famous.angular')
 
             scope.$on('registerChild', function(evt, data){
               if(evt.targetScope.$id != scope.$id){
-                console.log('view registered', data);
                 isolate.view.add(data.view);
                 isolate.children.push(data);
                 evt.stopPropagation();
@@ -83,7 +80,6 @@ angular.module('famous.angular')
             };
 
             scope.$on('registerModifier', function(evt, data){
-              console.log('caught registerModifier', data);
               isolate._modifier = data;
             });
           },
@@ -93,7 +89,12 @@ angular.module('famous.angular')
             transclude(scope, function(clone) {
               element.find('div').append(clone);
             });
-            scope.$emit('registerChild', {view: isolate.view, mod: isolate.modifier});
+            
+            scope.$emit('registerChild', {
+              view: isolate.view,
+              mod: isolate.modifier
+            });
+
             isolate.readyToRender = true;
           }
         }

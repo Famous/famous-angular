@@ -5,11 +5,11 @@ angular.module('integrationApp',['famous.angular', 'ui.router'])
     $stateProvider
       .state("main", {
         url: "/",
-        templateUrl: "views/main.html"
+        templateUrl: "views/animations.html"
       })
-      .state("demo", {
-        url: "/demo",
-        templateUrl: "views/demo.html"
+      .state("timbre", {
+        url: "/timbre",
+        templateUrl: "views/main.html"
       })
       .state("modifiers", {
         url: "/modifiers",

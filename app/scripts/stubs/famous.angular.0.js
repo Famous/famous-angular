@@ -1,8 +1,19 @@
+//TODO:  the templates for the first and last segments of
+//       the compiled famous.angular.js file sit in separate
+//       files (in app/scripts/stubs.)  Rather than maintain
+//       this structure, probably should put together a
+//       placeholder-replacement step in gulp instead of 
+//       concatenating files like this.
+
 'use strict';
 
+//TODO:  Ensure that this list stays up-to-date with
+//       the filesystem (maybe write a bash script
+//       working around `ls -R1 app/scripts/famous` ?)
 var requirements = [
   "famous/core/Engine",
   "famous/core/EventHandler",
+  "famous/core/EventEmitter",
   "famous/core/Modifier",
   "famous/core/RenderNode",
   "famous/core/Surface",
@@ -18,7 +29,6 @@ var requirements = [
   "famous/utilities/Timer",
   "famous/views/ScrollView"
 ]
-
 
 //declare the module before the async callback so that
 //it will be accessible to other synchronously loaded angular
