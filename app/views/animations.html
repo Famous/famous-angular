@@ -97,7 +97,9 @@
             <br>
             Two-way:  <input ng-model="twoWayTest" />
             <br>
-            {{twoWayTest}}
+            {{twoWayTest}} {{stuff.length}}
+
+            <div class="wowmang" ng-repeat="a in stuff" ng-click="alert()">{{a}}</div>
           </fa-surface>
         </fa-modifier>
       </fa-modifier>
@@ -182,10 +184,10 @@
 
     <animate  targetModSelector="#contentMod"
               field="opacity"
-              curve="outQuad"
+              curve="inQuad"
               startValue="0"
               endValue="1"
-              timelineLowerBound=".55"
+              timelineLowerBound=".5"
               timelineUpperBound="1" />
   </fa-animation>
 </fa-app>

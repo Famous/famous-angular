@@ -111,6 +111,12 @@ angular.module('integrationApp')
       "Hey, look at me!"
     ];
 
+    $scope.stuff = [
+      1,2,3,4,5,6,9
+    ]
+    $scope.alert = function(){
+      $scope.stuff.splice(0,1);
+    }
     var _contentIndex = 0;
     var _content = _contents[_contentIndex];
     $scope.getContent = function(){

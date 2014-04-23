@@ -1,5 +1,5 @@
   <fa-app fa-pipe-to="enginePipe" ng-controller="MainCtrl">
-    <fa-view fa-pipe-to="enginePipe" fa-background-color="'black'">
+    
       <fa-scroll-view fa-pipe-from="enginePipe" fa-controller="DemoCtrl">
         <fa-surface
           ng-repeat="surf in surfs"
@@ -10,5 +10,5 @@
           Index: {{$index}}
         </fa-surface>
       </fa-scroll-view>
-    </fa-view>
+    
   </fa-app>
