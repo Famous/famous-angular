@@ -1,16 +1,16 @@
 <fa-app fa-pipe-to="enginePipe">
   
   <fa-modifier fa-translate="[0,44,0]">
-    <fa-scroll-view fa-pipe-from="enginePipe" >
-      <fa-modifier ng-repeat="e in events" fa-translate="[0,0,0]" fa-size="[undefined,80]" fa-controller="DemoCtrl" >
+    <fa-scroll-view fa-pipe-from="enginePipe" id="scrollView">
+      <fa-modifier ng-repeat="e in events" fa-translate="[0,0,0]" fa-size="[undefined,80]" >
         <fa-modifier fa-translate="[0,0,0]" fa-origin="[rand(), 0]"  fa-size="[160,40]">
           <fa-modifier fa-translate="[0,20]" fa-origin="[{{$even ? 1 : -1}},0]">
-            <fa-surface 
-              fa-size="[100,10]"
+            <fa-surface
+              fa-size="[{{320-e.name.length*8}},10]"
               class="tLine">
             </fa-surface>
           </fa-modifier>
-          <fa-surface>
+          <fa-surface ng-click="setEvent(e)">
             <div class="tItem">{{e.name}}</div>
           </fa-surface>
         </fa-modifier>
@@ -23,6 +23,5 @@
     <div ng-include="'views/_header.html'">hi</div>
   </fa-view>
   <!-- end header -->
-
 
 </fa-app>

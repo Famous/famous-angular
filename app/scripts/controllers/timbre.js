@@ -38,5 +38,9 @@ angular.module('integrationApp')
         bgColor: _.sample(colors),
       }
     });
+
+    $scope.setEvent = function(e){
+      $scope.activeEvent = e;
+    }
   });
 
