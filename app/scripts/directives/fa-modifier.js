@@ -98,7 +98,9 @@ angular.module('famous.angular')
             window.s = scope;
 
             scope.$on('$destroy', function() {
+              console.log('destruction!!')
               isolate.modifier.setOpacity(0);
+              scope.$emit('unregisterChild', {id: scope.$id})
             });
             
             scope.$on('registerChild', function(evt, data){
@@ -119,6 +121,7 @@ angular.module('famous.angular')
             });
 
             scope.$emit('registerChild', {
+              id: scope.$id,
               view: isolate.node,
               mod: function() { return {origin: ""}; }
             });

@@ -32,13 +32,29 @@ angular.module('famous.angular')
               (scope.$eval(attrs.faPipeFrom)).pipe(isolate.view);
             }
 
+            var updateScrollview = function(){
+              isolate.view.sequenceFrom(_.map(_children, function(c){
+                return c.view
+              }));
+            }
+
             scope.$on('registerChild', function(evt, data){
               if(evt.targetScope.$id != scope.$id){
-                _children.push(data.view);
-                isolate.view.sequenceFrom(_children);
+                _children.push(data);
+                updateScrollview();
                 evt.stopPropagation();
               };
             });
+
+            scope.$on('unregisterChild', function(evt, data){
+              if(evt.targetScope.$id != scope.$id){
+                _children = _.reject(_children, function(c){
+                  return c.id === data.id
+                });
+                updateScrollview();
+                evt.stopPropagation();
+              }
+            })
 
           },
           post: function(scope, element, attrs){
