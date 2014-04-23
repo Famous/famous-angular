@@ -18,18 +18,16 @@ angular.module('famous.angular')
                 duration: scope.$eval(attrs.duration),
                 curve: scope.$eval(attrs.curve) || 'linear'
               };
-              console.log('transition', transition);
-              _trans.set(1, transition, function(){alert('done')});
+              _trans.set(1, transition);
+              //TODO:  handle $animate with a callback
+              //       support custom callbacks?
             }
             scope.reset = function(){
               _trans.set(0);
             }
 
-            if(timeline === undefined || timeline() === undefined){
-              if(attrs.duration){
-                timeline = _trans.get;
-              }
-              console.log('timeline', timeline)
+            if(timeline === undefined){
+              timeline = _trans.get.bind(_trans);
               if(attrs.autoplay)
                 scope.play();
             }
@@ -147,7 +145,7 @@ angular.module('famous.angular')
                     var transformFunction = function(){
                       var x = timeline() || 0;
                       if(Math.random() < .01)
-                        console.log('x', timeline(1));
+                        console.log('x', timeline());
                       var relevantIndex = 0;
                       var relevantSegment = segments[relevantIndex];
 
