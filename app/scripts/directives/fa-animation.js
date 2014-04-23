@@ -13,7 +13,6 @@ angular.module('famous.angular')
             var _trans = new Transitionable(0);
 
             scope.play = function(){
-              console.log('playing')
               var transition = {
                 duration: scope.$eval(attrs.duration),
                 curve: scope.$eval(attrs.curve) || 'linear'
@@ -144,8 +143,6 @@ angular.module('famous.angular')
                     //       function and we should be able to optimize.
                     var transformFunction = function(){
                       var x = timeline() || 0;
-                      if(Math.random() < .01)
-                        console.log('x', timeline());
                       var relevantIndex = 0;
                       var relevantSegment = segments[relevantIndex];
 
