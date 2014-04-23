@@ -10,6 +10,10 @@ angular.module('integrationApp')
     $scope.enginePipe = new EventHandler();
     $scope.search = {name:''}
 
+    $scope.rand = function(){
+      return Math.random() * 1;
+    }
+
 
 
   	var elements = 70;
