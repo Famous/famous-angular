@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('integrationApp')
-  .controller('TimbreCtrl', function ($scope, famous) {
+  .controller('TimbreCtrl', function ($scope, famous, testFilterService) {
   	$scope.yo ={a:'shoe'}
   	window.a = $scope
   	var EventHandler = famous['famous/core/EventHandler'];
@@ -9,6 +9,11 @@ angular.module('integrationApp')
     var Transitionable = famous['famous/transitions/Transitionable']
     $scope.enginePipe = new EventHandler();
     $scope.search = {name:''}
+
+    $scope.$watch(function(){return $scope.search.name},
+      function(){
+        testFilterService.setField($scope.search.name);
+      });
 
     $scope.rand = function(){
       return Math.random() * 1;
@@ -34,10 +39,13 @@ angular.module('integrationApp')
     ];
     $scope.events = _.map(_.range(elements), function(i){
       return {
+        rand: $scope.rand(),
         name: _.sample(strings),
         bgColor: _.sample(colors),
       }
     });
+
+    console.log('events', $scope.events);
 
     $scope.setEvent = function(e){
       $scope.activeEvent = e;
