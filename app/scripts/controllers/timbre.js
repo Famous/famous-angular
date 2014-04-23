@@ -48,6 +48,7 @@ angular.module('integrationApp')
     console.log('events', $scope.events);
 
     $scope.setEvent = function(e){
+      console.log('set event', e)
       $scope.activeEvent = e;
     }
   });

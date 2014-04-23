@@ -5,13 +5,36 @@ angular.module('famous.angular')
       scope: true,
       compile: function(tElement, tAttrs, transclude){
         var Transform = famous['famous/core/Transform'];
+        var Transitionable = famous['famous/transitions/Transitionable'];
         var Easing = famous['famous/transitions/Easing'];
-        console.log(Easing)
         return {
           pre: function(scope, element, attrs){
             var timeline = scope.$eval(attrs.timeline)
+            var _trans = new Transitionable(0);
+
+            scope.play = function(){
+              console.log('playing')
+              var transition = {
+                duration: scope.$eval(attrs.duration),
+                curve: scope.$eval(attrs.curve) || 'linear'
+              };
+              console.log('transition', transition);
+              _trans.set(1, transition, function(){alert('done')});
+            }
+            scope.reset = function(){
+              _trans.set(0);
+            }
+
+            if(timeline === undefined || timeline() === undefined){
+              if(attrs.duration){
+                timeline = _trans.get;
+              }
+              console.log('timeline', timeline)
+              if(attrs.autoplay)
+                scope.play();
+            }
             if(!timeline instanceof Function)
-              throw 'timeline must be a reference to a function';
+              throw 'timeline must be a reference to a function or duration must be provided';
 
             var animates = element.find('animate');
             var declarations = {};
@@ -123,6 +146,8 @@ angular.module('famous.angular')
                     //       function and we should be able to optimize.
                     var transformFunction = function(){
                       var x = timeline();
+                      if(Math.random() < .01)
+                        console.log('x', timeline(1));
                       var relevantIndex = 0;
                       var relevantSegment = segments[relevantIndex];
 
