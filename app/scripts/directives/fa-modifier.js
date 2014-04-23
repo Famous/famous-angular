@@ -94,6 +94,12 @@ angular.module('famous.angular')
             });
 
             var modifierNode = isolate.node.add(isolate.modifier);
+
+            window.s = scope;
+
+            scope.$on('$destroy', function() {
+              isolate.modifier.setOpacity(0);
+            });
             
             scope.$on('registerChild', function(evt, data){
               if(evt.targetScope.$id !== evt.currentScope.$id){
