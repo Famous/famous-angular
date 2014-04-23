@@ -145,7 +145,7 @@ angular.module('famous.angular')
                     //TODO:  if needed:  make this more efficient.  This is a hot-running
                     //       function and we should be able to optimize.
                     var transformFunction = function(){
-                      var x = timeline();
+                      var x = timeline() || 0;
                       if(Math.random() < .01)
                         console.log('x', timeline(1));
                       var relevantIndex = 0;
