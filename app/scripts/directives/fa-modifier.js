@@ -22,6 +22,7 @@ angular.module('famous.angular')
             var Transform = famous['famous/core/Transform']
 
             isolate.node = new RenderNode();
+            isolate.index = scope.$eval(attrs.faIndex);
 
             var get = function(x) {
               if (x instanceof Function) return x();
@@ -95,8 +96,6 @@ angular.module('famous.angular')
 
             var modifierNode = isolate.node.add(isolate.modifier);
 
-            window.s = scope;
-
             scope.$on('$destroy', function() {
               console.log('destruction!!')
               isolate.modifier.setOpacity(0);
@@ -122,6 +121,7 @@ angular.module('famous.angular')
 
             scope.$emit('registerChild', {
               id: scope.$id,
+              index: isolate.index,
               view: isolate.node,
               mod: function() { return {origin: ""}; }
             });

@@ -33,6 +33,9 @@ angular.module('famous.angular')
             }
 
             var updateScrollview = function(){
+              _children.sort(function(a, b){
+                return a.index < b.index;
+              });
               isolate.view.sequenceFrom(_.map(_children, function(c){
                 return c.view
               }));

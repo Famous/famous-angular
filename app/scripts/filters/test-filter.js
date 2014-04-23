@@ -11,7 +11,6 @@ angular.module('integrationApp')
         if(input[i][field].toLowerCase().indexOf(testFilterService.getField().toLowerCase()) > -1)
           ret.push(input[i])
 
-      
       return ret;
     };
   });
