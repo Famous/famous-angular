@@ -1,38 +1,42 @@
 <fa-app fa-controller="FaTimbreCtrl" fa-pipe-to="enginePipe">
-  
-  <fa-modifier fa-translate="[0,44,0]" id="tester">
-    <fa-scroll-view fa-pipe-from="enginePipe" id="scrollView">
-      <fa-modifier ng-repeat="e in events  | testFilter:'name' track by e.rand" fa-translate="[0,0,0]" fa-size="[320,80,1]" fa-index="$index" >
-          <fa-modifier id="test" testid="test" class="line" fa-rotate-z="handleZ(e)" fa-translate="[0,25,0]" fa-origin="[e.rand,0, 0]" fa-size="[1,1, 1]" >
-            <fa-surface
-              fa-size="[getLineWidth(e),5, 1]"
-              class="tLine"
-              >
-            </fa-surface>
-          </fa-modifier>
-          <fa-modifier id="testtest" fa-origin="[e.rand,0]" >
-            <fa-surface ng-click="setEvent(e)" fa-size="[1,1,1]">
-              <div class="tItem">{{e.name}}</div>
-            </fa-surface>
-          </fa-modifier>
-      </fa-modifier>
-    </fa-scroll-view>
+
+  <fa-modifier id="viewA">
+   <!-- header -->
+    <fa-view >
+      <div ng-include="'views/_header.html'">hi</div>
+    </fa-view>
+    <!-- end header -->
+    
+    <fa-modifier fa-translate="[0,44,0]" id="tester">
+      <fa-scroll-view fa-pipe-from="enginePipe" id="scrollView">
+        <fa-modifier ng-repeat="e in events  | testFilter:'name' track by e.rand" fa-translate="[0,0,0]" fa-size="[320,80,1]" fa-index="$index" >
+            <fa-modifier id="test" testid="test" class="line" fa-rotate-z="handleZ(e)" fa-translate="[0,25,0]" fa-origin="[e.rand,0, 0]" fa-size="[1,1, 1]" >
+              <fa-surface
+                fa-size="[getLineWidth(e),5, 1]"
+                class="tLine"
+                >
+              </fa-surface>
+            </fa-modifier>
+            <fa-modifier id="testtest" fa-origin="[e.rand,0]" >
+              <fa-surface ng-click="setEvent(e)" fa-size="[1,1,1]">
+                <div class="tItem">{{e.name}}</div>
+              </fa-surface>
+            </fa-modifier>
+        </fa-modifier>
+      </fa-scroll-view>
+    </fa-modifier>
   </fa-modifier>
 
-  <!-- header -->
-  <fa-view >
-    <div ng-include="'views/_header.html'">hi</div>
-  </fa-view>
-  <!-- end header -->
 
-    <fa-animation id="animateTest" duration="1000" autoplay="true">
-    <animate  targetModSelector=".line"
-              field="scale"
-              startValue="[.5,1,1]"
-              endValue="[1,1,1]"
+
+    <fa-animation duration="1000">
+      <animate  targetModSelector="#viewA"
+              field="translateX"
+              startValue="0"
+              endValue="320"
               curve="outBounce"
               timelineLowerBound="0"
               timelineUpperBound="1" />
-            </fa-animation>
+    </fa-animation>
 
 </fa-app>
