@@ -6,7 +6,8 @@ angular.module('famous.angular')
   .directive('faController', function ($controller) {
     return {
       restrict: 'A',
-      scope: true,
+      scope: false,
+      priority: 1001,
       compile: function(tElement, tAttrs, transclude) {
         return {
           pre: function(scope, element, attrs){
@@ -18,10 +19,10 @@ angular.module('famous.angular')
             //  elements by their identifiers using HTML selectors
             //  (this may be a good way to pass references from
             //  the views/DOM to the controllers)
-            if(attrs.faController)
-              $controller(attrs.faController, {'$scope': scope})
           },
           post: function(scope, element, attrs){
+            if(attrs.faController)
+              $controller(attrs.faController, {'$scope': scope})
           }
         }
       }

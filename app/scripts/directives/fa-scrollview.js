@@ -66,6 +66,12 @@ angular.module('famous.angular')
             transclude(scope, function(clone) {
               element.find('div').append(clone);
             });
+
+            //TODO:  support data-bound ids (supports only strings for now)
+            //Possibly make "fa-id" for databound ids?
+            //Register this modifier by ID in bag
+            var id = attrs.id;
+            famous.bag.register(id, isolate.view)
             scope.$emit('registerChild', {view: isolate.view, mod: isolate.modifier});
           }
         };

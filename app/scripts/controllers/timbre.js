@@ -19,8 +19,6 @@ angular.module('integrationApp')
       return (Math.random() * (.6-.1) + .1);
     }
 
-
-
   	var elements = 70;
   	var colors = [
       '#869B40',
@@ -44,8 +42,6 @@ angular.module('integrationApp')
         bgColor: _.sample(colors),
       }
     });
-
-    console.log('events', $scope.events);
 
     $scope.setEvent = function(e){
       console.log('set event', e)

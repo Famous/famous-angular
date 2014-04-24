@@ -55,7 +55,6 @@ angular.module('famous.angular')
             scope.context.add(scope.view);
 
             scope.$on('registerChild', function(evt, data){
-              console.log("app registered child", data);
               scope.view.add(data.view);
               evt.stopPropagation();
             })

@@ -51,6 +51,23 @@ require(requirements, function(/*args*/){
         _modules[key] = module;
       };
 
+      //bag for holding references to declared elements,
+      //accessible by those elements' ids
+      //TODO:  break out into separate service?
+      var _bag = {};
+      _modules.bag = {
+        _contents: _bag,
+        register: function(id, ref){
+          if(_bag[id])
+            _bag[id].push(ref)
+          else
+            _bag[id] = [ref];
+        },
+        get: function(id){
+          return _bag[id];
+        }
+      }
+
       // Method that gets called when the 'famous'
       // service is injected in the normal course of the app
       this.$get = function () {
