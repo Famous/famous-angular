@@ -1,8 +1,8 @@
 <fa-app fa-pipe-to="enginePipe">
   
-  <fa-modifier fa-translate="[0,44,0]">
+  <fa-modifier fa-translate="[0,44,0]" id="tester">
     <fa-scroll-view fa-pipe-from="enginePipe" id="scrollView">
-      <fa-modifier ng-repeat="e in events  | testFilter:'name' track by e.rand" fa-translate="[0,0,0]" fa-size="[320,80,1]" fa-index="$index" >
+      <fa-modifier class="tester" ng-repeat="e in events  | testFilter:'name' track by e.rand" fa-translate="[0,0,0]" fa-size="[320,80,1]" fa-index="$index" >
           <fa-modifier fa-translate="[getLineX(e),20,0]" fa-origin="[e.rand,0, 0]" fa-size="[1,1, 1]" >
             <fa-surface
               fa-size="[getLineWidth(e),5, 1]"
@@ -24,5 +24,15 @@
     <div ng-include="'views/_header.html'">hi</div>
   </fa-view>
   <!-- end header -->
+
+    <fa-animation duration="2000" autoplay="true">
+    <animate  targetModSelector=".tester"
+              field="scale"
+              startValue="[.5,1,1]"
+              endValue="[1,1,1]"
+              curve="inQuad"
+              timelineLowerBound="0"
+              timelineUpperBound="1" />
+            </fa-animation>
 
 </fa-app>
