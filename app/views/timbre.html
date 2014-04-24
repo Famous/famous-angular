@@ -2,18 +2,19 @@
   
   <fa-modifier fa-translate="[0,44,0]">
     <fa-scroll-view fa-pipe-from="enginePipe" id="scrollView">
-      <fa-modifier ng-repeat="e in events  | testFilter:'name' track by e.rand" fa-translate="[0,0,0]" fa-size="[undefined,80]" fa-index="$index" >
-        <fa-modifier fa-translate="[0,0,0]" fa-origin="[rand(), 0]"  fa-size="[160,40]">
-          <fa-modifier fa-translate="[0,20]" fa-origin="[{{$even ? 1 : -1}},0]">
+      <fa-modifier ng-repeat="e in events  | testFilter:'name' track by e.rand" fa-translate="[0,0,0]" fa-size="[320,80]" fa-index="$index" >
+          <fa-modifier fa-translate="[getLineX(e),20]" fa-origin="[e.rand,0]" fa-size="[1,1]" fa-scale="[.5,1,1]">
             <fa-surface
-              fa-size="[{{320-e.name.length*8}},10]"
-              class="tLine">
+              fa-size="[getLineWidth(e),5]"
+              class="tLine"
+              >
             </fa-surface>
           </fa-modifier>
-          <fa-surface ng-click="setEvent(e)">
-            <div class="tItem">{{e.name}}</div>
-          </fa-surface>
-        </fa-modifier>
+          <fa-modifier fa-origin="[e.rand,0]" >
+            <fa-surface ng-click="setEvent(e)" fa-size="[1,1]">
+              <div class="tItem">{{e.rand.toFixed(1)}}</div>
+            </fa-surface>
+          </fa-modifier>
       </fa-modifier>
     </fa-scroll-view>
   </fa-modifier>

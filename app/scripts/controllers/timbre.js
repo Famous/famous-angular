@@ -16,7 +16,7 @@ angular.module('integrationApp')
       });
 
     $scope.rand = function(){
-      return Math.random() * 1;
+      return (Math.random() * (.6-.1) + .1);
     }
 
 
@@ -49,6 +49,15 @@ angular.module('integrationApp')
 
     $scope.setEvent = function(e){
       $scope.activeEvent = e;
+      alert(e.name)
+    };
+
+    $scope.getLineX = function(e){
+      return e.rand < .45 ? -e.rand*320 : 0;
+    }
+
+    $scope.getLineWidth = function(e){
+      return e.rand > .45 ? 320-(e.rand*320) : e.rand*320;
     }
   });
 
