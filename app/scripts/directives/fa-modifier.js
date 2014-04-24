@@ -48,13 +48,8 @@ angular.module('famous.angular')
               }
 
               if (attrs.faScale){
-                transforms.push(
-                  Transform.scale(
-                    get(
-                      scope.$eval(attrs.faScale)
-                    )
-                  )
-                );
+                var values = scope.$eval(attrs.faScale).map(get)
+                transforms.push(Transform.scale.apply(this, values));
               }
 
               if (attrs.faRotateY) {
@@ -82,6 +77,8 @@ angular.module('famous.angular')
                   Transform.skew(0, 0, scope.$eval(attrs.faSkew))
                 );
               }
+
+
 
               if(!transforms.length)
                 return undefined;
