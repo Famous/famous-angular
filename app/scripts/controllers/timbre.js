@@ -34,7 +34,7 @@ angular.module('integrationApp')
       'music',
       'video',
       'javascript',
-      'san francisco',
+      'SF',
       'web'
     ];
     $scope.events = _.map(_.range(elements), function(i){
