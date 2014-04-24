@@ -47,6 +47,16 @@ angular.module('famous.angular')
                 );
               }
 
+              if (attrs.faScale){
+                transforms.push(
+                  Transform.scale(
+                    get(
+                      scope.$eval(attrs.faScale)
+                    )
+                  )
+                );
+              }
+
               if (attrs.faRotateY) {
                 transforms.push(
                   Transform.rotateY(

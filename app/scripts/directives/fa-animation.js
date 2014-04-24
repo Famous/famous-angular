@@ -5,13 +5,33 @@ angular.module('famous.angular')
       scope: true,
       compile: function(tElement, tAttrs, transclude){
         var Transform = famous['famous/core/Transform'];
+        var Transitionable = famous['famous/transitions/Transitionable'];
         var Easing = famous['famous/transitions/Easing'];
-        console.log(Easing)
         return {
           pre: function(scope, element, attrs){
             var timeline = scope.$eval(attrs.timeline)
+            var _trans = new Transitionable(0);
+
+            scope.play = function(){
+              var transition = {
+                duration: scope.$eval(attrs.duration),
+                curve: scope.$eval(attrs.curve) || 'linear'
+              };
+              _trans.set(1, transition);
+              //TODO:  handle $animate with a callback
+              //       support custom callbacks?
+            }
+            scope.reset = function(){
+              _trans.set(0);
+            }
+
+            if(timeline === undefined){
+              timeline = _trans.get.bind(_trans);
+              if(attrs.autoplay)
+                scope.play();
+            }
             if(!timeline instanceof Function)
-              throw 'timeline must be a reference to a function';
+              throw 'timeline must be a reference to a function or duration must be provided';
 
             var animates = element.find('animate');
             var declarations = {};
@@ -122,7 +142,7 @@ angular.module('famous.angular')
                     //TODO:  if needed:  make this more efficient.  This is a hot-running
                     //       function and we should be able to optimize.
                     var transformFunction = function(){
-                      var x = timeline();
+                      var x = timeline() || 0;
                       var relevantIndex = 0;
                       var relevantSegment = segments[relevantIndex];
 

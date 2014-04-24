@@ -97,16 +97,14 @@
             <br>
             Two-way:  <input ng-model="twoWayTest" />
             <br>
-            {{twoWayTest}} {{stuff.length}}
-
-            <div class="wowmang" ng-repeat="a in stuff" ng-click="alert()">{{a}}</div>
+            {{twoWayTest}}
           </fa-surface>
         </fa-modifier>
       </fa-modifier>
-    </fa-modifier>
+    </fa-modifier
   </fa-view>
 
-  <fa-animation timeline="functionThatReturnsATimelineValueBetween0And1">
+  <fa-animation duration="2000" autoplay="true">
     <animate  targetModSelector="#topMod"
               field="rotateX"
               startValue="3.1415"
