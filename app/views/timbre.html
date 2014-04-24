@@ -28,12 +28,11 @@
   </fa-modifier>
 
 
-
-    <fa-animation duration="1000">
-      <animate  targetModSelector="#viewA"
-              field="translateX"
-              startValue="0"
-              endValue="320"
+    <fa-animation id="animateTest" duration="1000" autoplay="true">
+    <animate  targetModSelector=".line"
+              field="scale"
+              startValue="[.5,1,1]"
+              endValue="[1,1,1]"
               curve="outBounce"
               timelineLowerBound="0"
               timelineUpperBound="1" />

@@ -2,7 +2,7 @@ angular.module('famous.angular')
   .directive('faAnimation', function (famous) {
     return {
       restrict: 'EA',
-      scope: true,
+      scope: {},
       compile: function(tElement, tAttrs, transclude){
         var Transform = famous['famous/core/Transform'];
         var Transitionable = famous['famous/transitions/Transitionable'];
@@ -68,6 +68,7 @@ angular.module('famous.angular')
                     _.each(modElements, function(modElement){
                       var modScope = angular.element(modElement).scope();
                       var modifier = modScope.isolate[modScope.$id].modifier;
+                      if(modifier.transformFrom )
                       var getTransform = modScope.isolate[modScope.$id].getTransform;
 
                       //TODO:  won't need to special-case curve type 'linear'

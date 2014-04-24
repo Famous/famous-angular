@@ -24,6 +24,8 @@
     <!-- endbuild -->
   </head>
   <body >
+
+
    <object id="tuio" type="application/x-tuio" style="width: 0px; height: 0px;">
   </object>
     <!--[if lt IE 7]>
@@ -46,6 +48,23 @@
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 
 
+
+  <script>
+    //shim angular module to support 'presenter'
+    //TODO:  move into library
+    (function () {
+      var originalModule = angular.module;
+      angular.module = function () {
+        var module = originalModule.apply(this, arguments);
+        module.presenter = function () {
+          module.controller.apply(this,arguments)
+        };
+        return module;
+      }
+    }());
+  </script>
+
+
     <!--SCRIPTS-->
     <script src="scripts/app.js"></script>
     <script src="scripts/controllers/main.js"></script>
@@ -62,8 +81,7 @@
     <script src="scripts/controllers/fa-timbre.js"></script>
     <script src="scripts/services/fakedata.js"></script>
     <script src="scripts/services/test-filter-service.js"></script>
-    
-    
+    <script src="scripts/presenters/timbre.js"></script>
 
     <!--SCRIPTS END-->
         
