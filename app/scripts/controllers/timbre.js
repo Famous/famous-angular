@@ -54,11 +54,15 @@ angular.module('integrationApp')
     };
 
     $scope.getLineX = function(e){
-      return e.rand < .45 ? -e.rand*320 : 0;
+      return e.rand < .45 ? 0 : 0;
     }
 
     $scope.getLineWidth = function(e){
       return e.rand > .45 ? 320-(e.rand*320) : e.rand*320;
+    }
+
+    $scope.handleZ = function(e){
+      return e.rand < .45 ? Math.PI : 0;
     }
   });
 
