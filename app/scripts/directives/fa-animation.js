@@ -65,10 +65,11 @@ angular.module('famous.angular')
                     var modElements = element.parent().find(
                       animate.attributes['targetmodselector'].value
                     );
+                    
+                    
                     _.each(modElements, function(modElement){
                       var modScope = angular.element(modElement).scope();
                       var modifier = modScope.isolate[modScope.$id].modifier;
-                      if(modifier.transformFrom )
                       var getTransform = modScope.isolate[modScope.$id].getTransform;
 
                       //TODO:  won't need to special-case curve type 'linear'

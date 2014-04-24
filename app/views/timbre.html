@@ -1,10 +1,8 @@
-<fa-app fa-controller="FaTimbreCtrl" fa-pipe-to="enginePipe">
+<fa-app fa-presenter="TimbrePres" fa-pipe-to="enginePipe">
 
   <fa-modifier id="viewA">
-   <!-- header -->
-    <fa-view >
-      <div ng-include="'views/_header.html'">hi</div>
-    </fa-view>
+    <!-- header -->
+    <div ng-include="'views/_header.html'">hi</div>
     <!-- end header -->
     
     <fa-modifier fa-translate="[0,44,0]" id="tester">
@@ -28,14 +26,14 @@
   </fa-modifier>
 
 
-    <fa-animation id="animateTest" duration="1000" autoplay="true">
-    <animate  targetModSelector=".line"
-              field="scale"
-              startValue="[.5,1,1]"
-              endValue="[1,1,1]"
-              curve="outBounce"
-              timelineLowerBound="0"
-              timelineUpperBound="1" />
-    </fa-animation>
+  <fa-animation id="animateTest" duration="1000" autoplay="true">
+  <animate  targetModSelector="#viewA"
+            field="scale"
+            startValue="[.5,1,1]"
+            endValue="[1,1,1]"
+            curve="outBounce"
+            timelineLowerBound="0"
+            timelineUpperBound="1" />
+  </fa-animation>
 
 </fa-app>
