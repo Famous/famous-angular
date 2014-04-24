@@ -29,7 +29,7 @@ angular.module('famous.angular')
               return x.get ? x.get() : x;
             };
 
-            var getTransform = function() {
+            isolate.getTransform = function() {
               //var transforms = [Transform.translate(0, 0, 0)];
               var transforms = [];
               if (attrs.faTranslate) {
@@ -95,7 +95,7 @@ angular.module('famous.angular')
             }
 
             isolate.modifier = new Modifier({
-              transform: getTransform,
+              transform: isolate.getTransform,
               size: scope.$eval(attrs.faSize),
               opacity: scope.$eval(attrs.faOpacity),
               origin: scope.$eval(attrs.faOrigin)

@@ -53,6 +53,7 @@ angular.module('famous.angular')
                   _.each(modElements, function(modElement){
                     var modScope = angular.element(modElement).scope();
                     var modifier = modScope.isolate[modScope.$id].modifier;
+                    var getTransform = modScope.isolate[modScope.$id].getTransform;
 
                     //TODO:  won't need to special-case curve type 'linear'
                     //       once/if it exists in Easing.js
@@ -86,6 +87,7 @@ angular.module('famous.angular')
 
                       //Keep arrays of all declarations so that transformFunctions
                       //can handle all of the appropriate segments
+
                       var modDecs =
                         declarations[modScope.$id] =
                         declarations[modScope.$id] || {};
@@ -217,7 +219,7 @@ angular.module('famous.angular')
 
                         modifier.transformFrom(function(){
 
-                          var mult = [];
+                          var mult = getTransform ? [getTransform()] : [];
                           for(var j = 0; j < transformComponents.length; j++){
                             ((function(){
                               var transVal = transformComponents[j].fn();
@@ -244,7 +246,7 @@ angular.module('famous.angular')
               
             }
       }, 1)
-            
+
           }
 
         }
