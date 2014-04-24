@@ -63,7 +63,13 @@ require(requirements, function(/*args*/){
           else
             _bag[id] = [ref];
         },
-        get: function(id){
+        first: function(id){
+          var arr = _bag[id];
+          if(arr)
+            return arr[0];
+          return undefined;
+        },
+        all: function(id){
           return _bag[id];
         }
       }

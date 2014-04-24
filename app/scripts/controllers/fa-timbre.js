@@ -7,8 +7,7 @@ angular.module('integrationApp')
 
 
     setInterval(function(){
-      window.f = famous
-      famous.bag.get('animateTest')[0].replay();
+      famous.bag.first('animateTest').replay();
     }, 2000);
-    
+
   });
