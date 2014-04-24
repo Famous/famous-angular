@@ -8,6 +8,7 @@ angular.module('integrationApp')
   	var GenericSync = famous['famous/inputs/GenericSync'];
     var Transitionable = famous['famous/transitions/Transitionable'];
     $scope.enginePipe = new EventHandler();
+    $scope.enginePipe2 = new EventHandler();
     $scope.search = {name:''}
     $scope.events = angular.copy(Fakedata.events);
     console.log('events', $scope.events);
@@ -43,19 +44,24 @@ angular.module('integrationApp')
       return e.rand < .45 ? Math.PI : 0;
     }
 
-    var tran = new Transitionable(0);
-
+    $scope.tran = new Transitionable(0);
     $scope.sync = new GenericSync(function(){
-      return tran.get();
+      return $scope.tran.get();
     }, {direction: GenericSync.DIRECTION_X});
 
     var SCROLL_SENSITIVITY = 1200; //inverse
     $scope.sync.on('update', function(data){
+      console.log('update', data)
+      console.log('update tran', $scope.tran.get())
       var newVal = Math.max(0,
-        Math.min(1, data.delta / SCROLL_SENSITIVITY + tran.get()));
-      tran.set(newVal);
+        Math.min(1, data.delta / SCROLL_SENSITIVITY + $scope.tran.get()));
+      $scope.tran.set(newVal);
     });
     $scope.enginePipe.pipe($scope.sync);
+
+    $scope.horizontalTimeline = function(){
+      return $scope.tran.get();
+    };
 
 
 

@@ -2,7 +2,7 @@ angular.module('famous.angular')
   .directive('faAnimation', function (famous) {
     return {
       restrict: 'EA',
-      scope: {},
+      scope: true,
       compile: function(tElement, tAttrs, transclude){
         var Transform = famous['famous/core/Transform'];
         var Transitionable = famous['famous/transitions/Transitionable'];
@@ -17,6 +17,7 @@ angular.module('famous.angular')
             var isolate = scope.isolate[scope.$id];
             setTimeout(function(){
               var timeline = scope.$eval(attrs.timeline)
+              console.log('timeline', timeline)
               isolate._trans = new Transitionable(0);
 
               isolate.play = function(){

@@ -6,7 +6,7 @@ angular.module('integrationApp')
     console.log('bag', famous.bag._contents); //has access to items created in DOM
 
     setInterval(function(){
-      famous.bag.first('animateTest').replay();
+      // famous.bag.first('animateTest').replay();
     }, 2000);
 
   });
