@@ -12,7 +12,7 @@ angular.module('famous.angular')
       scope: true,
       compile: function(tElement, tAttrs, transclude){
         return {
-          pre: function(scope, element, attrs){
+          post: function(scope, element, attrs){
             scope.isolate = scope.isolate || {};
             scope.isolate[scope.$id] = scope.isolate[scope.$id] || {};
             var isolate = scope.isolate[scope.$id];
@@ -118,8 +118,7 @@ angular.module('famous.angular')
 
             if(attrs.faTranslate){
             }
-          },
-          post: function(scope, element, attrs){
+            
             var isolate = scope.isolate[scope.$id];
 
             transclude(scope, function(clone) {

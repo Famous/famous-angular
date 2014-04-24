@@ -8,7 +8,8 @@ angular.module('famous.angular')
         var Transitionable = famous['famous/transitions/Transitionable'];
         var Easing = famous['famous/transitions/Easing'];
         return {
-          pre: function(scope, element, attrs){
+          post: function(scope, element, attrs){
+            setTimeout(function(){
             var timeline = scope.$eval(attrs.timeline)
             var _trans = new Transitionable(0);
 
@@ -48,7 +49,7 @@ angular.module('famous.angular')
                   var modElements = element.parent().find(
                     animate.attributes['targetmodselector'].value
                   );
-
+                  console.log('modElements', modElements)
                   _.each(modElements, function(modElement){
                     var modScope = angular.element(modElement).scope();
                     var modifier = modScope.isolate[modScope.$id].modifier;
@@ -242,11 +243,12 @@ angular.module('famous.angular')
               })();
               
             }
-          },
-          post: function(scope, element, attrs){
-
+      }, 1)
+            
           }
+
         }
+
       }
     };
   });
