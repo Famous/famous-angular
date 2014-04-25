@@ -7,6 +7,7 @@ angular.module('integrationApp')
   	var EventHandler = famous['famous/core/EventHandler'];
   	var GenericSync = famous['famous/inputs/GenericSync'];
     var Transitionable = famous['famous/transitions/Transitionable'];
+    var Easing = famous['famous/transitions/Easing'];
     $scope.enginePipe = new EventHandler();
     $scope.enginePipe2 = new EventHandler();
     $scope.search = {name:''}
@@ -51,17 +52,46 @@ angular.module('integrationApp')
 
     var SCROLL_SENSITIVITY = 1200; //inverse
     $scope.sync.on('update', function(data){
-      console.log('update', data)
-      console.log('update tran', $scope.tran.get())
       var newVal = Math.max(0,
         Math.min(1, data.delta / SCROLL_SENSITIVITY + $scope.tran.get()));
+
+      
       $scope.tran.set(newVal);
     });
     $scope.enginePipe.pipe($scope.sync);
-
     $scope.horizontalTimeline = function(){
       return $scope.tran.get();
     };
+
+    var TOUCHING = null;
+    var MODE = null;
+
+    $scope.enginePipe.on("touchstart", function (e){
+      TOUCHING = [e.touches[0].pageX,e.touches[0].pageY];
+    });
+    $scope.enginePipe.on("touchmove", function (e){
+      var xd = Math.abs(TOUCHING[0] - e.touches[0].pageX);
+      var yd = Math.abs(TOUCHING[1] - e.touches[0].pageY);
+      if (!MODE){
+        MODE = xd > yd ? 'X' : 'Y';
+      }
+      console.log(MODE)
+    });
+    $scope.enginePipe.on("touchend", function(){
+      TOUCHING = false;
+      var x = $scope.tran.get() > 0.4 ? 1 : 0;
+      if (MODE === "X"){
+        $scope.tran.set(x, {duration:"500", curve:Easing.outBounce});
+      } else {
+        $scope.tran.set(0);
+      }
+      MODE = null;
+    })
+
+    $scope.viewAX = function(){
+      if (MODE === "Y") {return 0;}
+      return $scope.tran.get()*320;
+    }
 
 
 
