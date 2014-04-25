@@ -74,6 +74,9 @@ angular.module('integrationApp')
       var yd = Math.abs(TOUCHING[1] - e.touches[0].pageY);
       if (!MODE){
         MODE = xd > yd ? 'X' : 'Y';
+        if(MODE === 'Y'){
+          $scope.fireLinesAnimation();
+        }
       }
       console.log(MODE)
     });

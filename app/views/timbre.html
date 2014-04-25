@@ -26,13 +26,20 @@
   </fa-modifier>
 
   <fa-animation id="animateTest" duration="1000" >
-  <animate  targetModSelector=".line"
-            field="scale"
-            startValue="[0,0,1]"
-            endValue="[1,0,1]"
-            curve="outBounce"
-            timelineLowerBound="0"
-            timelineUpperBound="1" />
+    <animate  targetModSelector=".line"
+              field="scale"
+              startValue="[1,1,1]"
+              endValue="[0,1,1]"
+              curve="outBounce"
+              timelineLowerBound="0"
+              timelineUpperBound=".01" />
+    <animate  targetModSelector=".line"
+              field="scale"
+              startValue="[0,1,1]"
+              endValue="[1,1,1]"
+              curve="outBounce"
+              timelineLowerBound=".01"
+              timelineUpperBound="1" />
   </fa-animation>
 
 </fa-app>
