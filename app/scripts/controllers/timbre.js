@@ -75,7 +75,7 @@ angular.module('integrationApp')
       if (!MODE){
         MODE = xd > yd ? 'X' : 'Y';
         if(MODE === 'Y'){
-          _lineTrans.set(1, {duration: 800, curve: Easing.outBounce});
+          _lineTrans.set(1, {duration: 300, curve: 'easeOut'});
         }
       }
     });
