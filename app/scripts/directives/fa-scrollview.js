@@ -24,9 +24,8 @@ angular.module('famous.angular')
 
             var _children = [];
 
-            isolate.view = new ScrollView({
-              itemSpacing: 10
-            });
+            var options = scope.$eval(attrs.faOptions) || {};
+            isolate.view = new ScrollView(options);
 
             if (attrs.faPipeFrom) {
               (scope.$eval(attrs.faPipeFrom)).pipe(isolate.view);
