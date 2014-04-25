@@ -1,11 +1,20 @@
 <fa-app fa-presenter="TimbrePres" fa-pipe-to="enginePipe">
 
-  <fa-modifier id="viewA" fa-translate="[viewAX, 0 ,1]">
+  <fa-modifier id="viewB" fa-translate="[0,0,-15]" fa-rotate-z="-.25">
+    <fa-modifier fa-size="[undefined, 50]" ng-repeat="strip in strips track by strip.id"
+      fa-translate="[-75, $index * 55 + 120,0]">
+      <fa-surface class="strip">{{strip.label}}</fa-surface>
+    </fa-modifier>
+    
+  </fa-modifier>
+
+  <fa-modifier id="viewA" fa-translate="[viewAX, 0 ,10]">
     <!-- header -->
     <div ng-include="'views/_header.html'">hi</div>
     <!-- end header -->
     
     <fa-modifier fa-translate="[0,44,0]" id="tester">
+      <fa-surface class="whitePanel"></fa-surface>
       <fa-scroll-view fa-pipe-from="enginePipe"  id="scrollView" >
         <fa-modifier ng-repeat="e in events  | testFilter:'name' track by e.rand" fa-translate="[0,0,0]" fa-size="[320,80,1]" fa-index="$index" >
             <fa-modifier id="test" testid="test" class="line" fa-rotate-z="handleZ(e)" fa-translate="[0,25,0]" fa-origin="[e.rand,0, 0]" fa-size="[1,1, 1]" >

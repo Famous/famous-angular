@@ -16,6 +16,20 @@ angular.module('integrationApp')
 
     console.log('normal controller bag', famous.bag._contents); //has access to items created in DOM
 
+    $scope.strips = [
+      {
+        id: 1,
+        label: "Strip 1"
+      },
+      {
+        id: 2,
+        label: "Strip 2"
+      },
+      {
+        id: 3,
+        label: "Strip 3"
+      }
+    ]
 
     $scope.$watch(function(){return $scope.search.name},
       function(){

@@ -18,3 +18,14 @@
 	background: black;
 	z-index: -1;
 }
+
+.strip {
+	background-color: black;
+	color: white;
+	padding-left: 50px;
+
+}
+
+.whitePanel {
+	background-color: #FFFFFF;
+}
