@@ -79,6 +79,7 @@ angular.module('integrationApp')
 
     var TOUCHING = null;
     var MODE = null;
+    var MIN_X_THRESH = 1;
 
     $scope.enginePipe.on("touchstart", function (e){
       TOUCHING = [e.touches[0].pageX,e.touches[0].pageY];
@@ -87,7 +88,7 @@ angular.module('integrationApp')
       var xd = Math.abs(TOUCHING[0] - e.touches[0].pageX);
       var yd = Math.abs(TOUCHING[1] - e.touches[0].pageY);
       if (!MODE){
-        MODE = xd > yd ? 'X' : 'Y';
+        MODE = xd > yd && xd > MIN_X_THRESH ? 'X' : 'Y';
         if(MODE === 'Y'){
           _lineTrans.set(1, {duration: 300, curve: 'easeOut'});
         }
