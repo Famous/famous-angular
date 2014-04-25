@@ -7,16 +7,13 @@
 <div fa-app ng-controller="RepeatCtrl" >
 
   <fa-modifier fa-size="[200, 100]"
-               fa-origin="[0.3, 0.2]">
-    <fa-surface fa-size="[undefined, 30]">
-      <div>
-        <h1>Modifiers</h1>
-      </div>
-    </fa-surfac>
+               fa-origin="[0.5, 0.1]">
     <fa-modifier 
+      class="fade-out"
       fa-size="[undefined, 30]"
       ng-repeat="x in modifierList"
-      fa-translate="[0, ($index * 35) + 50, 0]">
+      ng-animate="{leave: 'fade-out'}"
+      fa-translate="[0, (x * 35) + 50, 0]">
       <fa-surface fa-size="[undefined, undefined]" fa-background-color="'#97DED6'" fa-click="remove(modifierList, $index)">
         <div>
           {{x}}

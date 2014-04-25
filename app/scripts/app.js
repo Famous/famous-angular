@@ -1,4 +1,4 @@
-angular.module('integrationApp',['famous.angular', 'ui.router'])
+angular.module('integrationApp',['famous.angular', 'ui.router', 'ngAnimate'])
   .config(function($stateProvider, $urlRouterProvider){
 
     $urlRouterProvider.otherwise("/");
