@@ -50,7 +50,7 @@ angular.module('integrationApp')
       return $scope.tran.get();
     }, {direction: GenericSync.DIRECTION_X});
 
-    var SCROLL_SENSITIVITY = 1200; //inverse
+    var SCROLL_SENSITIVITY = 500; //inverse
     $scope.sync.on('update', function(data){
       var newVal = Math.max(0,
         Math.min(1, data.delta / SCROLL_SENSITIVITY + $scope.tran.get()));
@@ -81,7 +81,7 @@ angular.module('integrationApp')
     });
     $scope.enginePipe.on("touchend", function(){
       TOUCHING = false;
-      var x = $scope.tran.get() > 0.4 ? 1 : 0;
+      var x = $scope.tran.get() > 0.5 ? 1 : 0;
       if (MODE === "X"){
         $scope.tran.set(x, {duration:"500", curve:Easing.outBounce});
       } else {

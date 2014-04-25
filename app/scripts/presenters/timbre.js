@@ -8,6 +8,7 @@ angular.module('integrationApp')
 
     $scope.fireLinesAnimation = function(){
       famous.bag.first('animateTest').replay();
+      console.log(window.zz = famous.bag.first('animateTest'))
     }
 
   });
