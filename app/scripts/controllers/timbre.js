@@ -81,7 +81,7 @@ angular.module('integrationApp')
     });
     $scope.enginePipe.on("touchend", function(){
       TOUCHING = false;
-      var x = $scope.tran.get() > 0.5 ? 1 : 0;
+      var x = $scope.tran.get() > 0.4 ? 0.85 : 0;
       if (MODE === "X"){
         $scope.tran.set(x, {duration:"500", curve:Easing.outBounce});
       } else {
