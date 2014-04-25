@@ -75,7 +75,7 @@ angular.module('integrationApp')
       if (!MODE){
         MODE = xd > yd ? 'X' : 'Y';
         if(MODE === 'Y'){
-          $scope.fireLinesAnimation();
+          _lineTrans.set(1, {duration: 500, curve: Easing.outBounce});
         }
       }
     });
@@ -87,12 +87,18 @@ angular.module('integrationApp')
       } else {
         $scope.tran.set(0);
       }
+      _lineTrans.set(0, {duration: 500, curve: Easing.outBounce});
       MODE = null;
     })
 
     $scope.viewAX = function(){
       if (MODE === "Y") {return 0;}
       return $scope.tran.get()*320;
+    }
+
+    var _lineTrans = new Transitionable(0);
+    $scope.linesTimeline = function(){
+      return _lineTrans.get();
     }
 
 
