@@ -78,7 +78,6 @@ angular.module('integrationApp')
           $scope.fireLinesAnimation();
         }
       }
-      console.log(MODE)
     });
     $scope.enginePipe.on("touchend", function(){
       TOUCHING = false;
