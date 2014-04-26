@@ -12,6 +12,7 @@
     "requirejs": "~2.1.11",
     "angular-ui-router": "~0.2.10",
     "underscore": "~1.6.0",
-    "jquery": "~2.1.0"
+    "jquery": "~2.1.0",
+    "angular-animate": "~1.2.16"
   }
 }
