@@ -132,8 +132,7 @@ angular.module('famous.angular')
             scope.$emit('registerChild', {
               id: scope.$id,
               index: isolate.index,
-              view: isolate.node,
-              mod: function() { return {origin: ""}; }
+              view: isolate.node
             });
           }
         }

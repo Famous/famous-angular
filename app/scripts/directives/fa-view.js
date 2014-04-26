@@ -17,7 +17,9 @@ angular.module('famous.angular')
             
             var View = famous['famous/core/View'];
             var Engine = famous['famous/core/Engine'];
-            var Transform = famous['famous/core/Transform']
+            var Transform = famous['famous/core/Transform'];
+
+            isolate.index = scope.$eval(attrs.faIndex);
 
             function FaView(){
               View.apply(this, arguments);
@@ -53,17 +55,17 @@ angular.module('famous.angular')
             };
 
             //TODO:  determine if readyToRender flag is necessary anymore
-            FaView.prototype.render = function() {
-              if(!isolate.readyToRender)
-                return [];
-              return isolate.children.map(function(data){
-                return {
-                  // origin: data.mod().origin,
-                  // transform: getTransform(data),
-                  // target: data.view.render()
-                }
-              });
-            };
+            // FaView.prototype.render = function() {
+            //   if(!isolate.readyToRender)
+            //     return [];
+            //   return isolate.children.map(function(data){
+            //     return {
+            //       // origin: data.mod().origin,
+            //       // transform: getTransform(data),
+            //       // target: data.view.render()
+            //     }
+            //   });
+            // };
 
             isolate.view = new FaView({
               size: scope.$eval(attrs.faSize) || [undefined, undefined]
@@ -77,14 +79,6 @@ angular.module('famous.angular')
               }
             })
 
-            isolate._modifier = {};
-            isolate.modifier = function(){
-              return isolate._modifier;
-            };
-
-            scope.$on('registerModifier', function(evt, data){
-              isolate._modifier = data;
-            });
           },
           post: function(scope, element, attrs){
             var isolate = scope.isolate[scope.$id];
@@ -94,8 +88,9 @@ angular.module('famous.angular')
             });
             
             scope.$emit('registerChild', {
-              view: isolate.view,
-              mod: isolate.modifier
+              id: scope.$id,
+              index: isolate.index,
+              view: isolate.view
             });
 
             isolate.readyToRender = true;

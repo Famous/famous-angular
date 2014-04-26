@@ -16,7 +16,7 @@
     <fa-modifier fa-translate="[0,44,0]" id="tester">
       <fa-surface class="whitePanel"></fa-surface>
       <fa-scroll-view fa-pipe-from="enginePipe"  id="scrollView" >
-        <fa-modifier ng-repeat="e in events  | testFilter:'name' track by e.rand" fa-translate="[0,0,0]" fa-size="[320,80,1]" fa-index="$index" >
+        <fa-view ng-repeat="e in events  | testFilter:'name' track by e.rand" fa-size="[320,80,1]" fa-index="$index" >
             <fa-modifier id="test" testid="test" class="line" fa-rotate-z="handleZ(e)" fa-translate="[0,25,0]" fa-origin="[e.rand,0, 0]" fa-size="[1,1, 1]" >
               <fa-surface
                 fa-size="[getLineWidth(e),5, 1]"
@@ -29,7 +29,7 @@
                 <div class="tItem">{{e.name}}</div>
               </fa-surface>
             </fa-modifier>
-        </fa-modifier>
+        </fa-view>
       </fa-scroll-view>
     </fa-modifier>
   </fa-modifier>

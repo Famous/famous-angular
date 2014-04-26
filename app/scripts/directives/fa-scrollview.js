@@ -71,7 +71,7 @@ angular.module('famous.angular')
             //Register this modifier by ID in bag
             var id = attrs.id;
             famous.bag.register(id, isolate.view)
-            scope.$emit('registerChild', {view: isolate.view, mod: isolate.modifier});
+            scope.$emit('registerChild', {view: isolate.view});
           }
         };
       }
