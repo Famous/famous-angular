@@ -28,6 +28,11 @@ angular.module('integrationApp',['famous.angular', 'ui.router'])
         url: "/repeat",
         templateUrl: "views/repeat.html"
       })
+      .state("demo", {
+        url: "/demo",
+        templateUrl: "views/demo.html"
+      })
+
       .state("reading", {
         url: "/reading",
         templateUrl: "views/reading.html"

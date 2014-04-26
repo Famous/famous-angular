@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('integrationApp')
-  .controller('TimbreCtrl', function ($scope, famous, testFilterService, Fakedata) {
+  .controller('TimbreCtrl', function ($scope, famous, testFilterService, Fakedata, $timeout) {
   	$scope.yo ={a:'shoe'}
   	window.a = $scope
   	var EventHandler = famous['famous/core/EventHandler'];
@@ -83,6 +83,7 @@ angular.module('integrationApp')
 
     $scope.enginePipe.on("touchstart", function (e){
       TOUCHING = [e.touches[0].pageX,e.touches[0].pageY];
+      svStopped = false;
     });
     $scope.enginePipe.on("touchmove", function (e){
       var xd = Math.abs(TOUCHING[0] - e.touches[0].pageX);
@@ -90,7 +91,9 @@ angular.module('integrationApp')
       if (!MODE){
         MODE = xd > yd && xd > MIN_X_THRESH ? 'X' : 'Y';
         if(MODE === 'Y'){
-          _lineTrans.set(1, {duration: 300, curve: 'easeOut'});
+          linesIn();
+        } else {
+          $scope.disableScrollView();
         }
       }
     });
@@ -102,8 +105,14 @@ angular.module('integrationApp')
       } else {
         $scope.tran.set(0);
       }
-      _lineTrans.set(0, {duration: 800, curve: Easing.outBounce});
+      
       MODE = null;
+      $scope.enableScrollView();
+
+      if (Math.abs(famous.bag.first("scrollView").getVelocity()) < 0.001 && !lines){
+        console.log(famous.bag.first("scrollView").getVelocity())
+        linesOut();
+      }
     })
 
     $scope.viewAX = function(){
@@ -115,6 +124,24 @@ angular.module('integrationApp')
     $scope.linesTimeline = function(){
       return _lineTrans.get();
     }
+
+    var svStopped = null;
+    var lines = null
+    function linesOut(){
+      _lineTrans.set(0, {duration: 800, curve: Easing.outBounce});
+      lines = true;
+    }
+    function linesIn(){
+      _lineTrans.set(1, {duration: 300, curve: 'easeOut'});
+      lines = false;
+    }
+
+    $scope.$on("scrollview Stopped", function(){
+      if (!TOUCHING){
+        linesOut();
+      }
+      svStopped = true;
+    })
 
 
 
