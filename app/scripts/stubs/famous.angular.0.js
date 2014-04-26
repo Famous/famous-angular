@@ -25,7 +25,7 @@ var requirements = [
   "famous/inputs/PinchSync",
   "famous/transitions/Easing",
   "famous/transitions/SpringTransition",
-  "famous/transitions/TransitionableTransform",
+  "famous/transitions/Transitionable",
   "famous/utilities/Timer",
   "famous/views/ScrollView"
 ]
