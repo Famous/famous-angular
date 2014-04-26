@@ -104,6 +104,8 @@ angular.module('famous.angular')
             var modifierNode = isolate.node.add(isolate.modifier);
 
             scope.$on('$destroy', function() {
+              isolate.modifier.setOpacity(0);
+              scope.$emit('unregisterChild', {id: scope.$id});
             });
             
             scope.$on('registerChild', function(evt, data){

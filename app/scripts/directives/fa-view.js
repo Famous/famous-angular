@@ -71,6 +71,14 @@ angular.module('famous.angular')
               size: scope.$eval(attrs.faSize) || [undefined, undefined]
             });
 
+            scope.$on('$destroy', function() {
+              //TODO:  find a way to support hiding views upon destroy
+              //       (hook into a 'secret' modifier?  or return [] in
+              //       prototype.render?)
+              //isolate.modifier.setOpacity(0);
+              scope.$emit('unregisterChild', {id: scope.$id});
+            });
+
             scope.$on('registerChild', function(evt, data){
               if(evt.targetScope.$id != scope.$id){
                 isolate.view.add(data.view);
