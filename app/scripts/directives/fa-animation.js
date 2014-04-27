@@ -264,7 +264,6 @@ angular.module('famous.angular')
                 
               }
             }, 1)//end setTimeout
-            //TODO:  this bl
           }
 
         }

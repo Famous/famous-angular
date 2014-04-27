@@ -12,6 +12,11 @@ angular.module('integrationApp',['famous.angular', 'ui.router', 'ngAnimate'])
         templateUrl: "views/timbre.html",
         controller: "TimbreCtrl"
       })
+      .state("lock-screen", {
+        url: "/lock-screen",
+        templateUrl: "views/lock-screen.html",
+        controller: "LockScreenCtrl"
+      })
       .state("modifiers", {
         url: "/modifiers",
         templateUrl: "views/modifiers.html"
