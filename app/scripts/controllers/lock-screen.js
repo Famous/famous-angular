@@ -19,18 +19,24 @@ angular.module('integrationApp')
       numberPadGridLayout: {
         dimensions: [3, 4],
         cellSize: [.3 * _width, .1 * _height]
+      },
+      inputDotsGridLayout: {
+        dimensions: [4, 1],
+        cellSize: [.12 * _width, 20]
       }
     }
 
     $scope.sizes = {
       numberButton: [77, 77],
-      numberPadGridLayout: [.9 * _width, .7 * _height]
+      numberPadGridLayout: [.9 * _width, .7 * _height],
+      inputDotsGridLayout: [.478 * _width, 20]
     }
 
     $scope.positions = {
       numberPadGridLayout: [.085 * _width, 130, 2],
       emergencyText: [.085 * _width, _height - 36, 2],
       deleteText: [-(.085 * _width), _height - 36, 2],
+      enterPasscodeText: [0, 45, 2]
     }
 
     $scope.numberButtons = [

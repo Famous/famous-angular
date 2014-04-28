@@ -29,6 +29,11 @@
 
     <fa-scroll-view id="main-scroll-view" fa-pipe-from="enginePipe" fa-options="options.mainScrollView">
       <fa-view id="number-pad">
+
+        <fa-modifier fa-translate="positions.enterPasscodeText">
+          <fa-surface class="enter-passcode">Enter Passcode</fa-surface>
+        </fa-modifier>
+
         <fa-modifier fa-translate="positions.numberPadGridLayout" fa-size="sizes.numberPadGridLayout">
           <fa-grid-layout fa-options="options.numberPadGridLayout">
             <fa-view ng-repeat="numberButton in numberButtons track by numberButton.number" fa-index="$index">

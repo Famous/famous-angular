@@ -3,6 +3,11 @@
   color: #FFF;
 }
 
+.lock-screen .enter-passcode {
+  font-size: 1.1em;
+  text-align: center;
+}
+
 .lock-screen .delete {
   text-align: right;
 }
