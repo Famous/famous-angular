@@ -1,15 +1,46 @@
 <fa-app fa-pipe-to="enginePipe">
 
   <fa-view id="background-image">
-    <fa-modifier>
-      <fa-surface fa-background-color="'#dd7022'"></fa-surface>
+    <fa-modifier id="blurred-background">
+      <fa-surface>
+        <img src="images/monkey-blurred.jpg" />
+      </fa-surface>
     </fa-modifier>
-    <!-- TODO:  add another, solarized bg image (probably with canvas); opacitate between the two -->
+    <fa-modifier id="clear-background">
+      <fa-surface>
+        <img src="images/monkey.jpg" />
+      </fa-surface>
+    </fa-modifier>
   </fa-view>
 
-  <fa-scroll-view id="main-scroll-view" fa-pipe-from="enginePipe">
+  <fa-animation duration="3000" autoplay="true">
+    <animate  targetModSelector="#blurred-background"
+              field="opacity"
+              startValue="0"
+              endValue="1"
+              curve="linear" />
+    <animate  targetModSelector="#clear-background"
+              field="opacity"
+              startValue="1"
+              endValue="0"
+              curve="linear" />
+  </fa-animation>
+
+  <fa-scroll-view id="main-scroll-view" fa-pipe-from="enginePipe" fa-options="options.mainScrollView">
     <fa-view id="number-pad">
-      <fa-surface>Number pad</fa-surface>
+      <fa-modifier fa-translate="positions.numberPadGridLayout">
+        <fa-grid-layout fa-options="options.numberPadGridLayout">
+          <fa-view ng-repeat="numberButton in numberButtons track by numberButton.number" fa-index="$index">
+            <fa-surface ng-if="numberButton.number !== ''" fa-opacity=".66" fa-size="sizes.numberButton">
+              <img class="ring" src="images/lock-screen/number-button-outline.svg" />
+            </fa-surface>
+            <fa-surface fa-size="sizes.numberButton" class="number-button">
+              <div class="number">{{numberButton.number}}</div>
+              <div class="letters">{{numberButton.letters}}</div>
+            </fa-surface>
+          </fa-view>
+        </fa-grid-layout>
+      </fa-modifier>
     </fa-view>
     <fa-view id="slide-screen">
       <fa-surface>Slide</fa-surface>

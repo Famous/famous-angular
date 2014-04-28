@@ -1,0 +1,17 @@
+.number-button {
+  text-align: center;
+}
+
+.number-button .number {
+  margin-top: .3em;
+  font-size: 2.2em;
+}
+
+.number-button .letters {
+  font-size: .6em;
+}
+
+.number-button .ring {
+  left: 0;
+  top: 0;
+}
