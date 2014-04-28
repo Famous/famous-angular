@@ -1,3 +1,12 @@
+
+.lock-screen {
+  color: #FFF;
+}
+
+.lock-screen .delete {
+  text-align: right;
+}
+
 .number-button {
   text-align: center;
 }

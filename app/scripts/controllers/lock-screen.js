@@ -23,58 +23,28 @@ angular.module('integrationApp')
     }
 
     $scope.sizes = {
-      numberButton: [77, 77]
+      numberButton: [77, 77],
+      numberPadGridLayout: [.9 * _width, .7 * _height]
     }
 
     $scope.positions = {
-      numberPadGridLayout: [10, 100, 2]
+      numberPadGridLayout: [.085 * _width, 130, 2],
+      emergencyText: [.085 * _width, _height - 36, 2],
+      deleteText: [-(.085 * _width), _height - 36, 2],
     }
 
     $scope.numberButtons = [
-      {
-        number: 1,
-        letters: ""
-      },
-      {
-        number: 2,
-        letters: "ABC"
-      },
-      {
-        number: 3,
-        letters: "DEF"
-      },
-      {
-        number: 4,
-        letters: "GHI"
-      },
-      {
-        number: 5,
-        letters: "JKL"
-      },
-      {
-        number: 6,
-        letters: "MNO"
-      },
-      {
-        number: 7,
-        letters: "PQRS"
-      },
-      {
-        number: 8,
-        letters: "TUV"
-      },
-      {
-        number: 9,
-        letters: "WXYZ"
-      },
-      {
-        number: "",
-        letters: ""
-      },
-      {
-        number: 0,
-        letters: ""
-      }
+      { number: 1, letters: ""},
+      { number: 2, letters: "ABC"},
+      { number: 3, letters: "DEF"},
+      { number: 4, letters: "GHI"},
+      { number: 5, letters: "JKL"},
+      { number: 6, letters: "MNO"},
+      { number: 7, letters: "PQRS"},
+      { number: 8, letters: "TUV"},
+      { number: 9, letters: "WXYZ"},
+      { number: "",letters: ""},
+      { number: 0, letters: ""},
     ]
 
   });
