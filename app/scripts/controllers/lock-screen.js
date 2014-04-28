@@ -28,15 +28,21 @@ angular.module('integrationApp')
 
     $scope.sizes = {
       numberButton: [77, 77],
-      numberPadGridLayout: [.9 * _width, .7 * _height],
-      inputDotsGridLayout: [.478 * _width, 20]
+      numberPadGridLayout: [.9 * _width, .7 * _height - 20],
+      inputDotsGridLayout: [.478 * _width, 20],
+      inputDot: [15, 15],
+      slideToUnlockText: [.45 * _width, 24]
     }
 
     $scope.positions = {
-      numberPadGridLayout: [.085 * _width, 130, 2],
+      numberPadGridLayout: [.085 * _width, 150, 2],
       emergencyText: [.085 * _width, _height - 36, 2],
       deleteText: [-(.085 * _width), _height - 36, 2],
-      enterPasscodeText: [0, 45, 2]
+      enterPasscodeText: [0, 45, 2],
+      inputDotsGridLayout: [.3 * _width, 85],
+      slideToUnlockText: [0, _height - 100, 2],
+      clock: [0, 40, 2],
+      calendar: [0, 130, 2],
     }
 
     $scope.numberButtons = [
@@ -51,6 +57,12 @@ angular.module('integrationApp')
       { number: 9, letters: "WXYZ"},
       { number: "",letters: ""},
       { number: 0, letters: ""},
-    ]
+    ];
+
+    $scope.fireButtonAnimation = function(index){
+      console.log('famous bag', famous.bag)
+      console.log('index', index);
+      famous.bag.first('number-button-animation-' + index).replay();
+    }
 
   });

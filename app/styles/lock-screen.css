@@ -12,6 +12,31 @@
   text-align: right;
 }
 
+.lock-screen .input-dot {
+  text-align: center;
+}
+
+.lock-screen .slide-to-unlock {
+  text-align: center;
+}
+
+.lock-screen .slide-to-unlock img.mask {
+  width: 182px;
+}
+
+.lock-screen .clock {
+  font-size: 2.3em;
+  font-weight: 100;
+  text-align: center;
+}
+
+.lock-screen .calendar {
+  font-size: 1.1em;
+  text-align: center;
+}
+
+
+
 .number-button {
   text-align: center;
 }

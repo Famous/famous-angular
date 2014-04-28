@@ -72,6 +72,8 @@ angular.module('famous.angular')
             var id = attrs.id;
             famous.bag.register(id, isolate.view)
             scope.$emit('registerChild', {view: isolate.view});
+
+            window.sv = isolate.view
           }
         };
       }

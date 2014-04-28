@@ -28,18 +28,63 @@
     </fa-animation>
 
     <fa-scroll-view id="main-scroll-view" fa-pipe-from="enginePipe" fa-options="options.mainScrollView">
+
+      <!-- Left panel -->
       <fa-view id="number-pad">
 
+        <!-- Header -->
         <fa-modifier fa-translate="positions.enterPasscodeText">
           <fa-surface class="enter-passcode">Enter Passcode</fa-surface>
         </fa-modifier>
+        <fa-modifier fa-translate="positions.inputDotsGridLayout" fa-size="sizes.inputDotsGridLayout">
+          <fa-grid-layout fa-options="options.inputDotsGridLayout">
+            <fa-surface class="input-dot" fa-size="sizes.inputDot">
+              <img src="images/lock-screen/input-dot-filled.svg" />
+            </fa-surface>
+            <fa-surface class="input-dot" fa-size="sizes.inputDot">
+              <img src="images/lock-screen/input-dot-empty.svg" />
+            </fa-surface>
+            <fa-surface class="input-dot" fa-size="sizes.inputDot">
+              <img src="images/lock-screen/input-dot-empty.svg" />
+            </fa-surface>
+            <fa-surface class="input-dot" fa-size="sizes.inputDot">
+              <img src="images/lock-screen/input-dot-empty.svg" />
+            </fa-surface>
+          </fa-grid-layout>
+        </fa-modifier>
 
+        <!-- Number pad -->
         <fa-modifier fa-translate="positions.numberPadGridLayout" fa-size="sizes.numberPadGridLayout">
           <fa-grid-layout fa-options="options.numberPadGridLayout">
             <fa-view ng-repeat="numberButton in numberButtons track by numberButton.number" fa-index="$index">
-              <fa-surface ng-if="numberButton.number !== ''" fa-opacity=".66" fa-size="sizes.numberButton">
-                <img class="ring" src="images/lock-screen/number-button-outline.svg" />
-              </fa-surface>
+              <fa-modifier fa-opacity=".8">
+                <fa-surface ng-if="numberButton.number !== ''" fa-size="sizes.numberButton" >
+                  <img class="ring" src="images/lock-screen/number-button-outline.svg" />
+                </fa-surface>
+              </fa-modifier>
+
+              <fa-modifier fa-opacity="0" id="{{'number-button-' + $index}}">
+                <fa-surface ng-if="numberButton.number !== ''" fa-size="sizes.numberButton" fa-tap="fireButtonAnimation($index)">
+                  <img class="ring" src="images/lock-screen/number-button-fill.svg" />
+                </fa-surface>
+              </fa-modifier>
+              <fa-animation id="{{'number-button-animation-' + $index}}" duration="400">
+                <animate  targetModSelector="{{'#number-button-' + $index}}"
+                          field="opacity"
+                          startValue="0"
+                          endValue=".7"
+                          curve="linear"
+                          timelineLowerBound="0"
+                          timelineUpperBound=".01"/>
+                <animate  targetModSelector="{{'#number-button-' + $index}}"
+                          field="opacity"
+                          startValue=".7"
+                          endValue="0"
+                          curve="outQuad"
+                          timelineLowerBound=".1"
+                          timelineUpperBound="1"/>
+              </fa-animation>
+
               <fa-surface fa-size="sizes.numberButton" class="number-button">
                 <div class="number">{{numberButton.number}}</div>
                 <div class="letters">{{numberButton.letters}}</div>
@@ -47,6 +92,8 @@
             </fa-view>
           </fa-grid-layout>
         </fa-modifier>
+
+        <!-- Footer text buttons -->
         <fa-modifier fa-translate="positions.emergencyText">
           <fa-surface>Emergency</fa-surface>
         </fa-modifier>
@@ -55,8 +102,25 @@
         </fa-modifier>
       </fa-view>
 
+      <!-- Right panel -->
       <fa-view id="slide-screen">
-        <fa-surface>Slide</fa-surface>
+
+        <!-- Clock and calendar -->
+        <fa-modifier fa-translate="positions.clock">
+          <fa-surface class="clock">8:23</fa-surface>
+        </fa-modifier>
+        <fa-modifier fa-translate="positions.calendar">
+          <fa-surface class="calendar">Sunday, April 27</fa-surface>
+        </fa-modifier>
+
+        <!-- Slide to unlock text -->
+        <fa-modifier fa-translate="positions.slideToUnlockText">
+          <fa-surface>
+            <div class="slide-to-unlock">
+              <img class="mask" src="images/lock-screen/slide-to-unlock-mask.svg" />
+            </div>
+          </fa-surface>
+        </fa-modifier>
       </fa-view>
     </fa-scroll-view>
   </fa-app>
