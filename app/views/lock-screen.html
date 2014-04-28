@@ -14,6 +14,7 @@
       </fa-modifier>
     </fa-view>
 
+    <!-- Background blur animation, TODO:  tie to horizontal sync instead of autoplay -->
     <fa-animation duration="3000" autoplay="true">
       <animate  targetModSelector="#blurred-background"
                 field="opacity"
@@ -63,6 +64,8 @@
                 </fa-surface>
               </fa-modifier>
 
+
+              <!-- Flash-on-tap overlay -->
               <fa-modifier fa-opacity="0" id="{{'number-button-' + $index}}">
                 <fa-surface ng-if="numberButton.number !== ''" fa-size="sizes.numberButton" fa-tap="fireButtonAnimation($index)">
                   <img class="ring" src="images/lock-screen/number-button-fill.svg" />
