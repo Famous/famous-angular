@@ -7,7 +7,7 @@ angular.module('integrationApp')
 
     //TODO:  either set the scrollview's initial position to the second page,
     //       or make it double-wide and offset it x: -1 * screenWidth
-    
+
     var _width = 320;
     var _height = 568;
     $scope.options = {
@@ -28,6 +28,7 @@ angular.module('integrationApp')
 
     $scope.sizes = {
       numberButton: [77, 77],
+      enterPasscodeSurface: [undefined, 100],
       numberPadGridLayout: [.9 * _width, .7 * _height - 20],
       inputDotsGridLayout: [.478 * _width, 20],
       inputDot: [15, 15],

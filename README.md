@@ -9,6 +9,8 @@
 
 `npm install -g gulp`
 
+`git submodule update --init --recursive` 
+
 ####Thereafter:
 `gulp` 
 

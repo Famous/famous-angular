@@ -40,7 +40,6 @@ angular.module('famous.angular')
             }
 
             scope.$on('registerChild', function(evt, data){
-              console.log('grid receiving child', data)
               if(evt.targetScope.$id != scope.$id){
                 _children.push(data);
                 updateGridLayout();

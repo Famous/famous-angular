@@ -23,7 +23,7 @@ angular.module('famous.angular')
               });
 
               isolate.surface.on("touchend", function(data) {
-                if (!_dragging) scope.$eval(attrs.faTap);
+                if (!_dragging) scope.$eval(attrs.faTap)(data);
                 _dragging = false
               });
             }
