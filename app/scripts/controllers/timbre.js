@@ -44,7 +44,7 @@ angular.module('integrationApp')
     $scope.setEvent = function(e){
       console.log('set event', e)
       $scope.activeEvent = e;
-      alert(e.name)
+      $scope.tran.set(-1, {duration:"500", curve:Easing.outBounce});
     };
 
     $scope.getLineX = function(e){
@@ -64,12 +64,10 @@ angular.module('integrationApp')
       return $scope.tran.get();
     }, {direction: GenericSync.DIRECTION_X});
 
-    var SCROLL_SENSITIVITY = 500; //inverse
+    var SCROLL_SENSITIVITY = 550; //inverse
     $scope.sync.on('update', function(data){
       var newVal = Math.max(0,
         Math.min(1, data.delta / SCROLL_SENSITIVITY + $scope.tran.get()));
-
-      
       $scope.tran.set(newVal);
     });
     $scope.enginePipe.pipe($scope.sync);

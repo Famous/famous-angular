@@ -1,4 +1,4 @@
-<fa-app fa-presenter="TimbrePres" fa-pipe-to="enginePipe">
+<fa-app fa-presenter="TimbrePres" >
 
   <fa-modifier id="viewB" fa-translate="[0,0,-15]" fa-rotate-z="-.25">
     <fa-modifier fa-size="[undefined, 50]" ng-repeat="strip in strips track by strip.id"
@@ -8,13 +8,13 @@
     
   </fa-modifier>
 
-  <fa-modifier id="viewA" fa-translate="[viewAX, 0 ,10]">
+  <fa-modifier id="viewA" fa-translate="[viewAX(), 0 ,10]">
     <!-- header -->
-    <div ng-include="'views/_header.html'">hi</div>
+    <div ng-include="'views/_header.html'"></div>
     <!-- end header -->
     
     <fa-modifier fa-translate="[0,44,0]" id="tester">
-      <fa-surface class="whitePanel"></fa-surface>
+      <fa-surface class="whitePanel" fa-pipe-to="enginePipe"></fa-surface>
       <fa-scroll-view fa-pipe-from="enginePipe"  id="scrollView" >
         <fa-view ng-repeat="e in events  | testFilter:'name' track by e.rand" fa-size="[320,80,1]" fa-index="$index" >
             <fa-modifier id="test" testid="test" class="line" fa-rotate-z="handleZ(e)" fa-translate="[0,25,0]" fa-origin="[e.rand,0, 0]" fa-size="[1,1, 1]" >
@@ -25,13 +25,23 @@
               </fa-surface>
             </fa-modifier>
             <fa-modifier id="testtest" fa-origin="[e.rand,0]" >
-              <fa-surface ng-click="setEvent(e)" fa-size="[1,1,1]">
+              <fa-surface fa-pipe-to="enginePipe" ng-click="setEvent(e)" fa-size="[1,1,1]">
                 <div class="tItem">{{e.name}}</div>
               </fa-surface>
             </fa-modifier>
         </fa-view>
       </fa-scroll-view>
     </fa-modifier>
+  </fa-modifier>
+
+
+  <fa-modifier id="viewC" fa-translate="[viewAX()+320, 0, 10]">
+    <fa-surface style="background:#666" class="blackPanel" fa-pipe-to="enginePipe"></fa-surface>
+    <fa-surface >
+    <div style="color:red;font-size:60px;z-index:10;" >
+      {{activeEvent.name}}
+    </div>
+  </fa-surface>
   </fa-modifier>
 
   <fa-animation id="animateTest" timeline="linesTimeline" >

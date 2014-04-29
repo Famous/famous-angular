@@ -12,7 +12,7 @@ angular.module('integrationApp')
       famous.bag.first('animateTest').replay();
       console.log(window.zz = famous.bag.first('animateTest'))
     }
-    scrollview.setOptions({margin:20000})
+    scrollview.setOptions({margin:20000, friction: 0.0015, drag: 0.0001, speedLimit : 5})
 
     $scope.disableScrollView = function(){
     	scrollview.unsubscribe($scope.enginePipe);
