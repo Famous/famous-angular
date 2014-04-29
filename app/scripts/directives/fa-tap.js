@@ -2,9 +2,7 @@
 // © 2014 Thomas Street LLC. All rights reserved
 //
 
-'use strict';
-
-angular.module('integrationApp')
+angular.module('famous.angular')
   .directive('faTap', function () {
     return {
       restrict: 'A',
