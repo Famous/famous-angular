@@ -60,9 +60,10 @@ angular.module('integrationApp')
       { number: 0, letters: ""},
     ];
 
-    $scope.fireButtonAnimation = function(index){
+    $scope.fireButtonAnimation = function(index, event){
       console.log('famous bag', famous.bag)
       console.log('index', index);
+      console.log('event', event);
       famous.bag.first('number-button-animation-' + index).replay();
     }
 

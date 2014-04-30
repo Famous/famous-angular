@@ -3,7 +3,7 @@
 //
 
 angular.module('famous.angular')
-  .directive('faTap', function () {
+  .directive('faTap', function ($parse) {
     return {
       restrict: 'A',
       compile: function() {
@@ -23,7 +23,10 @@ angular.module('famous.angular')
               });
 
               isolate.surface.on("touchend", function(data) {
-                if (!_dragging) scope.$eval(attrs.faTap)(data);
+                if (!_dragging){
+                  var fn = $parse(attrs.faTap);
+                  fn(scope, {$event:data});
+                }
                 _dragging = false
               });
             }

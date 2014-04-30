@@ -67,7 +67,7 @@
 
               <!-- Flash-on-tap overlay -->
               <fa-modifier fa-opacity="0" id="{{'number-button-' + $index}}">
-                <fa-surface ng-if="numberButton.number !== ''" fa-size="sizes.numberButton" fa-tap="fireButtonAnimation($index)">
+                <fa-surface ng-if="numberButton.number !== ''" fa-size="sizes.numberButton" fa-tap="fireButtonAnimation($index, $event)">
                   <img class="ring" src="images/lock-screen/number-button-fill.svg" />
                 </fa-surface>
               </fa-modifier>

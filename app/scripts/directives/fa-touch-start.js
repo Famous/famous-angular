@@ -3,7 +3,7 @@
 //
 
 angular.module('famous.angular')
-  .directive('faTouchStart', function () {
+  .directive('faTouchStart', function ($parse) {
     return {
       restrict: 'A',
       compile: function() {
@@ -15,7 +15,8 @@ angular.module('famous.angular')
 
             if (attrs.faTouchStart) {
               isolate.surface.on("touchstart", function(data) {
-                scope.$eval(attrs.faTouchStart)(data);
+                var fn = $parse(attrs.faTouchStart);
+                fn(scope, {$event:data});
               });
             }
           }
