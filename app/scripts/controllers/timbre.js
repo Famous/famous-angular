@@ -7,12 +7,17 @@ angular.module('integrationApp')
     var GenericSync = famous['famous/inputs/GenericSync'];
     var Transitionable = famous['famous/transitions/Transitionable'];
     var Easing = famous['famous/transitions/Easing'];
-
-
+    var MouseSync       = require('famous/inputs/MouseSync');
+    var TouchSync       = require('famous/inputs/TouchSync');
+    var Timer           = require('famous/utilities/Timer');
     $scope.enginePipe = new EventHandler();
     $scope.enginePipe2 = new EventHandler();
     $scope.search = {name:''}
     $scope.events = angular.copy(Fakedata.events);
+
+
+
+
     console.log('events', $scope.events);
 
     console.log('normal controller bag', famous.bag._contents); //has access to items created in DOM
@@ -30,7 +35,23 @@ angular.module('integrationApp')
         id: 3,
         label: "Strip 3"
       }
-    ]
+    ];
+
+    $scope.stripOptions = {
+      angle: -0.2,
+      width: 320,
+      stripHeight: 54,
+      topOffset: 37,
+      stripOffset: 58,
+      transition: {
+          duration: 400,
+          curve: 'easeOut'
+      },
+      duration: 400,
+      curve: 'outQuad',
+      staggerDelay: 35,
+      featureOffset: 280
+    }
 
     $scope.$watch(function(){return $scope.search.name},
       function(){
@@ -66,10 +87,17 @@ angular.module('integrationApp')
     }, {direction: GenericSync.DIRECTION_X});
 
     var SCROLL_SENSITIVITY = 550; //inverse
+    var stripFlag = true;
     $scope.sync.on('update', function(data){
       var newVal = Math.max(0,
         Math.min(1, data.delta / SCROLL_SENSITIVITY + $scope.tran.get()));
       $scope.tran.set(newVal);
+      if (newVal === 0){
+        stripFlag = true;
+      } else if (stripFlag){
+        $scope.testStrips();
+        stripFlag = false;
+      }
     });
 
     $scope.enginePipe.pipe($scope.sync);
@@ -95,6 +123,9 @@ angular.module('integrationApp')
           linesIn();
         } else {
           $scope.disableScrollView();
+        }
+        if (MODE === 'X' && $scope.tran.get() < 0.2){
+          $scope.testStrips();
         }
       }
     });
@@ -144,12 +175,26 @@ angular.module('integrationApp')
       lines = false;
     }
 
+    $scope.calcStripY = function(){
+      return   $scope.stripOptions.width * Math.tan(-$scope.stripOptions.angle);
+    }
+
     $scope.$on("scrollview Stopped", function(){
       if (!TOUCHING){
         linesOut();
       }
       svStopped = true;
-    })
+    });
+
+    $scope.testStrips = function(){
+      $scope.strips.forEach( function (s,i){
+        var mod = famous.bag.first("animateStrip" + i);
+        mod.reset();
+        Timer.setTimeout(function(i) {
+          mod.play();
+        }.bind(this, i), i * $scope.stripOptions.staggerDelay+1);
+      })
+    }
 
 
 
