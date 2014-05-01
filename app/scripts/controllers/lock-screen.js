@@ -46,12 +46,26 @@ angular.module('integrationApp')
       }
       if(_dotIndex >= DOTS){
         $scope.fireDotShakeAnimation(function(){
-          console.log('callback"')
           _dotIndex = -1;
           $scope.shiftInputDots();
           if(!$scope.$$phase)
             $scope.$apply();
         })
+      }
+    }
+
+    $scope.bgOpacity = function(){
+      var scrollView = famous.bag.first('main-scroll-view');
+      if(scrollView){
+        window.sv = scrollView;
+        return Math.random();
+      } else return 1;
+    };
+
+    $scope.leftRightPos = function(){
+      var scrollView = famous.bag.first('main-scroll-view');
+      if(scrollView){
+
       }
     }
 

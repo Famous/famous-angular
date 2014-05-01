@@ -1,31 +1,17 @@
 <div class="lock-screen">
   <fa-app fa-pipe-to="enginePipe">
     <fa-view id="background-image">
-      <fa-modifier id="blurred-background">
-        <fa-surface fa-size="sizes.bgImage">
-          <img style="width: 100%" src="images/lock-screen/monkey-blurred.jpg" />
-        </fa-surface>
-      </fa-modifier>
       <fa-modifier id="clear-background">
         <fa-surface fa-size="sizes.bgImage">
           <img style="width: 100%" src="images/lock-screen/monkey.jpg" />
         </fa-surface>
       </fa-modifier>
+      <fa-modifier id="blurred-background" fa-opacity="bgOpacity">
+        <fa-surface fa-size="sizes.bgImage">
+          <img style="width: 100%" src="images/lock-screen/monkey-blurred.jpg" />
+        </fa-surface>
+      </fa-modifier>
     </fa-view>
-
-    <!-- Background blur animation, TODO:  tie to horizontal sync instead of autoplay -->
-    <fa-animation duration="3000" autoplay="true">
-      <animate  targetModSelector="#blurred-background"
-                field="opacity"
-                startValue="0"
-                endValue="1"
-                curve="linear" />
-      <animate  targetModSelector="#clear-background"
-                field="opacity"
-                startValue="1"
-                endValue="0"
-                curve="linear" />
-    </fa-animation>
 
     <fa-scroll-view id="main-scroll-view" fa-start-index="1" fa-pipe-from="enginePipe" fa-options="options.mainScrollView">
 
