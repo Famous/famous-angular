@@ -38,17 +38,9 @@
         </fa-modifier>
         <fa-modifier fa-translate="positions.inputDotsGridLayout" fa-size="sizes.inputDotsGridLayout">
           <fa-grid-layout fa-options="options.inputDotsGridLayout">
-            <fa-surface class="input-dot" fa-size="sizes.inputDot">
-              <img src="images/lock-screen/input-dot-filled.svg" />
-            </fa-surface>
-            <fa-surface class="input-dot" fa-size="sizes.inputDot">
-              <img src="images/lock-screen/input-dot-empty.svg" />
-            </fa-surface>
-            <fa-surface class="input-dot" fa-size="sizes.inputDot">
-              <img src="images/lock-screen/input-dot-empty.svg" />
-            </fa-surface>
-            <fa-surface class="input-dot" fa-size="sizes.inputDot">
-              <img src="images/lock-screen/input-dot-empty.svg" />
+            <fa-surface class="input-dot" fa-size="sizes.inputDot" ng-repeat="dot in inputDots">
+              <img ng-if="dot.val" src="images/lock-screen/input-dot-filled.svg" />
+              <img ng-if="!dot.val" src="images/lock-screen/input-dot-empty.svg" />
             </fa-surface>
           </fa-grid-layout>
         </fa-modifier>
@@ -66,7 +58,7 @@
 
               <!-- Flash-on-tap overlay -->
               <fa-modifier fa-opacity="0" id="{{'number-button-' + $index}}">
-                <fa-surface ng-if="numberButton.number !== ''" fa-size="sizes.numberButton" fa-tap="fireButtonAnimation($index, $event)">
+                <fa-surface ng-if="numberButton.number !== ''" fa-size="sizes.numberButton" fa-tap="buttonTap($index)">
                   <img class="ring" src="images/lock-screen/number-button-fill.svg" />
                 </fa-surface>
               </fa-modifier>

@@ -26,6 +26,8 @@ angular.module('famous.angular')
                 if (!_dragging){
                   var fn = $parse(attrs.faTap);
                   fn(scope, {$event:data});
+                  if(!scope.$$phase)
+                    scope.$apply();
                 }
                 _dragging = false
               });

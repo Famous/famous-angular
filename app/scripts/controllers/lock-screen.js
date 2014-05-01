@@ -30,6 +30,26 @@ angular.module('integrationApp')
       console.log('test', arg);
     }
 
+    $scope.inputDots = [
+      {val: false},
+      {val: false},
+      {val: false},
+      {val: false}
+    ];
+
+    var _dotIndex = 0;
+    var DOTS = 4;
+    $scope.shiftInputDots = function(){
+      _dotIndex = (_dotIndex + 1) % DOTS;
+      for(var i = 0; i < DOTS; i++){
+        $scope.inputDots[i].val = i < _dotIndex;
+        console.log('new val', i < _dotIndex);
+      }
+      //TODO:  handle case when dots fill up (go back to zero after delay; animate)
+    }
+
+    window.scope = $scope;
+
     $scope.sizes = {
       numberButton: [77, 77],
       enterPasscodeSurface: [undefined, 100],
@@ -66,10 +86,13 @@ angular.module('integrationApp')
       { number: 0, letters: ""},
     ];
 
-    $scope.fireButtonAnimation = function(index, event){
-      console.log('famous bag', famous.bag)
-      console.log('index', index);
-      console.log('event', event);
+    $scope.buttonTap = function(index){
+      $scope.shiftInputDots();
+      $scope.fireButtonAnimation(index);
+    }
+    
+
+    $scope.fireButtonAnimation = function(index){
       famous.bag.first('number-button-animation-' + index).replay();
     }
 
