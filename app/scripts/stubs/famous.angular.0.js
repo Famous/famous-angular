@@ -22,6 +22,8 @@ var requirements = [
   "famous/core/ViewSequence",
   "famous/inputs/GenericSync",
   "famous/inputs/RotateSync",
+  "famous/inputs/TouchSync",
+  "famous/inputs/MouseSync",
   "famous/inputs/PinchSync",
   "famous/transitions/Easing",
   "famous/transitions/SpringTransition",

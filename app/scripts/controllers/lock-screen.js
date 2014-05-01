@@ -26,13 +26,19 @@ angular.module('integrationApp')
       }
     }
 
+    $scope.testLog = function(arg) {
+      console.log('test', arg);
+    }
+
     $scope.sizes = {
       numberButton: [77, 77],
       enterPasscodeSurface: [undefined, 100],
       numberPadGridLayout: [.9 * _width, .7 * _height - 20],
       inputDotsGridLayout: [.478 * _width, 20],
       inputDot: [15, 15],
-      slideToUnlockText: [.45 * _width, 24]
+      slideToUnlockText: [.45 * _width, 24],
+      calendar: [undefined, 30],
+      clock: [undefined, 200]
     }
 
     $scope.positions = {

@@ -100,7 +100,7 @@
           <fa-surface>Emergency</fa-surface>
         </fa-modifier>
         <fa-modifier fa-origin="[1,0]" fa-translate="positions.deleteText">
-          <fa-surface><div style="text-align: right">Delete</div></fa-surface>
+          <fa-surface fa-tap="testLog"><div style="text-align: right">Delete</div></fa-surface>
         </fa-modifier>
       </fa-view>
 
@@ -109,10 +109,10 @@
 
         <!-- Clock and calendar -->
         <fa-modifier fa-translate="positions.clock">
-          <fa-surface class="clock">8:23</fa-surface>
+          <fa-surface fa-size="sizes.clock" class="clock">8:23</fa-surface>
         </fa-modifier>
         <fa-modifier fa-translate="positions.calendar">
-          <fa-surface class="calendar">Sunday, April 27</fa-surface>
+          <fa-surface fa-size="sizes.calendar" class="calendar">Sunday, April 27</fa-surface>
         </fa-modifier>
 
         <!-- Slide to unlock text -->
