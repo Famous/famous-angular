@@ -20,21 +20,21 @@ angular.module('famous.angular')
               console.log('timeline', timeline)
               isolate._trans = new Transitionable(0);
 
-              isolate.play = function(){
+              isolate.play = function(callback){
                 var transition = {
                   duration: scope.$eval(attrs.duration),
                   curve: scope.$eval(attrs.curve) || 'linear'
                 };
-                isolate._trans.set(1, transition);
+                isolate._trans.set(1, transition, callback);
                 //TODO:  handle $animate with a callback
                 //       support custom callbacks?
               }
               isolate.reset = function(){
                 isolate._trans.set(0);
               }
-              isolate.replay = function(){
+              isolate.replay = function(callback){
                 isolate.reset();
-                isolate.play();
+                isolate.play(callback);
               }
 
               //TODO:  support data-bound ids (supports only strings for now)

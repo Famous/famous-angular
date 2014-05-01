@@ -40,10 +40,20 @@ angular.module('integrationApp')
     var _dotIndex = 0;
     var DOTS = 4;
     $scope.shiftInputDots = function(){
-      _dotIndex = (_dotIndex + 1) % DOTS;
+      _dotIndex = (_dotIndex + 1);
       for(var i = 0; i < DOTS; i++){
         $scope.inputDots[i].val = i < _dotIndex;
-        console.log('new val', i < _dotIndex);
+      }
+      if(_dotIndex >= DOTS){
+        //TODO:  fire animation
+        $scope.fireDotShakeAnimation(function(){
+          console.log('callback"')
+          _dotIndex = -1;
+          $scope.shiftInputDots();
+          if(!$scope.$$phase)
+            $scope.$apply();
+        })
+
       }
       //TODO:  handle case when dots fill up (go back to zero after delay; animate)
     }
@@ -66,7 +76,8 @@ angular.module('integrationApp')
       emergencyText: [.085 * _width, _height - 36, 2],
       deleteText: [-(.085 * _width), _height - 36, 2],
       enterPasscodeText: [0, 45, 2],
-      inputDotsGridLayout: [.3 * _width, 85],
+      inputDotsGridLayout: [.3 * _width, 85, 2],
+      inputDotsGridLayoutShake: [-100, 0, 2],
       slideToUnlockText: [0, _height - 100, 2],
       clock: [0, 40, 2],
       calendar: [0, 130, 2],
@@ -90,10 +101,14 @@ angular.module('integrationApp')
       $scope.shiftInputDots();
       $scope.fireButtonAnimation(index);
     }
-    
+
 
     $scope.fireButtonAnimation = function(index){
       famous.bag.first('number-button-animation-' + index).replay();
+    }
+
+    $scope.fireDotShakeAnimation = function(callback){
+      famous.bag.first('dot-shake-animation').replay(callback);
     }
 
   });

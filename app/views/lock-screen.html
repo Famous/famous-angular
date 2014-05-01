@@ -36,7 +36,8 @@
         <fa-modifier fa-translate="positions.enterPasscodeText" fa-size="sizes.enterPasscodeSurface">
           <fa-surface class="enter-passcode">Enter Passcode</fa-surface>
         </fa-modifier>
-        <fa-modifier fa-translate="positions.inputDotsGridLayout" fa-size="sizes.inputDotsGridLayout">
+
+        <fa-modifier id="dot-container" fa-translate="positions.inputDotsGridLayout" fa-size="sizes.inputDotsGridLayout">
           <fa-grid-layout fa-options="options.inputDotsGridLayout">
             <fa-surface class="input-dot" fa-size="sizes.inputDot" ng-repeat="dot in inputDots">
               <img ng-if="dot.val" src="images/lock-screen/input-dot-filled.svg" />
@@ -44,6 +45,24 @@
             </fa-surface>
           </fa-grid-layout>
         </fa-modifier>
+
+
+        <fa-animation id="dot-shake-animation" duration="750">
+          <animate  targetModSelector="#dot-container"  
+                    field="translate"
+                    startValue="[0,0,0]"
+                    endValue="[-50,0,0]"
+                    curve="linear"
+                    timelineLowerBound="0"
+                    timelineUpperBound=".1"/>
+          <animate  targetModSelector="#dot-container"  
+                    field="translate"
+                    startValue="[-50,0,0]"
+                    endValue="[0,0,0]"
+                    curve="outElastic"
+                    timelineLowerBound=".1"
+                    timelineUpperBound="1"/>
+        </fa-animation>
 
         <!-- Number pad -->
         <fa-modifier fa-translate="positions.numberPadGridLayout" fa-size="sizes.numberPadGridLayout">
