@@ -88,16 +88,16 @@ angular.module('famous.angular')
                 return Transform.multiply.apply(this, transforms);
             };
 
-            var getOpacity = function(){
+            isolate.getOpacity = function(){
               if (attrs.faOpacity)
-                return scope.$eval(attrs.faOpacity);
+                return get(scope.$eval(attrs.faOpacity));
               return 1;
             }
 
             isolate.modifier = new Modifier({
               transform: isolate.getTransform,
               size: scope.$eval(attrs.faSize),
-              opacity: scope.$eval(attrs.faOpacity),
+              opacity: isolate.getOpacity,
               origin: scope.$eval(attrs.faOrigin)
             });
 
@@ -114,9 +114,6 @@ angular.module('famous.angular')
                 evt.stopPropagation();
               }
             })
-
-            if(attrs.faTranslate){
-            }
             
             var isolate = scope.isolate[scope.$id];
 
