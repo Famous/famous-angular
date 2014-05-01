@@ -77,7 +77,6 @@ angular.module('integrationApp')
       deleteText: [-(.085 * _width), _height - 36, 2],
       enterPasscodeText: [0, 45, 2],
       inputDotsGridLayout: [.3 * _width, 85, 2],
-      inputDotsGridLayoutShake: [-100, 0, 2],
       slideToUnlockText: [0, _height - 100, 2],
       clock: [0, 40, 2],
       calendar: [0, 130, 2],
