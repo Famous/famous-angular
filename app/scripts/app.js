@@ -5,7 +5,7 @@ angular.module('integrationApp',['famous.angular', 'ui.router', 'ngAnimate'])
     $stateProvider
       .state("main", {
         url: "/",
-        templateUrl: "views/demo.html"
+        templateUrl: "views/animations.html"
       })
       .state("timbre", {
         url: "/timbre",
