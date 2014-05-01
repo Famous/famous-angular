@@ -1,3 +1,4 @@
+
 // 
 // © 2014 Thomas Street LLC. All rights reserved
 //
@@ -17,6 +18,8 @@ angular.module('famous.angular')
               isolate.surface.on("touchstart", function(data) {
                 var fn = $parse(attrs.faTouchStart);
                 fn(scope, {$event:data});
+                if(!scope.$$phase)
+                  scope.$apply();
               });
             }
           }

@@ -15,7 +15,10 @@ angular.module('famous.angular')
 
             if (attrs.faTouchMove) {
               isolate.surface.on("touchmove", function(data) {
-                scope.$eval(attrs.faTouchMove)(data);
+                var fn = $parse(attrs.faTouchMove);
+                fn(scope, {$event:data});
+                if(!scope.$$phase)
+                  scope.$apply();
               });
             }
           }

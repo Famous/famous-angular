@@ -31,19 +31,26 @@ angular.module('famous.angular')
               (scope.$eval(attrs.faPipeFrom)).pipe(isolate.view);
             }
 
-            var updateScrollview = function(){
+
+            var updateScrollview = function(init){
               _children.sort(function(a, b){
                 return a.index - b.index;
               });
-              isolate.view.sequenceFrom(_.map(_children, function(c){
-                return c.view
-              }));
+
+              var options = {
+                array: _.map(_children, function(c){ return c.view }) 
+              };
+              if(init){
+                options.index = scope.$eval(attrs.faStartIndex);
+              }
+              var viewSeq = new ViewSequence(options);
+              isolate.view.sequenceFrom(viewSeq);
             }
 
             scope.$on('registerChild', function(evt, data){
               if(evt.targetScope.$id != scope.$id){
                 _children.push(data);
-                updateScrollview();
+                updateScrollview(true);
                 evt.stopPropagation();
               };
             });

@@ -30,8 +30,34 @@ angular.module('integrationApp')
       console.log('test', arg);
     }
 
+    $scope.inputDots = [
+      {val: false},
+      {val: false},
+      {val: false},
+      {val: false}
+    ];
+
+    var _dotIndex = 0;
+    var DOTS = 4;
+    $scope.shiftInputDots = function(){
+      _dotIndex = (_dotIndex + 1);
+      for(var i = 0; i < DOTS; i++){
+        $scope.inputDots[i].val = i < _dotIndex;
+      }
+      if(_dotIndex >= DOTS){
+        $scope.fireDotShakeAnimation(function(){
+          console.log('callback"')
+          _dotIndex = -1;
+          $scope.shiftInputDots();
+          if(!$scope.$$phase)
+            $scope.$apply();
+        })
+      }
+    }
+
     $scope.sizes = {
       numberButton: [77, 77],
+      bgImage: [_width, _height],
       enterPasscodeSurface: [undefined, 100],
       numberPadGridLayout: [.9 * _width, .7 * _height - 20],
       inputDotsGridLayout: [.478 * _width, 20],
@@ -46,7 +72,7 @@ angular.module('integrationApp')
       emergencyText: [.085 * _width, _height - 36, 2],
       deleteText: [-(.085 * _width), _height - 36, 2],
       enterPasscodeText: [0, 45, 2],
-      inputDotsGridLayout: [.3 * _width, 85],
+      inputDotsGridLayout: [.3 * _width, 85, 2],
       slideToUnlockText: [0, _height - 100, 2],
       clock: [0, 40, 2],
       calendar: [0, 130, 2],
@@ -66,11 +92,18 @@ angular.module('integrationApp')
       { number: 0, letters: ""},
     ];
 
-    $scope.fireButtonAnimation = function(index, event){
-      console.log('famous bag', famous.bag)
-      console.log('index', index);
-      console.log('event', event);
+    $scope.buttonTap = function(index){
+      $scope.shiftInputDots();
+      $scope.fireButtonAnimation(index);
+    }
+
+
+    $scope.fireButtonAnimation = function(index){
       famous.bag.first('number-button-animation-' + index).replay();
+    }
+
+    $scope.fireDotShakeAnimation = function(callback){
+      famous.bag.first('dot-shake-animation').replay(callback);
     }
 
   });
