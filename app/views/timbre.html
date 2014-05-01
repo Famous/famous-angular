@@ -9,15 +9,15 @@
     </fa-modifier>
   </fa-modifier>
 
-  <fa-modifier id="viewA" fa-translate="[viewAX(), 0 ,10]" fa-pipe-to="enginePipe">
+  <fa-modifier id="viewA" fa-translate="[viewAX(), 0 ,10]">
 
-    <fa-view fa-pipe-to="enginePipe">
+    <fa-view>
       <!-- header -->
       <div ng-include="'views/_header.html'"></div>
       <!-- end header -->
       
       <fa-modifier fa-translate="[0,44,0]" id="tester">
-        <fa-surface class="whitePanel"></fa-surface>
+        <fa-surface class="whitePanel" fa-pipe-to="enginePipe"></fa-surface>
         <fa-scroll-view fa-pipe-from="enginePipe"  id="scrollView" >
           <fa-view ng-repeat="e in events  | testFilter:'name' track by e.rand" fa-size="[320,80,1]" fa-index="$index" >
               <fa-modifier id="test" testid="test" class="line" fa-rotate-z="handleZ(e)" fa-translate="[0,25,0]" fa-origin="[e.rand,0, 0]" fa-size="[1,1, 1]" >
@@ -28,7 +28,7 @@
                 </fa-surface>
               </fa-modifier>
               <fa-modifier id="testtest" fa-origin="[e.rand,0]" >
-                <fa-surface fa-xpipe-to="enginePipe" ng-click="setEvent(e)" fa-size="[1,1,1]">
+                <fa-surface fa-pipe-to="enginePipe" ng-click="setEvent(e)" fa-size="[1,1,1]">
                   <div class="tItem">{{e.name}}</div>
                 </fa-surface>
               </fa-modifier>

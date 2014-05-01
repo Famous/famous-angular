@@ -34,7 +34,16 @@ angular.module('integrationApp')
       {
         id: 3,
         label: "Strip 3"
-      }
+      },
+      {
+        id: 5,
+        label: "Strip 5"
+      },
+      {
+        id: 4,
+        label: "Strip 4"
+      },
+
     ];
 
     $scope.stripOptions = {
@@ -86,7 +95,7 @@ angular.module('integrationApp')
       return $scope.tran.get();
     }, {direction: GenericSync.DIRECTION_X});
 
-    var SCROLL_SENSITIVITY = 550; //inverse
+    var SCROLL_SENSITIVITY = 300; //inverse
     var stripFlag = true;
     $scope.sync.on('update', function(data){
       var newVal = Math.max(0,
@@ -99,6 +108,17 @@ angular.module('integrationApp')
         stripFlag = false;
       }
     });
+    $scope.sync.on('end', function(data){
+      var vel = data.velocity;
+      var pos = $scope.tran.get();
+      var newVal = 0;
+      if (pos > 0.5){
+        newVal = vel < -0.75 ? 0 : 0.85;
+      } else {
+        newVal = vel > 0.75 ? 0.85: 0;
+      }
+      $scope.tran.set(newVal, {duration:"300", curve:Easing.outSine});
+    })
 
     $scope.enginePipe.pipe($scope.sync);
     $scope.horizontalTimeline = function(){
@@ -114,7 +134,6 @@ angular.module('integrationApp')
       svStopped = false;
     });
     $scope.enginePipe.on("touchmove", function (e){
-      console.log($scope.tran.get())
       var xd = Math.abs(TOUCHING[0] - e.touches[0].pageX);
       var yd = Math.abs(TOUCHING[1] - e.touches[0].pageY);
       if (!MODE){
@@ -134,9 +153,9 @@ angular.module('integrationApp')
       TOUCHING = false;
       var x = $scope.tran.get() > 0.4 ? 0.85 : 0;
       if (MODE === "X"){
-        $scope.tran.set(x, {duration:"500", curve:Easing.outBounce});
+        // $scope.tran.set(x, {duration:"300", curve:Easing.outSine});
         if (x === 0.85) stuckRight = true;
-      } else if(!stuckRight) {
+      } else if(!stuckRight || MODE === 'Y') {
         $scope.tran.set(0);
         stuckRight = false;
       }
@@ -148,7 +167,6 @@ angular.module('integrationApp')
         console.log(famous.bag.first("scrollView").getVelocity())
         linesOut();
       }
-
     })
 
     $scope.viewAX = function(){
@@ -176,7 +194,7 @@ angular.module('integrationApp')
     }
 
     $scope.calcStripY = function(){
-      return   $scope.stripOptions.width * Math.tan(-$scope.stripOptions.angle);
+      return  $scope.stripOptions.width * Math.tan(-$scope.stripOptions.angle);
     }
 
     $scope.$on("scrollview Stopped", function(){
