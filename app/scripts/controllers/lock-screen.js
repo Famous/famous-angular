@@ -57,6 +57,7 @@ angular.module('integrationApp')
 
     $scope.sizes = {
       numberButton: [77, 77],
+      bgImage: [_width, _height],
       enterPasscodeSurface: [undefined, 100],
       numberPadGridLayout: [.9 * _width, .7 * _height - 20],
       inputDotsGridLayout: [.478 * _width, 20],

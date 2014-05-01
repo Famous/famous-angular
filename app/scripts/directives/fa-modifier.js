@@ -13,8 +13,6 @@ angular.module('famous.angular')
       compile: function(tElement, tAttrs, transclude){
         return {
           post: function(scope, element, attrs){
-
-            console.log('compiling mod')
             scope.isolate = scope.isolate || {};
             scope.isolate[scope.$id] = scope.isolate[scope.$id] || {};
             var isolate = scope.isolate[scope.$id];

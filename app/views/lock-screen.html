@@ -2,13 +2,13 @@
   <fa-app fa-pipe-to="enginePipe">
     <fa-view id="background-image">
       <fa-modifier id="blurred-background">
-        <fa-surface>
-          <img src="images/monkey-blurred.jpg" />
+        <fa-surface fa-size="sizes.bgImage">
+          <img style="width: 100%" src="images/lock-screen/monkey-blurred.jpg" />
         </fa-surface>
       </fa-modifier>
       <fa-modifier id="clear-background">
-        <fa-surface>
-          <img src="images/monkey.jpg" />
+        <fa-surface fa-size="sizes.bgImage">
+          <img style="width: 100%" src="images/lock-screen/monkey.jpg" />
         </fa-surface>
       </fa-modifier>
     </fa-view>
@@ -27,7 +27,7 @@
                 curve="linear" />
     </fa-animation>
 
-    <fa-scroll-view id="main-scroll-view" fa-pipe-from="enginePipe" fa-options="options.mainScrollView">
+    <fa-scroll-view id="main-scroll-view" fa-start-index="1" fa-pipe-from="enginePipe" fa-options="options.mainScrollView">
 
       <!-- Left panel -->
       <fa-view id="number-pad">
