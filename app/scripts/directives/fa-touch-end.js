@@ -17,6 +17,8 @@ angular.module('famous.angular')
               isolate.surface.on("touchend", function(data) {
                 var fn = $parse(attrs.faTouchEnd);
                 fn(scope, {$event:data});
+                if(!scope.$$phase)
+                  scope.$apply();
               });
             }
           }

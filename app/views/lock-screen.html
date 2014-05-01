@@ -54,13 +54,20 @@
                     endValue="[-50,0,0]"
                     curve="linear"
                     timelineLowerBound="0"
-                    timelineUpperBound=".1"/>
+                    timelineUpperBound=".075"/>
           <animate  targetModSelector="#dot-container"  
                     field="translate"
-                    startValue="[-50,0,0]"
+                    startValue="[0,0,0]"
+                    endValue="[30,0,0]"
+                    curve="linear"
+                    timelineLowerBound=".075"
+                    timelineUpperBound=".15"/>
+          <animate  targetModSelector="#dot-container"  
+                    field="translate"
+                    startValue="[40,0,0]"
                     endValue="[0,0,0]"
                     curve="outElastic"
-                    timelineLowerBound=".1"
+                    timelineLowerBound=".15"
                     timelineUpperBound="1"/>
         </fa-animation>
 
@@ -111,7 +118,7 @@
           <fa-surface>Emergency</fa-surface>
         </fa-modifier>
         <fa-modifier fa-origin="[1,0]" fa-translate="positions.deleteText">
-          <fa-surface fa-tap="testLog"><div style="text-align: right">Delete</div></fa-surface>
+          <fa-surface fa-touch-move="testLog('mrow')"><div style="text-align: right">Delete</div></fa-surface>
         </fa-modifier>
       </fa-view>
 
@@ -127,7 +134,7 @@
         </fa-modifier>
 
         <!-- Slide to unlock text -->
-        <fa-modifier fa-translate="positions.slideToUnlockText">
+        <fa-modifier fa-translate="positions.slideToUnlockText" fa-opacity=".5">
           <fa-surface>
             <div class="slide-to-unlock">
               <img class="mask" src="images/lock-screen/slide-to-unlock-mask.svg" />

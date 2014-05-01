@@ -45,7 +45,6 @@ angular.module('integrationApp')
         $scope.inputDots[i].val = i < _dotIndex;
       }
       if(_dotIndex >= DOTS){
-        //TODO:  fire animation
         $scope.fireDotShakeAnimation(function(){
           console.log('callback"')
           _dotIndex = -1;
@@ -53,12 +52,8 @@ angular.module('integrationApp')
           if(!$scope.$$phase)
             $scope.$apply();
         })
-
       }
-      //TODO:  handle case when dots fill up (go back to zero after delay; animate)
     }
-
-    window.scope = $scope;
 
     $scope.sizes = {
       numberButton: [77, 77],
