@@ -4,7 +4,11 @@ angular.module('integrationApp')
   .presenter('TimbrePres', function ($scope, famous) {
     console.log('scope', $scope); //shares same scope as TimbreCtrl
     console.log('bag', famous.bag._contents); //has access to items created in DOM
+    var Transform       = require('famous/core/Transform');
+    var Timer           = require('famous/utilities/Timer');
     $scope.bag = famous.bag
+
+
 
     var scrollview = famous.bag.first("scrollView");
 
@@ -37,8 +41,63 @@ angular.module('integrationApp')
     		}
     		return origRender();
     	}
-    }
+    };
+
+
     scrollViewWatchers();
+
+
+
+    var testOptions = {
+        angle: -0.2,
+        stripWidth: 320,
+        stripHeight: 54,
+        topOffset: 37,
+        stripOffset: 58,
+        transition: {
+            duration: 400,
+            curve: 'easeOut'
+        },
+        duration: 400,
+        staggerDelay: 35,
+        featureOffset: 280
+    };
+    $scope.resetStrips = function(){
+        var strips = famous.bag.all("stripMod");
+        var topOffset = testOptions.topOffset;
+        var stripOffset = testOptions.stripOffset;
+        var stripWidth = testOptions.stripWidth;
+        var angle = testOptions.angle;
+
+        var initX = -stripWidth;
+        var initY = topOffset + stripWidth * Math.tan(-angle);
+        for (var i = 0; i < strips.length; i++) {
+            strips[i].setTransform(Transform.translate(initX, initY, 0));
+            initY += stripOffset;
+        }
+
+        // famous.bag.first("viewB").setOpacity(0);
+    }
+
+    $scope.animateStrips = function(){
+        $scope.resetStrips();
+        var strips = famous.bag.all("stripMod");
+        var transition = {
+            duration: 400,
+            curve: 'easeOut'
+        };
+        var delay = 35;
+        var stripOffset = 58;
+        var topOffset = 37;
+        for(var i = 0; i < strips.length; i++) {
+            Timer.setTimeout(function(i) {
+                var yOffset = topOffset + i * stripOffset;
+                strips[i].setTransform(
+                    Transform.translate(0, yOffset, 0),
+                    transition);
+            }.bind(this, i), i * delay);
+        }
+    }
 
 
 

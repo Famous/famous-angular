@@ -2,12 +2,13 @@
 
 angular.module('integrationApp')
   .controller('TimbreCtrl', function ($scope, famous, testFilterService, Fakedata, $timeout) {
-  	$scope.yo ={a:'shoe'}
   	window.a = $scope
-  	var EventHandler = famous['famous/core/EventHandler'];
-  	var GenericSync = famous['famous/inputs/GenericSync'];
+    var EventHandler = famous['famous/core/EventHandler'];
+    var GenericSync = famous['famous/inputs/GenericSync'];
     var Transitionable = famous['famous/transitions/Transitionable'];
     var Easing = famous['famous/transitions/Easing'];
+
+
     $scope.enginePipe = new EventHandler();
     $scope.enginePipe2 = new EventHandler();
     $scope.search = {name:''}
@@ -70,6 +71,7 @@ angular.module('integrationApp')
         Math.min(1, data.delta / SCROLL_SENSITIVITY + $scope.tran.get()));
       $scope.tran.set(newVal);
     });
+
     $scope.enginePipe.pipe($scope.sync);
     $scope.horizontalTimeline = function(){
       return $scope.tran.get();
@@ -84,10 +86,11 @@ angular.module('integrationApp')
       svStopped = false;
     });
     $scope.enginePipe.on("touchmove", function (e){
+      console.log($scope.tran.get())
       var xd = Math.abs(TOUCHING[0] - e.touches[0].pageX);
       var yd = Math.abs(TOUCHING[1] - e.touches[0].pageY);
       if (!MODE){
-        MODE = xd > yd && xd > MIN_X_THRESH ? 'X' : 'Y';
+        MODE = (xd > yd && xd > MIN_X_THRESH) || $scope.tran.get() > 0.75 ? 'X' : 'Y';
         if(MODE === 'Y'){
           linesIn();
         } else {
@@ -95,13 +98,16 @@ angular.module('integrationApp')
         }
       }
     });
+    var stuckRight;
     $scope.enginePipe.on("touchend", function(){
       TOUCHING = false;
       var x = $scope.tran.get() > 0.4 ? 0.85 : 0;
       if (MODE === "X"){
         $scope.tran.set(x, {duration:"500", curve:Easing.outBounce});
-      } else {
+        if (x === 0.85) stuckRight = true;
+      } else if(!stuckRight) {
         $scope.tran.set(0);
+        stuckRight = false;
       }
       
       MODE = null;
@@ -111,11 +117,15 @@ angular.module('integrationApp')
         console.log(famous.bag.first("scrollView").getVelocity())
         linesOut();
       }
+
     })
 
     $scope.viewAX = function(){
-      if (MODE === "Y") {return 0;}
-      return $scope.tran.get()*320;
+      var x = $scope.tran.get()*320;
+      if (MODE === "Y") {
+        return 0;
+      }
+      return x;
     }
 
     var _lineTrans = new Transitionable(0);
@@ -126,11 +136,11 @@ angular.module('integrationApp')
     var svStopped = null;
     var lines = null
     function linesOut(){
-      _lineTrans.set(0, {duration: 800, curve: Easing.outBounce});
+      _lineTrans.set(0, {duration: 600, curve: Easing.outBounce});
       lines = true;
     }
     function linesIn(){
-      _lineTrans.set(1, {duration: 300, curve: 'easeOut'});
+      _lineTrans.set(1, {duration: 200, curve: 'easeOut'});
       lines = false;
     }
 
