@@ -17,12 +17,14 @@ angular.module('famous.angular')
             if (attrs.faTap) {
               var _dragging = false;
 
-              isolate.surface.on("touchmove", function(data) {
+              //TODO:  refactor to isolate.renderNode
+              var renderNode = isolate.surface || isolate.view;
+              renderNode.on("touchmove", function(data) {
                 _dragging = true;
                 return data;
               });
 
-              isolate.surface.on("touchend", function(data) {
+              renderNode.on("touchend", function(data) {
                 if (!_dragging){
                   var fn = $parse(attrs.faTap);
                   fn(scope, {$event:data});

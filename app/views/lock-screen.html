@@ -40,20 +40,20 @@
                     endValue="[-40,0,0]"
                     curve="linear"
                     timelineLowerBound="0"
-                    timelineUpperBound=".1"/>
+                    timelineUpperBound=".075"/>
           <animate  targetModSelector="#dot-container"  
                     field="translate"
                     startValue="[0,0,0]"
                     endValue="[30,0,0]"
                     curve="linear"
-                    timelineLowerBound=".1"
-                    timelineUpperBound=".2"/>
+                    timelineLowerBound=".075"
+                    timelineUpperBound=".15"/>
           <animate  targetModSelector="#dot-container"  
                     field="translate"
                     startValue="[40,0,0]"
                     endValue="[0,0,0]"
                     curve="outElastic"
-                    timelineLowerBound=".2"
+                    timelineLowerBound=".15"
                     timelineUpperBound="1"/>
         </fa-animation>
 
@@ -70,7 +70,7 @@
 
               <!-- Flash-on-tap overlay -->
               <fa-modifier fa-opacity="0" id="{{'number-button-' + $index}}">
-                <fa-surface ng-if="numberButton.number !== ''" fa-size="sizes.numberButton" fa-tap="buttonTap($index)">
+                <fa-surface ng-if="numberButton.number !== ''" fa-size="sizes.numberButton">
                   <img class="ring" src="images/lock-screen/number-button-fill.svg" />
                 </fa-surface>
               </fa-modifier>
@@ -95,6 +95,11 @@
                 <div class="number">{{numberButton.number}}</div>
                 <div class="letters">{{numberButton.letters}}</div>
               </fa-surface>
+
+              <!-- Invisible surface for touch handling -->
+              <fa-surface fa-size="sizes.numberButton" fa-position="[0,0,500]" fa-tap="buttonTap($index, numberButton)" fa-pipe-to="enginePipe">
+                &nbsp;
+              </fa-surface>
             </fa-view>
           </fa-grid-layout>
         </fa-modifier>
@@ -104,7 +109,7 @@
           <fa-surface>Emergency</fa-surface>
         </fa-modifier>
         <fa-modifier fa-origin="[1,0]" fa-translate="positions.deleteText">
-          <fa-surface fa-touch-move="testLog('mrow')"><div style="text-align: right">Delete</div></fa-surface>
+          <fa-surface fa-tap="unshiftInputDots()"><div style="text-align: right">Delete</div></fa-surface>
         </fa-modifier>
       </fa-view>
 

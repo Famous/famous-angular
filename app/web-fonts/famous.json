@@ -1,0 +1,5 @@
+{
+  "name": "web-fonts",
+  "styles": ["open-sans.css"],
+  "fonts": ["**/*.woff", "**/*.svg", "**/*.ttf", "**/*.eot"]
+}

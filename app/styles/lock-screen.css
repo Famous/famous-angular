@@ -1,6 +1,8 @@
 
 .lock-screen {
   color: #FFF;
+  font-family: 'Open Sans';
+  pointer-events: none;
 }
 
 .lock-screen .enter-passcode {
@@ -26,7 +28,7 @@
 
 .lock-screen .clock {
   font-size: 2.3em;
-  font-weight: 100;
+  font-weight: 200;
   text-align: center;
 }
 
@@ -39,15 +41,17 @@
 
 .number-button {
   text-align: center;
+  pointer-events: none;
 }
 
 .number-button .number {
-  margin-top: .3em;
+  margin-top: .25em;
   font-size: 2.2em;
 }
 
 .number-button .letters {
   font-size: .6em;
+  margin-top: -.4em;
 }
 
 .number-button .ring {

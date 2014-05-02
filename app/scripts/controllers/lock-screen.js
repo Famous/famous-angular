@@ -8,13 +8,15 @@ angular.module('integrationApp')
     //TODO:  either set the scrollview's initial position to the second page,
     //       or make it double-wide and offset it x: -1 * screenWidth
 
+
+
     var _width = 320;
     var _height = 568;
     $scope.options = {
       mainScrollView: {
         paginated: true,
         direction: 0, //horizontal
-        speedLimit: 1
+        speedLimit: 5
       },
       numberPadGridLayout: {
         dimensions: [3, 4],
@@ -37,6 +39,7 @@ angular.module('integrationApp')
       {val: false}
     ];
 
+    var _inputLocked = false;
     var _dotIndex = 0;
     var DOTS = 4;
     $scope.shiftInputDots = function(){
@@ -45,13 +48,20 @@ angular.module('integrationApp')
         $scope.inputDots[i].val = i < _dotIndex;
       }
       if(_dotIndex >= DOTS){
+        _inputLocked = true;
         $scope.fireDotShakeAnimation(function(){
           _dotIndex = -1;
           $scope.shiftInputDots();
+          _inputLocked = false;
           if(!$scope.$$phase)
             $scope.$apply();
         })
       }
+    }
+
+    $scope.unshiftInputDots = function(){
+      _dotIndex = Math.max(0,(_dotIndex - 2));
+      $scope.shiftInputDots();
     }
 
     $scope.bgOpacity = function(){
@@ -85,13 +95,13 @@ angular.module('integrationApp')
     }
 
     $scope.positions = {
-      numberPadGridLayout: [.085 * _width, 150, 2],
+      numberPadGridLayout: [.085 * _width, 150, 50],
       emergencyText: [.085 * _width, _height - 36, 2],
       deleteText: [-(.085 * _width), _height - 36, 2],
       enterPasscodeText: [0, 45, 2],
       inputDotsGridLayout: [.3 * _width, 85, 2],
       slideToUnlockText: [0, _height - 100, 2],
-      clock: [0, 40, 2],
+      clock: [0, 28, 2],
       calendar: [0, 130, 2],
     }
 
@@ -109,9 +119,12 @@ angular.module('integrationApp')
       { number: 0, letters: ""},
     ];
 
-    $scope.buttonTap = function(index){
-      $scope.shiftInputDots();
-      $scope.fireButtonAnimation(index);
+    $scope.buttonTap = function(index, numberButton){
+      console.log('pressed', numberButton.number);
+      if(!_inputLocked){
+        $scope.shiftInputDots();
+        $scope.fireButtonAnimation(index);
+      }
     }
 
 
