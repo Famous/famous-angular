@@ -16,8 +16,8 @@ angular.module('famous.angular')
           post: function(scope, element, attrs){
             var isolate = scope.isolate[scope.$id];
             setTimeout(function(){
-              var timeline = scope.$eval(attrs.timeline)
-              console.log('timeline', timeline)
+              var timeline = scope.$eval(attrs.timeline);
+              console.log('timeline', timeline);
               isolate._trans = new Transitionable(0);
 
               isolate.play = function(callback){
@@ -41,7 +41,7 @@ angular.module('famous.angular')
               //Possibly make "fa-id" for databound ids?
               //Register this modifier by ID in bag
               var id = attrs.id;
-              famous.bag.register(id, isolate)
+              famous.bag.register(id, isolate);
 
               if(timeline === undefined){
                 timeline = isolate._trans.get.bind(isolate._trans);
