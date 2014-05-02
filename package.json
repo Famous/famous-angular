@@ -6,7 +6,7 @@
     "connect-livereload": "^0.4.0",
     "express": "^4.0.0",
     "grunt-contrib-jasmine": "~0.6.3",
-    "gulp": "~3.6.2",
+    "gulp": "^3.6.2",
     "gulp-autoprefixer": "0.0.7",
     "gulp-cache": "^0.1.3",
     "gulp-clean": "^0.2.4",
@@ -25,16 +25,12 @@
     "karma-jasmine": "~0.2.0",
     "karma-ng-html2js-preprocessor": "^0.1.0",
     "karma-ng-scenario": "^0.1.0",
-    "tiny-lr": "0.0.5",
-    "bower": "~1.3.3"
+    "tiny-lr": "0.0.5"
   },
   "engines": {
     "node": ">=0.8.0"
   },
   "scripts": {
-    "install": "bower install",
-	"postinstall": "git submodule update --init --recursive",
-	"start": "gulp",
     "test": "grunt test"
   }
 }

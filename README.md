@@ -4,19 +4,17 @@
 
 ##Running
 
-####Before you start, tools your will need
-* Download and install [git](http://git-scm.com/downloads)
-* Download and install [nodeJS](http://nodejs.org/download/)
-
 ####First time:
-`git clone https://github.com/thomasstreet/famous-angular.git`
-
 `npm install`
 
-####Thereafter:
-`npm start`
+`npm install -g gulp`
 
-Npm start will use gulp to concatenate files into famous.angular.js, which is symlinked into the app folder. It will also watch for changes inside app and livereload as necessary.
+`git submodule update --init --recursive` 
+
+####Thereafter:
+`gulp` 
+
+Running gulp will concatenate files into famous.angular.js, which is symlinked into the app folder.  It will also watch for changes inside app and livereload as necessary.
 
 As configured, you should be able to access the application at localhost:4000.
 
