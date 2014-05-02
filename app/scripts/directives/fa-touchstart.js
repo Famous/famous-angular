@@ -3,10 +3,11 @@
 // © 2014 Thomas Street LLC. All rights reserved
 //
 
-angular.module('famous.angular')
-  .directive('faTouchStart', function ($parse) {
+window.argh = angular.module('famous.angular')
+  .directive('faTouchstart', function ($parse) {
     return {
       restrict: 'A',
+      scope: false,
       compile: function() {
         return { 
           post: function(scope, element, attrs) {

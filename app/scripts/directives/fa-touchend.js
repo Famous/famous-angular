@@ -3,7 +3,7 @@
 //
 
 angular.module('famous.angular')
-  .directive('faTouchEnd', function ($parse) {
+  .directive('faTouchend', function ($parse) {
     return {
       restrict: 'A',
       compile: function() {
