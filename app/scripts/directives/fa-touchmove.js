@@ -6,6 +6,7 @@ angular.module('famous.angular')
   .directive('faTouchmove', function ($parse) {
     return {
       restrict: 'A',
+      scope: false,
       compile: function() {
         return { 
           post: function(scope, element, attrs) {
