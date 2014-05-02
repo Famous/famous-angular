@@ -13,6 +13,20 @@
       </fa-modifier>
     </fa-view>
 
+    <fa-modifier id="top-capsule" fa-translate="positions.topCapsule" fa-opacity=".5">
+      <fa-surface fa-size="sizes.topCapsule">
+        <img src="images/lock-screen/capsule.svg" />
+      </fa-surface>
+    </fa-modifier>
+
+    <fa-animation timeline="scrollXPosition">
+      <animate  targetModSelector="#top-capsule"
+                field="translate"
+                startValue="[0,0,0]"
+                endValue="[0,-100,0]" />
+    </fa-animation>
+
+
     <fa-scroll-view id="main-scroll-view" fa-start-index="1" fa-pipe-from="enginePipe" fa-options="options.mainScrollView">
 
       <!-- Left panel -->
@@ -64,6 +78,7 @@
               <fa-modifier fa-opacity=".8">
                 <fa-surface ng-if="numberButton.number !== ''" fa-size="sizes.numberButton" >
                   <img class="ring" src="images/lock-screen/number-button-outline.svg" />
+
                 </fa-surface>
               </fa-modifier>
 
@@ -110,19 +125,7 @@
 
       <!-- Right panel -->
       <fa-view id="slide-screen">
-        <fa-modifier id="top-capsule" fa-translate="positions.topCapsule" fa-opacity=".5">
-          <fa-surface fa-size="sizes.topCapsule">
-            <img src="images/lock-screen/capsule.svg" />
-          </fa-surface>
-        </fa-modifier>
-
-        <fa-animation timeline="scrollXPosition">
-          <animate  targetModSelector="#top-capsule"
-                    field="translate"
-                    startValue="[0,0,0]"
-                    endValue="[0,-100,0]" />
-        </fa-animation>
-
+        
         <!-- Clock and calendar -->
         <fa-modifier fa-translate="positions.clock">
           <fa-surface fa-size="sizes.clock" class="clock">8:23</fa-surface>
