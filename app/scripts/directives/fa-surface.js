@@ -20,9 +20,11 @@ angular.module('famous.angular')
             var Transform = famous['famous/core/Transform']
             var EventHandler = famous['famous/core/EventHandler'];
             
-            var properties = {
-              backgroundColor: scope.$eval(attrs.faBackgroundColor),
-              color: scope.$eval(attrs.faColor)
+            isolate.getProperties = function(){
+              return {
+                backgroundColor: scope.$eval(attrs.faBackgroundColor),
+                color: scope.$eval(attrs.faColor)
+              };
             };
 
             var getOrValue = function(x) {
@@ -43,7 +45,7 @@ angular.module('famous.angular')
             isolate.surface = new Surface({
               size: scope.$eval(attrs.faSize),
               class: scope.$eval(attrs.class),
-              properties: properties
+              properties: isolate.getProperties()
             });
 
             //TODO:  support ng-class
@@ -68,19 +70,11 @@ angular.module('famous.angular')
           post: function(scope, element, attrs){
             var isolate = scope.isolate[scope.$id];
             var updateContent = function(){
-              //TODO:  fill with other properties
-              isolate.surface.setProperties({'backgroundColor':  scope.$eval(attrs.faBackgroundColor)});
+              isolate.surface.setProperties(isolate.getProperties());
               var compiledEl = isolate.compiledEl = isolate.compiledEl || $compile(element.find('div.fa-surface').contents())(scope)
               isolate.surface.setContent(isolate.compiledEl.context);
             };
 
-            //listener-free scope.$watch will fire any time a $digest occurs
-            
-            //TODO:  was this only needed when we were handling
-            // our own dirty-checking?
-            /*scope.$watch(function(){
-              updateContent();
-            })*/
             updateContent();
 
             //boilerplate

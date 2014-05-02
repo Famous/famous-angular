@@ -5,6 +5,10 @@
     <fa-surface fa-size="[undefined, undefined]" class="background-dark">
     </fa-surface>
 
+    <fa-modifier fa-translate="positions.scrollText" fa-opacity="1 - functionThatReturnsATimelineValueBetween0And1()">
+      <fa-surface class="animations-text">Scroll Up/Down</fa-surface>
+    </fa-modifier>
+
     <fa-modifier id="wholeThing" fa-size="[sizes.width, sizes.height]" fa-origin="[.5, .5]">
     
       <fa-modifier fa-translate="positions.centerSquare">

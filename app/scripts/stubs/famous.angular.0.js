@@ -31,6 +31,7 @@ var requirements = [
   "famous/transitions/Transitionable",
   "famous/utilities/Timer",
   "famous/views/ScrollView",
+  "famous/views/Scroller",
   "famous/views/GridLayout"
 ]
 

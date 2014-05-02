@@ -26,12 +26,18 @@ angular.module('integrationApp')
       },
       width: _width, //320
       height: _height, //568
-      triangle: _r
+      triangle: _r,
+      scrollText: [undefined, 20]
     };
 
     $scope.twoWayTest = "test";
 
     $scope.positions = {
+      scrollText: [
+        0,
+        20,
+        10
+      ],
       topTriangle: [
         sizes.margins.left + sizes.triangle,
         sizes.margins.top,
