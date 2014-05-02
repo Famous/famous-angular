@@ -40,8 +40,8 @@ module.exports = function (grunt) {
             '!app/scripts/famous/**/*.js',
             '!app/scripts/famous-utilities/**/*.js',
             '!app/scripts/famous-transitions/**/*.js']
-        },
-      },
+        }
+      }
     },
 
 
@@ -54,8 +54,8 @@ module.exports = function (grunt) {
       },
       dist: {
         src: ['<%= yeoman.app %>/scripts/directives/**/*'],
-        dest: 'dist/famous.angular.js',
-      },
+        dest: 'dist/famous.angular.js'
+      }
     },
 
     // Watches files for changes and runs tasks based on the changed files

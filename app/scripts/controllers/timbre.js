@@ -43,7 +43,7 @@ angular.module('integrationApp')
       {
         id: 4,
         label: "Strip 4"
-      },
+      }
 
     ];
 
