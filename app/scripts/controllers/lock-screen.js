@@ -16,7 +16,8 @@ angular.module('integrationApp')
       mainScrollView: {
         paginated: true,
         direction: 0, //horizontal
-        speedLimit: 5
+        speedLimit: 5,
+        margin: 10000
       },
       numberPadGridLayout: {
         dimensions: [3, 4],

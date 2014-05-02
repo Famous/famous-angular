@@ -2,6 +2,9 @@
 .lock-screen {
   color: #FFF;
   font-family: 'Open Sans';
+}
+
+.no-pointer {
   pointer-events: none;
 }
 
@@ -41,7 +44,6 @@
 
 .number-button {
   text-align: center;
-  pointer-events: none;
 }
 
 .number-button .number {
