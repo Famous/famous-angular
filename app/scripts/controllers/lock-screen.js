@@ -39,7 +39,8 @@ angular.module('integrationApp')
       slideToUnlockText: [.45 * _width, 24],
       calendar: [undefined, 30],
       clock: [undefined, 200],
-      emergencyText: [75, 50]
+      emergencyText: [75, 50],
+      topCapsule: [40, 8]
     }
 
     $scope.positions = {
@@ -51,6 +52,7 @@ angular.module('integrationApp')
       slideToUnlockText: [0, _height - 100, 2],
       clock: [0, 28, 2],
       calendar: [0, 130, 2],
+      topCapsule: [143, 0, 2]
     }
 
     $scope.numberButtons = [
@@ -114,7 +116,7 @@ angular.module('integrationApp')
       var scrollView = famous.bag.first('main-scroll-view');
       if(scrollView){
         var perPosition = $scope.scrollXPosition();
-        return 1 - perPosition;
+        return perPosition;
       } else
         return 0;
     };
@@ -125,7 +127,7 @@ angular.module('integrationApp')
         var page = sv._node.index;
         var absPosition = _width * page + sv.getPosition();
         var perPosition = Math.max(0, Math.min(1, absPosition / (_width)));
-        return perPosition;
+        return 1 - perPosition;
       }
     };
 

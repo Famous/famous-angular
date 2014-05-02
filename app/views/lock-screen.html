@@ -100,7 +100,7 @@
         </fa-modifier>
 
         <!-- Footer text buttons -->
-        <fa-modifier fa-size="emergencyText" fa-translate="positions.emergencyText">
+        <fa-modifier fa-size="sizes.emergencyText" fa-translate="positions.emergencyText">
           <fa-surface>Emergency</fa-surface>
         </fa-modifier>
         <fa-modifier fa-origin="[1,0]" fa-translate="positions.deleteText">
@@ -110,7 +110,18 @@
 
       <!-- Right panel -->
       <fa-view id="slide-screen">
+        <fa-modifier id="top-capsule" fa-translate="positions.topCapsule" fa-opacity=".5">
+          <fa-surface fa-size="sizes.topCapsule">
+            <img src="images/lock-screen/capsule.svg" />
+          </fa-surface>
+        </fa-modifier>
 
+        <fa-animation timeline="scrollXPosition">
+          <animate  targetModSelector="#top-capsule"
+                    field="translate"
+                    startValue="[0,0,0]"
+                    endValue="[0,-100,0]" />
+        </fa-animation>
 
         <!-- Clock and calendar -->
         <fa-modifier fa-translate="positions.clock">
@@ -124,7 +135,7 @@
         <fa-modifier fa-translate="positions.slideToUnlockText" fa-opacity=".5">
           <fa-surface>
             <div class="slide-to-unlock">
-              <img class="mask" src="images/lock-screen/slide-to-unlock-mask.svg" />
+              <img class="mask" src="images/lock-screen/slide-to-unlock-mask-white.svg" />
             </div>
           </fa-surface>
         </fa-modifier>
