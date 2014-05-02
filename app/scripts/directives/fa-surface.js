@@ -20,6 +20,19 @@ angular.module('famous.angular')
             var Transform = famous['famous/core/Transform']
             var EventHandler = famous['famous/core/EventHandler'];
             
+            //update properties
+            //TODO:  is this going to be a bottleneck?
+            scope.$watch(
+              function(){
+                return isolate.getProperties()
+              },
+              function(){
+                if(isolate.surface)
+                  isolate.surface.setProperties(isolate.getProperties());
+              },
+              true
+            )
+
             isolate.getProperties = function(){
               return {
                 backgroundColor: scope.$eval(attrs.faBackgroundColor),
@@ -70,7 +83,6 @@ angular.module('famous.angular')
           post: function(scope, element, attrs){
             var isolate = scope.isolate[scope.$id];
             var updateContent = function(){
-              isolate.surface.setProperties(isolate.getProperties());
               var compiledEl = isolate.compiledEl = isolate.compiledEl || $compile(element.find('div.fa-surface').contents())(scope)
               isolate.surface.setContent(isolate.compiledEl.context);
             };
