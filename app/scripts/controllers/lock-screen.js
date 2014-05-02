@@ -57,9 +57,12 @@ angular.module('integrationApp')
     $scope.bgOpacity = function(){
       var scrollView = famous.bag.first('main-scroll-view');
       if(scrollView){
-        window.sv = scrollView;
-        return Math.random();
-      } else return 1;
+        var page = sv._node.index;
+        var absPosition = _width * page + sv.getPosition();
+        var perPosition = Math.max(0, Math.min(1, absPosition / (_width)))
+        return 1 - perPosition;
+      } else
+        return 0;
     };
 
     $scope.leftRightPos = function(){
