@@ -28,6 +28,7 @@ angular.module('integrationApp')
         rand: rand(),
         name: _.sample(strings),
         bgColor: _.sample(colors),
+        id: i
       }
     });
 

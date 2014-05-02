@@ -8,6 +8,7 @@ angular.module('integrationApp')
     var Transitionable = famous['famous/transitions/Transitionable'];
     var Easing = famous['famous/transitions/Easing'];
     var MouseSync       = require('famous/inputs/MouseSync');
+    var fc       = famous['famous/inputs/FastClick'];
     var TouchSync       = require('famous/inputs/TouchSync');
     var Timer           = require('famous/utilities/Timer');
     $scope.enginePipe = new EventHandler();
@@ -73,9 +74,12 @@ angular.module('integrationApp')
     };
 
     $scope.setEvent = function(e){
-      console.log('set event', e)
+      linesIn();
       $scope.activeEvent = e;
-      $scope.tran.set(-1, {duration:"500", curve:Easing.outBounce});
+      Timer.setTimeout(function() {
+        $scope.tran.set(-1, {duration:"400", curve:Easing.outQuint});
+        linesOut();
+      }, 300);
     };
 
     $scope.getLineX = function(e){
@@ -93,7 +97,7 @@ angular.module('integrationApp')
     $scope.tran = new Transitionable(0);
     $scope.sync = new GenericSync(function(){
       return $scope.tran.get();
-    }, {direction: GenericSync.DIRECTION_X});
+    },{direction: GenericSync.DIRECTION_X});
 
     var SCROLL_SENSITIVITY = 300; //inverse
     var stripFlag = true;
@@ -117,7 +121,7 @@ angular.module('integrationApp')
       } else {
         newVal = vel > 0.75 ? 0.85: 0;
       }
-      $scope.tran.set(newVal, {duration:"300", curve:Easing.outSine});
+      $scope.tran.set(newVal, {duration:"300", curve:Easing.outQuint});
     })
 
     $scope.enginePipe.pipe($scope.sync);
@@ -145,6 +149,7 @@ angular.module('integrationApp')
         }
         if (MODE === 'X' && $scope.tran.get() < 0.2){
           $scope.testStrips();
+          $scope.disableScrollView();
         }
       }
     });
@@ -193,6 +198,7 @@ angular.module('integrationApp')
       lines = false;
     }
 
+    $scope.linesIn = linesIn;
     $scope.calcStripY = function(){
       return  $scope.stripOptions.width * Math.tan(-$scope.stripOptions.angle);
     }
@@ -212,6 +218,10 @@ angular.module('integrationApp')
           mod.play();
         }.bind(this, i), i * $scope.stripOptions.staggerDelay+1);
       })
+    }
+
+    $scope.back = function(){
+      $scope.tran.set(0, {duration:"250", curve:Easing.outSine});
     }
 
 

@@ -16,8 +16,8 @@ angular.module('integrationApp')
       famous.bag.first('animateTest').replay();
       console.log(window.zz = famous.bag.first('animateTest'))
     }
-    scrollview.setOptions({margin:20000, friction: 0.0010, drag: 0.0001, speedLimit : 5})
-
+    // oh man dont mess with this... default is so much smoother
+    // scrollview.setOptions({margin:20000, friction: 0.002, drag: 0.0001, speedLimit : 5})
     $scope.disableScrollView = function(){
     	scrollview.unsubscribe($scope.enginePipe);
     }
