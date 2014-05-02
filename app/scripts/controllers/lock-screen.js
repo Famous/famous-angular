@@ -28,59 +28,6 @@ angular.module('integrationApp')
       }
     }
 
-    $scope.testLog = function(arg) {
-      console.log('test', arg);
-    }
-
-    $scope.inputDots = [
-      {val: false},
-      {val: false},
-      {val: false},
-      {val: false}
-    ];
-
-    var _inputLocked = false;
-    var _dotIndex = 0;
-    var DOTS = 4;
-    $scope.shiftInputDots = function(){
-      _dotIndex = (_dotIndex + 1);
-      for(var i = 0; i < DOTS; i++){
-        $scope.inputDots[i].val = i < _dotIndex;
-      }
-      if(_dotIndex >= DOTS){
-        _inputLocked = true;
-        $scope.fireDotShakeAnimation(function(){
-          _dotIndex = -1;
-          $scope.shiftInputDots();
-          _inputLocked = false;
-          if(!$scope.$$phase)
-            $scope.$apply();
-        })
-      }
-    }
-
-    $scope.unshiftInputDots = function(){
-      _dotIndex = Math.max(0,(_dotIndex - 2));
-      $scope.shiftInputDots();
-    }
-
-    $scope.bgOpacity = function(){
-      var scrollView = famous.bag.first('main-scroll-view');
-      if(scrollView){
-        var page = sv._node.index;
-        var absPosition = _width * page + sv.getPosition();
-        var perPosition = Math.max(0, Math.min(1, absPosition / (_width)))
-        return 1 - perPosition;
-      } else
-        return 0;
-    };
-
-    $scope.leftRightPos = function(){
-      var scrollView = famous.bag.first('main-scroll-view');
-      if(scrollView){
-
-      }
-    }
 
     $scope.sizes = {
       numberButton: [77, 77],
@@ -91,11 +38,12 @@ angular.module('integrationApp')
       inputDot: [15, 15],
       slideToUnlockText: [.45 * _width, 24],
       calendar: [undefined, 30],
-      clock: [undefined, 200]
+      clock: [undefined, 200],
+      emergencyText: [75, 50]
     }
 
     $scope.positions = {
-      numberPadGridLayout: [.085 * _width, 150, 50],
+      numberPadGridLayout: [.085 * _width, 150, 500],
       emergencyText: [.085 * _width, _height - 36, 2],
       deleteText: [-(.085 * _width), _height - 36, 2],
       enterPasscodeText: [0, 45, 2],
@@ -119,6 +67,68 @@ angular.module('integrationApp')
       { number: 0, letters: ""},
     ];
 
+    $scope.inputDots = [
+      {val: false},
+      {val: false},
+      {val: false},
+      {val: false}
+    ];
+
+
+
+
+
+
+
+
+    $scope.testLog = function(arg) {
+      console.log('test', arg);
+    }
+
+    var _inputLocked = false;
+    var _dotIndex = 0;
+    var DOTS = 4;
+    $scope.shiftInputDots = function(){
+      _dotIndex = (_dotIndex + 1);
+      for(var i = 0; i < DOTS; i++){
+        $scope.inputDots[i].val = i < _dotIndex;
+      }
+      if(_dotIndex >= DOTS){
+        _inputLocked = true;
+        $scope.fireDotShakeAnimation(function(){
+          _dotIndex = -1;
+          $scope.shiftInputDots();
+          _inputLocked = false;
+          if(!$scope.$$phase)
+            $scope.$apply();
+        })
+      }
+    }
+
+    $scope.unshiftInputDots = function(){
+      _dotIndex = Math.max(-1,(_dotIndex - 2));
+      $scope.shiftInputDots();
+    }
+
+    $scope.bgOpacity = function(){
+      var scrollView = famous.bag.first('main-scroll-view');
+      if(scrollView){
+        var perPosition = $scope.scrollXPosition();
+        return 1 - perPosition;
+      } else
+        return 0;
+    };
+
+    $scope.scrollXPosition = function(){
+      var scrollView = famous.bag.first('main-scroll-view');
+      if(scrollView){
+        var page = sv._node.index;
+        var absPosition = _width * page + sv.getPosition();
+        var perPosition = Math.max(0, Math.min(1, absPosition / (_width)));
+        return perPosition;
+      }
+    };
+
     $scope.buttonTap = function(index, numberButton){
       console.log('pressed', numberButton.number);
       if(!_inputLocked){
@@ -126,7 +136,6 @@ angular.module('integrationApp')
         $scope.fireButtonAnimation(index);
       }
     }
-
 
     $scope.fireButtonAnimation = function(index){
       famous.bag.first('number-button-animation-' + index).replay();

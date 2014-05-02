@@ -69,8 +69,8 @@
 
 
               <!-- Flash-on-tap overlay -->
-              <fa-modifier fa-opacity="0" id="{{'number-button-' + $index}}">
-                <fa-surface ng-if="numberButton.number !== ''" fa-size="sizes.numberButton">
+              <fa-modifier fa-opacity="0" id="{{'number-button-' + $index}}" fa-translate="[0,0,50]">
+                <fa-surface ng-if="numberButton.number !== ''" fa-size="sizes.numberButton" fa-tap="buttonTap($index, numberButton)" fa-pipe-to="enginePipe">
                   <img class="ring" src="images/lock-screen/number-button-fill.svg" />
                 </fa-surface>
               </fa-modifier>
@@ -95,17 +95,12 @@
                 <div class="number">{{numberButton.number}}</div>
                 <div class="letters">{{numberButton.letters}}</div>
               </fa-surface>
-
-              <!-- Invisible surface for touch handling -->
-              <fa-surface fa-size="sizes.numberButton" fa-position="[0,0,500]" fa-tap="buttonTap($index, numberButton)" fa-pipe-to="enginePipe">
-                &nbsp;
-              </fa-surface>
             </fa-view>
           </fa-grid-layout>
         </fa-modifier>
 
         <!-- Footer text buttons -->
-        <fa-modifier fa-translate="positions.emergencyText">
+        <fa-modifier fa-size="emergencyText" fa-translate="positions.emergencyText">
           <fa-surface>Emergency</fa-surface>
         </fa-modifier>
         <fa-modifier fa-origin="[1,0]" fa-translate="positions.deleteText">
@@ -115,6 +110,7 @@
 
       <!-- Right panel -->
       <fa-view id="slide-screen">
+
 
         <!-- Clock and calendar -->
         <fa-modifier fa-translate="positions.clock">
