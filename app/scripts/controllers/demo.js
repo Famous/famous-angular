@@ -31,7 +31,7 @@ angular.module('integrationApp')
     $scope.surfs = _.map(_.range(elements), function(i){
       return {
         content: _.sample(strings),
-        bgColor: _.sample(colors),
+        bgColor: _.sample(colors)
       }
     });
 

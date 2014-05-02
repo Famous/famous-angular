@@ -31,7 +31,7 @@ var requirements = [
   "famous/transitions/Transitionable",
   "famous/utilities/Timer",
   "famous/views/ScrollView",
-  "famous/views/GridLayout",
+  "famous/views/GridLayout"
 ]
 
 //declare the module before the async callback so that

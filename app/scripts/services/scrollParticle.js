@@ -24,13 +24,13 @@ angular.module('integrationApp')
         if (edgeDetected < 0) {
           this._springPosition = clipSizeFn();
           this.spring.setOptions({
-              anchor: [this._springPosition, 0, 0],
+              anchor: [this._springPosition, 0, 0]
           });
         }
         else if (edgeDetected > 0) {
           this._springPosition = 0;
           this.spring.setOptions({
-              anchor: [this._springPosition, 0, 0],
+              anchor: [this._springPosition, 0, 0]
           });
         }
 

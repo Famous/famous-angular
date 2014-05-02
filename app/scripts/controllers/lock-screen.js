@@ -67,7 +67,7 @@ angular.module('integrationApp')
       { number: 8, letters: "TUV"},
       { number: 9, letters: "WXYZ"},
       { number: "",letters: ""},
-      { number: 0, letters: ""},
+      { number: 0, letters: ""}
     ];
 
     $scope.inputDots = [

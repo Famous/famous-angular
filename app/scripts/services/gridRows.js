@@ -26,12 +26,12 @@ angular.module('integrationApp')
               tweet: second,
               size: height,
               x: 2*height + 3*margin,
-              y: margin,
+              y: margin
             }, {
               tweet: third,
               size: height,
               x: 2*height + 3*margin,
-              y: height + 2*margin,
+              y: height + 2*margin
             }]
         };
       },
@@ -49,7 +49,7 @@ angular.module('integrationApp')
               tweet: second,
               size: height,
               x: height + 2*margin,
-              y: margin,
+              y: margin
             }, {
               tweet: third,
               size: height,

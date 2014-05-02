@@ -15,7 +15,7 @@ angular.module('integrationApp')
     };
 
     $scope.$on('$destroy', function() {
-      console.log(scope, "heard $destroy");
+      console.log($scope, "heard $destroy");
     });
 
   })
