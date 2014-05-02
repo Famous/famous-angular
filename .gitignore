@@ -1,6 +1,18 @@
+# OS generated files #
+######################
+.DS_Store
+ehthumbs.db
+Icon?
+Thumbs.db
+
+# Node Files #
+##############
 node_modules
+
+# Project Files #
+#################
 dist
 .tmp
 .sass-cache
 app/bower_components
-*.DS_STORE
+.idea/*
