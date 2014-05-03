@@ -1,11 +1,7 @@
-//TODO:  the templates for the first and last segments of
-//       the compiled famous.angular.js file sit in separate
-//       files (in app/scripts/stubs.)  Rather than maintain
-//       this structure, probably should put together a
-//       placeholder-replacement step in gulp instead of 
-//       concatenating files like this.
-
 'use strict';
+
+// Put angular bootstrap on hold
+window.name = "NG_DEFER_BOOTSTRAP!" + window.name;
 
 //TODO:  Ensure that this list stays up-to-date with
 //       the filesystem (maybe write a bash script
@@ -37,6 +33,10 @@ var requirements = [
   "famous/views/Scroller",
   "famous/views/GridLayout"
 ]
+
+require.config({
+	baseUrl: "/scripts"
+});
 
 //declare the module before the async callback so that
 //it will be accessible to other synchronously loaded angular
@@ -89,7 +89,23 @@ require(requirements, function(/*args*/){
       };
     });
 
+	ngFameApp.config(function(famousProvider){
+		for(var i = 0; i < requirements.length; i++)
+			famousProvider.registerModule(requirements[i], required[i]);
+		console.log('registered modules', famousProvider.$get());
+	});
 
+	/*if(window.famousAngularBootstrap){
+	 window.famousAngularBootstrap();
+	 }else{
+	 throw "window.famousAngularBootstrap callback not defined.  In order to work with famous-angular, you must define that callback function and bootstrap your app inside."
+	 }*/
+
+	angular.element(document).ready(function () {
+		angular.resumeBootstrap();
+	});
+
+})
 angular.module('famous.angular')
   .directive('faAnimation', function (famous) {
     return {
@@ -1130,21 +1146,3 @@ angular.module('famous.angular')
       }
     };
   }]);
-
-
-
-
-
-  ngFameApp.config(function(famousProvider){
-    for(var i = 0; i < requirements.length; i++)
-      famousProvider.registerModule(requirements[i], required[i]);
-    console.log('registered modules', famousProvider.$get());
-  });
-
-  if(window.famousAngularBootstrap){
-    window.famousAngularBootstrap();
-  }else{
-    throw "window.famousAngularBootstrap callback not defined.  In order to work with famous-angular, you must define that callback function and bootstrap your app inside."
-  }
-  
-})
