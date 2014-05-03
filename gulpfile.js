@@ -38,7 +38,7 @@ gulp.task('scripts', function() {
   .pipe(jshint('.jshintrc'))
   .pipe(jshint.reporter('default'))
   .pipe(concat('famous.angular.js'))
-  .pipe(gulp.dest('dist/scripts'))
+  .pipe(gulp.dest('app/scripts'))
   .pipe(livereload(server))
   .pipe(notify({ message: 'Scripts task complete' }));
 });
@@ -52,31 +52,40 @@ gulp.task('clean', function() {
 // Watch
 gulp.task('watch', function(event) {
   server.listen(LIVERELOAD_PORT, function (err) {
-  if (err) {
-    return console.log(err)
-  };
+	  if (err) {
+	    return console.log(err)
+	  };
 
-  // Watch .js files
-  gulp.watch(
-    [
-      'app/scripts/*/**/*.js',
-      'app/scripts/app.js',
-      '!app/scripts/famous.angular.js',
-      'app/index.html',
-      'app/views/**/*.html'
-    ],
-    ['scripts']
-  ).on('change',
-    function(file){
-      server.changed(file.path);
-    }
-  );
+	  // Watch .js files
+	  gulp.watch(
+	    [
+	      'app/scripts/*/**/*.js',
+	      'app/scripts/app.js',
+	      '!app/scripts/famous.angular.js',
+	      'app/index.html',
+	      'app/views/**/*.html'
+	    ],
+	    ['build']
+	  ).on('change',
+	    function(file){
+	      server.changed(file.path);
+	    }
+	  );
   });
-
 });
 
+// Build for dist
+gulp.task('build', ['clean', 'scripts'], function(event) {
+	return gulp.src('app/scripts/famous.angular.js')
+	.pipe(gulp.dest('dist/scripts'))
+	.pipe(uglify())
+	.pipe(rename({suffix: '.min'}))
+	.pipe(gulp.dest('dist/scripts'))
+	.pipe(notify({ message: 'Build task complete' }));
+})
+
 // Default task
-gulp.task('default', ['scripts', 'clean'], function() {
+gulp.task('default', ['scripts'], function() {
   startExpress();
   gulp.start('watch');
 });
