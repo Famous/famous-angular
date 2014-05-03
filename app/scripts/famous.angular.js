@@ -107,7 +107,6 @@ require(requirements, function(/*args*/){
 	});
 
 })
-
 angular.module('famous.angular')
   .directive('faAnimation', function (famous) {
     return {
