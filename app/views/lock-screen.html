@@ -2,14 +2,12 @@
   <fa-app fa-pipe-to="enginePipe">
     <fa-view id="background-image">
       <fa-modifier id="clear-background">
-        <fa-surface fa-size="sizes.bgImage">
-          <img style="width: 100%" src="images/lock-screen/monkey.jpg" />
-        </fa-surface>
+        <fa-image-surface fa-image-url="'images/lock-screen/monkey.jpg'" fa-size="sizes.bgImage">
+        </fa-image-surface>
       </fa-modifier>
       <fa-modifier id="blurred-background" fa-opacity="bgOpacity">
-        <fa-surface fa-size="sizes.bgImage">
-          <img style="width: 100%" src="images/lock-screen/monkey-blurred.jpg" />
-        </fa-surface>
+        <fa-image-surface fa-size="sizes.bgImage" fa-image-url="'images/lock-screen/monkey-blurred.jpg'">
+        </fa-image-surface>
       </fa-modifier>
     </fa-view>
 

@@ -29,6 +29,7 @@ var requirements = [
   "famous/inputs/MouseSync",
   "famous/inputs/PinchSync",
   "famous/inputs/FastClick",
+  "famous/surfaces/ImageSurface",
   "famous/transitions/Easing",
   "famous/transitions/SpringTransition",
   "famous/transitions/Transitionable",
