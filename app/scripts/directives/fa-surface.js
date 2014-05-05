@@ -69,9 +69,32 @@ angular.module('famous.angular')
               return modifiers;
             };
 
-            if (attrs.faPipeTo) {
-              isolate.surface.pipe(scope.$eval(attrs.faPipeTo));
-            }
+            //update pipes; support multiple, dynamically
+            //bound pipes.  May need to do a deep watch,
+            //which is currently bugging out Angular.  One
+            //solution would be a custom deep-watch function
+            //(probably watch collection, return a hashKey-like array)
+            scope.$watch(
+              function(){
+                return scope.$eval(attrs.faPipeTo);
+              },
+              function(newPipe, oldPipe){
+                if(oldPipe instanceof Array){
+                  for(var i = 0; i < oldPipe.length; i++){
+                    isolate.surface.unpipe(oldPipe[i]);
+                  }
+                }else if(oldPipe !== undefined){
+                  isolate.surface.unpipe(oldPipe);
+                }
+
+                if(newPipe instanceof Array){
+                  for(var i = 0; i < newPipe.length; i++){
+                    isolate.surface.pipe(newPipe[i]);
+                  }
+                }else if(newPipe !== undefined){
+                  isolate.surface.pipe(newPipe);
+                }
+              });
 
             if (attrs.faClick) {
               isolate.surface.on("click", function() {
