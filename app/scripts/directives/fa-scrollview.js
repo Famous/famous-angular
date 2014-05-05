@@ -16,7 +16,7 @@ angular.module('famous.angular')
             scope.isolate[scope.$id] = scope.isolate[scope.$id] || {};
             var isolate = scope.isolate[scope.$id];
 
-            var ScrollView = famous["famous/views/ScrollView"];
+            var ScrollView = famous["famous/views/Scrollview"];
             var ViewSequence = famous['famous/core/ViewSequence'];
             var Surface = famous['famous/core/Surface'];
 

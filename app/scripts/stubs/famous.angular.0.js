@@ -34,7 +34,7 @@ var requirements = [
   "famous/transitions/SpringTransition",
   "famous/transitions/Transitionable",
   "famous/utilities/Timer",
-  "famous/views/ScrollView",
+  "famous/views/Scrollview",
   "famous/views/Scroller",
   "famous/views/GridLayout"
 ]

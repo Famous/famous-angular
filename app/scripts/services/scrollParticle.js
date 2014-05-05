@@ -5,7 +5,7 @@
 angular.module('integrationApp')
   .factory('ScrollParticle', function (famous) {
 
-    var ScrollView = famous['famous/views/ScrollView'];
+    var ScrollView = famous['famous/views/Scrollview'];
     var Timer = famous["famous/utilities/Timer"];
     var PhysicsEngine = famous['famous/physics/PhysicsEngine'];
     var Particle = famous['famous/physics/bodies/Particle'];
