@@ -101,14 +101,12 @@ angular.module('famous.angular')
           post: function(scope, element, attrs){
             var isolate = scope.isolate[scope.$id];
             var updateContent = function(){
-              isolate.surface.setContent(scope.$eval(attrs.faImageUrl))
+              isolate.surface.setContent(attrs.faImageUrl)
             };
 
             updateContent();
 
-            scope.$watch(function(){
-              return scope.$eval(attrs.faImageUrl)
-            }, updateContent);
+            attrs.$observe('faImageUrl', updateContent);
 
 
             //TODO:  support data-bound ids (supports only strings for now)

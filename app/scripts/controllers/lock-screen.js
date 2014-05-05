@@ -29,7 +29,6 @@ angular.module('integrationApp')
       }
     }
 
-
     $scope.sizes = {
       numberButton: [77, 77],
       bgImage: [_width, _height],
