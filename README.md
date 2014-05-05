@@ -1,7 +1,5 @@
 # famous-angular
 
-&copy; 2014 Thomas Street.  All Rights Reserved.
-
 ##Running
 
 ####Before you start, tools your will need

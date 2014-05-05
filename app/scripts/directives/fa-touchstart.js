@@ -1,9 +1,7 @@
 
-// 
-// © 2014 Thomas Street LLC. All rights reserved
-//
 
-window.argh = angular.module('famous.angular')
+
+angular.module('famous.angular')
   .directive('faTouchstart', function ($parse) {
     return {
       restrict: 'A',

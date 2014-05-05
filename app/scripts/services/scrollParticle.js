@@ -1,6 +1,4 @@
-// 
-// © 2014 Thomas Street LLC. All rights reserved
-//
+
 
 'use strict';
 

@@ -1,9 +1,3 @@
-// 
-// © 2014 Thomas Street LLC. All rights reserved
-//
-
-
-
 angular.module('famous.angular')
   .directive('faGridLayout', function (famous, $controller) {
     return {

@@ -364,11 +364,6 @@ angular.module('famous.angular')
     };
   });
 
-// 
-// © 2014 Thomas Street LLC. All rights reserved
-//
-
-
 angular.module('famous.angular')
   .directive('faApp', ["famous", function (famous) {
     return {
@@ -435,12 +430,6 @@ angular.module('famous.angular')
       }
     };
   }]);
-
-// 
-// © 2014 Thomas Street LLC. All rights reserved
-//
-
-
 
 angular.module('famous.angular')
   .directive('faGridLayout', function (famous, $controller) {
@@ -515,9 +504,7 @@ angular.module('famous.angular')
     };
   });
 
-// 
-// © 2014 Thomas Street LLC. All rights reserved
-//
+
 
 angular.module('famous.angular')
   .directive('faModifier', ["famous", function (famous) {
@@ -656,9 +643,7 @@ angular.module('famous.angular')
     };
   }]);
 
-// 
-// © 2014 Thomas Street LLC. All rights reserved
-//
+
 
 angular.module('famous.angular')
   .directive('faPresenter', function ($controller) {
@@ -687,9 +672,7 @@ angular.module('famous.angular')
     };
   });
 
-// 
-// © 2014 Thomas Street LLC. All rights reserved
-//
+
 
 
 
@@ -775,10 +758,6 @@ angular.module('famous.angular')
       }
     };
   });
-
-// 
-// © 2014 Thomas Street LLC. All rights reserved
-//
 
 angular.module('famous.angular')
   .directive('faSurface', function (famous, $interpolate, $controller, $compile) {
@@ -908,9 +887,7 @@ angular.module('famous.angular')
     };
   });
 
-// 
-// © 2014 Thomas Street LLC. All rights reserved
-//
+
 
 angular.module('famous.angular')
   .directive('faTap', function ($parse) {
@@ -950,9 +927,7 @@ angular.module('famous.angular')
     };
   });
 
-// 
-// © 2014 Thomas Street LLC. All rights reserved
-//
+
 
 angular.module('famous.angular')
   .directive('faTouchend', function ($parse) {
@@ -982,9 +957,7 @@ angular.module('famous.angular')
     };
   });
 
-// 
-// © 2014 Thomas Street LLC. All rights reserved
-//
+
 
 angular.module('famous.angular')
   .directive('faTouchmove', function ($parse) {
@@ -1013,11 +986,9 @@ angular.module('famous.angular')
   });
 
 
-// 
-// © 2014 Thomas Street LLC. All rights reserved
-//
 
-window.argh = angular.module('famous.angular')
+
+angular.module('famous.angular')
   .directive('faTouchstart', function ($parse) {
     return {
       restrict: 'A',
@@ -1043,9 +1014,7 @@ window.argh = angular.module('famous.angular')
     };
   });
 
-// 
-// © 2014 Thomas Street LLC. All rights reserved
-//
+
 
 angular.module('famous.angular')
   .directive('faView', ["famous", "$controller", function (famous, $controller) {
