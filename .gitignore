@@ -8,6 +8,7 @@ Thumbs.db
 # Node Files #
 ##############
 node_modules
+npm-debug.log
 
 # Project Files #
 #################
