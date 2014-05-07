@@ -1,5 +1,5 @@
 angular.module('famous.angular')
-  .directive('faAnimation', function (famous) {
+  .directive('faAnimation', function (famous, famousDecorator) {
     return {
       restrict: 'EA',
       scope: true,
@@ -9,15 +9,13 @@ angular.module('famous.angular')
         var Easing = famous['famous/transitions/Easing'];
         return {
           pre: function(scope, element, attrs){
-            scope.isolate = scope.isolate || {};
-            scope.isolate[scope.$id] = scope.isolate[scope.$id] || {};
-            var isolate = scope.isolate[scope.$id];
+            var isolate = famousDecorator.ensureIsolate(scope);
           },
           post: function(scope, element, attrs){
-            var isolate = scope.isolate[scope.$id];
+            var isolate = famousDecorator.ensureIsolate(scope);
+            
             setTimeout(function(){
               var timeline = scope.$eval(attrs.timeline);
-              console.log('timeline', timeline);
               isolate._trans = new Transitionable(0);
 
               isolate.play = function(callback){

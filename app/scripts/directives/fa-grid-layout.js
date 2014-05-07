@@ -1,5 +1,5 @@
 angular.module('famous.angular')
-  .directive('faGridLayout', function (famous, $controller) {
+  .directive('faGridLayout', function (famous, famousDecorator, $controller) {
     return {
       template: '<div></div>',
       restrict: 'E',
@@ -8,9 +8,7 @@ angular.module('famous.angular')
       compile: function(tElem, tAttrs, transclude){
         return  {
           pre: function(scope, element, attrs){
-            scope.isolate = scope.isolate || {};
-            scope.isolate[scope.$id] = scope.isolate[scope.$id] || {};
-            var isolate = scope.isolate[scope.$id];
+            var isolate = famousDecorator.ensureIsolate(scope);
 
             var GridLayout = famous["famous/views/GridLayout"];
             var ViewSequence = famous['famous/core/ViewSequence'];
@@ -53,8 +51,8 @@ angular.module('famous.angular')
 
           },
           post: function(scope, element, attrs){
-            var isolate = scope.isolate[scope.$id];
-
+            var isolate = famousDecorator.ensureIsolate(scope);
+            
             transclude(scope, function(clone) {
               element.find('div').append(clone);
             });

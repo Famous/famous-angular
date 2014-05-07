@@ -1,16 +1,14 @@
 
 
 angular.module('famous.angular')
-  .directive('faTouchmove', function ($parse) {
+  .directive('faTouchmove', function ($parse, famousDecorator) {
     return {
       restrict: 'A',
       scope: false,
       compile: function() {
         return { 
           post: function(scope, element, attrs) {
-            scope.isolate = scope.isolate || {};
-            scope.isolate[scope.$id] = scope.isolate[scope.$id] || {};
-            var isolate = scope.isolate[scope.$id];
+            var isolate = famousDecorator.ensureIsolate(scope);
 
             if (attrs.faTouchMove) {
               isolate.renderNode.on("touchmove", function(data) {

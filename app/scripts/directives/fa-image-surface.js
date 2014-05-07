@@ -1,5 +1,5 @@
 angular.module('famous.angular')
-  .directive('faImageSurface', function (famous, $interpolate, $controller, $compile) {
+  .directive('faImageSurface', function (famous, famousDecorator, $interpolate, $controller, $compile) {
     return {
       scope: true,
       template: '<div class="fa-image-surface"></div>',
@@ -7,9 +7,7 @@ angular.module('famous.angular')
       compile: function(tElem, tAttrs, transclude){
         return {
           pre: function(scope, element, attrs){
-            scope.isolate = scope.isolate || {};
-            scope.isolate[scope.$id] = scope.isolate[scope.$id] || {};
-            var isolate = scope.isolate[scope.$id];
+            var isolate = famousDecorator.ensureIsolate(scope);
 
             var ImageSurface = famous['famous/surfaces/ImageSurface'];
             var Transform = famous['famous/core/Transform']
@@ -39,17 +37,6 @@ angular.module('famous.angular')
               return x.get ? x.get() : x;
             };
 
-            //TODO: $observe attributes and pass updated values
-            // into variables that are returned by functions that
-            // can then be passed into modifiers
-
-            var modifiers = {
-              origin: scope.$eval(attrs.faOrigin),
-              translate: scope.$eval(attrs.faTranslate),
-              rotateZ: scope.$eval(attrs.faRotateZ),
-              skew: scope.$eval(attrs.faSkew)
-            };
-
             isolate.renderNode = new ImageSurface({
               size: scope.$eval(attrs.faSize),
               class: scope.$eval(attrs.class),
@@ -59,10 +46,6 @@ angular.module('famous.angular')
             //TODO:  support ng-class
             if(attrs.class)
               isolate.renderNode.setClasses(attrs['class'].split(' '));
-
-            isolate.modifier = function() {
-              return modifiers;
-            };
 
             //update pipes; support multiple, dynamically
             //bound pipes.  May need to do a deep watch,
@@ -99,7 +82,8 @@ angular.module('famous.angular')
 
           },
           post: function(scope, element, attrs){
-            var isolate = scope.isolate[scope.$id];
+            var isolate = famousDecorator.ensureIsolate(scope);
+            
             var updateContent = function(){
               isolate.renderNode.setContent(attrs.faImageUrl)
             };
@@ -108,14 +92,13 @@ angular.module('famous.angular')
 
             attrs.$observe('faImageUrl', updateContent);
 
-
             //TODO:  support data-bound ids (supports only strings for now)
             //Possibly make "fa-id" for databound ids?
             //Register this modifier by ID in bag
             var id = attrs.id;
             famous.bag.register(id, isolate.renderNode)
 
-            scope.$emit('registerChild', {renderNode: isolate.renderNode, mod: isolate.modifier});
+            scope.$emit('registerChild', {renderNode: isolate.renderNode});
           }
         }
       }

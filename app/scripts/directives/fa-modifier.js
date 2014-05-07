@@ -1,7 +1,7 @@
 
 
 angular.module('famous.angular')
-  .directive('faModifier', ["famous", function (famous) {
+  .directive('faModifier', ["famous", "famousDecorator", function (famous, famousDecorator) {
     return {
       template: '<div></div>',
       transclude: true,
@@ -11,9 +11,7 @@ angular.module('famous.angular')
       compile: function(tElement, tAttrs, transclude){
         return {
           post: function(scope, element, attrs){
-            scope.isolate = scope.isolate || {};
-            scope.isolate[scope.$id] = scope.isolate[scope.$id] || {};
-            var isolate = scope.isolate[scope.$id];
+            var isolate = famousDecorator.ensureIsolate(scope);
 
             var RenderNode = famous['famous/core/RenderNode']
             var Modifier = famous['famous/core/Modifier']
@@ -75,8 +73,6 @@ angular.module('famous.angular')
                 );
               }
 
-
-
               if(!transforms.length)
                 return undefined;
               else if (transforms.length === 1)
@@ -118,7 +114,6 @@ angular.module('famous.angular')
             transclude(scope, function(clone) {
               element.find('div').append(clone);
             });
-
 
             //TODO:  support data-bound ids (supports only strings for now)
             //Possibly make "fa-id" for databound ids?

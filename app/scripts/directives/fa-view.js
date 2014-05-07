@@ -1,7 +1,7 @@
 
 
 angular.module('famous.angular')
-  .directive('faView', ["famous", "$controller", function (famous, $controller) {
+  .directive('faView', ["famous", "famousDecorator", "$controller", function (famous, famousDecorator, $controller) {
     return {
       template: '<div></div>',
       transclude: true,
@@ -10,9 +10,7 @@ angular.module('famous.angular')
       compile: function(tElement, tAttrs, transclude){
         return {
           pre: function(scope, element, attrs){
-            scope.isolate = scope.isolate || {};
-            scope.isolate[scope.$id] = scope.isolate[scope.$id] || {};
-            var isolate = scope.isolate[scope.$id];
+            var isolate = famousDecorator.ensureIsolate(scope);
             
             var View = famous['famous/core/View'];
             var Engine = famous['famous/core/Engine'];
@@ -64,7 +62,7 @@ angular.module('famous.angular')
 
           },
           post: function(scope, element, attrs){
-            var isolate = scope.isolate[scope.$id];
+            var isolate = famousDecorator.ensureIsolate(scope);
             
             transclude(scope, function(clone) {
               element.find('div').append(clone);

@@ -1,22 +1,19 @@
 
 
 angular.module('famous.angular')
-  .directive('faTap', function ($parse) {
+  .directive('faTap', function ($parse, famousDecorator) {
     return {
       restrict: 'A',
       compile: function() {
         return { 
           post: function(scope, element, attrs) {
-            scope.isolate = scope.isolate || {};
-            scope.isolate[scope.$id] = scope.isolate[scope.$id] || {};
-            var isolate = scope.isolate[scope.$id];
-
+            var isolate = famousDecorator.ensureIsolate(scope);
 
             if (attrs.faTap) {
               var _dragging = false;
 
               //TODO:  refactor to isolate.renderNode
-              var renderNode = isolate.renderNode || isolate.view;
+              var renderNode = isolate.renderNode
               renderNode.on("touchmove", function(data) {
                 _dragging = true;
                 return data;

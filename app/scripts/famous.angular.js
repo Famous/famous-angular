@@ -134,7 +134,7 @@ angular.module('famous.angular')
   });
 
 angular.module('famous.angular')
-  .directive('faAnimation', function (famous) {
+  .directive('faAnimation', function (famous, famousDecorator) {
     return {
       restrict: 'EA',
       scope: true,
@@ -144,15 +144,13 @@ angular.module('famous.angular')
         var Easing = famous['famous/transitions/Easing'];
         return {
           pre: function(scope, element, attrs){
-            scope.isolate = scope.isolate || {};
-            scope.isolate[scope.$id] = scope.isolate[scope.$id] || {};
-            var isolate = scope.isolate[scope.$id];
+            var isolate = famousDecorator.ensureIsolate(scope);
           },
           post: function(scope, element, attrs){
-            var isolate = scope.isolate[scope.$id];
+            var isolate = famousDecorator.ensureIsolate(scope);
+            
             setTimeout(function(){
               var timeline = scope.$eval(attrs.timeline);
-              console.log('timeline', timeline);
               isolate._trans = new Transitionable(0);
 
               isolate.play = function(callback){
@@ -475,7 +473,7 @@ angular.module('famous.angular')
   }]);
 
 angular.module('famous.angular')
-  .directive('faGridLayout', function (famous, $controller) {
+  .directive('faGridLayout', function (famous, famousDecorator, $controller) {
     return {
       template: '<div></div>',
       restrict: 'E',
@@ -484,9 +482,7 @@ angular.module('famous.angular')
       compile: function(tElem, tAttrs, transclude){
         return  {
           pre: function(scope, element, attrs){
-            scope.isolate = scope.isolate || {};
-            scope.isolate[scope.$id] = scope.isolate[scope.$id] || {};
-            var isolate = scope.isolate[scope.$id];
+            var isolate = famousDecorator.ensureIsolate(scope);
 
             var GridLayout = famous["famous/views/GridLayout"];
             var ViewSequence = famous['famous/core/ViewSequence'];
@@ -529,8 +525,8 @@ angular.module('famous.angular')
 
           },
           post: function(scope, element, attrs){
-            var isolate = scope.isolate[scope.$id];
-
+            var isolate = famousDecorator.ensureIsolate(scope);
+            
             transclude(scope, function(clone) {
               element.find('div').append(clone);
             });
@@ -548,7 +544,7 @@ angular.module('famous.angular')
   });
 
 angular.module('famous.angular')
-  .directive('faImageSurface', function (famous, $interpolate, $controller, $compile) {
+  .directive('faImageSurface', function (famous, famousDecorator, $interpolate, $controller, $compile) {
     return {
       scope: true,
       template: '<div class="fa-image-surface"></div>',
@@ -556,9 +552,7 @@ angular.module('famous.angular')
       compile: function(tElem, tAttrs, transclude){
         return {
           pre: function(scope, element, attrs){
-            scope.isolate = scope.isolate || {};
-            scope.isolate[scope.$id] = scope.isolate[scope.$id] || {};
-            var isolate = scope.isolate[scope.$id];
+            var isolate = famousDecorator.ensureIsolate(scope);
 
             var ImageSurface = famous['famous/surfaces/ImageSurface'];
             var Transform = famous['famous/core/Transform']
@@ -588,17 +582,6 @@ angular.module('famous.angular')
               return x.get ? x.get() : x;
             };
 
-            //TODO: $observe attributes and pass updated values
-            // into variables that are returned by functions that
-            // can then be passed into modifiers
-
-            var modifiers = {
-              origin: scope.$eval(attrs.faOrigin),
-              translate: scope.$eval(attrs.faTranslate),
-              rotateZ: scope.$eval(attrs.faRotateZ),
-              skew: scope.$eval(attrs.faSkew)
-            };
-
             isolate.renderNode = new ImageSurface({
               size: scope.$eval(attrs.faSize),
               class: scope.$eval(attrs.class),
@@ -608,10 +591,6 @@ angular.module('famous.angular')
             //TODO:  support ng-class
             if(attrs.class)
               isolate.renderNode.setClasses(attrs['class'].split(' '));
-
-            isolate.modifier = function() {
-              return modifiers;
-            };
 
             //update pipes; support multiple, dynamically
             //bound pipes.  May need to do a deep watch,
@@ -648,7 +627,8 @@ angular.module('famous.angular')
 
           },
           post: function(scope, element, attrs){
-            var isolate = scope.isolate[scope.$id];
+            var isolate = famousDecorator.ensureIsolate(scope);
+            
             var updateContent = function(){
               isolate.renderNode.setContent(attrs.faImageUrl)
             };
@@ -657,14 +637,13 @@ angular.module('famous.angular')
 
             attrs.$observe('faImageUrl', updateContent);
 
-
             //TODO:  support data-bound ids (supports only strings for now)
             //Possibly make "fa-id" for databound ids?
             //Register this modifier by ID in bag
             var id = attrs.id;
             famous.bag.register(id, isolate.renderNode)
 
-            scope.$emit('registerChild', {renderNode: isolate.renderNode, mod: isolate.modifier});
+            scope.$emit('registerChild', {renderNode: isolate.renderNode});
           }
         }
       }
@@ -674,7 +653,7 @@ angular.module('famous.angular')
 
 
 angular.module('famous.angular')
-  .directive('faModifier', ["famous", function (famous) {
+  .directive('faModifier', ["famous", "famousDecorator", function (famous, famousDecorator) {
     return {
       template: '<div></div>',
       transclude: true,
@@ -684,9 +663,7 @@ angular.module('famous.angular')
       compile: function(tElement, tAttrs, transclude){
         return {
           post: function(scope, element, attrs){
-            scope.isolate = scope.isolate || {};
-            scope.isolate[scope.$id] = scope.isolate[scope.$id] || {};
-            var isolate = scope.isolate[scope.$id];
+            var isolate = famousDecorator.ensureIsolate(scope);
 
             var RenderNode = famous['famous/core/RenderNode']
             var Modifier = famous['famous/core/Modifier']
@@ -748,8 +725,6 @@ angular.module('famous.angular')
                 );
               }
 
-
-
               if(!transforms.length)
                 return undefined;
               else if (transforms.length === 1)
@@ -791,7 +766,6 @@ angular.module('famous.angular')
             transclude(scope, function(clone) {
               element.find('div').append(clone);
             });
-
 
             //TODO:  support data-bound ids (supports only strings for now)
             //Possibly make "fa-id" for databound ids?
@@ -844,7 +818,7 @@ angular.module('famous.angular')
 
 
 angular.module('famous.angular')
-  .directive('faScrollView', function (famous, $controller) {
+  .directive('faScrollView', function (famous, famousDecorator, $controller) {
     return {
       template: '<div></div>',
       restrict: 'E',
@@ -853,9 +827,7 @@ angular.module('famous.angular')
       compile: function(tElem, tAttrs, transclude){
         return  {
           pre: function(scope, element, attrs){
-            scope.isolate = scope.isolate || {};
-            scope.isolate[scope.$id] = scope.isolate[scope.$id] || {};
-            var isolate = scope.isolate[scope.$id];
+            var isolate = famousDecorator.ensureIsolate(scope);
 
             var ScrollView = famous["famous/views/Scrollview"];
             var ViewSequence = famous['famous/core/ViewSequence'];
@@ -906,7 +878,7 @@ angular.module('famous.angular')
 
           },
           post: function(scope, element, attrs){
-            var isolate = scope.isolate[scope.$id];
+            var isolate = famousDecorator.ensureIsolate(scope);
 
             transclude(scope, function(clone) {
               element.find('div').append(clone);
@@ -1055,22 +1027,19 @@ angular.module('famous.angular')
 
 
 angular.module('famous.angular')
-  .directive('faTap', function ($parse) {
+  .directive('faTap', function ($parse, famousDecorator) {
     return {
       restrict: 'A',
       compile: function() {
         return { 
           post: function(scope, element, attrs) {
-            scope.isolate = scope.isolate || {};
-            scope.isolate[scope.$id] = scope.isolate[scope.$id] || {};
-            var isolate = scope.isolate[scope.$id];
-
+            var isolate = famousDecorator.ensureIsolate(scope);
 
             if (attrs.faTap) {
               var _dragging = false;
 
               //TODO:  refactor to isolate.renderNode
-              var renderNode = isolate.renderNode || isolate.view;
+              var renderNode = isolate.renderNode
               renderNode.on("touchmove", function(data) {
                 _dragging = true;
                 return data;
@@ -1095,16 +1064,14 @@ angular.module('famous.angular')
 
 
 angular.module('famous.angular')
-  .directive('faTouchend', function ($parse) {
+  .directive('faTouchend', function ($parse, famousDecorator) {
     return {
       restrict: 'A',
       scope: false,
       compile: function() {
         return { 
           post: function(scope, element, attrs) {
-            scope.isolate = scope.isolate || {};
-            scope.isolate[scope.$id] = scope.isolate[scope.$id] || {};
-            var isolate = scope.isolate[scope.$id];
+            var isolate = famousDecorator.ensureIsolate(scope);
 
             if (attrs.faTouchEnd) {
               isolate.renderNode.on("touchend", function(data) {
@@ -1125,16 +1092,14 @@ angular.module('famous.angular')
 
 
 angular.module('famous.angular')
-  .directive('faTouchmove', function ($parse) {
+  .directive('faTouchmove', function ($parse, famousDecorator) {
     return {
       restrict: 'A',
       scope: false,
       compile: function() {
         return { 
           post: function(scope, element, attrs) {
-            scope.isolate = scope.isolate || {};
-            scope.isolate[scope.$id] = scope.isolate[scope.$id] || {};
-            var isolate = scope.isolate[scope.$id];
+            var isolate = famousDecorator.ensureIsolate(scope);
 
             if (attrs.faTouchMove) {
               isolate.renderNode.on("touchmove", function(data) {
@@ -1154,16 +1119,14 @@ angular.module('famous.angular')
 
 
 angular.module('famous.angular')
-  .directive('faTouchstart', function ($parse) {
+  .directive('faTouchstart', function ($parse, famousDecorator) {
     return {
       restrict: 'A',
       scope: false,
       compile: function() {
         return { 
           post: function(scope, element, attrs) {
-            scope.isolate = scope.isolate || {};
-            scope.isolate[scope.$id] = scope.isolate[scope.$id] || {};
-            var isolate = scope.isolate[scope.$id];
+            var isolate = famousDecorator.ensureIsolate(scope);
 
             if (attrs.faTouchStart) {
               isolate.renderNode.on("touchstart", function(data) {
@@ -1182,7 +1145,7 @@ angular.module('famous.angular')
 
 
 angular.module('famous.angular')
-  .directive('faView', ["famous", "$controller", function (famous, $controller) {
+  .directive('faView', ["famous", "famousDecorator", "$controller", function (famous, famousDecorator, $controller) {
     return {
       template: '<div></div>',
       transclude: true,
@@ -1191,9 +1154,7 @@ angular.module('famous.angular')
       compile: function(tElement, tAttrs, transclude){
         return {
           pre: function(scope, element, attrs){
-            scope.isolate = scope.isolate || {};
-            scope.isolate[scope.$id] = scope.isolate[scope.$id] || {};
-            var isolate = scope.isolate[scope.$id];
+            var isolate = famousDecorator.ensureIsolate(scope);
             
             var View = famous['famous/core/View'];
             var Engine = famous['famous/core/Engine'];
@@ -1245,7 +1206,7 @@ angular.module('famous.angular')
 
           },
           post: function(scope, element, attrs){
-            var isolate = scope.isolate[scope.$id];
+            var isolate = famousDecorator.ensureIsolate(scope);
             
             transclude(scope, function(clone) {
               element.find('div').append(clone);
