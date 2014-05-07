@@ -13,7 +13,7 @@ angular.module('famous.angular')
             var isolate = scope.isolate[scope.$id];
 
             if (attrs.faTouchMove) {
-              isolate.surface.on("touchmove", function(data) {
+              isolate.renderNode.on("touchmove", function(data) {
                 var fn = $parse(attrs.faTouchMove);
                 fn(scope, {$event:data});
                 if(!scope.$$phase)

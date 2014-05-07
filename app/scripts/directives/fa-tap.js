@@ -16,7 +16,7 @@ angular.module('famous.angular')
               var _dragging = false;
 
               //TODO:  refactor to isolate.renderNode
-              var renderNode = isolate.surface || isolate.view;
+              var renderNode = isolate.renderNode || isolate.view;
               renderNode.on("touchmove", function(data) {
                 _dragging = true;
                 return data;

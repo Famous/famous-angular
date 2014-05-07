@@ -14,7 +14,7 @@ angular.module('famous.angular')
             var isolate = scope.isolate[scope.$id];
 
             if (attrs.faTouchStart) {
-              isolate.surface.on("touchstart", function(data) {
+              isolate.renderNode.on("touchstart", function(data) {
                 var fn = $parse(attrs.faTouchStart);
                 fn(scope, {$event:data});
                 if(!scope.$$phase)

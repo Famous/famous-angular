@@ -32,6 +32,7 @@ function startExpress() {
 gulp.task('scripts', function() {
   return gulp.src([
     'app/scripts/services/famous.js',
+    'app/scripts/services/famousDecorator.js',
     'app/scripts/directives/**/*.js'
   ])
   .pipe(jshint('.jshintrc'))

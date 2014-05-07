@@ -108,6 +108,31 @@ require(requirements, function(/*args*/){
 	});
 
 })
+
+angular.module('famous.angular')
+  .factory('famousDecorator', function () {
+    
+    var _roles = {
+      child: {
+
+      },
+      parent: {
+
+      }
+    }
+
+    return {
+      addRole: function(role, scope){
+
+      },
+      ensureIsolate: function(scope){
+        scope.isolate = scope.isolate || {};
+        scope.isolate[scope.$id] = scope.isolate[scope.$id] || {};
+        return scope.isolate[scope.$id];
+      }
+    };
+  });
+
 angular.module('famous.angular')
   .directive('faAnimation', function (famous) {
     return {
@@ -546,8 +571,8 @@ angular.module('famous.angular')
                 return isolate.getProperties()
               },
               function(){
-                if(isolate.surface)
-                  isolate.surface.setProperties(isolate.getProperties());
+                if(isolate.renderNode)
+                  isolate.renderNode.setProperties(isolate.getProperties());
               },
               true
             )
@@ -574,7 +599,7 @@ angular.module('famous.angular')
               skew: scope.$eval(attrs.faSkew)
             };
 
-            isolate.surface = new ImageSurface({
+            isolate.renderNode = new ImageSurface({
               size: scope.$eval(attrs.faSize),
               class: scope.$eval(attrs.class),
               properties: isolate.getProperties()
@@ -582,7 +607,7 @@ angular.module('famous.angular')
 
             //TODO:  support ng-class
             if(attrs.class)
-              isolate.surface.setClasses(attrs['class'].split(' '));
+              isolate.renderNode.setClasses(attrs['class'].split(' '));
 
             isolate.modifier = function() {
               return modifiers;
@@ -600,23 +625,23 @@ angular.module('famous.angular')
               function(newPipe, oldPipe){
                 if(oldPipe instanceof Array){
                   for(var i = 0; i < oldPipe.length; i++){
-                    isolate.surface.unpipe(oldPipe[i]);
+                    isolate.renderNode.unpipe(oldPipe[i]);
                   }
                 }else if(oldPipe !== undefined){
-                  isolate.surface.unpipe(oldPipe);
+                  isolate.renderNode.unpipe(oldPipe);
                 }
 
                 if(newPipe instanceof Array){
                   for(var i = 0; i < newPipe.length; i++){
-                    isolate.surface.pipe(newPipe[i]);
+                    isolate.renderNode.pipe(newPipe[i]);
                   }
                 }else if(newPipe !== undefined){
-                  isolate.surface.pipe(newPipe);
+                  isolate.renderNode.pipe(newPipe);
                 }
               });
 
             if (attrs.faClick) {
-              isolate.surface.on("click", function() {
+              isolate.renderNode.on("click", function() {
                 scope.$eval(attrs.faClick);
               });
             }
@@ -625,7 +650,7 @@ angular.module('famous.angular')
           post: function(scope, element, attrs){
             var isolate = scope.isolate[scope.$id];
             var updateContent = function(){
-              isolate.surface.setContent(attrs.faImageUrl)
+              isolate.renderNode.setContent(attrs.faImageUrl)
             };
 
             updateContent();
@@ -637,9 +662,9 @@ angular.module('famous.angular')
             //Possibly make "fa-id" for databound ids?
             //Register this modifier by ID in bag
             var id = attrs.id;
-            famous.bag.register(id, isolate.surface)
+            famous.bag.register(id, isolate.renderNode)
 
-            scope.$emit('registerChild', {view: isolate.surface, mod: isolate.modifier});
+            scope.$emit('registerChild', {view: isolate.renderNode, mod: isolate.modifier});
           }
         }
       }
@@ -902,7 +927,7 @@ angular.module('famous.angular')
   });
 
 angular.module('famous.angular')
-  .directive('faSurface', function (famous, $interpolate, $controller, $compile) {
+  .directive('faSurface', function (famous, famousDecorator, $interpolate, $controller, $compile) {
     return {
       scope: true,
       transclude: true,
@@ -911,9 +936,7 @@ angular.module('famous.angular')
       compile: function(tElem, tAttrs, transclude){
         return {
           pre: function(scope, element, attrs){
-            scope.isolate = scope.isolate || {};
-            scope.isolate[scope.$id] = scope.isolate[scope.$id] || {};
-            var isolate = scope.isolate[scope.$id];
+            var isolate = famousDecorator.ensureIsolate(scope);
 
             var Surface = famous['famous/core/Surface'];
             var Transform = famous['famous/core/Transform']
@@ -926,8 +949,8 @@ angular.module('famous.angular')
                 return isolate.getProperties()
               },
               function(){
-                if(isolate.surface)
-                  isolate.surface.setProperties(isolate.getProperties());
+                if(isolate.renderNode)
+                  isolate.renderNode.setProperties(isolate.getProperties());
               },
               true
             )
@@ -954,7 +977,7 @@ angular.module('famous.angular')
               skew: scope.$eval(attrs.faSkew)
             };
 
-            isolate.surface = new Surface({
+            isolate.renderNode = new Surface({
               size: scope.$eval(attrs.faSize),
               class: scope.$eval(attrs.class),
               properties: isolate.getProperties()
@@ -962,7 +985,7 @@ angular.module('famous.angular')
 
             //TODO:  support ng-class
             if(attrs.class)
-              isolate.surface.setClasses(attrs['class'].split(' '));
+              isolate.renderNode.setClasses(attrs['class'].split(' '));
 
             isolate.modifier = function() {
               return modifiers;
@@ -980,33 +1003,34 @@ angular.module('famous.angular')
               function(newPipe, oldPipe){
                 if(oldPipe instanceof Array){
                   for(var i = 0; i < oldPipe.length; i++){
-                    isolate.surface.unpipe(oldPipe[i]);
+                    isolate.renderNode.unpipe(oldPipe[i]);
                   }
                 }else if(oldPipe !== undefined){
-                  isolate.surface.unpipe(oldPipe);
+                  isolate.renderNode.unpipe(oldPipe);
                 }
 
                 if(newPipe instanceof Array){
                   for(var i = 0; i < newPipe.length; i++){
-                    isolate.surface.pipe(newPipe[i]);
+                    isolate.renderNode.pipe(newPipe[i]);
                   }
                 }else if(newPipe !== undefined){
-                  isolate.surface.pipe(newPipe);
+                  isolate.renderNode.pipe(newPipe);
                 }
               });
 
             if (attrs.faClick) {
-              isolate.surface.on("click", function() {
+              isolate.renderNode.on("click", function() {
                 scope.$eval(attrs.faClick);
               });
             }
 
           },
           post: function(scope, element, attrs){
-            var isolate = scope.isolate[scope.$id];
+            var isolate = famousDecorator.ensureIsolate(scope);
+
             var updateContent = function(){
               var compiledEl = isolate.compiledEl = isolate.compiledEl || $compile(element.find('div.fa-surface').contents())(scope)
-              isolate.surface.setContent(isolate.compiledEl.context);
+              isolate.renderNode.setContent(isolate.compiledEl.context);
             };
 
             updateContent();
@@ -1020,9 +1044,9 @@ angular.module('famous.angular')
             //Possibly make "fa-id" for databound ids?
             //Register this modifier by ID in bag
             var id = attrs.id;
-            famous.bag.register(id, isolate.surface)
+            famous.bag.register(id, isolate.renderNode)
 
-            scope.$emit('registerChild', {view: isolate.surface, mod: isolate.modifier});
+            scope.$emit('registerChild', {view: isolate.renderNode, mod: isolate.modifier});
           }
         }
       }
@@ -1047,7 +1071,7 @@ angular.module('famous.angular')
               var _dragging = false;
 
               //TODO:  refactor to isolate.renderNode
-              var renderNode = isolate.surface || isolate.view;
+              var renderNode = isolate.renderNode || isolate.view;
               renderNode.on("touchmove", function(data) {
                 _dragging = true;
                 return data;
@@ -1084,7 +1108,7 @@ angular.module('famous.angular')
             var isolate = scope.isolate[scope.$id];
 
             if (attrs.faTouchEnd) {
-              isolate.surface.on("touchend", function(data) {
+              isolate.renderNode.on("touchend", function(data) {
                 var fn = $parse(attrs.faTouchMove);
                 fn(scope, {$event:data});
                 if(!scope.$$phase)
@@ -1114,7 +1138,7 @@ angular.module('famous.angular')
             var isolate = scope.isolate[scope.$id];
 
             if (attrs.faTouchMove) {
-              isolate.surface.on("touchmove", function(data) {
+              isolate.renderNode.on("touchmove", function(data) {
                 var fn = $parse(attrs.faTouchMove);
                 fn(scope, {$event:data});
                 if(!scope.$$phase)
@@ -1143,7 +1167,7 @@ angular.module('famous.angular')
             var isolate = scope.isolate[scope.$id];
 
             if (attrs.faTouchStart) {
-              isolate.surface.on("touchstart", function(data) {
+              isolate.renderNode.on("touchstart", function(data) {
                 var fn = $parse(attrs.faTouchStart);
                 fn(scope, {$event:data});
                 if(!scope.$$phase)
