@@ -19,7 +19,6 @@ angular.module('famous.angular')
             var Modifier = famous['famous/core/Modifier']
             var Transform = famous['famous/core/Transform']
 
-            isolate.node = new RenderNode();
             isolate.index = scope.$eval(attrs.faIndex);
 
             var get = function(x) {
@@ -92,6 +91,7 @@ angular.module('famous.angular')
               return 1;
             }
 
+            
             isolate.modifier = new Modifier({
               transform: isolate.getTransform,
               size: scope.$eval(attrs.faSize),
@@ -99,7 +99,7 @@ angular.module('famous.angular')
               origin: scope.$eval(attrs.faOrigin)
             });
 
-            var modifierNode = isolate.node.add(isolate.modifier);
+            isolate.renderNode = new RenderNode().add(isolate.modifier)
 
             scope.$on('$destroy', function() {
               isolate.modifier.setOpacity(0);
@@ -108,7 +108,7 @@ angular.module('famous.angular')
             
             scope.$on('registerChild', function(evt, data){
               if(evt.targetScope.$id !== evt.currentScope.$id){
-                modifierNode.add(data.view);
+                isolate.renderNode.add(data.view);
                 evt.stopPropagation();
               }
             })
@@ -124,12 +124,12 @@ angular.module('famous.angular')
             //Possibly make "fa-id" for databound ids?
             //Register this modifier by ID in bag
             var id = attrs.id;
-            famous.bag.register(id, isolate.modifier)
+            famous.bag.register(id, isolate)
 
             scope.$emit('registerChild', {
               id: scope.$id,
               index: isolate.index,
-              view: isolate.node
+              view: isolate.renderNode
             });
           }
         }
