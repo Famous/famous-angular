@@ -20,13 +20,6 @@ angular.module('famous.angular')
 
             isolate.index = scope.$eval(attrs.faIndex);
 
-            function FaView(){
-              View.apply(this, arguments);
-            }
-
-            FaView.prototype = Object.create(View.prototype);
-            FaView.prototype.constructor = FaView;
-
             isolate.children = [];
 
             var getOrValue = function(x) {
@@ -53,34 +46,17 @@ angular.module('famous.angular')
               return Transform.multiply.apply(this, transforms);
             };
 
-            //TODO:  determine if readyToRender flag is necessary anymore
-            // FaView.prototype.render = function() {
-            //   if(!isolate.readyToRender)
-            //     return [];
-            //   return isolate.children.map(function(data){
-            //     return {
-            //       // origin: data.mod().origin,
-            //       // transform: getTransform(data),
-            //       // target: data.view.render()
-            //     }
-            //   });
-            // };
-
-            isolate.view = new FaView({
+            isolate.renderNode = new View({
               size: scope.$eval(attrs.faSize) || [undefined, undefined]
             });
 
             scope.$on('$destroy', function() {
-              //TODO:  find a way to support hiding views upon destroy
-              //       (hook into a 'secret' modifier?  or return [] in
-              //       prototype.render?)
-              //isolate.modifier.setOpacity(0);
               scope.$emit('unregisterChild', {id: scope.$id});
             });
 
             scope.$on('registerChild', function(evt, data){
               if(evt.targetScope.$id != scope.$id){
-                isolate.view.add(data.view);
+                isolate.renderNode.add(data.view);
                 isolate.children.push(data);
                 evt.stopPropagation();
               }
@@ -97,7 +73,7 @@ angular.module('famous.angular')
             scope.$emit('registerChild', {
               id: scope.$id,
               index: isolate.index,
-              view: isolate.view
+              view: isolate.renderNode
             });
 
             isolate.readyToRender = true;
