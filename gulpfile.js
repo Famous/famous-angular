@@ -31,9 +31,8 @@ function startExpress() {
 // Scripts
 gulp.task('scripts', function() {
   return gulp.src([
-    'app/scripts/stubs/famous.angular.0.js',
-    'app/scripts/directives/**/*.js',
-    'app/scripts/stubs/famous.angular.1.js'
+    'app/scripts/services/famous.js',
+    'app/scripts/directives/**/*.js'
   ])
   .pipe(jshint('.jshintrc'))
   .pipe(jshint.reporter('default'))

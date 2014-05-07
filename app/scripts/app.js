@@ -43,7 +43,3 @@ angular.module('integrationApp',['famous.angular', 'ui.router', 'ngAnimate'])
         templateUrl: "views/reading.html"
       });
     });
-
-window.famousAngularBootstrap = function(){
-  angular.bootstrap(document, ['integrationApp']);
-} 

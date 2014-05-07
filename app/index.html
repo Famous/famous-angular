@@ -1,8 +1,8 @@
 <!doctype html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" ng-app="integrationApp"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" ng-app="integrationApp"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9" ng-app="integrationApp"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" ng-app="integrationApp"> <!--<![endif]-->
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -42,16 +42,19 @@
     <script src="bower_components/json3/lib/json3.min.js"></script>
     <![endif]-->
 
+    <!-- bower:js -->
     <script src="bower_components/underscore/underscore.js"></script>
     <script src="bower_components/jquery/dist/jquery.js"></script>
-    <!-- bower:js -->
     <script src="bower_components/angular/angular.js"></script>
-    <!-- endbower -->
     <script src="bower_components/angular-animate/angular-animate.js"></script>
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="bower_components/angular-touch/angular-touch.js"></script>
+    <script src="bower_components/requirejs/require.js"></script>
+    <!-- endbower -->
 
-
+    <!-- libs -->
+    <script src="scripts/famous.angular.js"></script>
+    <!-- endlibs -->
 
   <script>
     //shim angular module to support 'presenter'
@@ -87,15 +90,10 @@
     <script src="scripts/services/test-filter-service.js"></script>
     <script src="scripts/presenters/timbre.js"></script>
     <script src="scripts/controllers/lock-screen.js"></script>
-
     <!--SCRIPTS END-->
-        
-    
-
 
     <!-- requires a plugin to use: https://github.com/borismus/MagicTouch -->
     <script src="vendor/magictouch.js"></script>
-    <script src="vendor/require.js" data-main="scripts/famous.angular"></script>
 
 </body>
 </html>
