@@ -23,10 +23,10 @@ angular.module('famous.angular')
             var _children = [];
 
             var options = scope.$eval(attrs.faOptions) || {};
-            isolate.view = new ScrollView(options);
+            isolate.renderNode = new ScrollView(options);
 
             if (attrs.faPipeFrom) {
-              (scope.$eval(attrs.faPipeFrom)).pipe(isolate.view);
+              (scope.$eval(attrs.faPipeFrom)).pipe(isolate.renderNode);
             }
 
 
@@ -36,13 +36,13 @@ angular.module('famous.angular')
               });
 
               var options = {
-                array: _.map(_children, function(c){ return c.view }) 
+                array: _.map(_children, function(c){ return c.renderNode }) 
               };
               if(init){
                 options.index = scope.$eval(attrs.faStartIndex);
               }
               var viewSeq = new ViewSequence(options);
-              isolate.view.sequenceFrom(viewSeq);
+              isolate.renderNode.sequenceFrom(viewSeq);
             }
 
             scope.$on('registerChild', function(evt, data){
@@ -75,10 +75,9 @@ angular.module('famous.angular')
             //Possibly make "fa-id" for databound ids?
             //Register this modifier by ID in bag
             var id = attrs.id;
-            famous.bag.register(id, isolate.view)
-            scope.$emit('registerChild', {view: isolate.view});
+            famous.bag.register(id, isolate.renderNode)
+            scope.$emit('registerChild', {renderNode: isolate.renderNode});
 
-            window.sv = isolate.view
           }
         };
       }

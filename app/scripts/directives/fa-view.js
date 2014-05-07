@@ -56,7 +56,7 @@ angular.module('famous.angular')
 
             scope.$on('registerChild', function(evt, data){
               if(evt.targetScope.$id != scope.$id){
-                isolate.renderNode.add(data.view);
+                isolate.renderNode.add(data.renderNode);
                 isolate.children.push(data);
                 evt.stopPropagation();
               }
@@ -73,7 +73,7 @@ angular.module('famous.angular')
             scope.$emit('registerChild', {
               id: scope.$id,
               index: isolate.index,
-              view: isolate.renderNode
+              renderNode: isolate.renderNode
             });
 
             isolate.readyToRender = true;

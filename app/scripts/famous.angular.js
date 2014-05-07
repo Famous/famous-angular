@@ -459,7 +459,7 @@ angular.module('famous.angular')
             scope.context.add(scope.view);
 
             scope.$on('registerChild', function(evt, data){
-              scope.view.add(data.view);
+              scope.view.add(data.renderNode);
               evt.stopPropagation();
             })
           },
@@ -494,18 +494,18 @@ angular.module('famous.angular')
             var _children = [];
 
             var options = scope.$eval(attrs.faOptions) || {};
-            isolate.view = new GridLayout(options);
+            isolate.renderNode = new GridLayout(options);
 
             if (attrs.faPipeFrom) {
-              (scope.$eval(attrs.faPipeFrom)).pipe(isolate.view);
+              (scope.$eval(attrs.faPipeFrom)).pipe(isolate.renderNode);
             }
 
             var updateGridLayout = function(){
               _children.sort(function(a, b){
                 return a.index - b.index;
               });
-              isolate.view.sequenceFrom(_.map(_children, function(c){
-                return c.view
+              isolate.renderNode.sequenceFrom(_.map(_children, function(c){
+                return c.renderNode
               }));
             }
 
@@ -539,8 +539,8 @@ angular.module('famous.angular')
             //Possibly make "fa-id" for databound ids?
             //Register this modifier by ID in bag
             var id = attrs.id;
-            famous.bag.register(id, isolate.view)
-            scope.$emit('registerChild', {view: isolate.view});
+            famous.bag.register(id, isolate)
+            scope.$emit('registerChild', {renderNode: isolate.renderNode});
           }
         };
       }
@@ -664,7 +664,7 @@ angular.module('famous.angular')
             var id = attrs.id;
             famous.bag.register(id, isolate.renderNode)
 
-            scope.$emit('registerChild', {view: isolate.renderNode, mod: isolate.modifier});
+            scope.$emit('registerChild', {renderNode: isolate.renderNode, mod: isolate.modifier});
           }
         }
       }
@@ -781,7 +781,7 @@ angular.module('famous.angular')
             
             scope.$on('registerChild', function(evt, data){
               if(evt.targetScope.$id !== evt.currentScope.$id){
-                isolate.renderNode.add(data.view);
+                isolate.renderNode.add(data.renderNode);
                 evt.stopPropagation();
               }
             })
@@ -802,7 +802,7 @@ angular.module('famous.angular')
             scope.$emit('registerChild', {
               id: scope.$id,
               index: isolate.index,
-              view: isolate.renderNode
+              renderNode: isolate.renderNode
             });
           }
         }
@@ -864,10 +864,10 @@ angular.module('famous.angular')
             var _children = [];
 
             var options = scope.$eval(attrs.faOptions) || {};
-            isolate.view = new ScrollView(options);
+            isolate.renderNode = new ScrollView(options);
 
             if (attrs.faPipeFrom) {
-              (scope.$eval(attrs.faPipeFrom)).pipe(isolate.view);
+              (scope.$eval(attrs.faPipeFrom)).pipe(isolate.renderNode);
             }
 
 
@@ -877,13 +877,13 @@ angular.module('famous.angular')
               });
 
               var options = {
-                array: _.map(_children, function(c){ return c.view }) 
+                array: _.map(_children, function(c){ return c.renderNode }) 
               };
               if(init){
                 options.index = scope.$eval(attrs.faStartIndex);
               }
               var viewSeq = new ViewSequence(options);
-              isolate.view.sequenceFrom(viewSeq);
+              isolate.renderNode.sequenceFrom(viewSeq);
             }
 
             scope.$on('registerChild', function(evt, data){
@@ -916,10 +916,9 @@ angular.module('famous.angular')
             //Possibly make "fa-id" for databound ids?
             //Register this modifier by ID in bag
             var id = attrs.id;
-            famous.bag.register(id, isolate.view)
-            scope.$emit('registerChild', {view: isolate.view});
+            famous.bag.register(id, isolate.renderNode)
+            scope.$emit('registerChild', {renderNode: isolate.renderNode});
 
-            window.sv = isolate.view
           }
         };
       }
@@ -1046,7 +1045,7 @@ angular.module('famous.angular')
             var id = attrs.id;
             famous.bag.register(id, isolate.renderNode)
 
-            scope.$emit('registerChild', {view: isolate.renderNode, mod: isolate.modifier});
+            scope.$emit('registerChild', {renderNode: isolate.renderNode});
           }
         }
       }
@@ -1238,7 +1237,7 @@ angular.module('famous.angular')
 
             scope.$on('registerChild', function(evt, data){
               if(evt.targetScope.$id != scope.$id){
-                isolate.renderNode.add(data.view);
+                isolate.renderNode.add(data.renderNode);
                 isolate.children.push(data);
                 evt.stopPropagation();
               }
@@ -1255,7 +1254,7 @@ angular.module('famous.angular')
             scope.$emit('registerChild', {
               id: scope.$id,
               index: isolate.index,
-              view: isolate.renderNode
+              renderNode: isolate.renderNode
             });
 
             isolate.readyToRender = true;

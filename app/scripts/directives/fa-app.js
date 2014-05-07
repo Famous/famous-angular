@@ -50,7 +50,7 @@ angular.module('famous.angular')
             scope.context.add(scope.view);
 
             scope.$on('registerChild', function(evt, data){
-              scope.view.add(data.view);
+              scope.view.add(data.renderNode);
               evt.stopPropagation();
             })
           },
