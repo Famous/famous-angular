@@ -98,6 +98,30 @@ angular.module('integrationApp')
             }.bind(this, i), i * delay);
         }
     }
+    window.Transform = Transform
+    $scope.eventsOut = function(){
+      var transition = { duration: 400, curve: 'easeOut'};
+      var left = famous.bag.all("left");
+      var right = famous.bag.all("right");
+
+      left.forEach(function (l,i){
+        l.transformFrom(l.getTransform());       
+        l.setTransform(
+          Transform.translate(-250, 0, 0),
+          transition)
+      });
+
+      right.forEach(function (r,i){
+        r.transformFrom(r.getTransform());       
+        r.setTransform(
+          Transform.translate(250, 0, 0),
+          transition)
+      });
+
+      
+
+
+    }
 
 
 

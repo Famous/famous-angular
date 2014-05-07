@@ -73,7 +73,9 @@ angular.module('integrationApp')
 
     };
 
-    $scope.setEvent = function(e){
+    $scope.setEvent = function(e, event){
+      console.log(event)
+      event.target.id = "theOne"
       linesIn();
       $scope.activeEvent = e;
       Timer.setTimeout(function() {
@@ -92,6 +94,10 @@ angular.module('integrationApp')
 
     $scope.handleZ = function(e){
       return e.rand < .45 ? Math.PI : 0;
+    }
+
+    $scope.handleLR = function (e){
+      return e.rand < .45 ? 'left' : 'right';
     }
 
     $scope.tran = new Transitionable(0);
