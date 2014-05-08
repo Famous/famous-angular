@@ -17,8 +17,6 @@ angular.module('famous.angular')
             var Modifier = famous['famous/core/Modifier']
             var Transform = famous['famous/core/Transform']
 
-            isolate.index = scope.$eval(attrs.faIndex);
-
             var get = function(x) {
               if (x instanceof Function) return x();
               return x.get ? x.get() : x;
@@ -108,8 +106,6 @@ angular.module('famous.angular')
                 evt.stopPropagation();
               }
             })
-            
-            var isolate = scope.isolate[scope.$id];
 
             transclude(scope, function(clone) {
               element.find('div').append(clone);
@@ -121,11 +117,7 @@ angular.module('famous.angular')
             var id = attrs.id;
             famous.bag.register(id, isolate)
 
-            scope.$emit('registerChild', {
-              id: scope.$id,
-              index: isolate.index,
-              renderNode: isolate.renderNode
-            });
+            scope.$emit('registerChild', isolate);
           }
         }
       }

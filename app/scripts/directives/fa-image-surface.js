@@ -98,7 +98,7 @@ angular.module('famous.angular')
             var id = attrs.id;
             famous.bag.register(id, isolate.renderNode)
 
-            scope.$emit('registerChild', {renderNode: isolate.renderNode});
+            scope.$emit('registerChild', isolate);
           }
         }
       }

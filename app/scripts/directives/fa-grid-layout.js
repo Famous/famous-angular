@@ -62,7 +62,7 @@ angular.module('famous.angular')
             //Register this modifier by ID in bag
             var id = attrs.id;
             famous.bag.register(id, isolate)
-            scope.$emit('registerChild', {renderNode: isolate.renderNode});
+            scope.$emit('registerChild', isolate);
           }
         };
       }

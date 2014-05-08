@@ -3,7 +3,7 @@
 
 
 angular.module('famous.angular')
-  .directive('faScrollView', function (famous, famousDecorator, $controller) {
+  .directive('faScrollView', function (famous, famousDecorator, $timeout, $controller) {
     return {
       template: '<div></div>',
       restrict: 'E',
@@ -27,20 +27,31 @@ angular.module('famous.angular')
               (scope.$eval(attrs.faPipeFrom)).pipe(isolate.renderNode);
             }
 
-
             var updateScrollview = function(init){
-              _children.sort(function(a, b){
-                return a.index - b.index;
-              });
+              //$timeout hack used here because the
+              //updateScrollview function will get called
+              //before the $index values get re-bound
+              //through ng-repeat.  The result is that
+              //the items get sorted here, then the indexes
+              //get re-bound, and thus the results are incorrectly
+              //ordered.
+              $timeout(function(){
+                _children.sort(function(a, b){
+                  return a.index - b.index;
+                }); 
 
-              var options = {
-                array: _.map(_children, function(c){ return c.renderNode }) 
-              };
-              if(init){
-                options.index = scope.$eval(attrs.faStartIndex);
-              }
-              var viewSeq = new ViewSequence(options);
-              isolate.renderNode.sequenceFrom(viewSeq);
+                var options = {
+                  array: _.map(_children, function(c){ return c.renderNode }) 
+                };
+                //set the first page on the scrollview if
+                //specified
+                if(init)
+                  options.index = scope.$eval(attrs.faStartIndex);
+                
+                var viewSeq = new ViewSequence(options);
+                isolate.renderNode.sequenceFrom(viewSeq);
+
+              })
             }
 
             scope.$on('registerChild', function(evt, data){
@@ -74,7 +85,7 @@ angular.module('famous.angular')
             //Register this modifier by ID in bag
             var id = attrs.id;
             famous.bag.register(id, isolate.renderNode)
-            scope.$emit('registerChild', {renderNode: isolate.renderNode});
+            scope.$emit('registerChild', isolate);
 
           }
         };

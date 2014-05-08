@@ -17,8 +17,6 @@ angular.module('integrationApp')
     $scope.events = angular.copy(Fakedata.events);
 
 
-
-
     console.log('events', $scope.events);
 
     console.log('normal controller bag', famous.bag._contents); //has access to items created in DOM

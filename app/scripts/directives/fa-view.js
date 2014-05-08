@@ -67,12 +67,14 @@ angular.module('famous.angular')
             transclude(scope, function(clone) {
               element.find('div').append(clone);
             });
-            
-            scope.$emit('registerChild', {
+
+            var viewData = {
               id: scope.$id,
               index: isolate.index,
               renderNode: isolate.renderNode
-            });
+            };
+
+            scope.$emit('registerChild', viewData);
 
             isolate.readyToRender = true;
           }

@@ -23,8 +23,8 @@
       <fa-modifier fa-translate="[0,44,0]" id="tester">
         <fa-surface class="whitePanel" fa-pipe-to="enginePipe"></fa-surface>
         <fa-scroll-view fa-pipe-from="enginePipe"  id="scrollView" >
-          <fa-modifier id="{{handleLR(e)}}" ng-repeat="e in events  | testFilter:'name' track by e.id" fa-translate="[0,0,0]">
-            <fa-view  fa-index="$index" fa-size="[320,80,1]">
+          <fa-modifier fa-index="$index" id="{{handleLR(e)}}" ng-repeat="e in events  | testFilter:'name' track by e.id" fa-translate="[0,0,0]">
+            <fa-view fa-size="[320,80,1]">
                 <fa-modifier id="test" testid="test" class="line" fa-rotate-z="handleZ(e)" fa-translate="[0,25,0]" fa-origin="[e.rand,0, 0]" fa-size="[1,1, 1]">
                   <fa-surface
                     fa-size="[getLineWidth(e),5, 1]"
