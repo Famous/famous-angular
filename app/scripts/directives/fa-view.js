@@ -68,15 +68,7 @@ angular.module('famous.angular')
               element.find('div').append(clone);
             });
 
-            var viewData = {
-              id: scope.$id,
-              index: isolate.index,
-              renderNode: isolate.renderNode
-            };
-
-            scope.$emit('registerChild', viewData);
-
-            isolate.readyToRender = true;
+            scope.$emit('registerChild', isolate);
           }
         }
       }
