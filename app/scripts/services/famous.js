@@ -7,33 +7,33 @@ window.name = "NG_DEFER_BOOTSTRAP!" + window.name;
 //       the filesystem (maybe write a bash script
 //       working around `ls -R1 app/scripts/famous` ?)
 var requirements = [
-  "famous/core/Engine",
-  "famous/core/EventHandler",
-  "famous/core/EventEmitter",
-  "famous/core/Modifier",
-  "famous/core/RenderNode",
-  "famous/core/Surface",
-  "famous/core/Transform",
-  "famous/core/View",
-  "famous/core/ViewSequence",
-  "famous/events/EventArbiter",
-  "famous/events/EventFilter",
-  "famous/events/EventMapper",
-  "famous/inputs/GenericSync",
-  "famous/inputs/RotateSync",
-  "famous/inputs/TouchSync",
-  "famous/inputs/MouseSync",
-  "famous/inputs/PinchSync",
-  "famous/inputs/FastClick",
-  "famous/surfaces/ImageSurface",
-  "famous/surfaces/InputSurface",
-  "famous/transitions/Easing",
-  "famous/transitions/SpringTransition",
-  "famous/transitions/Transitionable",
-  "famous/utilities/Timer",
-  "famous/views/Scrollview",
-  "famous/views/Scroller",
-  "famous/views/GridLayout"
+	"famous/core/Engine",
+	"famous/core/EventHandler",
+	"famous/core/EventEmitter",
+	"famous/core/Modifier",
+	"famous/core/RenderNode",
+	"famous/core/Surface",
+	"famous/core/Transform",
+	"famous/core/View",
+	"famous/core/ViewSequence",
+	"famous/events/EventArbiter",
+	"famous/events/EventFilter",
+	"famous/events/EventMapper",
+	"famous/inputs/GenericSync",
+	"famous/inputs/RotateSync",
+	"famous/inputs/TouchSync",
+	"famous/inputs/MouseSync",
+	"famous/inputs/PinchSync",
+	"famous/inputs/FastClick",
+	"famous/surfaces/ImageSurface",
+	"famous/surfaces/InputSurface",
+	"famous/transitions/Easing",
+	"famous/transitions/SpringTransition",
+	"famous/transitions/Transitionable",
+	"famous/utilities/Timer",
+	"famous/views/Scrollview",
+	"famous/views/Scroller",
+	"famous/views/GridLayout"
 ]
 
 require.config({
@@ -45,65 +45,113 @@ require.config({
 //components
 var ngFameApp = angular.module('famous.angular', []);
 
-require(requirements, function(/*args*/){
-    //capture 'arguments' in a variable that will exist in
-    //child scopes
-    var required = arguments;
-    
-    //Declare this provider inside this file to avoid needing to deal with
-    //AMD on any other angular files.  Alternative would be to
-    //wrap other angular components in define() blocks (not the end of the world)
-    ngFameApp.provider('famous', function () {
-      // hash for storing modules
-      var _modules = {};
+require(requirements, function(/*args*/) {
+	//capture 'arguments' in a variable that will exist in
+	//child scopes
+	var required = arguments;
 
-      this.registerModule = function (key, module) {
-        _modules[key] = module;
-      };
+	/**
+	* @ngdoc provider
+	* @name famousProvider
+	* @module famous.angular
+	* @description
+	* This provider is loaded as an AMD module and will keep a reference on the complete Famo.us library.
+	* We use this provider to avoid needing to deal with AMD on any other angular files.
+	*
+	* @usage
+	* You probably won't have to configure this provider
+	*
+	* ```js
+	* angular.module('mySuperApp', ['famous.angular']).config(
+	*   function(famousProvider) {
+	*
+	*       // Register your modules
+	*       famousProvider.registerModule('moduleKey', module);
+	*
+	*   };
+	* });
+	* ```
+	*
+	*/
+	ngFameApp.provider('famous', function() {
+		// hash for storing modules
+		var _modules = {};
 
-      //bag for holding references to declared elements,
-      //accessible by those elements' ids
-      //TODO:  break out into separate service?
-      var _bag = {};
-      _modules.bag = {
-        _contents: _bag,
-        register: function(id, ref){
-          if(_bag[id])
-            _bag[id].push(ref)
-          else
-            _bag[id] = [ref];
-        },
-        first: function(id){
-          var arr = _bag[id];
-          if(arr)
-            return arr[0];
-          return undefined;
-        },
-        all: function(id){
-          return _bag[id];
-        }
-      }
+		/**
+		 * @ngdoc method
+		 * @name famousProvider#registerModule
+		 * @module famous.angular
+		 * @description
+		 * Register the modules that will be available in the famous service
+	     *
+	     * @param {string} key the key that will be used to register the module
+	     * @param {misc} module the data that will be returned by the service
+		 */
+		this.registerModule = function(key, module) {
+			//TODO warning if the key is already registered ?
+			_modules[key] = module;
+		};
 
-      // Method that gets called when the 'famous'
-      // service is injected in the normal course of the app
-      this.$get = function () {
-        return _modules;
-      };
-    });
+		//bag for holding references to declared elements,
+		//accessible by those elements' ids
+		//TODO:  break out into separate service?
+		var _bag = {};
+		_modules.bag = {
+			_contents: _bag,
+			register: function(id, ref) {
+				if(_bag[id])
+					_bag[id].push(ref)
+				else
+					_bag[id] = [ref];
+			},
+			first: function(id) {
+				var arr = _bag[id];
+				if(arr)
+					return arr[0];
+				return undefined;
+			},
+			all: function(id) {
+				return _bag[id];
+			}
+		}
 
-	ngFameApp.config(function(famousProvider){
-		for(var i = 0; i < requirements.length; i++)
-			famousProvider.registerModule(requirements[i], required[i]);
-		console.log('registered modules', famousProvider.$get());
+		this.$get = function() {
+
+			/**
+			 * @ngdoc service
+			 * @name famous
+			 * @module famous.angular
+			 * @description
+			 * This service gives you access to the complete Famo.us library.
+			 *
+			 * @usage
+			 * Use this service to access the registered Famo.us modules as an object.
+			 *
+			 * ```js
+			 * angular.module('mySuperApp', ['famous.angular']).controller(
+			 *   function($scope, famous) {
+			 *
+			 *       // Access any registered module
+			 *       var EventHandler = famous['famous/core/EventHandler'];
+			 *       $scope.eventHandler = new EventHandler();
+			 *
+			 *   };
+			 * });
+			 * ```
+			 *
+			 */
+			return _modules;
+		};
 	});
 
-	/*if(window.famousAngularBootstrap){
-	 window.famousAngularBootstrap();
-	 }else{
-	 throw "window.famousAngularBootstrap callback not defined.  In order to work with famous-angular, you must define that callback function and bootstrap your app inside."
-	 }*/
+	ngFameApp.config(function(famousProvider) {
+		for(var i = 0; i < requirements.length; i++) {
+			famousProvider.registerModule(requirements[i], required[i]);
+		}
+//		console.log('registered modules', famousProvider.$get());
+	});
 
-	angular.element(document).ready(function () {
+	angular.element(document).ready(function() {
 		angular.resumeBootstrap();
 	});
 

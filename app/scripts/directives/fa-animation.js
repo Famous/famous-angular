@@ -1,3 +1,19 @@
+/**
+ * @ngdoc directive
+ * @name faAnimation
+ * @module famous.angular
+ * @restrict EA
+ * @description
+ * This directive is used to animate an element in conjunction with an {@link api/directive/animate animate} directive
+ *
+ * @usage
+ * ```html
+ * <fa-animation timeline="functionThatReturnsATimelineValueBetween0And1">
+ *  <animate targetModSelector="#topMod" field="rotateX" startValue="3.1415" endValue="0" curve="inQuad" timelineLowerBound="0" timelineUpperBound=".25" />
+ * </fa-animation>
+ * ```
+ */
+
 angular.module('famous.angular')
   .directive('faAnimation', function (famous, famousDecorator) {
     return {
@@ -48,6 +64,22 @@ angular.module('famous.angular')
               }
               if(!timeline instanceof Function)
                 throw 'timeline must be a reference to a function or duration must be provided';
+
+	            /**
+	             * @ngdoc directive
+	             * @name animate
+	             * @module famous.angular
+	             * @restrict E
+	             * @description
+	             * This directive is used to specify the animation of an element in a {@link api/directive/faAnimation faAnimation} directive
+	             *
+	             * @usage
+	             * ```html
+	             * <fa-animation timeline="functionThatReturnsATimelineValueBetween0And1">
+	             *  <animate targetModSelector="#topMod" field="rotateX" startValue="3.1415" endValue="0" curve="inQuad" timelineLowerBound="0" timelineUpperBound=".25" />
+	             * </fa-animation>
+	             * ```
+	             */
 
               var animates = element.find('animate');
               var declarations = {};

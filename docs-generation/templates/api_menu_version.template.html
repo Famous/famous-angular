@@ -1,0 +1,50 @@
+
+  <!-- Directives -->
+  <li class="menu-section">
+    <a href="#" class="api-section">
+       Directives
+    </a>
+    <ul>
+        <@ for doc in docs @><@ if doc.docType == "directive" @>
+        <li>
+            <a href="{{ page.versionHref }}/<$ doc.path $>">
+                <$ doc.name | dashCase $>
+            </a>
+        </li>
+        <@ endif @><@ endfor @>
+    </ul>
+  </li>
+
+
+  <!-- Side Menus -->
+  <li class="menu-section">
+    <a href="#" class="api-section">
+       Services
+    </a>
+    <ul>
+        <@ for doc in docs @><@ if doc.docType == "service" @>
+        <li>
+            <a href="{{ page.versionHref }}/<$ doc.path $>">
+                <$ doc.name $>
+            </a>
+        </li>
+        <@ endif @><@ endfor @>
+    </ul>
+  </li>
+
+
+  <!-- Side Menus -->
+  <li class="menu-section">
+    <a href="#" class="api-section">
+       Providers
+    </a>
+    <ul>
+        <@ for doc in docs @><@ if doc.docType == "provider" @>
+        <li>
+            <a href="{{ page.versionHref }}/<$ doc.path $>">
+                <$ doc.name $>
+            </a>
+        </li>
+        <@ endif @><@ endfor @>
+    </ul>
+  </li>
