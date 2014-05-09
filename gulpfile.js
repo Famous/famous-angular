@@ -17,7 +17,9 @@ var gulp = require('gulp'),
   cache = require('gulp-cache'),
   livereload = require('gulp-livereload'),
   lr = require('tiny-lr'),
-  server = lr();
+  server = lr(),
+  gutil = require('gulp-util'),
+  pkg = require('./package.json');
 
 // Set up server
 function startExpress() {
@@ -83,6 +85,30 @@ gulp.task('build', ['clean', 'scripts'], function(event) {
 	.pipe(gulp.dest('dist/scripts'))
 	.pipe(notify({ message: 'Build task complete' }));
 })
+
+gulp.task('docs', ['scripts'], function(done) {
+	var dgeni = require('dgeni'),
+		semver = require('semver'),
+		argv = require('minimist')(process.argv.slice(2)),
+		docVersion = argv['doc-version'];
+
+	if (docVersion != 'unstable' && !semver.valid(docVersion)) {
+		console.log('Usage: gulp docs --doc-version=(unstable|versionName)');
+		if(pkg.version) {
+			console.log('Current package.json version is: '+pkg.version);
+		}
+		console.log('No version selected, using unstable');
+		docVersion = 'unstable';
+	}
+	process.env.DOC_VERSION = docVersion;
+
+	gutil.log('Generating documentation for ', gutil.colors.cyan(docVersion));
+	var generateDocs = dgeni.generator('docs-generation/docs.config.js');
+	return generateDocs().then(function() {
+		gutil.log('Docs for', gutil.colors.cyan(docVersion), 'generated!');
+	});
+});
+
 
 // Default task
 gulp.task('default', ['scripts'], function() {

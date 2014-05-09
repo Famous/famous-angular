@@ -3,7 +3,12 @@
   "version": "0.0.0",
   "dependencies": {},
   "devDependencies": {
+    "bower": "~1.3.3",
+    "canonical-path": "0.0.2",
     "connect-livereload": "^0.4.0",
+    "cp-r": "^0.1.1",
+    "dgeni": "^0.3.0",
+    "dgeni-packages": "^0.9.1",
     "express": "^4.0.0",
     "grunt-contrib-jasmine": "~0.6.3",
     "gulp": "~3.6.2",
@@ -20,21 +25,26 @@
     "gulp-rename": "^1.2.0",
     "gulp-ruby-sass": "~0.4.3",
     "gulp-uglify": "^0.2.1",
+    "gulp-util": "^2.2.14",
     "jshint-stylish": "~0.1.3",
     "karma": "^0.12.1",
     "karma-jasmine": "~0.2.0",
     "karma-ng-html2js-preprocessor": "^0.1.0",
     "karma-ng-scenario": "^0.1.0",
+    "lodash": "^2.4.1",
+    "minimist": "0.0.8",
+    "mkdirp": "^0.5.0",
+    "semver": "^2.3.0",
     "tiny-lr": "0.0.5",
-    "bower": "~1.3.3"
+    "winston": "^0.7.3"
   },
   "engines": {
     "node": ">=0.8.0"
   },
   "scripts": {
     "install": "bower install",
-	"postinstall": "git submodule update --init --recursive",
-	"start": "gulp",
+    "postinstall": "git submodule update --init --recursive",
+    "start": "gulp",
     "test": "grunt test"
   }
 }
