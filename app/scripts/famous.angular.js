@@ -180,6 +180,18 @@ angular.module('famous.angular')
                 isolate.play(callback);
               }
 
+              //disengage will be a function that
+              //unassigns the event listener
+              var _disengage = undefined;
+              if(attrs.event){
+                if(_disengage)
+                  _disengage();
+                _disengage = $scope.$on(attrs.event, function(evt, data){
+                  var callback = data.callback || undefined;
+                  isolate.replay(callback)
+                })
+              }
+
               //TODO:  support data-bound ids (supports only strings for now)
               //Possibly make "fa-id" for databound ids?
               //Register this modifier by ID in bag
@@ -842,6 +854,63 @@ angular.module('famous.angular')
 
 
 
+angular.module('famous.angular')
+  .directive('faRenderNode', ["famous", "famousDecorator", function (famous, famousDecorator) {
+    return {
+      template: '<div></div>',
+      transclude: true,
+      scope: true,
+      restrict: 'EA',
+      compile: function(tElement, tAttrs, transclude){
+        return {
+          pre: function(scope, element, attrs){
+            var isolate = famousDecorator.ensureIsolate(scope);
+            
+            var Engine = famous['famous/core/Engine'];
+
+            var getOrValue = function(x) {
+              return x.get ? x.get() : x;
+            };
+
+            isolate.children = [];
+
+            attrs.$observe('faPipeTo', function(val){
+              var pipeTo = scope.$eval(val);
+              if(pipeTo)
+                Engine.pipe(pipeTo);
+            })
+
+            isolate.renderNode = scope.$eval(attrs.faNode);
+
+            scope.$on('$destroy', function() {
+              scope.$emit('unregisterChild', {id: scope.$id});
+            });
+
+            scope.$on('registerChild', function(evt, data){
+              if(evt.targetScope.$id != scope.$id){
+                isolate.renderNode.add(data.renderNode);
+                isolate.children.push(data);
+                evt.stopPropagation();
+              }
+            })
+
+          },
+          post: function(scope, element, attrs){
+            var isolate = famousDecorator.ensureIsolate(scope);
+            
+            transclude(scope, function(clone) {
+              element.find('div').append(clone);
+            });
+
+            scope.$emit('registerChild', isolate);
+          }
+        }
+      }
+    };
+  }]);
+
+
+
 
 
 angular.module('famous.angular')
@@ -1198,8 +1267,6 @@ angular.module('famous.angular')
             var Engine = famous['famous/core/Engine'];
             var Transform = famous['famous/core/Transform'];
 
-            isolate.index = scope.$eval(attrs.faIndex);
-
             isolate.children = [];
 
             var getOrValue = function(x) {
@@ -1250,15 +1317,7 @@ angular.module('famous.angular')
               element.find('div').append(clone);
             });
 
-            var viewData = {
-              id: scope.$id,
-              index: isolate.index,
-              renderNode: isolate.renderNode
-            };
-
-            scope.$emit('registerChild', viewData);
-
-            isolate.readyToRender = true;
+            scope.$emit('registerChild', isolate);
           }
         }
       }

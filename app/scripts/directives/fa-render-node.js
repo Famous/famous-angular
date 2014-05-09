@@ -1,7 +1,7 @@
 
 
 angular.module('famous.angular')
-  .directive('faView', ["famous", "famousDecorator", "$controller", function (famous, famousDecorator, $controller) {
+  .directive('faRenderNode', ["famous", "famousDecorator", function (famous, famousDecorator) {
     return {
       template: '<div></div>',
       transclude: true,
@@ -12,15 +12,13 @@ angular.module('famous.angular')
           pre: function(scope, element, attrs){
             var isolate = famousDecorator.ensureIsolate(scope);
             
-            var View = famous['famous/core/View'];
             var Engine = famous['famous/core/Engine'];
-            var Transform = famous['famous/core/Transform'];
-
-            isolate.children = [];
 
             var getOrValue = function(x) {
               return x.get ? x.get() : x;
             };
+
+            isolate.children = [];
 
             attrs.$observe('faPipeTo', function(val){
               var pipeTo = scope.$eval(val);
@@ -28,23 +26,7 @@ angular.module('famous.angular')
                 Engine.pipe(pipeTo);
             })
 
-            var getTransform = function(data) {
-              var transforms = [];
-              var mod = data.mod();
-              if (mod.translate && mod.translate.length) {
-                var values = mod.translate.map(getOrValue)
-                transforms.push(Transform.translate.apply(this, values));
-              }
-              if (mod.rotateZ)
-                transforms.push(Transform.rotateZ(mod.rotateZ));
-              if (mod.skew)
-                transforms.push(Transform.skew(0, 0, mod.skew));
-              return Transform.multiply.apply(this, transforms);
-            };
-
-            isolate.renderNode = new View({
-              size: scope.$eval(attrs.faSize) || [undefined, undefined]
-            });
+            isolate.renderNode = scope.$eval(attrs.faNode);
 
             scope.$on('$destroy', function() {
               scope.$emit('unregisterChild', {id: scope.$id});

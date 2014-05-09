@@ -35,6 +35,18 @@ angular.module('famous.angular')
                 isolate.play(callback);
               }
 
+              //disengage will be a function that
+              //unassigns the event listener
+              var _disengage = undefined;
+              if(attrs.event){
+                if(_disengage)
+                  _disengage();
+                _disengage = $scope.$on(attrs.event, function(evt, data){
+                  var callback = data.callback || undefined;
+                  isolate.replay(callback)
+                })
+              }
+
               //TODO:  support data-bound ids (supports only strings for now)
               //Possibly make "fa-id" for databound ids?
               //Register this modifier by ID in bag

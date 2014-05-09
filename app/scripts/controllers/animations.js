@@ -7,6 +7,7 @@ angular.module('integrationApp')
     var GenericSync = famous['famous/inputs/GenericSync'];
     var RotateSync = famous['famous/inputs/RotateSync'];
     var PinchSync = famous['famous/inputs/PinchSync'];
+    var Surface = famous['famous/core/Surface'];
     var EventHandler = famous['famous/core/EventHandler'];
 
     var _width = window.innerWidth;
@@ -24,6 +25,7 @@ angular.module('integrationApp')
       triangle: _r,
       scrollText: [undefined, 20]
     };
+
 
     $scope.twoWayTest = "test";
 
