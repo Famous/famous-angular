@@ -27,6 +27,11 @@ angular.module('integrationApp')
     };
 
 
+    setTimeout(function(){
+      $scope.$emit('testEvent')
+      $scope.$broadcast('testEvent')
+    }, 1000)
+
     $scope.twoWayTest = "test";
 
     $scope.positions = {

@@ -183,11 +183,12 @@ angular.module('famous.angular')
               //disengage will be a function that
               //unassigns the event listener
               var _disengage = undefined;
+              console.log('event', attrs.event)
               if(attrs.event){
                 if(_disengage)
                   _disengage();
-                _disengage = $scope.$on(attrs.event, function(evt, data){
-                  var callback = data.callback || undefined;
+                _disengage = scope.$on(attrs.event, function(evt, data){
+                  var callback = data && data.callback ? data.callback : undefined;
                   isolate.replay(callback)
                 })
               }
