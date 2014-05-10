@@ -31,7 +31,7 @@ angular.module('integrationApp')
       $scope.$broadcast('testEvent')
     }, 1000)
 
-    $scope.twoWayTest = "test";
+    $scope.twoWayTest = "Two-way data binding";
 
     $scope.positions = {
       scrollText: [
@@ -104,18 +104,12 @@ angular.module('integrationApp')
       tran.set(newVal);
     });
 
-    //set tran to auto-animate transition
-    //tran.set(1, {duration: 2000, curve: 'linear'});
-
-    //TODO:  determine a more elegant (declarative?) way to
-    //       handle event handling and piping
     $scope.eventHandler = new EventHandler();
     $scope.eventHandler.pipe($scope.sync);
 
     var _contents = [
-      "Hey, I'm data-bound!",
-      "Hey, I change my content!",
-      "Hey, look at me!"
+      "One-way data binding",
+      "Data binding, one way"
     ];
 
     var _contentIndex = 0;

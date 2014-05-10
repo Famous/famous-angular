@@ -80,5 +80,6 @@ body {
 
 .center-content {
   color: #303030;
+  text-align: center;
   padding: 10pt;
 }

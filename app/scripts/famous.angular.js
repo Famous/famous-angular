@@ -630,9 +630,6 @@ angular.module('famous.angular')
               element.find('div').append(clone);
             });
 
-            //TODO:  support data-bound ids (supports only strings for now)
-            //Possibly make "fa-id" for databound ids?
-            //Register this modifier by ID in bag
             var id = attrs.id;
             famous.bag.register(id, isolate)
             scope.$emit('registerChild', isolate);
@@ -1326,32 +1323,16 @@ angular.module('famous.angular')
       scope: true,
       restrict: 'EA',
       compile: function(tElement, tAttrs, transclude){
+        var View = famous['famous/core/View'];
+        
         return {
           pre: function(scope, element, attrs){
             var isolate = famousDecorator.ensureIsolate(scope);
-            
-            var View = famous['famous/core/View'];
-            var Engine = famous['famous/core/Engine'];
-            var Transform = famous['famous/core/Transform'];
 
             isolate.children = [];
 
             var getOrValue = function(x) {
               return x.get ? x.get() : x;
-            };
-
-            var getTransform = function(data) {
-              var transforms = [];
-              var mod = data.mod();
-              if (mod.translate && mod.translate.length) {
-                var values = mod.translate.map(getOrValue)
-                transforms.push(Transform.translate.apply(this, values));
-              }
-              if (mod.rotateZ)
-                transforms.push(Transform.rotateZ(mod.rotateZ));
-              if (mod.skew)
-                transforms.push(Transform.skew(0, 0, mod.skew));
-              return Transform.multiply.apply(this, transforms);
             };
 
             isolate.renderNode = new View({

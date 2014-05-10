@@ -99,7 +99,8 @@
           <fa-surface class="center-content">
             {{getContent()}}
             <br>
-            Two-way:  <input ng-model="twoWayTest" />
+            <br>
+            <input ng-model="twoWayTest" />
             <br>
             {{twoWayTest}}
           </fa-surface>
@@ -108,7 +109,7 @@
     </fa-modifier>
   </fa-view>
 
-  <fa-animation event="testEvent" duration="2000">
+  <fa-animation event="testEvent" duration="1250">
     <animate  targetModSelector="#topMod"
               field="rotateX"
               startValue="3.1415"
