@@ -45,6 +45,18 @@ angular.module('famous.angular')
             scope.view = new AppView();
             scope.context.add(scope.view);
 
+
+            //TODO:  What if the actual scope hierarchy
+            //were angular $watched instead of using eventing?
+            //Could write a function that traverses angular's scopes
+            //and returns a hash-like
+            //representation of render-node-containing $scopes
+            //(via their isolate objects.)  Then, tweak the scene
+            //graph as needed when it sees changes.
+            //This would make e.g. reflowing elements in a scrollview
+            //more elegant than the current approach, but would
+            //require a bit of replumbing.  Would need to investigate
+            //the overhead of $watching a potentially complex scene graph, too
             scope.$on('registerChild', function(evt, data){
               scope.view.add(data.renderNode);
               evt.stopPropagation();
