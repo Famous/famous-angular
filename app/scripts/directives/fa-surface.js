@@ -63,33 +63,6 @@ angular.module('famous.angular')
               return modifiers;
             };
 
-            //update pipes; support multiple, dynamically
-            //bound pipes.  May need to do a deep watch,
-            //which is currently bugging out Angular.  One
-            //solution would be a custom deep-watch function
-            //(probably watch collection, return a hashKey-like array)
-            scope.$watch(
-              function(){
-                return scope.$eval(attrs.faPipeTo);
-              },
-              function(newPipe, oldPipe){
-                if(oldPipe instanceof Array){
-                  for(var i = 0; i < oldPipe.length; i++){
-                    isolate.renderNode.unpipe(oldPipe[i]);
-                  }
-                }else if(oldPipe !== undefined){
-                  isolate.renderNode.unpipe(oldPipe);
-                }
-
-                if(newPipe instanceof Array){
-                  for(var i = 0; i < newPipe.length; i++){
-                    isolate.renderNode.pipe(newPipe[i]);
-                  }
-                }else if(newPipe !== undefined){
-                  isolate.renderNode.pipe(newPipe);
-                }
-              });
-
             if (attrs.faClick) {
               isolate.renderNode.on("click", function() {
                 scope.$eval(attrs.faClick);
