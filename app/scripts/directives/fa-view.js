@@ -22,12 +22,6 @@ angular.module('famous.angular')
               return x.get ? x.get() : x;
             };
 
-            attrs.$observe('faPipeTo', function(val){
-              var pipeTo = scope.$eval(val);
-              if(pipeTo)
-                Engine.pipe(pipeTo);
-            })
-
             var getTransform = function(data) {
               var transforms = [];
               var mod = data.mod();

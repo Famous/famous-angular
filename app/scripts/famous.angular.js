@@ -509,7 +509,7 @@ angular.module('famous.angular')
   });
 
 angular.module('famous.angular')
-  .directive('faApp', ["famous", function (famous) {
+  .directive('faApp', ["famous", "famousDecorator", function (famous, famousDecorator) {
     return {
       template: '<div style="display: none;"><div></div></div>',
       transclude: true,
@@ -517,20 +517,16 @@ angular.module('famous.angular')
       compile: function(tElement, tAttrs, transclude){
         return {
           pre: function(scope, element, attrs){
+            var isolate = famousDecorator.ensureIsolate(scope);
+            
             var View = famous['famous/core/View'];
             var Engine = famous['famous/core/Engine'];
             var Transform = famous['famous/core/Transform']
 
+            
             element.append('<div class="famous-angular-container"></div>');
             var famousContainer = $(element.find('.famous-angular-container'))[0];
             scope.context = Engine.createContext(famousContainer);
-
-            attrs.$observe('faPipeTo', function(val){
-              if(attrs.faPipeTo){
-                var pipeTo = scope.$eval(val);
-                Engine.pipe(pipeTo);
-              }
-            })
 
             function AppView(){
               View.apply(this, arguments);
@@ -694,33 +690,6 @@ angular.module('famous.angular')
             //TODO:  support ng-class
             if(attrs.class)
               isolate.renderNode.setClasses(attrs['class'].split(' '));
-
-            //update pipes; support multiple, dynamically
-            //bound pipes.  May need to do a deep watch,
-            //which is currently bugging out Angular.  One
-            //solution would be a custom deep-watch function
-            //(probably watch collection, return a hashKey-like array)
-            scope.$watch(
-              function(){
-                return scope.$eval(attrs.faPipeTo);
-              },
-              function(newPipe, oldPipe){
-                if(oldPipe instanceof Array){
-                  for(var i = 0; i < oldPipe.length; i++){
-                    isolate.renderNode.unpipe(oldPipe[i]);
-                  }
-                }else if(oldPipe !== undefined){
-                  isolate.renderNode.unpipe(oldPipe);
-                }
-
-                if(newPipe instanceof Array){
-                  for(var i = 0; i < newPipe.length; i++){
-                    isolate.renderNode.pipe(newPipe[i]);
-                  }
-                }else if(newPipe !== undefined){
-                  isolate.renderNode.pipe(newPipe);
-                }
-              });
 
             if (attrs.faClick) {
               isolate.renderNode.on("click", function() {
@@ -903,6 +872,50 @@ angular.module('famous.angular')
       }
     };
   }]);
+
+
+
+angular.module('famous.angular')
+  .directive('faPipeTo', function (famous, famousDecorator) {
+    return {
+      restrict: 'A',
+      scope: false,
+      priority: 16,
+      compile: function() {
+        var Engine = famous['famous/core/Engine'];
+        
+        return { 
+          post: function(scope, element, attrs) {
+            var isolate = famousDecorator.ensureIsolate(scope);
+            scope.$watch(
+              function(){
+                return scope.$eval(attrs.faPipeTo);
+              },
+              function(newPipe, oldPipe){
+                console.log('updating pipes')
+                var target = isolate.renderNode || Engine;
+                if(oldPipe instanceof Array){
+                  for(var i = 0; i < oldPipe.length; i++){
+                    target.unpipe(oldPipe[i]);
+                  }
+                }else if(oldPipe !== undefined){
+                  target.unpipe(oldPipe);
+                }
+
+                if(newPipe instanceof Array){
+                  for(var i = 0; i < newPipe.length; i++){
+                    target.pipe(newPipe[i]);
+                  }
+                }else if(newPipe !== undefined){
+                  target.pipe(newPipe);
+                }
+              }
+            );
+          }
+        }
+      }
+    };
+  });
 
 
 
@@ -1150,33 +1163,6 @@ angular.module('famous.angular')
               return modifiers;
             };
 
-            //update pipes; support multiple, dynamically
-            //bound pipes.  May need to do a deep watch,
-            //which is currently bugging out Angular.  One
-            //solution would be a custom deep-watch function
-            //(probably watch collection, return a hashKey-like array)
-            scope.$watch(
-              function(){
-                return scope.$eval(attrs.faPipeTo);
-              },
-              function(newPipe, oldPipe){
-                if(oldPipe instanceof Array){
-                  for(var i = 0; i < oldPipe.length; i++){
-                    isolate.renderNode.unpipe(oldPipe[i]);
-                  }
-                }else if(oldPipe !== undefined){
-                  isolate.renderNode.unpipe(oldPipe);
-                }
-
-                if(newPipe instanceof Array){
-                  for(var i = 0; i < newPipe.length; i++){
-                    isolate.renderNode.pipe(newPipe[i]);
-                  }
-                }else if(newPipe !== undefined){
-                  isolate.renderNode.pipe(newPipe);
-                }
-              });
-
             if (attrs.faClick) {
               isolate.renderNode.on("click", function() {
                 scope.$eval(attrs.faClick);
@@ -1353,12 +1339,6 @@ angular.module('famous.angular')
             var getOrValue = function(x) {
               return x.get ? x.get() : x;
             };
-
-            attrs.$observe('faPipeTo', function(val){
-              var pipeTo = scope.$eval(val);
-              if(pipeTo)
-                Engine.pipe(pipeTo);
-            })
 
             var getTransform = function(data) {
               var transforms = [];
