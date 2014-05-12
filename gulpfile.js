@@ -1,5 +1,6 @@
 var EXPRESS_PORT = 4000;
 var EXPRESS_ROOT = __dirname + '/app';
+var EXPRESS_DOCS_ROOT = __dirname + '/angus-site/_site';
 var LIVERELOAD_PORT = 35729;
 
 // Load plugins
@@ -19,14 +20,15 @@ var gulp = require('gulp'),
   lr = require('tiny-lr'),
   server = lr(),
   gutil = require('gulp-util'),
-  pkg = require('./package.json');
+  pkg = require('./package.json'),
+  exec = require('gulp-exec');
 
 // Set up server
-function startExpress() {
+function startExpress(root) {
   var express = require('express');
   var app = express();
   app.use(require('connect-livereload')());
-  app.use(express.static(EXPRESS_ROOT));
+  app.use(express.static(root));
   app.listen(EXPRESS_PORT);
 }
 
@@ -59,8 +61,7 @@ gulp.task('watch', function(event) {
 	  };
 
 	  // Watch .js files
-	  gulp.watch(
-	    [
+	  gulp.watch([
 	      'app/scripts/*/**/*.js',
 	      'app/scripts/app.js',
 	      '!app/scripts/famous.angular.js',
@@ -109,9 +110,21 @@ gulp.task('docs', ['scripts'], function(done) {
 	});
 });
 
+gulp.task('build-site', ['docs'], function(done) {
+	return gulp.src('./angus-site/scss/*.scss')
+		.pipe(sass())
+		.pipe(gulp.dest('./angus-site/css'))
+		.pipe(exec("jekyll build --source ./angus-site/ --destination ./angus-site/_site/"))
+		.pipe(notify({ message: 'Jekyll build task complete' }));
+});
+
+gulp.task('site', function(done) {
+	startExpress(EXPRESS_DOCS_ROOT);
+	gutil.log('Server running at Docs for', gutil.colors.cyan('http://localhost:'+EXPRESS_PORT+'/'));
+});
 
 // Default task
 gulp.task('default', ['scripts'], function() {
-  startExpress();
+  startExpress(EXPRESS_ROOT);
   gulp.start('watch');
 });

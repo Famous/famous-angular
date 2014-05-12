@@ -19,12 +19,11 @@ module.exports = function(config) {
 
 	config.set('basePath', __dirname);
 	config.set('source.projectPath', '.');
-	config.set('rendering.outputFolder', '../docs/');
-
+	config.set('rendering.outputFolder', '../angus-site');
 
 	var versionData = require('./generate-versions')(config);
 	config.set('versionData', versionData);
-	config.set('rendering.contentsFolder', path.join('../docs', versionData.current.folder));
+	config.set('rendering.contentsFolder', path.join('docs', versionData.current.folder));
 
 	config.set('processing.api-docs', {
 		outputPath: 'api/${docType}/${name}/index.md',

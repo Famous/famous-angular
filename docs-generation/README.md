@@ -8,19 +8,15 @@ Previewing Doc Pages
 If you want to test the static website, follow these steps:
 
 * To test documentation, follow these steps:
-  1. Clone ng.us-site to `./docs` - this is where the `gulp docs` task builds to.
-    - `mkdir tmp`
-    - _This doesn't work for the moment_ `git clone https://github.com/FamousInternal/ng.us-site.git tmp/ng.us-site`
-  2. Install ruby & jekyll **if** you don't have it: http://jekyllrb.com/docs/installation/
+  1. Install ruby & jekyll **if** you don't have it: http://jekyllrb.com/docs/installation/
     - `gem install pygments.rb --version "=0.5.0"`
     - `gem install wdm`
     - `gem install jekyll --version "=1.4.2"`
-  3. Go back to project root and build the docs
-    - `gulp docs`
-  4. Make jekyll serve the site.
-    - `cd tmp/ng.us-site`
-    -  `jekyll serve -w`
-  5. Open http://localhost:4000/docs/api/ and see your changes! Re-run `gulp docs` again whenever you change something, and jekyll will update the site.
+  2. Go back to project root and build the docs & the website in one task
+    - `gulp build-site`
+  3. Launch the local webserver.
+    - `gulp site`
+  4. Open http://localhost:4000/docs/api/ and see your changes! Re-run `gulp build-site` again whenever you change something.
 
 **Templates in `templates` folder**
 

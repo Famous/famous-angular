@@ -9,7 +9,7 @@ module.exports = function(config) {
   var outputFolder = config.get('rendering.outputFolder');
   var currentVersion = config.get('currentVersion');
 
-  var docsBaseFolder = path.resolve(basePath, outputFolder);
+  var docsBaseFolder = path.resolve(basePath, outputFolder, 'docs');
 
   createFolders.create(config);
   var versions = fs.readdirSync(docsBaseFolder)
@@ -25,7 +25,7 @@ module.exports = function(config) {
     //Latest version is in docs root
     var folder = version == latestVersion ? '' : version;
     return {
-      href: path.join(folder),
+      href: path.join('/docs', folder),
       folder: folder,
       name: version
     };
