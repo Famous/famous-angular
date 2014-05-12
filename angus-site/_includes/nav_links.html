@@ -1,0 +1,26 @@
+<nav class="navbar navbar-default horizontal-gradient" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle button ionic" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+        <i class="icon ion-navicon"></i>
+      </button>
+      <a class="navbar-brand" href="/">
+        {% if page.header_logo %}
+          {{ page.header_logo }}
+        {% else %}
+          <img src="/img/ionic-logo-white.svg" width="123" height="43" alt="Ionic Framework">
+        {% endif %}
+      </a>
+    </div>
+
+    <div class="collapse navbar-collapse navbar-ex1-collapse">
+      <ul class="nav navbar-nav navbar-right">
+        <li><a class="nav-link" href="/getting-started/">Getting Started</a></li>
+        <li><a class="nav-link" href="/docs/">Docs</a></li>
+        <li><a class="nav-link" href="https://github.com/FamousInternal/famous-angular">Github</a></li>
+          <li><a class="nav-link" href="http://famo.us/">Famo.us</a></li>
+        <li><a class="nav-link" href="http://www.angularjs.com/">AngularJS</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>

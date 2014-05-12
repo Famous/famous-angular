@@ -1,0 +1,62 @@
+
+.input-type {
+  position: absolute;
+  bottom: 0;
+  z-index: 1000;
+  width: 100%;
+  height: 300px;
+  background: no-repeat center bottom;
+}
+
+.ios7 .text-input,
+.ios7 .password-input,
+.ios7 .search-input {
+  background-image: url('/img/input-types/ios7/keyboard-text-pass-search.png');
+}
+.ios7 .email-input {
+  background-image: url('/img/input-types/ios7/keyboard-email.png');
+}
+.ios7 .tel-input {
+  background-image: url('/img/input-types/ios7/keyboard-tel.png');
+}
+.ios7 .number-input {
+  background-image: url('/img/input-types/ios7/keyboard-number.png');
+}
+.ios7 .date-input {
+  background-image: url('/img/input-types/ios7/keyboard-date.png');
+}
+.ios7 .month-input {
+  background-image: url('/img/input-types/ios7/keyboard-month.png');
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 1.3),
+       only screen and (   min--moz-device-pixel-ratio: 1.3),
+       only screen and (        min-device-pixel-ratio: 1.3),
+       only screen and (             min-resolution: 124dpi)
+{ 
+  .ios7 .input-type {
+    background-size: 320px 260px;
+  }
+
+  .ios7 .text-input,
+  .ios7 .password-input,
+  .ios7 .search-input {
+    background-image: url('/img/input-types/ios7/keyboard-text-pass-search@2x.png');
+  }
+  .ios7 .email-input {
+    background-image: url('/img/input-types/ios7/keyboard-email@2x.png');
+  }
+  .ios7 .tel-input {
+    background-image: url('/img/input-types/ios7/keyboard-tel@2x.png');
+  }
+  .ios7 .number-input {
+    background-image: url('/img/input-types/ios7/keyboard-number@2x.png');
+  }
+  .ios7 .date-input {
+    background-image: url('/img/input-types/ios7/keyboard-date@2x.png');
+  }
+  .ios7 .month-input {
+    background-image: url('/img/input-types/ios7/keyboard-month@2x.png');
+  }
+
+}

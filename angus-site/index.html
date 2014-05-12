@@ -1,0 +1,244 @@
+---
+layout: full
+title: "Ionic: Advanced HTML5 Hybrid Mobile App Framework"
+body_css: "home"
+---
+
+<div class="primary-row horizontal-gradient">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6">
+        <h1>
+          Create amazing apps
+        </h1>
+        <h2>
+          The beautiful, open source front-end framework for developing hybrid mobile apps with HTML5.
+        </h2>
+        <p class="btn-row">
+          <a id="repo-download" class="btn btn-primary btn-download desktop-btn" href="{{ site.latest_download }}" alt="Download v{{ site.latest_version }}">Download beta</a>
+          <a class="btn btn-primary btn-get-started desktop-btn" href="/getting-started/">Get started</a>
+          <a class="btn btn-primary btn-download mobile-btn" href="/docs">View Docs</a>
+        </p>
+        <p class="version-text">
+          v{{ site.latest_version }} &#183; {{ site.latest_release_date }} &#183; MIT Licensed
+        </p>
+      </div>
+      <div class="col-sm-6 feature-img">
+        <a class="demo-link" href="https://github.com/driftyco/ionic-weather/" target="_blank">Ionic Weather Demo App</a>
+        <img class="feature-img-loading" src="/img/homepage/phones-weather-demo@2x.png">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--<div class="utility-bar">-->
+  <!--<div class="container">-->
+    <!--<div class="row">-->
+      <!--<ul class="social-row ionic col-md-7">-->
+        <!--<li><a href="https://github.com/driftyco/ionic" target="_blank"><i class="ion-social-github"></i> <span id="gh-stargazers"></span> Stars</a></li>-->
+        <!--<li><a href="https://github.com/driftyco/ionic" target="_blank"><i class="ion-fork-repo"></i> <span id="gh-forks"></span> Forks</a></li>-->
+        <!--<li><a href="https://twitter.com/IonicFramework" target="_blank"><i class="ion-social-twitter"></i> <span id="tw-followers"></span> Followers</a></li>-->
+      <!--</ul>-->
+      <!--<form action="http://codiqa.createsend.com/t/t/s/jytylh/" method="post" class="input-group col-md-5">-->
+        <!--<input name="cm-jytylh-jytylh" class="form-control" type="email" placeholder="Enter your email for the latest ionic news" required />-->
+        <!--<span class="input-group-btn">-->
+          <!--<button class="btn btn-default" type="submit">Subscribe</button>-->
+        <!--</span>-->
+      <!--</form>-->
+    <!--</div>-->
+  <!--</div>-->
+<!--</div>-->
+
+<script>
+  $('.feature-img-loading').on('load', function() {
+    $('.feature-img').addClass('img-loaded');
+    $(this).remove();
+  });
+
+  function digits(n){
+    return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+  $.ajax({
+    dataType: "jsonp",
+    url: "https://api.github.com/repos/driftyco/ionic",
+    success: function(data){
+      if(data) {
+        if(data.data.watchers){
+          $("#gh-stargazers").html(digits(data.data.watchers));
+        }
+        if(data.data.forks){
+          $("#gh-forks").html(digits(data.data.forks));
+        }
+      }
+    }
+  });
+  $.ajax({
+    dataType: "jsonp",
+    url: "https://cdn.api.twitter.com/1/users/show.json?screen_name=ionicframework",
+    success: function(data){
+      if(data && data.followers_count){
+        $("#tw-followers").html(digits(data.followers_count));
+      }
+    }
+  });
+</script>
+
+<div id="learn-more">
+
+  <div class="desc-row">
+
+    <h3>
+      Create hybrid mobile apps with the web technologies you love.
+    </h3>
+    <p>
+      Free and open source, Ionic offers a library of mobile-optimized HTML, CSS and JS <a href="/docs/components/">components</a>
+      for building highly interactive apps. Built with <a href="http://sass-lang.com/" target="_blank">Sass</a>
+      and optimized for <a href="http://angularjs.org/" target="_blank">AngularJS</a>.
+    </p>
+
+  </div>
+
+  <div class="feature-row img-performance">
+
+    <h4>Performance obsessed</h4>
+    <p>
+      Speed is important. So important that you only notice when it isn't there. Ionic is
+      built to perform and behave great in the latest mobile devices. With <strong>minimal DOM</strong>
+      manipulation, <strong>zero jQuery</strong>, and <strong>hardware accelerated</strong> transitions,
+      one thing is for sure: you'll be impressed.
+    </p>
+
+  </div>
+
+  <div class="feature-row img-angular img-right">
+
+    <h4>AngularJS &amp; Ionic</h4>
+    <p>
+      A match made in heaven. Ionic utilizes <a href="http://angularjs.org/">AngularJS</a>
+      in order to create a framework most suited to develop rich and robust applications. Ionic not only
+      looks nice, but its core architecture is for <strong>serious app development</strong>,
+      and AngularJS ties in perfectly.
+    </p>
+
+  </div>
+
+  <div class="feature-row img-native">
+
+    <h4>Native focused</h4>
+    <p>
+      Ionic is modeled off of popular native mobile development SDKs, making it easy to understand for
+      anyone that has built a native app for iOS or Android. Just drop it in your code to get going,
+      and push through PhoneGap when it's ready. Develop once, deploy everywhere.
+    </p>
+
+  </div>
+
+  <div class="feature-row img-design img-right">
+
+    <h4>Beautifully designed</h4>
+    <p>
+      Clean, simple, and functional. Ionic has been designed to work and display beautifully on all
+      current mobile devices. With tons of popular mobile components, typography, interactive
+      paradigms, and a gorgeous (yet extensible) base theme, you'll wonder how you lived without it.
+    </p>
+
+  </div>
+
+  <div class="feature-row img-nerds">
+
+      <h4>Built by nerds (like you)</h4>
+      <p>
+        Built and maintained by developers and designers passionate about web technologies. Ionic focuses
+        on standards compliant code, is forward thinking, and managed through
+        <a href="https://github.com/driftyco/ionic">Github</a>. We want to make
+        mobile development with HTML5 awesome and simple.
+      </p>
+
+  </div>
+
+  {% include testimonials.html %}
+
+  <!--
+  <div class="desc-row examples-row">
+
+    <h3>
+      Ionic examples
+    </h3>
+    <p>
+      Check out our <a href="/examples/showcase/">examples</a>, including starter templates and showcase demos.
+    </p>
+
+    <div>
+      <img src="/img/examples.jpg" style="max-width: 100%" alt="Ionic examples">
+    </div>
+
+  </div>
+  -->
+
+</div>
+
+<div class="pre-footer">
+
+  <div class="row ionic">
+
+    <div class="col-sm-6 col-a">
+      <h4>
+        <a href="/docs">Getting started <span class="icon ion-arrow-right-c"></span></a>
+      </h4>
+      <p>
+        Learn more about how Ionic was built, why you should use it, and what's included. We'll cover
+        the basics and help you get started from the ground up.
+      </p>
+    </div>
+
+    <div class="col-sm-6 col-b">
+      <h4>
+        <a href="/docs/components/">Documentation <span class="icon ion-arrow-right-c"></span></a>
+      </h4>
+      <p>
+        What are you waiting for? Take a look and get coding! Our documentation covers all you need to know
+        to get an app up and running in minutes.
+      </p>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="pre-footer footer-social">
+
+  <p>
+    Help us change the way the world develops for mobile.
+    <span class="spread-word">Spread the word.</span>
+  </p>
+  <ul class="share-row">
+    <li class="github-watch">
+      <iframe src="http://ghbtns.com/github-btn.html?user=driftyco&amp;repo=ionic&amp;type=watch&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="180" height="25"></iframe>
+    </li>
+    <li class="gplus">
+      <div class="g-plusone" data-size="medium"></div>
+      <script type="text/javascript">
+        (function() {
+          var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+          po.src = 'https://apis.google.com/js/platform.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+        })();
+      </script>
+    </li>
+    <li class="twitter-share">
+      <a href="https://twitter.com/share" class="twitter-share-button" data-via="ionicframework" data-hashtags="html5,mobile,angularjs" data-related="maxlynch,adamdbradley,benjsperry,drifty">Tweet</a>
+    </li>
+    <li class="twitter-follow">
+      <div id="fb-root"></div>
+      <script>(function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));</script>
+      <div class="fb-share-button" data-href="http://ionicframework.com/" data-type="button_count"></div>
+    </li>
+  </ul>
+
+</div>

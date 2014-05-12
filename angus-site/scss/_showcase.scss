@@ -1,0 +1,22 @@
+#showcase {
+
+  #apps {
+    margin-top: 40px;
+    > .row {
+      margin-top: 50px;
+    }
+  }
+
+  #contact {
+    margin-top: 15px;
+  }
+
+  .app {
+    .row {
+      margin-bottom: 15px;
+      img {
+        width: 100%;
+      }
+    }
+  }
+}

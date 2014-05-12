@@ -1,0 +1,119 @@
+
+/*
+ * Some CSS adapted from LayerVault, http://layervault.com
+ */
+
+
+.fade-down.ng-enter {
+  -webkit-animation: fadeInDown 0.5s both;
+  animation: fadeInDown 0.5s both;
+}
+.fade-down.ng-leave {
+  -webkit-animation: fadeOutUp 0.5s both;
+  animation: fadeOutUp 0.5s both;
+  width: 100%;
+  position: absolute;
+}
+
+
+$form-text-color: #292c31;
+$form-inactive-color: #ddd;
+$form-placeholder-color: #bcbcbc;
+$form-active-color: #4e8ef7;
+$form-error-color: #f95c5c;
+
+$input-height: 60px;
+
+[step] {
+  margin-bottom: 30px;
+}
+.inset-step {
+  padding-left: 15px;
+  margin-top: 10px;
+}
+
+
+.input-container,
+.input-container * {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+}
+.input-container {
+  margin-bottom: 10px;
+  position: relative;
+  * {
+    margin-bottom: 5px;
+  }
+  .subtext {
+    color: #999;
+    font-size: 14px;
+    font-weight: 300;
+  }
+  input,
+  textarea {
+    font-size: 16px;
+    font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    width: 100%;
+    height: $input-height;
+    -webkit-transition: border 300ms ease;
+    -moz-transition: border 300ms ease;
+    -ms-transition: border 300ms ease;
+    -o-transition: border 300ms ease;
+    transition: border 300ms ease;
+    outline: none;
+
+    padding: 18px 10px 0 8px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+
+    border: 2px solid $form-inactive-color;
+    &:focus {
+      border-color: $form-active-color;
+    }
+    &.error {
+      border-color: $form-error-color;
+    }
+  }
+  textarea {
+    height: 150px;
+    padding: 10px;
+  }
+  label {
+    font-size: 11px;
+    font-weight: 300;
+    -webkit-transition: color 300ms ease;
+    -moz-transition: color 300ms ease;
+    -ms-transition: color 300ms ease;
+    -o-transition: color 300ms ease;
+    transition: color 300ms ease;
+
+    float: left;
+    position: absolute;
+    display: block;
+    top: 5px;
+    left: 11px;
+    font-size: 12px;
+
+    color: $form-placeholder-color;
+  }
+  .description ~ label {
+    top: 31px;
+  }
+  label.error {
+    display: none;
+    color: $form-error-color;
+  }
+  input:focus ~ label:not(.error) {
+    color: $form-active-color;
+  }
+  input.error ~ label {
+    display: none;
+    &.error {
+      display: block;
+    }
+  }
+}

@@ -1,0 +1,169 @@
+.fb-share-button > span {
+  vertical-align: inherit !important;
+}
+.author-icon {
+  float: left;
+  margin-right: 8px;
+  width: 24px;
+  border-radius: 20px;
+}
+
+#spinner {
+    -webkit-animation: rotation 45s infinite linear;
+}
+
+@-webkit-keyframes rotation {
+    from {-webkit-transform: rotate(0deg);}
+    to   {-webkit-transform: rotate(359deg);}
+}
+
+#blog-wrapper {
+  max-width: 730px;
+  margin: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+
+  .pagination {
+    display: block;
+    width: 100%;
+  }
+
+}
+
+#blog-top {
+  text-align: center;
+  margin: 50px 0px 100px;
+  a {
+    opacity: 1;
+  }
+  h3 {
+    font-family: "AvenirNextLTPro-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #222;
+    font-weight: normal;
+  }
+  h5 {
+    font-size: 14px;
+  }
+}
+#posts {
+  font-family: "FreightTextProBook-Regular", Georgia, Cambria, "Times New Roman", Times, serif;
+  font-size: 22px;
+  color: #444;
+  font-weight: normal;
+  letter-spacing: .01rem;
+  -webkit-font-smoothing: antialiased;
+}
+.post {
+  line-height: 34px;
+
+  h2 {
+    margin: 40px 0px 15px 0px;
+  }
+
+  img {
+    max-width: 100%;
+  }
+
+  a {
+    transition: none;
+    -webkit-transition: none;
+    -moz-transition: none;
+    color: #437FE6;
+    opacity: 1;
+  }
+
+  p {
+    margin-bottom: 32px;
+  }
+
+  b, strong {
+    font-family: "FreightTextProMedium-Regular", Georgia, Cambria, "Times New Roman", Times, serif;
+    font-weight: bold;
+    color: #000;
+  }
+
+  h3 {
+    font-family: "FreightTextProMedium-Regular", Georgia, Cambria, "Times New Roman", Times, serif;
+    color: #222;
+    font-weight: normal;
+    font-size: 26px;
+    letter-spacing: -0.02rem;
+    margin: 42px 0px 12px 0px;
+  }
+
+  hr {
+  margin-top: 30px;
+  margin-bottom: 70px;
+  border: 0;
+  border-top: 2px solid #eee;
+  }
+
+  .showcase-image {
+    margin: 10px 0px;
+  }
+
+  .body-image {
+  margin: 10px 0px;
+  }
+
+  .post-title {
+    font-family: "AvenirNextLTPro-Medium", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #222 !important;
+    font-weight: normal;
+    font-size: 32px;
+    letter-spacing: -0.05rem;
+
+    a {
+      color: #222222;
+    }
+  }
+  .post-time {
+    font-style: italic;
+    font-size: 13px;
+    color: #999999;
+    margin: 20px 0px 20px;
+    display: block;
+  }
+  .post-social {
+    margin-bottom: 10px;
+  }
+
+  code {
+    font-size: 75%;
+  }
+  .highlight code {
+    font-size: 14px;
+  }
+}
+
+.disqus {
+  margin-top: 40px;
+}
+
+.phone {
+  position: relative;
+  margin: auto;
+  width: 365px;
+  height: 810px;
+  background: url("/img/phone-case.png") no-repeat right top;
+  margin-bottom: 15px;
+
+  img {
+    position: absolute;
+    top: 104px;
+    left: 22px;
+    z-index: 0;
+    width: 320px;
+    height: 568px;
+    border: 4px solid #22272d;
+    background-color: white;
+  }
+}
+
+.caption {
+  color: #666666;
+  text-align: center;
+  font-style: italic;
+  font-size: 14px;
+  margin-bottom: 20px;
+}

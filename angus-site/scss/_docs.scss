@@ -1,0 +1,435 @@
+@font-face {
+  font-weight: normal;
+  font-style: normal;
+  font-family: "Ionicons";
+  src: url("../fonts/ionicons.eot?v=1.3.0");
+  src: url("../fonts/ionicons.eot?v=1.3.0#iefix") format("embedded-opentype"), url("../fonts/ionicons.ttf?v=1.3.0") format("truetype"), url("../fonts/ionicons.woff?v=1.3.0") format("woff"), url("../fonts/ionicons.svg?v=1.3.0#Ionicons") format("svg"); }
+
+.fixed-menu {
+  position: fixed;
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+}
+.ionic.ionic-example .bar {
+  position: relative;
+}
+.device-preview-page .aside-menu {
+  display: none;
+}
+@media (min-width: 992px) {
+  .device-preview-page .aside-menu {
+    display: block;
+  }
+}
+
+@media (max-width: 991px) {
+  .device-preview-page .main-content {
+    width: 100%;
+  }
+}
+
+.left-menu {
+  margin-top: 8px;
+  padding-left: 0;
+  list-style: none;
+  font-size: 12px;
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  a {
+    display: block;
+    color: #444;
+    text-decoration: none;
+    &:hover {
+      background: transparent !important;
+    }
+  }
+
+  li {
+    display: none;
+    margin: 8px 0;
+    list-style: none;
+
+    &.menu-title {
+      display: block;
+      margin-top: 0;
+    }
+
+    ul {
+      display: none;
+      padding-left: 12px;
+    }
+
+  }
+
+  .menu-title a {
+    color: #aaaaaa;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 11px;
+    line-height: 20px;
+  }
+
+  &.nav li.active {
+    > a {
+      border-right: 2px solid $brand-primary;
+      color: $brand-primary;
+    }
+    > ul {
+      display: block;
+    }
+  }
+
+  &.nav > li > a {
+    padding: 1px 0;
+  }
+}
+
+.left-menu.active-menu {
+  .menu-title a {
+    color: $brand-primary;
+  }
+   li {
+    display: block;
+  }
+}
+
+.docs .aside-menu {
+  margin-bottom: 20px;
+}
+.docs .main-content {
+  margin-bottom: 150px;
+}
+
+.docs-section {
+  padding-bottom: 20px;
+  color: #444;
+  font-size: 14px;
+  line-height: 1.9em;
+
+  .panel-heading {
+    font-family: $font-family-monospace;
+  }
+
+  .highlight {
+    margin: 10px 0 20px 0;
+  }
+
+  pre {
+    margin-bottom: 0;
+    font-size: 12px !important;
+  }
+
+  h1, h2, h3 {
+    a {
+      text-decoration: none;
+    }
+  }
+
+  h2, h3 {
+    padding-bottom: 0;
+  }
+  h2 a, h3 a {
+    display: block;
+    padding-bottom: 8px;
+    transition: color .15s ease-in-out;
+  }
+
+  td, th {
+    font-size: 14px !important;
+  }
+}
+
+pre {
+  border: 0;
+  border-left: 4px solid #D7DBE4;
+  background: #F0F3F8;
+}
+
+.device-preview-page .docs-section {
+  padding-bottom: 60px;
+  min-height: 320px;
+}
+
+.docs-section {
+
+  h2 {
+    padding-bottom: 16px;
+  }
+
+  h1, h2, h3 {
+    a {
+      color: #999;
+    }
+  }
+
+  h1 a:hover,
+  h2 a:hover,
+  h3 a:hover {
+    color: #111;
+    text-decoration: none;
+  }
+
+  &.active {
+    h2 a, h3 a {
+      color: #222;
+    }
+  }
+}
+
+.doc-example {
+  display: none;
+}
+
+.docs-section + .docs-section {
+  padding-top: 20px;
+}
+
+.device-preview-page {
+  position: relative;
+
+  .docs-section:last-child {
+    padding-bottom: 600px;
+  }
+
+  .ionic .content-wrapper {
+    overflow: hidden !important;
+    height: 100%;
+  }
+
+  .device-preview {
+    position: absolute;
+    right: 0;
+    z-index: 1;
+    width: 380px;
+    height: 810px;
+    background: url("/img/phone-case.png") no-repeat right top;
+
+    a {
+      opacity: 1;
+    }
+
+    .content {
+      position: relative;
+    }
+
+  }
+  @media only screen and (-webkit-min-device-pixel-ratio: 1.3),
+         only screen and (   min--moz-device-pixel-ratio: 1.3),
+         only screen and (        min-device-pixel-ratio: 1.3),
+         only screen and (             min-resolution: 124dpi)
+    {
+      .device-preview {
+        background-image: url("/img/phone-case@2x.png");
+        background-size: 365px 792px;
+      }
+    }
+
+  .fixed-preview {
+    position: fixed;
+    top: 0;
+    right: auto;
+    -webkit-transform: translate3d(0, 0, 0);
+    -moz-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+
+  .docs-section {
+    padding-right: 380px;
+  }
+
+  @media (max-width: 767px) {
+    .device-preview {
+      display: none;
+    }
+    .docs-section {
+      padding-right: 0;
+    }
+  }
+
+  .device-preview > div {
+    position: absolute;
+    top: 104px;
+    left: 33px;
+    z-index: 0;
+    width: 328px;
+    height: 576px;
+    border: 4px solid #22272d;
+    background-color: white;
+    opacity: 0;
+    transition: opacity .2s ease-in-out;
+
+    &.active-preview {
+      z-index: 100;
+      opacity: 1;
+    }
+
+    &.screen-bg {
+      opacity: 1 !important;
+    }
+
+  }
+
+  .default-screen .content {
+    height: 100%;
+    background: url('/img/ionic_icon.svg') no-repeat center 115px;
+    background-size: 250px 250px;
+  }
+
+}
+
+.attention-arrow {
+  position: absolute;
+  background: url("/img/attention-arrow.png") no-repeat;
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 1.3),
+       only screen and (   min--moz-device-pixel-ratio: 1.3),
+       only screen and (        min-device-pixel-ratio: 1.3),
+       only screen and (             min-resolution: 124dpi)
+{
+  .attention-arrow {
+    background: url("/img/attention-arrow@2x.png") no-repeat;
+    background-size: 40px 74px;
+  }
+}
+
+.ionic div.padding-example {
+  position: relative;
+  margin: 50px auto;
+  max-width: 240px;
+  height: 240px;
+  background: #ccc;
+
+  :first-child {
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    width: 140px;
+    height: 140px;
+    background: #4A87EE;
+  }
+}
+
+.ionic .tabs {
+  position: absolute !important;
+}
+
+.ionic .item.tabs {
+  position: relative !important;
+}
+
+.advanced-panel {
+  padding: 10px;
+  border: 1px solid #A7C6FC;
+  border-radius: 2px;
+  background: #F6F9FE;
+  color: #777;
+
+  em {
+    padding-right: 4px;
+    color: #528FF7;
+    vertical-align: middle;
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  a {
+    text-decoration: underline;
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+
+.cards-bg {
+  background: #f9f9f9;
+}
+
+.ionic .list.color-list-demo .item {
+  padding: 14px 15px 14px 15px;
+}
+.ionic .color-demo {
+  float: right;
+  width: 20px;
+  height: 20px;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 4px;
+  background: gray;
+}
+
+.ionic .col-demo {
+  padding: 5px;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 2px;
+  background: #f7f7f7;
+  text-align: center;
+}
+
+.ionic .responsive-break {
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-direction: normal;
+  -moz-box-direction: normal;
+  -webkit-box-orient: vertical;
+  -moz-box-orient: vertical;
+
+  .col {
+    margin-bottom: 15px;
+    width: 100%;
+  }
+}
+
+.ionic .ionicons-demo li {
+  display: inline-block;
+  padding: 2px;
+  font-size: 32px;
+
+  &:before {
+    display: block;
+    width: 42px;
+    text-align: center;
+  }
+}
+
+.table tr td:first-child {
+  white-space: nowrap;
+}
+
+.docs-home-row {
+  text-align: center;
+
+  > div {
+    margin-top: 50px;
+  }
+
+  h3 {
+    color: #333;
+    font-family: $font-family-medium;
+    margin-top: 8px;
+  }
+
+  h4 {
+    margin-bottom: 8px;
+  }
+
+  p {
+    color: #888;
+    font-size: 13px;
+    font-family: $font-family-regular;
+  }
+
+  a {
+    color: black;
+  }
+
+  a:hover {
+    text-decoration: none;
+  }
+}
+

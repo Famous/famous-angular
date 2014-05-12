@@ -1,0 +1,20 @@
+<div class="header horizontal-gradient">
+  <div class="container">
+    <h3>{% if page.header_title %}{{ page.header_title }}{% else %}{{ page.title }}{% endif %}</h3>
+    <h4>{% if page.header_sub_title %}{{ page.header_sub_title}}{% else %}How to get the most out of Ionic.{% endif %}</h4>
+  </div>
+  <div class="news">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 news-col">
+          {% if page.news %}{{ page.news }}{% else %}{{ site.news }}{% endif %}
+        </div>
+        <div class="col-sm-4 search-col">
+          {% include search_bar.html %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% include search_results.html %}

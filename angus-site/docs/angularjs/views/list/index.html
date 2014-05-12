@@ -1,0 +1,193 @@
+---
+layout: docs_api
+active: angularjs
+title: "List View"
+header_sub_title: "Generic lists of content"
+---
+
+<h1>List View</h1>
+
+{% include codepen.html id="JsHjf" %}
+
+<p>
+  The List is a widely used interface element in
+  most current mobile OS's, and can include content ranging from basic
+  text all the way to buttons, toggles, icons, and thumbnails.
+</p>
+<p>
+  Both the list, which contains items, and the list items themselves
+  can be any HTML element. The containing element requires the <code>list</code>
+  class and each list item requires the <code>item</code> class.
+  Ionic also comes with pre-built Angular directives to make it easier to create a
+  complex list.
+</p>
+<p>
+  Using the <code>ion-list</code> and <code>ion-item</code> directives make it easy to support various interaction modes such as swipe to edit, drag to reorder, and removing items.
+  However, if you need just a simple list you won't need to use the directives, but rather just use the classnames. <a href="http://codepen.io/ionic/pen/isfAJ">This demo is a simple list</a> without using the directives.
+</p>
+
+<div style="margin: 30px 360px 20px 0;">
+  <h2>Usage</h2>
+
+{% highlight html %}
+<ion-list>
+  <ion-item ng-repeat="item in items" item="item">
+  </ion-item>
+</ion-list>
+{% endhighlight %}
+</div>
+
+<p style="clear:both">
+  Lists have many options that can be configured and events that can be handled:
+</p>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Attribute</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>on-delete</td>
+      <td><b>function(item)</b></td>
+      <td></td>
+      <td>Called when an item is deleted.</td>
+    </tr>
+    <tr>
+      <td>on-reorder</td>
+      <td><b>function()</b></td>
+      <td></td>
+      <td>Called when an item is reordered.</td>
+    </tr>
+    <tr>
+      <td>show-delete</td>
+      <td><b>boolean</b></td>
+      <td>false</td>
+      <td>A true/false value which toggles each item's delete button.</td>
+    </tr>
+    <tr>
+      <td>show-reorder</td>
+      <td><b>boolean</b></td>
+      <td>false</td>
+      <td>A true/false value which toggles each item's reorder button.</td>
+    </tr>
+    <tr>
+      <td>can-delete</td>
+      <td><b>boolean</b></td>
+      <td>false</td>
+      <td>A true/false indicating if an item can even be deleted or not. If <code>on-delete</code> is set then
+        this value will default to true.</td>
+    </tr>
+    <tr>
+      <td>can-reorder</td>
+      <td><b>boolean</b></td>
+      <td>false</td>
+      <td>A true/false indicating if an item can even be reordered or not.</td>
+    </tr>
+    <tr>
+      <td>can-swipe</td>
+      <td><b>boolean</b></td>
+      <td>false</td>
+      <td>A true/false indicating if an item can even be swiped to reveal option buttons.</td>
+    </tr>
+    <tr>
+      <td>delete-icon</td>
+      <td><b>className</b></td>
+      <td>ion-minus-circled</td>
+      <td>The class name of the icon to show for all deletion items. The default
+        <a href="http://ionicons.com/">ionicon</a> is <b>ion-minus-circled</b>.
+      </td>
+    </tr>
+    <tr>
+      <td>reorder-icon</td>
+      <td><b>className</b></td>
+      <td>ion-navicon</td>
+      <td>The class name of the icon to show for reordering. The default
+        <a href="http://ionicons.com/">ionicon</a> is <b>ion-navicon</b>.
+      </td>
+    </tr>
+    <tr>
+      <td>item-type</td>
+      <td><b>className</b></td>
+      <td></td>
+      <td>The classnames which are available for item, check out the <a href="/docs-generation/components/#list">component docs</a> for more info.</td>
+    </tr>
+    <tr>
+      <td>animation</td>
+      <td><b>className</b></td>
+      <td></td>
+      <td>An animation class to apply on the list for animating children.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<h2>List Items</h2>
+
+<p>
+  List items make up the bulk of lists. List items can be swiped,
+  reordered, deleted, and selected. They support hidden option buttons
+  that are exposed after swiping, and trigger events on deletion and
+  selection.
+</p>
+<p>
+  List items also support embedded form elements and right-hand icons.
+</p>
+<p>
+  The content specified in the item content area will be the main content of the displayed item.
+  Make sure to add an icon at the end if you want a right-handed icon.
+</p>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Attribute</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>option-buttons</td>
+      <td><b>array</b></td>
+      <td>Buttons is an array of objects specifying the hidden buttons show underneath an item when swiped. The format of each
+        button object is: <code><pre>{
+  text: 'Edit',
+  type: 'button',
+  onTap: function(item) {
+    ..
+  }
+}
+</pre></code></td>
+    </tr>
+    <tr>
+      <td>on-delete</td>
+      <td><b>function(item)</b></td>
+      <td>Called when an item is deleted by the user.</td>
+    </tr>
+    <tr>
+      <td>can-delete</td>
+      <td><b>boolean</b></td>
+      <td>Whether this item can be deleted by the user.</td>
+    </tr>
+    <tr>
+      <td>can-reorder</td>
+      <td><b>boolean</b></td>
+      <td>Whether this item can be reordered.</td>
+    </tr>
+    <tr>
+      <td>can-swipe</td>
+      <td><b>boolean</b></td>
+      <td>Whether this item can be swiped to expose the hidden buttons.</td>
+    </tr>
+    <tr>
+      <td>item-type</td>
+      <td><b>className</b></td>
+      <td>The classnames which are available for item, check out the <a href="/docs-generation/components/#list">component docs</a> for more info.</td>
+    </tr>
+  </tbody>
+</table>
+

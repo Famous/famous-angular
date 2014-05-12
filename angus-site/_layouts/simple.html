@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% include meta_tags.html %}
+    <title>{{page.title}} - Ionic Framework</title>
+
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.css" rel="stylesheet">
+
+    <link href="/css/style.css" rel="stylesheet">
+
+    {% include analytics.html %}
+
+  </head>
+
+  <body>
+    {{ content }}
+
+    <div class="container">
+    </div>
+    <footer>
+      <div class="container">
+        Copyright &copy; <a href="http://drifty.com/">Drifty</a> 2014
+        <div class="pull-right credits">
+          Built by <a href="http://twitter.com/benjsperry">@benjsperry</a>
+          <a href="http://twitter.com/maxlynch">@maxlynch</a> and
+          <a href="http://twitter.com/adamdbradley">@adamdbradley</a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
+
+  </body>
+
+</html>

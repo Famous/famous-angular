@@ -1,0 +1,74 @@
+
+<div class="testimonials" id="testimonials">
+
+  <div class="testimonial-content">
+
+    <blockquote class="testimonial-0 active" data-testimonial="0">
+      <p>
+        Ionic is the framework that I use for all of my projects, and I'm not sure I can give a bigger compliment than that. The innate sense of style and sophistication built into Ionic is awesome and makes building professional-level mobile applications a snap.
+      </p>
+      <footer style="background-image: url('/img/testimonials/testimonial-hampton@2x.png')">
+        <cite>Hampton Catlin</cite>
+        <div>Creator of <a href="http://sass-lang.com/">Sass</a></div>
+      </footer>
+    </blockquote>
+
+    <blockquote class="testimonial-1" data-testimonial="1">
+      <p>
+        Ionic will dramatically change the way mobile apps are built. Their choice of AngularJS means building functionality is a now breeze and it feels near-native. Your developers and your users will thank you.
+      </p>
+      <footer style="background-image: url('/img/testimonials/testimonial-james@2x.png')">
+        <cite>James Tamplin</cite>
+        <div>Co-founder &amp; CEO, <a href="https://www.firebase.com/">Firebase</a></div>
+      </footer>
+    </blockquote>
+
+    <blockquote class="testimonial-2" data-testimonial="2">
+      <p>
+        I was so inspired when I found Ionic. It fills a gap that’s missing when building for mobile and solves many complexities that otherwise require multiple libraries, keeping your code cleaner. Overall, it just makes mobile development fun and fast, so you can build more!
+      </p>
+      <footer style="background-image: url('/img/testimonials/testimonial-holly@2x.png')">
+        <cite>Holly Schinsky</cite>
+        <div>Developer Evangelist, <a href="http://devgirl.org/">Adobe</a></div>
+      </footer>
+    </blockquote>
+
+  </div>
+
+</div>
+
+<script>
+
+  $(window).load(function(){
+    var container = $('#testimonials');
+    var quotes = container.find('blockquote');
+
+    var activeQuote = 0;
+    var timerId;
+
+    function startTimeout() {
+      timerId = setTimeout(start, 9000);
+    }
+
+    function start() {
+      activeQuote++;
+      if(activeQuote>=quotes.length) activeQuote = 0;
+      quotes.removeClass('active');
+      quotes.eq(activeQuote).addClass('active');
+      startTimeout();
+    }
+
+    quotes.find('footer').click(function(){
+      clearTimeout(timerId);
+      quotes.removeClass('active');
+      var blockquote = $(this).closest('blockquote');
+      activeQuote = parseInt( blockquote.data('testimonial'), 10);
+      blockquote.addClass('active');
+      startTimeout();
+    });
+
+    startTimeout();
+
+  });
+
+</script>

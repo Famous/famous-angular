@@ -4,3 +4,6 @@
 [submodule "app/scripts/lib"]
 	path = app/scripts/lib
 	url = git@github.com:Famous/lib.git
+[submodule "angus-site"]
+	path = angus-site
+	url = https://github.com/thomasstreet/angus-site.git

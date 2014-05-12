@@ -1,0 +1,140 @@
+
+.testimonials {
+
+  blockquote {
+    margin: 0;
+    padding: 0;
+    border: none;
+
+    p {
+      margin: 30px 0 0 0;
+      padding: 5px 10px 15px 30px;
+      background: url('/img/quote.png') no-repeat;
+      background-size: 25px 25px;
+      font-size: 16px;
+    }
+  }
+
+  footer {
+    margin-left: 30px;
+    padding-left: 50px;
+    background-color: white;
+    background-size: 44px 40px;
+    background-repeat: no-repeat;
+    -webkit-transition: opacity 0.3s;
+    transition: opacity 0.3s;
+  }
+
+}
+
+.testimonial-content {
+  position: relative;
+  margin: 0 auto;
+  padding: 0 5px 30px 5px;
+  max-width: 1050px;
+  border-top: 1px solid #f1f1f1;
+}
+
+@media (min-width: 768px) {
+
+  .testimonials {
+    position: relative;
+    height: 365px;
+
+    blockquote {
+
+      p {
+        position: absolute;
+        top: 70px;
+        margin: 0;
+        padding: 10px 80px 0 80px;
+        min-height: 150px;
+        background-size: 50px 50px;
+        color: #888;
+        text-align: center;
+        font-weight: normal;
+        font-size: 22px;
+        font-family: Georgia, serif;
+        line-height: 34px;
+        opacity: 0;
+        -webkit-transition: opacity 0.3s;
+        transition: opacity 0.3s;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      &.active {
+        p {
+          opacity: 1;
+        }
+      }
+    }
+
+    footer {
+      position: absolute;
+      top: 220px;
+      margin-left: 0;
+      padding-top: 5px;
+      max-width: 230px;
+      width: 230px;
+      height: 65px;
+      background-size: 44px 40px;
+      font-size: 13px;
+      opacity: .4;
+      cursor: pointer;
+    }
+
+    .active footer,
+    footer:hover {
+      opacity: 1;
+    }
+
+    .active footer {
+      border-bottom: 2px solid $brand-primary;
+    }
+
+    cite {
+      color: $brand-primary;
+      font-weight: 400;
+      font-size: 15px;
+    }
+
+    .testimonial-1 footer {
+      left: 37%;
+    }
+
+    .testimonial-2 footer {
+      right: 10px;
+    }
+
+  }
+
+  .testimonial-content {
+    padding: 60px 10px 0 10px;
+  }
+
+}
+
+
+@media (min-width: 960px) {
+
+  .testimonials {
+    height: 380px;
+
+    blockquote {
+      p {
+        font-size: 22px;
+      }
+    }
+
+    footer {
+      padding-top: 25px;
+      padding-left: 92px;
+      max-width: 265px;
+      width: 265px;
+      height: 94px;
+      background-size: 88px 80px;
+    }
+
+  }
+
+}

@@ -1,0 +1,221 @@
+#ionitron-image {
+  background: url('/img/getting-started/ionitron-avatar.png') no-repeat transparent;
+  width: 156px;
+  height: 156px;
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 1.3),
+       only screen and (   min--moz-device-pixel-ratio: 1.3),
+       only screen and (        min-device-pixel-ratio: 1.3),
+       only screen and (             min-resolution: 124dpi)
+{
+  #ionitron-image {
+    background: url('/img/getting-started/ionitron-avatar@2x.png') no-repeat transparent;
+    background-size: 156px 156px;
+  }
+}
+
+#ionitron-image.header-ionitron {
+  float: left;
+  margin-right: 10px;
+  @media screen and (max-width: 800px) {
+    background-size: 48px 48px;
+    width: 48px;
+    height: 48px;
+  }
+  @media screen and (max-width: 400px) {
+    background-size: 32px 32px;
+    width: 32px;
+    height: 32px;
+    ~ h3 {
+      font-size: 20px;
+      line-height: 34px;
+      margin: 0 0 4px 0;
+    }
+    ~ h4 {
+      font-size: 16px;
+      line-height: 18px;
+      color: #ECF3FF;
+    }
+  }
+}
+
+#getting-started {
+  padding: 40px 0px;
+
+  .italic {
+    font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-weight: 300;
+    margin: 20px 0px;
+    line-height: 26px;
+  }
+  i {
+    color: #999;
+  }
+
+  .row {
+    margin-bottom: 100px;
+  }
+
+  .num {
+    float: left;
+    width: 80px;
+  }
+
+  h2 {
+    color: #333333;
+    font-size: 28px;
+    padding-bottom: 4px;
+  }
+
+  h3 {
+    margin-bottom: 20px;
+  }
+
+  .sub-heading {
+    padding-bottom: 10px;
+    margin: auto;
+    max-width: 810px;
+    color: #444;
+    font-weight: 300;
+    font-size: 18px;
+    font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  }
+
+  .desc {
+    font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    color: #333;
+    font-weight: 300;
+    font-size: 14px;
+    margin-top: 16px;
+    margin-left: 80px;
+    margin-right: 20px;
+    line-height: 26px;
+  }
+
+  .code {
+    margin-top: 66px;
+  }
+  .highlight {
+    background: #eee;
+  }
+
+  input {
+    border: 2px solid #DDD;
+    color: #333;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    border-radius: 2px;
+
+    &:focus {
+      border: 2px solid #4e8ef7;
+      box-shadow: none;
+      -webkit-box-shadow: none;
+      -moz-box-shadow: none;
+    }
+  }
+
+  .btn-primary {
+    color: #FFF;
+    background-color: #4F8EF7;
+    transition: background-color .1s ease-in-out;
+    border-radius: 2px;
+    padding: 6px 20px;
+  }
+
+  #first-step {
+    margin-top: 60px;
+  }
+
+  #template-images {
+    margin-top: -60px;
+    padding-left: 95px;
+      
+    @media (max-width: 992px) {
+      padding-left: 15px;
+    }
+
+    .template {
+      text-align: center;
+      float: left;
+      width: 308px;
+      margin: 0px 68px;
+
+      &:first-child {
+        margin-left: 0;
+        margin-right: 0;
+      }
+      &:last-child {
+        margin-left: 0;
+        margin-right: 0;
+      }
+
+      @media (max-width: 1200px) {
+        width: 272px;
+        margin: 0px 20px;
+        .template-image {
+          width: 100%;
+          background-size: contain;
+        }
+      }
+
+      @media (max-width: 992px) {
+        width: 226px;
+        margin: 0px 20px;
+      }
+
+      @media (max-width: 768px) {
+        width: 100%;
+        float: none;
+        margin: 20px 0px;
+        .template-image {
+          width: 308px;
+          display: block;
+          margin: auto;
+        }
+      }
+    }
+
+    code {
+      display: inline-block;
+      margin-top: 15px;
+    }
+    .template-image {
+      display: inline-block;
+      width: 308px;
+      height: 263px;
+    }
+  }
+
+  #start-template-blank-image {
+    background: url('/img/getting-started/blank-app.png') no-repeat transparent;
+  }
+  #start-template-tabs-image {
+    background: url('/img/getting-started/tabs-app.png') no-repeat transparent;
+  }
+  #start-template-sidemenu-image {
+    background: url('/img/getting-started/menu-app.png') no-repeat transparent;
+  }
+
+  @media only screen and (-webkit-min-device-pixel-ratio: 1.3),
+         only screen and (   min--moz-device-pixel-ratio: 1.3),
+         only screen and (        min-device-pixel-ratio: 1.3),
+         only screen and (             min-resolution: 124dpi)
+    {
+      #start-template-blank-image {
+        background: url('/img/getting-started/blank-app@2x.png') no-repeat transparent;
+        background-size: 308px 263px;
+      }
+      #start-template-tabs-image {
+        background: url('/img/getting-started/tabs-app@2x.png') no-repeat transparent;
+        background-size: 308px 263px;
+      }
+      #start-template-sidemenu-image {
+        background: url('/img/getting-started/menu-app@2x.png') no-repeat transparent;
+        background-size: 308px 263px;
+      }
+
+    }
+
+}
+

@@ -1,0 +1,73 @@
+---
+layout: blog
+---
+<div class="post">
+  <div class="post-info">
+    <h3 class="post-title"><a href="{{page.url}}/">{{page.title}}</a></h3>
+    <time class="post-time">By {{page.author}}{% if page.hide_date %}{% else %} on {{page.date | date: "%B %d, %Y" }}{% endif %}</time>
+    <div class="post-social">
+      <a href="https://twitter.com/share" class="twitter-share-button" data-text="{{page.title}}" data-url="http://ionicframework.com{{page.url}}" data-via="ionicframework" data-related="ionicframework">Tweet</a>
+      <script>
+        !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+      </script>
+
+      <!-- Place this tag where you want the +1 button to render. -->
+      <!--
+      <div class="g-plusone" data-size="medium" data-href="http://ionicframework.com{{page.url}}"></div>
+      -->
+
+      <!-- Place this tag after the last +1 button tag. -->
+      <!--
+      <script type="text/javascript">
+        (function() {
+          var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+          po.src = 'https://apis.google.com/js/platform.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+        })();
+      </script>
+      -->
+
+      <!--<div class="fb-share-button" data-href="http://ionicframework.com{{page.url}}" data-type="button_count"></div>-->
+    </div>
+  </div>
+
+{{ content }}
+
+    <small><i>(Help us change mobile development forever. <a href="/jobs/">We are hiring!</a>)</i></small>
+  <hr>
+
+  <p>
+    <a href="https://twitter.com/ionicframework" class="twitter-follow-button" data-size="large">Follow @ionicframework</a>
+    <iframe src="http://ghbtns.com/github-btn.html?user=driftyco&repo=ionic&type=watch&count=true&size=large"
+      allowtransparency="true" frameborder="0" scrolling="0" width="152" height="30"></iframe>
+  </p>
+
+  <form action="http://codiqa.createsend.com/t/t/s/jytylh/" method="post" class="form">
+    <div class="form-inline">
+      <label for="fieldEmail">Join our list to get news and updates on Ionic!</label><br />
+      <div class="row">
+        <div class="col-sm-5">
+          <input id="fieldEmail" class="form-control" name="cm-jytylh-jytylh" type="email" placeholder="Your email" style="box-shadow: none; border: 2px solid #e1e1e1; border-radius: 4px; width: 240px;" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Subscribe</button>
+      </div>
+    </div>
+  </form>
+
+  <div class="disqus">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'ionic'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+  </div>
+</div>

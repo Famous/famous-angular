@@ -1,0 +1,91 @@
+
+.btn.btn-default {
+  border-color: #ddd;
+}
+.picker {
+  position: absolute;
+  max-width: 180px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, .3);
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.05), inset 0px 1px 0px 0px rgba(255, 255, 255, 0.1);
+
+  select {
+    display: block;
+    padding: 2px 60px 2px 10px;
+    width: 150%;
+    height: 24px;
+    outline: none;
+    border: none;
+    background: transparent;
+    color: #fff;
+    text-indent: 0.01px;
+    text-overflow: '';
+    font-size: 14px;
+    cursor: pointer;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, .4);
+  }
+
+  &:after {
+    position: absolute;
+    top: 50%;
+    right: 6%;
+    z-index: 0;
+    z-index: 99;
+    margin-top: -2px;
+    width: 0;
+    height: 0;
+    border-top: 3px solid;
+    border-right: 3px solid rgba(0, 0, 0, 0);
+    border-left: 3px solid rgba(0, 0, 0, 0);
+    color: rgba(255, 255, 255, 0.6);
+    content: "";
+  }
+
+}
+
+.api-title {
+  margin-top: 0;
+  font-size: 24px;
+}
+
+.docs-api h2 {
+  color: #222;
+  font-size: 22px;
+}
+
+.docs-api p,
+.docs-api td,
+.docs-api th {
+  color: #444;
+}
+
+.improve-docs {
+  position: absolute;
+  top: 4px;
+  right: 10px;
+  display: none;
+  float: right;
+
+  a {
+    padding: 2px 6px;
+    border: 2px solid #4f8ef7;
+    border-radius: 2px;
+
+    &:hover {
+      text-decoration: none;
+      opacity: 1;
+    }
+  }
+}
+
+@media (min-width: 992px) {
+  .improve-docs {
+    display: block;
+  }
+}
+

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% include meta_tags.html %}
+    <title>{{page.title}} - Ionic Framework</title>
+    {% include head_includes.html %}
+  </head>
+
+  <body class="docs docs-page docs-home">
+
+    {% include nav_links.html %}
+
+    {% include header.html %}
+
+    <div class="container content-container">
+
+      <div class="row">
+
+        <div class="col-md-2 col-sm-3 aside-menu">
+
+          <div class="docked-menu">
+
+            <ul class="nav left-menu">
+              <li class="menu-title">
+                <a href="/docs/overview/">Overview</a>
+              </li>
+            </ul>
+
+            <ul class="nav left-menu">
+              <li class="menu-title">
+                <a href="/docs/components/">CSS</a>
+              </li>
+            </ul>
+
+            <ul class="nav left-menu">
+              <li class="menu-title">
+                <a href="/docs/api/">JavaScript</a>
+              </li>
+            </ul>
+
+            <ul class="nav left-menu">
+              <li class="menu-title">
+                <a href="/docs/guide/">Guide</a>
+              </li>
+            </ul>
+
+          </div>
+
+        </div>
+
+        <div class="col-md-10 col-sm-9 main-content">
+          {{ content }}
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="pre-footer">
+
+      <div class="row ionic">
+
+        <div class="col-sm-6 col-a">
+          <h4>
+            <a href="/docs-generation/guide/">Read the Book <span class="icon ion-arrow-right-c"></span></a>
+          </h4>
+          <p>
+            A walk through of getting Ionic installed, creating a new project, building the UI, adding logic, testing, deploying on the device, and publishing to various app stores.
+          </p>
+        </div>
+
+        <div class="col-sm-6 col-b">
+          <h4>
+            <a href="http://forum.ionicframework.com/">Community Forum <span class="icon ion-arrow-right-c"></span></a>
+          </h4>
+          <p>
+            Discuss and share ideas, hacks, and quesitons with others building with Ionic on the official Ionic Forum. Stop by and say Hello!
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+
+    {% include footer.html %}
+
+    {% include base_scripts.html %}
+
+  </body>
+</html>

@@ -1,0 +1,136 @@
+
+.footer {
+  position: relative;
+  z-index: 100;
+  padding: 40px 10px 40px;
+  background: #2b3442;
+  color: #a4b3cd;
+  text-align: center;
+  font-size: 14px;
+  font-family: "AvenirNextLTPro-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  a {
+    color: #e2eeff;
+    opacity: 1;
+    transition-property: color;
+
+    &:hover {
+      color: white;
+    }
+  }
+
+  .authors {
+    clear: both;
+    margin: 0 auto;
+    padding: 30px 10px 10px 10px;
+    max-width: 900px;
+    border-top: 1px solid #414955;
+    line-height: 20px;
+  }
+
+  .base-links a {
+    display: inline-block;
+    padding: 3px 9px;
+  }
+
+  .newsletter {
+    margin: 0 auto 30px;
+    max-width: 900px;
+    
+    text-align: left;
+
+    .newsletter-text {
+      color: #e2eeff;
+    }
+
+    .sign-up {
+      font-size: 13px;
+    }
+
+    .col-sm-7 {
+      padding-left: 0;
+    }
+
+    .col-sm-5 {
+      padding-right: 0;
+    }
+
+    input {
+      border: none;
+      background: #45546D;
+      color: white;
+
+      &:focus {
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        background: #51627E;
+        box-shadow: inset 0px 0px 0px 1px #4E8EF7;
+      }
+
+      &::-webkit-input-placeholder {
+        color: #8e9fb8;
+      }
+      &::-moz-placeholder { 
+        color: #8e9fb8;  
+      }
+    }
+    button {
+      padding-right: 15px;
+      padding-left: 15px;
+      border: 1px solid #4e8ef7;
+      background: #4e8ef7;
+      color: white;
+      box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.3);
+
+      &:hover {
+        background: #5998FF;
+        color: white;
+      }
+
+      &:active {
+        border: 1px solid #3E75CE;
+        background: #4683E7;
+        color: #B1C4E4;
+        box-shadow: none;
+      }
+    }
+
+  }
+
+}
+
+.pre-footer {
+  position: relative;
+  z-index: 100;
+  padding: 40px;
+  background: #F7F7F7;
+
+  .row {
+    margin: 0 auto;
+    max-width: 900px;
+  }
+  p {
+    color: #999;
+    line-height: 28px;
+  }
+  a:hover {
+    text-decoration: none;
+    color: #4E8EF7;
+  }
+  span {
+    padding-left: 5px;
+  }
+  .col-a {
+    padding-bottom: 15px;
+  }
+  @media (min-width: 768px) {
+    .col-a {
+      padding-right: 60px;
+      padding-bottom: 0;
+      border-right: 1px solid #ddd;
+    }
+    .col-b {
+      padding-left: 70px;
+    }
+  }
+}

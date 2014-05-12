@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% include meta_tags.html %}
+    <title>{{page.title}}</title>
+    {% include head_includes.html %}
+  </head>
+
+  <body class="full-page {{page.body_css}} no-js">
+    <script>document.body.classList.remove('no-js');</script>
+
+    {% include nav_links.html %}
+
+    <div class="container content-container">
+      {{ content }}
+    </div>
+
+    {% include footer.html %}
+
+    {% include base_scripts.html %}
+
+  <script>
+    $('#repo-download').click(function() {
+      var href = $(this).attr('href');
+      ga('send', 'event', 'Download', 'Repo Download', {
+      'nonInteraction': 1,
+      'hitCallback': function() {
+        window.location = href;
+      }});
+      return false;
+    })
+  </script>
+  </body>
+</html>

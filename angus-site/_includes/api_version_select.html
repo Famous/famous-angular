@@ -1,0 +1,11 @@
+<select onchange="window.location.href=this.options[this.selectedIndex].value">
+
+  <option
+   value="/docs/unstable/api/"
+   {% if page.version == "unstable"%}selected{% endif %}>
+    unstable (latest)
+  </option>
+
+</select>
+
+

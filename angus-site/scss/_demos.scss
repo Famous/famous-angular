@@ -1,0 +1,33 @@
+#demo {
+
+  padding-bottom: 80px;
+
+  #demo-top {
+    margin-bottom: 60px;
+    h1, h4 {
+      text-align: center;
+    }
+    h1 {
+      border: none;
+      margin: 50px 0px 5px 0px;
+    }
+    h4 {
+      color: #777;
+      font-weight: normal;
+      margin-bottom: 20px;
+    }
+  }
+
+  pre {
+    border: none;
+  }
+
+  .phone-case {
+    margin: 0px auto 30px auto;
+    float: none;
+    cursor: pointer;
+    iframe {
+      cursor: pointer;
+    }
+  }
+}

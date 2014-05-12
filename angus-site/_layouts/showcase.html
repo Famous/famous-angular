@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% include meta_tags.html %}
+    <title>{{page.title}} - Ionic Framework</title>
+    <link href="/css/site.css" rel="stylesheet">
+    <link href="showcase.css" rel="stylesheet">
+    {% include analytics.html %}
+  </head>
+  <body class="showcase">
+
+    <div class="container">
+
+      <div class="showcase-header">
+        <a href="/showcase/" class="featured-link left">Featured</a>
+        <a href="#" class="featured-link right">Submit</a>
+      </div>
+      {{ content }}
+    </div>
+
+  </body>
+</html>

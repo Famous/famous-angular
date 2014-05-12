@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% include meta_tags.html %}
+    <title>{{page.title}}{% if page.title_sufix %}{{ page.title_sufix }}{% else %} - Ionic Framework{% endif %}</title>
+    {% include head_includes.html %}
+  </head>
+
+  <body class="{{ page.body_css }}">
+
+    {% include nav_links.html %}
+
+    {% include header.html %}
+
+    <div class="container content-container">
+
+      {{ content }}
+      
+    </div>
+
+    {% if page.pre_footer %}
+    <div class="pre-footer">
+
+      <div class="row ionic">
+
+        <div class="col-sm-6 col-a">
+          <h4>
+            <a href="/getting-started/">Getting started <span class="icon ion-arrow-right-c"></span></a>
+          </h4>
+          <p>
+            Learn more about how Ionic was built, why you should use it, and what's included. We'll cover
+            the basics and help you get started from the ground up.
+          </p>
+        </div>
+
+        <div class="col-sm-6 col-b">
+          <h4>
+            <a href="/docs/">Documentation <span class="icon ion-arrow-right-c"></span></a>
+          </h4>
+          <p>
+            What are you waiting for? Take a look and get coding! Our documentation covers all you need to know
+            to get an app up and running in minutes.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+    {% endif %}
+  
+    {% include footer.html %}
+
+    {% include base_scripts.html %}
+
+  </body>
+</html>

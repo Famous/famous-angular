@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% include meta_tags.html %}
+
+    <title>{{page.title}}</title>
+
+    {% include head_includes.html %}
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular-animate.js"></script>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"/>
+    <style>
+      html,
+      body {
+        min-height: 1200px;
+        padding-bottom: 100px;
+      }
+    </style>
+  </head>
+
+  <body class="full-page">
+
+    {% include nav_links.html %}
+
+    <div class="header horizontal-gradient">
+      <div class="container">
+        <div id="ionitron-image" class="header-ionitron"></div>
+        <h3>Greetings, Human.</h3>
+
+        <h4>
+          Have you found an issue with Ionic?<br/><br/>
+          If you fill out the below form properly, I can categorize and fix your issue in the most efficient manner possible.
+        </h4>
+      </div>
+    </div>
+
+    <div class="container content-container">
+      {{ content }}
+    </div>
+
+    <script src="https://cdn.firebase.com/v0/firebase.js"></script>
+    <script src="https://cdn.firebase.com/libs/angularfire/0.6.0/angularfire.min.js"></script>
+    <script src="https://cdn.firebase.com/js/simple-login/1.2.0/firebase-simple-login.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+
+    <script src="./app/vendor/ga.js"></script>
+    <script src="./app/vendor/markdown.min.js"></script>
+
+    <script src="./app/app.js"></script>
+    <script src="./app/services/LoginService.js"></script>
+    <script src="./app/services/GitHubService.js"></script>
+    {% include base_scripts.html %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.0/fastclick.min.js"></script>
+    <script src="./app/vendor/jquery.autogrow.js"></script>
+  </body>
+</html>
