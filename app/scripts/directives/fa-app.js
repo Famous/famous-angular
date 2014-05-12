@@ -13,9 +13,7 @@
  * @usage
  * ```html
  * <fa-app ng-controller="MyCtrl">
- *   <fa-surface>
- *     Here's some data-bound content {{myScopeVariable}}
- *   </fa-surface>
+ *   <!-- other fa- scene graph components -->
  * </fa-app>
  * ```
  */
