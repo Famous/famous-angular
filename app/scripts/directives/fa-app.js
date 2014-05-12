@@ -1,3 +1,25 @@
+/**
+ * @ngdoc directive
+ * @name faApp
+ * @module famous.angular
+ * @restrict EA
+ * @description
+ * This directive is the container and entry point to Ang.us.  Behind the scenes,
+ * it creates a Famous context and then adds child elements
+ * to that context as they get compiled.  Inside of this directive,
+ * normal HTML content will not get rendered to the screen unless
+ * it is inside of a {@link api/directive/faSurface fa-surface} directive.
+ *
+ * @usage
+ * ```html
+ * <fa-app ng-controller="MyCtrl">
+ *   <fa-surface>
+ *     Here's some data-bound content {{myScopeVariable}}
+ *   </fa-surface>
+ * </fa-app>
+ * ```
+ */
+
 angular.module('famous.angular')
   .directive('faApp', ["famous", "famousDecorator", function (famous, famousDecorator) {
     return {
