@@ -9,7 +9,7 @@ module.exports = {
   process: function(docs, config) {
     var versionData = config.get('versionData');
 
-    var docsBase = path.join(config.get('basePath'), config.get('rendering.outputFolder'));
+    var docsBase = path.join(config.get('basePath'), config.get('rendering.outputFolder'), 'docs');
     var versionDir = path.join(docsBase, versionData.latest.name);
     var latestDir = path.join(docsBase, 'api');
 
@@ -17,6 +17,7 @@ module.exports = {
       copy(latestDir, path.join(versionDir, 'api'), {
         deleteFirst: true
       });
+      copy(latestDir, path.join('docs', versionData.latest.name));
     });
   }
 };

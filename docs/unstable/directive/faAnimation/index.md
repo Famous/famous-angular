@@ -1,9 +1,8 @@
 ---
 layout: "docs_api"
-version: "unstable"
-versionHref: "unstable"
+version: "0.0.0"
+versionHref: "/docs"
 path: "api/directive/faAnimation/"
-
 title: "fa-animation"
 header_sub_title: "Directive in module famous.angular"
 doc: "faAnimation"
@@ -11,7 +10,7 @@ docType: "directive"
 ---
 
 <div class="improve-docs">
-  <a href='https://github.com/FamousInternal/famous-angular/edit/master/app/scripts/famous.angular.js#L184'>
+  <a href='https://github.com/FamousInternal/famous-angular/edit/master/app/scripts/famous.angular.js#L194'>
     Improve this doc
   </a>
 </div>
@@ -31,7 +30,7 @@ docType: "directive"
 
 
 
-This directive is used to animate an element in conjunction with an <a href="unstable/api/directive/animate">animate</a> directive
+This directive is used to animate an element in conjunction with an <a href="/docs/api/directive/animate">animate</a> directive
 
 
 
