@@ -1,3 +1,25 @@
+/**
+ * @ngdoc directive
+ * @name faSurface
+ * @module famous.angular
+ * @restrict EA
+ * @description
+ * This directive is used to create general Famo.us surfaces, which are the
+ * leaf nodes of the scene graph.  The content inside
+ * surfaces is what gets rendered to the screen.
+ * This is where you can create form elements, attach
+ * images, or output raw text content with one-way databinding {{}}.
+ * You can include entire complex HTML snippets inside a faSurface, including
+ * ngIncludes or custom (vanilla Angular) directives.
+ *
+ * @usage
+ * ```html
+ * <fa-surface>
+ *   Here's some data-bound content {{myScopeVariable}}
+ * </fa-surface>
+ * ```
+ */
+
 angular.module('famous.angular')
   .directive('faSurface', function (famous, famousDecorator, $interpolate, $controller, $compile) {
     return {
