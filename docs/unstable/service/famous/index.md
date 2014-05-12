@@ -1,7 +1,7 @@
 ---
 layout: "docs_api"
-version: "0.0.0"
-versionHref: "/docs"
+version: "unstable"
+versionHref: "/docs/unstable"
 path: "api/service/famous/"
 title: "famous"
 header_sub_title: "Service in module famous.angular"

@@ -1,7 +1,7 @@
 ---
 layout: "docs_api"
-version: "0.0.0"
-versionHref: "/docs"
+version: "unstable"
+versionHref: "/docs/unstable"
 path: "api/"
 title: Javascript
 header_sub_title: Build amazing AngularJS apps with the power of Famo.us

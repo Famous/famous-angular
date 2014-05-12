@@ -1,7 +1,7 @@
 ---
 layout: "docs_api"
-version: "0.0.0"
-versionHref: "/docs"
+version: "unstable"
+versionHref: "/docs/unstable"
 path: "api/directive/faAnimation/"
 title: "fa-animation"
 header_sub_title: "Directive in module famous.angular"
@@ -30,7 +30,7 @@ docType: "directive"
 
 
 
-This directive is used to animate an element in conjunction with an <a href="/docs/api/directive/animate">animate</a> directive
+This directive is used to animate an element in conjunction with an <a href="/docs/unstable/api/directive/animate">animate</a> directive
 
 
 
