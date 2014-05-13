@@ -1,13 +1,16 @@
 var SITE_DIR = './famous-angular-docs/';
+var SITE_DIR_RELATIVE = '/famous-angular-docs/';
 
 var EXPRESS_PORT = 4000;
 var EXPRESS_ROOT = __dirname + '/app';
-var EXPRESS_DOCS_ROOT = __dirname + SITE_DIR + '_site';
+var EXPRESS_DOCS_ROOT = __dirname + SITE_DIR_RELATIVE + '_site';
+
 var LIVERELOAD_PORT = 35729;
 
 // Load plugins
 var gulp = require('gulp'),
   sass = require('gulp-ruby-sass'),
+  stylus = require('gulp-stylus'),
   autoprefixer = require('gulp-autoprefixer'),
   minifycss = require('gulp-minify-css'),
   jshint = require('gulp-jshint'),
@@ -114,23 +117,25 @@ gulp.task('docs', ['scripts'], function(done) {
 });
 
 gulp.task('build-site', ['docs'], function(done) {
-	return gulp.src(SITE_DIR + 'scss/*.scss')
-		.pipe(sass())
-		.pipe(gulp.dest(SITE_DIR + 'css'))
-		.pipe(exec("jekyll build --source " + SITE_DIR +  " --destination " + SITE_DIR + "_site/"))
-		.pipe(notify({ message: 'Jekyll build task complete' }));
+  return gulp.start('build-jekyll');
+});
+
+// Compile .styl for the site submodule
+gulp.task('site-styl', function() {
+  return gulp.src(SITE_DIR + "styl/*.styl")
+    .pipe(stylus())
+    .pipe(gulp.dest(SITE_DIR + "css/"));
 });
 
 
 // Only jekyll-build, without compiling docs, for faster run-time and to
 // prevent infinite loop when watching over files
-gulp.task('build-jekyll', function(done) {
-	return gulp.src(SITE_DIR + 'scss/*.scss')
-		.pipe(sass())
-		.pipe(gulp.dest(SITE_DIR + 'css'))
-		.pipe(exec("jekyll build --source " + SITE_DIR +  " --destination " + SITE_DIR + "_site/"))
-    // Live reloading not working for some reason
-    .pipe(livereload(server));
+gulp.task('build-jekyll', ['site-styl'], function() {
+  var jekyllCommand = 'jekyll build --source ' + SITE_DIR +  ' --destination ' + SITE_DIR + '_site/';
+  // gulp-exec bugfix:
+  // Need to call gulp.src('') exactly, before using .pipe(exec())
+  return gulp.src('')
+    .pipe(exec(jekyllCommand));
 });
 
 gulp.task('live-reload', function() {
@@ -146,11 +151,12 @@ gulp.task('dev-site', ['build-jekyll'], function() {
 	    return console.log(err);
 	  }
 
-	  // Watch .css and .html files inside site submodule
+	  // Watch source files inside site submodule
 	  gulp.watch([
         // This might go over the watch limit
 	      SITE_DIR + '**/*.css',
 	      SITE_DIR + '**/*.html',
+	      SITE_DIR + '**/*.md',
         // Do NOT watch the compile _site directory, else the watch will create
         // an infinite loop
         '!' + SITE_DIR + '_site'
