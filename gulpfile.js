@@ -1,6 +1,8 @@
+var SITE_DIR = './famous-angular-docs/';
+
 var EXPRESS_PORT = 4000;
 var EXPRESS_ROOT = __dirname + '/app';
-var EXPRESS_DOCS_ROOT = __dirname + '/angus-site/_site';
+var EXPRESS_DOCS_ROOT = __dirname + SITE_DIR + '_site';
 var LIVERELOAD_PORT = 35729;
 
 // Load plugins
@@ -22,6 +24,7 @@ var gulp = require('gulp'),
   gutil = require('gulp-util'),
   pkg = require('./package.json'),
   exec = require('gulp-exec');
+
 
 // Set up server
 function startExpress(root) {
@@ -111,10 +114,10 @@ gulp.task('docs', ['scripts'], function(done) {
 });
 
 gulp.task('build-site', ['docs'], function(done) {
-	return gulp.src('./angus-site/scss/*.scss')
+	return gulp.src(SITE_DIR + 'scss/*.scss')
 		.pipe(sass())
-		.pipe(gulp.dest('./angus-site/css'))
-		.pipe(exec("jekyll build --source ./angus-site/ --destination ./angus-site/_site/"))
+		.pipe(gulp.dest(SITE_DIR + 'css'))
+		.pipe(exec("jekyll build --source " + SITE_DIR +  " --destination " + SITE_DIR + "_site/"))
 		.pipe(notify({ message: 'Jekyll build task complete' }));
 });
 
@@ -122,12 +125,16 @@ gulp.task('build-site', ['docs'], function(done) {
 // Only jekyll-build, without compiling docs, for faster run-time and to
 // prevent infinite loop when watching over files
 gulp.task('build-jekyll', function(done) {
-	return gulp.src('./angus-site/scss/*.scss')
+	return gulp.src(SITE_DIR + 'scss/*.scss')
 		.pipe(sass())
-		.pipe(gulp.dest('./angus-site/css'))
-		.pipe(exec("jekyll build --source ./angus-site/ --destination ./angus-site/_site/"))
+		.pipe(gulp.dest(SITE_DIR + 'css'))
+		.pipe(exec("jekyll build --source " + SITE_DIR +  " --destination " + SITE_DIR + "_site/"))
     // Live reloading not working for some reason
     .pipe(livereload(server));
+});
+
+gulp.task('live-reload', function() {
+  return livereload(server);
 });
 
 /***********************************************************************
@@ -139,16 +146,16 @@ gulp.task('dev-site', ['build-jekyll'], function() {
 	    return console.log(err);
 	  }
 
-	  // Watch .css and .html files inside angus-site submodule
+	  // Watch .css and .html files inside site submodule
 	  gulp.watch([
         // This might go over the watch limit
-	      'angus-site/**/*.css',
-	      'angus-site/**/*.html',
+	      SITE_DIR + '**/*.css',
+	      SITE_DIR + '**/*.html',
         // Do NOT watch the compile _site directory, else the watch will create
         // an infinite loop
-        '!angus-site/_site'
+        '!' + SITE_DIR + '_site'
 	    ],
-	    ['build-jekyll']
+	    ['build-jekyll', 'live-reload']
 	  );
   });
 
