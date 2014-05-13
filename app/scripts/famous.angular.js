@@ -854,7 +854,7 @@ angular.module('famous.angular')
  * watched by Angular instead of needing to $watch the values returned by the function.)
  * @usage
  * ```html
- * <fa-modifier fa-opacity=".25" fa-skew="myScopeSkewVariable" fa-translate="[25, 50, 2]" fa-scale="myFunctionThatReturnsAScaleArray">
+ * <fa-modifier fa-opacity=".25" fa-skew="myScopeSkewVariable" fa-translate="[25, 50, 2]" fa-scale="myScopeFunctionThatReturnsAnArray">
  *   <!-- Child elements of this fa-modifier will be affected by the values above -->
  *   <fa-surface>I'm translucent, skewed, rotated, and translated</fa-surface>
  * </fa-modifier>
