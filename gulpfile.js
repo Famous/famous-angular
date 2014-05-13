@@ -41,7 +41,7 @@ gulp.task('scripts', function() {
   ])
   .pipe(jshint('.jshintrc'))
   .pipe(jshint.reporter('default'))
-  .pipe(concat('famous.angular.js'))
+  .pipe(concat('famous-angular.js'))
   .pipe(gulp.dest('app/scripts'))
   .pipe(livereload(server))
   .pipe(notify({ message: 'Scripts task complete' }));
@@ -64,7 +64,7 @@ gulp.task('watch', function(event) {
 	  gulp.watch([
 	      'app/scripts/*/**/*.js',
 	      'app/scripts/app.js',
-	      '!app/scripts/famous.angular.js',
+	      '!app/scripts/famous-angular.js',
 	      'app/index.html',
 	      'app/views/**/*.html'
 	    ],
@@ -79,7 +79,17 @@ gulp.task('watch', function(event) {
 
 // Build for dist
 gulp.task('build', ['clean', 'scripts'], function(event) {
-	return gulp.src('app/scripts/famous.angular.js')
+	gulp.src('app/styles/famous.css')
+	.pipe(gulp.dest('dist/css'))
+	.pipe(minifycss())
+	.pipe(rename({suffix: '.min'}))
+	.pipe(gulp.dest('dist/css'))
+  /*
+  * Make the filename exactly match the bower repo's dir name,
+  * e.g. famous-angular/famous-angular.js, to ensure compatibility with
+  * yeoman's default gruntfile
+  */
+	return gulp.src('app/scripts/famous-angular.js')
 	.pipe(gulp.dest('dist/scripts'))
 	.pipe(uglify())
 	.pipe(rename({suffix: '.min'}))
