@@ -6,6 +6,8 @@ var _ = require('lodash');
 var basePackage = require('dgeni-packages/ngdoc');
 var pkg = require('../package.json');
 
+var SITE_DIR = '../famous-angular-docs/';
+
 module.exports = function(config) {
 	config.set('currentVersion', process.env.DOC_VERSION || 'unstable');
 
@@ -19,7 +21,7 @@ module.exports = function(config) {
 
 	config.set('basePath', __dirname);
 	config.set('source.projectPath', '.');
-	config.set('rendering.outputFolder', '../angus-site');
+	config.set('rendering.outputFolder', SITE_DIR);
 
 	var versionData = require('./generate-versions')(config);
 	config.set('versionData', versionData);
