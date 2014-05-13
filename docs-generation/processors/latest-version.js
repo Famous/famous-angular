@@ -9,14 +9,16 @@ module.exports = {
   process: function(docs, config) {
     var versionData = config.get('versionData');
 
-    var docsBase = path.join(config.get('basePath'), config.get('rendering.outputFolder'));
+    var docsBase = path.join(config.get('basePath'), config.get('rendering.outputFolder'), 'docs');
     var versionDir = path.join(docsBase, versionData.latest.name);
+	  console.log(versionDir);
     var latestDir = path.join(docsBase, 'api');
 
     mkdirp(versionDir, function() {
-      copy(latestDir, path.join(versionDir, 'api'), {
-        deleteFirst: true
-      });
+	    copy(path.join(versionDir, 'api'), latestDir, {
+		    deleteFirst: true
+	    });
+	    copy(path.join(versionDir, 'api'), path.join('docs', versionData.latest.name));
     });
   }
 };
