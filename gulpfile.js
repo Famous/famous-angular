@@ -118,6 +118,43 @@ gulp.task('build-site', ['docs'], function(done) {
 		.pipe(notify({ message: 'Jekyll build task complete' }));
 });
 
+
+// Only jekyll-build, without compiling docs, for faster run-time and to
+// prevent infinite loop when watching over files
+gulp.task('build-jekyll', function(done) {
+	return gulp.src('./angus-site/scss/*.scss')
+		.pipe(sass())
+		.pipe(gulp.dest('./angus-site/css'))
+		.pipe(exec("jekyll build --source ./angus-site/ --destination ./angus-site/_site/"))
+    // Live reloading not working for some reason
+    .pipe(livereload(server));
+});
+
+/***********************************************************************
+* Watch task for developing the angular-site submodule
+***********************************************************************/
+gulp.task('dev-site', ['build-jekyll'], function() {
+  server.listen(LIVERELOAD_PORT, function (err) {
+	  if (err) {
+	    return console.log(err);
+	  }
+
+	  // Watch .css and .html files inside angus-site submodule
+	  gulp.watch([
+        // This might go over the watch limit
+	      'angus-site/**/*.css',
+	      'angus-site/**/*.html',
+        // Do NOT watch the compile _site directory, else the watch will create
+        // an infinite loop
+        '!angus-site/_site'
+	    ],
+	    ['build-jekyll']
+	  );
+  });
+
+  gulp.start('site');
+});
+
 gulp.task('site', function(done) {
 	startExpress(EXPRESS_DOCS_ROOT);
 	gutil.log('Server running at Docs for', gutil.colors.cyan('http://localhost:'+EXPRESS_PORT+'/'));
