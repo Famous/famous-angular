@@ -690,6 +690,22 @@ angular.module('famous.angular')
     };
   });
 
+/**
+ * @ngdoc directive
+ * @name faImageSurface
+ * @module famous.angular
+ * @restrict EA
+ * @property faImageUrl    -   String url pointing to the image that should be loaded into the Famo.us ImageSurface
+ * @description
+ * This directive creates a Famo.us ImageSurface and loads
+ * the specified ImageUrl.
+ * @usage
+ * ```html
+ * <fa-image-surface fa-image-url="img/my-image.png">
+ * </fa-image-surface>
+ * ```
+ */
+
 angular.module('famous.angular')
   .directive('faImageSurface', function (famous, famousDecorator, $interpolate, $controller, $compile) {
     return {
