@@ -79,6 +79,11 @@ gulp.task('watch', function(event) {
 
 // Build for dist
 gulp.task('build', ['clean', 'scripts'], function(event) {
+	gulp.src('app/styles/famous.css')
+	.pipe(gulp.dest('dist/css'))
+	.pipe(minifycss())
+	.pipe(rename({suffix: '.min'}))
+	.pipe(gulp.dest('dist/css'))
   /*
   * Make the filename exactly match the bower repo's dir name,
   * e.g. famous-angular/famous-angular.js, to ensure compatibility with
