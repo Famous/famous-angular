@@ -690,6 +690,22 @@ angular.module('famous.angular')
     };
   });
 
+/**
+ * @ngdoc directive
+ * @name faImageSurface
+ * @module famous.angular
+ * @restrict EA
+ * @property {string} faImageUrl  -  String url pointing to the image that should be loaded into the Famo.us ImageSurface
+ * @description
+ * This directive creates a Famo.us ImageSurface and loads
+ * the specified ImageUrl.
+ * @usage
+ * ```html
+ * <fa-image-surface fa-image-url="img/my-image.png">
+ * </fa-image-surface>
+ * ```
+ */
+
 angular.module('famous.angular')
   .directive('faImageSurface', function (famous, famousDecorator, $interpolate, $controller, $compile) {
     return {
@@ -770,7 +786,27 @@ angular.module('famous.angular')
     };
   });
 
-
+/**
+ * @ngdoc directive
+ * @name faIndex
+ * @module famous.angular
+ * @restrict A
+ * @description
+ * This directive is used to specify the rendering order of elements
+ * inside of a ViewSequence-based component, such as @link api/directive/faScrollView faScrollView}
+ * or @link api/directive/faGridLayout faGridLayout}.  As a special case, when elements are added to
+ * these controls using ng-repeat, they are automatically assigned the
+ * $index property exposed by ng-repeat.  When adding elements manually
+ * (e.g. to a faScrollView but not using ng-repeat) or in a case where custom
+ * order is desired, then the index value must be assigned/overridden using the faIndex directive.
+ * @usage
+ * ```html
+ * <fa-scroll-view>
+ *  <fa-surface fa-index="0">Surface 1</fa-surface>
+ *  <fa-surface fa-index="1">Surface 2</fa-surface>
+ * </fa-scroll-view>
+ * ```
+ */
 
 angular.module('famous.angular')
   .directive('faIndex', function ($parse, famousDecorator) {
@@ -795,7 +831,35 @@ angular.module('famous.angular')
     };
   });
 
-
+/**
+ * @ngdoc directive
+ * @name faModifier
+ * @module famous.angular
+ * @restrict EA
+ * @property {Array|Function} faRotate  -  Array of numbers or function returning an array of numbers to which this Modifier's rotate should be bound. 
+ * @property {Number|Function} faRotateX  -  Number or function returning a number to which this Modifier's rotateX should be bound
+ * @property {Number|Function} faRotateY  -  Number or function returning a number to which this Modifier's rotateY should be bound
+ * @property {Number|Function} faRotateZ  -  Number or function returning a number to which this Modifier's rotateZ should be bound
+ * @property {Array|Function} faScale  -  Array of numbers or function returning an array of numbers to which this Modifier's scale should be bound
+ * @property {Array|Function} faSkew  -  Array of numbers or function returning an array of numbers to which this Modifier's skew should be bound
+ * @property {Transform} faTransform - Manually created Famo.us Transform object (an array) that can be passed to the modifier
+ * @property {Number|Function} faOpacity  -  Number or function returning a number to which this Modifier's opacity should be bound
+ * @property {Array|Function} faSize  -  Array of numbers (e.g. [100, 500] for the x- and y-sizes) or function returning an array of numbers to which this Modifier's size should be bound
+ * @property {Array|Function} faOrigin  -  Array of numbers (e.g. [.5, 0] for the x- and y-origins) or function returning an array of numbers to which this Modifier's origin should be bound
+ * @description
+ * This directive creates a Famo.us Modifier that will affect all children render nodes.  Its properties can be bound
+ * to numbers (including using Angular's data-binding, though this is discouraged for performance reasons)
+ * or to functions that return numbers (preferred, because the reference to the function is passed
+ * directly on to Famo.us, where only the reference to that function needs to be
+ * watched by Angular instead of needing to $watch the values returned by the function.)
+ * @usage
+ * ```html
+ * <fa-modifier fa-opacity=".25" fa-skew="myScopeSkewVariable" fa-translate="[25, 50, 2]" fa-scale="myScopeFunctionThatReturnsAnArray">
+ *   <!-- Child elements of this fa-modifier will be affected by the values above -->
+ *   <fa-surface>I'm translucent, skewed, rotated, and translated</fa-surface>
+ * </fa-modifier>
+ * ```
+ */
 
 angular.module('famous.angular')
   .directive('faModifier', ["famous", "famousDecorator", function (famous, famousDecorator) {
@@ -819,6 +883,10 @@ angular.module('famous.angular')
               return x.get ? x.get() : x;
             };
 
+            //TODO:  refactor to remove the need for scope.$eval's on every property on every frame.
+            //Instead, $scope.$watch the necessary values, and update a private reference, which
+            //will be returned by the getTransform function.  Should further decouple Angular
+            //digest overhead from Famo.us rendering performance.
             isolate.getTransform = function() {
               //var transforms = [Transform.translate(0, 0, 0)];
               var transforms = [];
@@ -827,6 +895,11 @@ angular.module('famous.angular')
                 transforms.push(Transform.translate.apply(this, values));
               }
 
+              if(attrs.faRotate){
+                var values = scope.$eval(attrs.faRotate).map(get)
+                transforms.push(Transform.rotate.apply(this, values));
+              }
+              //only apply faRotateX, etc. if faRotate is not defined
               if (attrs.faRotateX){
                 transforms.push(
                   Transform.rotateX(
@@ -836,12 +909,6 @@ angular.module('famous.angular')
                   )
                 );
               }
-
-              if (attrs.faScale){
-                var values = scope.$eval(attrs.faScale).map(get)
-                transforms.push(Transform.scale.apply(this, values));
-              }
-
               if (attrs.faRotateY) {
                 transforms.push(
                   Transform.rotateY(
@@ -851,7 +918,6 @@ angular.module('famous.angular')
                   )
                 );
               }
-
               if (attrs.faRotateZ) {
                 transforms.push(
                   Transform.rotateZ(
@@ -862,10 +928,15 @@ angular.module('famous.angular')
                 );
               }
 
+              if (attrs.faScale){
+                var values = scope.$eval(attrs.faScale).map(get)
+                transforms.push(Transform.scale.apply(this, values));
+              }
+
+              
               if (attrs.faSkew) {
-                transforms.push(
-                  Transform.skew(0, 0, scope.$eval(attrs.faSkew))
-                );
+                var values = scope.$eval(attrs.faSkew).map(get)
+                transforms.push(Transform.skew.apply(this, values));
               }
 
               if(!transforms.length)

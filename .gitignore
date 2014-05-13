@@ -16,3 +16,4 @@ npm-debug.log
 .sass-cache
 app/bower_components
 .idea/*
+_site
