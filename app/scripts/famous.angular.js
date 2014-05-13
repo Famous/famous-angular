@@ -1151,6 +1151,10 @@ angular.module('famous.angular')
               (scope.$eval(attrs.faPipeFrom)).pipe(isolate.renderNode);
             }
 
+            if (attrs.faPipeTo) {
+              (isolate.renderNode._eventOutput).pipe(scope.$eval(attrs.faPipeTo));
+            }
+
             var updateScrollview = function(init){
               //$timeout hack used here because the
               //updateScrollview function will get called
