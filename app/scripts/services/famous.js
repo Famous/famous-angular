@@ -116,7 +116,7 @@ require(requirements, function(/*args*/) {
 		   * //that we created in the view.
 		   * ```
 		   */
-			 */
+		   
 		_modules.find = function(selector){
 			var elems = angular.element(selector);
 			var scopes = _.map(elems, function(elem){
