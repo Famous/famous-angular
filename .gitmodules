@@ -4,9 +4,6 @@
 [submodule "angus-site"]
 	path = angus-site
 	url = git@github.com:thomasstreet/angus-site.git
-[submodule "angus-site-from-scratch"]
-	path = angus-site-from-scratch
-	url = https://github.com/thomasstreet/angus-site-from-scratch.git
 [submodule "famous-angular-docs"]
 	path = famous-angular-docs
 	url = https://github.com/thomasstreet/famous-angular-docs.git

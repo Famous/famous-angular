@@ -1,9 +1,9 @@
 var SITE_DIR = './famous-angular-docs/';
-var SITE_DIR_RELATIVE = '/famous-angular-docs/';
+var SITE_DIR_PATH = '/famous-angular-docs/';
 
 var EXPRESS_PORT = 4000;
 var EXPRESS_ROOT = __dirname + '/app';
-var EXPRESS_DOCS_ROOT = __dirname + SITE_DIR_RELATIVE + '_site';
+var EXPRESS_DOCS_ROOT = __dirname + SITE_DIR_PATH + '_site';
 
 var LIVERELOAD_PORT = 35729;
 
