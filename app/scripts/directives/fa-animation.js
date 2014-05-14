@@ -51,10 +51,9 @@ angular.module('famous.angular')
                 isolate.play(callback);
               }
 
-              //disengage will be a function that
-              //unassigns the event listener
+              //disengage is a function that
+              //can unassign the event listener
               var _disengage = undefined;
-              console.log('event', attrs.event)
               if(attrs.event){
                 if(_disengage)
                   _disengage();
@@ -64,11 +63,7 @@ angular.module('famous.angular')
                 })
               }
 
-              //TODO:  support data-bound ids (supports only strings for now)
-              //Possibly make "fa-id" for databound ids?
-              //Register this modifier by ID in bag
               var id = attrs.id;
-              famous.bag.register(id, isolate);
 
               if(timeline === undefined){
                 timeline = isolate._trans.get.bind(isolate._trans);

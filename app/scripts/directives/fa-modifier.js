@@ -34,7 +34,7 @@ angular.module('famous.angular')
       template: '<div></div>',
       transclude: true,
       restrict: 'EA',
-      priority: 100,
+      priority: 2,
       scope: true,
       compile: function(tElement, tAttrs, transclude){
         return {

@@ -17,7 +17,6 @@ angular.module('famous.angular')
                 return scope.$eval(attrs.faPipeTo);
               },
               function(newPipe, oldPipe){
-                console.log('updating pipes')
                 var target = isolate.renderNode || Engine;
                 if(oldPipe instanceof Array){
                   for(var i = 0; i < oldPipe.length; i++){

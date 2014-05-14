@@ -92,27 +92,40 @@ require(requirements, function(/*args*/) {
 			_modules[key] = module;
 		};
 
-		//bag for holding references to declared elements,
-		//accessible by those elements' ids
-		//TODO:  break out into separate service?
-		var _bag = {};
-		_modules.bag = {
-			_contents: _bag,
-			register: function(id, ref) {
-				if(_bag[id])
-					_bag[id].push(ref)
-				else
-					_bag[id] = [ref];
-			},
-			first: function(id) {
-				var arr = _bag[id];
-				if(arr)
-					return arr[0];
-				return undefined;
-			},
-			all: function(id) {
-				return _bag[id];
-			}
+			/**
+			 * @ngdoc method
+			 * @name famousProvider#find
+			 * @module famous.angular
+			 * @description given a selector, retrieves
+		   * the isolate on a template-declared scene graph element.  This is useful
+		   * for manipulating Famo.us objects directly after they've been declared in the DOM.
+		   * As in normal Angular, this DOM look-up should be performed in the postLink function
+		   * of a directive.
+			 * @returns {Array} an array of the isolate objects of the selected elements.
+		     *
+		     * @param {string} selector - the selector for the elements to look up
+		   * @usage
+		   * View:
+		   * ```html
+		   * <fa-scroll-view id="myScrollView"></fa-scroll-view>
+		   * ```
+		   * Controller:
+		   * ```javascript
+		   * var scrollViewReference = famous.find('#myScrollView')[0].renderNode;
+		   * //Now scrollViewReference is pointing to the Famo.us Scrollview object
+		   * //that we created in the view.
+		   * ```
+		   */
+			 */
+		_modules.find = function(selector){
+			var elems = angular.element(selector);
+			var scopes = _.map(elems, function(elem){
+				return angular.element(elem).scope();
+			});
+			var isolates = _.map(scopes,function(scope){
+				return scope.isolate[scope.$id];
+			});
+			return isolates;
 		}
 
 		this.$get = function() {
