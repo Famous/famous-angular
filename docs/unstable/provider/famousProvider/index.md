@@ -41,7 +41,6 @@ We use this provider to avoid needing to deal with AMD on any other angular file
 
 
 
-
 ## Usage
 You probably won't have to configure this provider
 
@@ -69,7 +68,6 @@ angular.module('mySuperApp', ['famous.angular']).config(
 </h2>
 
 Register the modules that will be available in the famous service
-
 
 
 
@@ -124,6 +122,61 @@ Register the modules that will be available in the famous service
 
 
 
+
+
+
+
+<div id="find"></div>
+<h2>
+  <code>find(selector)</code>
+
+</h2>
+
+given a selector, retrieves
+the isolate on a template-declared scene graph element.  This is useful
+for manipulating Famo.us objects directly after they've been declared in the DOM.
+As in normal Angular, this DOM look-up should be performed in the postLink function
+of a directive.
+
+
+
+<table class="table" style="margin:0;">
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>
+        selector
+        
+        
+      </td>
+      <td>
+        
+  <code>string</code>
+      </td>
+      <td>
+        <p>the selector for the elements to look up</p>
+
+        
+      </td>
+    </tr>
+    
+  </tbody>
+</table>
+
+
+
+
+
+
+* Returns: 
+  <code>Array</code> an array of the isolate objects of the selected elements.
 
 
 

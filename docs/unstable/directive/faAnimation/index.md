@@ -10,7 +10,7 @@ docType: "directive"
 ---
 
 <div class="improve-docs">
-  <a href='https://github.com/FamousInternal/famous-angular/edit/master/app/scripts/famous.angular.js#L194'>
+  <a href='https://github.com/FamousInternal/famous-angular/edit/master/app/scripts/famous.angular.js#L209'>
     Improve this doc
   </a>
 </div>
@@ -31,7 +31,6 @@ docType: "directive"
 
 
 This directive is used to animate an element in conjunction with an <a href="/docs/unstable/api/directive/animate">animate</a> directive
-
 
 
 

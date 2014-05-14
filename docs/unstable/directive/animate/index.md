@@ -10,7 +10,7 @@ docType: "directive"
 ---
 
 <div class="improve-docs">
-  <a href='https://github.com/FamousInternal/famous-angular/edit/master/app/scripts/famous.angular.js#L274'>
+  <a href='https://github.com/FamousInternal/famous-angular/edit/master/app/scripts/famous.angular.js#L284'>
     Improve this doc
   </a>
 </div>
@@ -31,7 +31,6 @@ docType: "directive"
 
 
 This directive is used to specify the animation of an element in a <a href="/docs/unstable/api/directive/faAnimation">faAnimation</a> directive
-
 
 
 
