@@ -1,4 +1,4 @@
-# famous-angular
+# Famo.us/Angular
 
 ##Running
 
