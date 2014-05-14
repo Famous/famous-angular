@@ -92,27 +92,40 @@ require(requirements, function(/*args*/) {
 			_modules[key] = module;
 		};
 
-		//bag for holding references to declared elements,
-		//accessible by those elements' ids
-		//TODO:  break out into separate service?
-		var _bag = {};
-		_modules.bag = {
-			_contents: _bag,
-			register: function(id, ref) {
-				if(_bag[id])
-					_bag[id].push(ref)
-				else
-					_bag[id] = [ref];
-			},
-			first: function(id) {
-				var arr = _bag[id];
-				if(arr)
-					return arr[0];
-				return undefined;
-			},
-			all: function(id) {
-				return _bag[id];
-			}
+			/**
+			 * @ngdoc method
+			 * @name famousProvider#find
+			 * @module famous.angular
+			 * @description given a selector, retrieves
+		   * the isolate on a template-declared scene graph element.  This is useful
+		   * for manipulating Famo.us objects directly after they've been declared in the DOM.
+		   * As in normal Angular, this DOM look-up should be performed in the postLink function
+		   * of a directive.
+			 * @returns {Array} an array of the isolate objects of the selected elements.
+		     *
+		     * @param {string} selector - the selector for the elements to look up
+		   * @usage
+		   * View:
+		   * ```html
+		   * <fa-scroll-view id="myScrollView"></fa-scroll-view>
+		   * ```
+		   * Controller:
+		   * ```javascript
+		   * var scrollViewReference = famous.find('#myScrollView')[0].renderNode;
+		   * //Now scrollViewReference is pointing to the Famo.us Scrollview object
+		   * //that we created in the view.
+		   * ```
+		   */
+		   
+		_modules.find = function(selector){
+			var elems = angular.element(selector);
+			var scopes = _.map(elems, function(elem){
+				return angular.element(elem).scope();
+			});
+			var isolates = _.map(scopes,function(scope){
+				return scope.isolate[scope.$id];
+			});
+			return isolates;
 		}
 
 		this.$get = function() {
@@ -159,7 +172,7 @@ require(requirements, function(/*args*/) {
 
 angular.module('famous.angular')
   .factory('famousDecorator', function () {
-    
+    //TODO:  add repeated logic to these roles
     var _roles = {
       child: {
 
@@ -170,6 +183,8 @@ angular.module('famous.angular')
     }
 
     return {
+      //TODO:  patch into _roles and assign the
+      // appropriate role to the given scope
       addRole: function(role, scope){
 
       },
@@ -244,10 +259,9 @@ angular.module('famous.angular')
                 isolate.play(callback);
               }
 
-              //disengage will be a function that
-              //unassigns the event listener
+              //disengage is a function that
+              //can unassign the event listener
               var _disengage = undefined;
-              console.log('event', attrs.event)
               if(attrs.event){
                 if(_disengage)
                   _disengage();
@@ -257,11 +271,7 @@ angular.module('famous.angular')
                 })
               }
 
-              //TODO:  support data-bound ids (supports only strings for now)
-              //Possibly make "fa-id" for databound ids?
-              //Register this modifier by ID in bag
               var id = attrs.id;
-              famous.bag.register(id, isolate);
 
               if(timeline === undefined){
                 timeline = isolate._trans.get.bind(isolate._trans);
@@ -642,10 +652,6 @@ angular.module('famous.angular')
             var options = scope.$eval(attrs.faOptions) || {};
             isolate.renderNode = new GridLayout(options);
 
-            if (attrs.faPipeFrom) {
-              (scope.$eval(attrs.faPipeFrom)).pipe(isolate.renderNode);
-            }
-
             var updateGridLayout = function(){
               _children.sort(function(a, b){
                 return a.index - b.index;
@@ -681,8 +687,6 @@ angular.module('famous.angular')
               element.find('div').append(clone);
             });
 
-            var id = attrs.id;
-            famous.bag.register(id, isolate)
             scope.$emit('registerChild', isolate);
           }
         };
@@ -773,12 +777,6 @@ angular.module('famous.angular')
 
             attrs.$observe('faImageUrl', updateContent);
 
-            //TODO:  support data-bound ids (supports only strings for now)
-            //Possibly make "fa-id" for databound ids?
-            //Register this modifier by ID in bag
-            var id = attrs.id;
-            famous.bag.register(id, isolate.renderNode)
-
             scope.$emit('registerChild', isolate);
           }
         }
@@ -849,9 +847,9 @@ angular.module('famous.angular')
  * @description
  * This directive creates a Famo.us Modifier that will affect all children render nodes.  Its properties can be bound
  * to numbers (including using Angular's data-binding, though this is discouraged for performance reasons)
- * or to functions that return numbers (preferred, because the reference to the function is passed
+ * or to functions that return numbers.  The latter is  preferred, because the reference to the function is passed
  * directly on to Famo.us, where only the reference to that function needs to be
- * watched by Angular instead of needing to $watch the values returned by the function.)
+ * watched by Angular instead of needing to $watch the values returned by the function.
  * @usage
  * ```html
  * <fa-modifier fa-opacity=".25" fa-skew="myScopeSkewVariable" fa-translate="[25, 50, 2]" fa-scale="myScopeFunctionThatReturnsAnArray">
@@ -867,7 +865,7 @@ angular.module('famous.angular')
       template: '<div></div>',
       transclude: true,
       restrict: 'EA',
-      priority: 100,
+      priority: 2,
       scope: true,
       compile: function(tElement, tAttrs, transclude){
         return {
@@ -979,18 +977,54 @@ angular.module('famous.angular')
               element.find('div').append(clone);
             });
 
-            //TODO:  support data-bound ids (supports only strings for now)
-            //Possibly make "fa-id" for databound ids?
-            //Register this modifier by ID in bag
-            var id = attrs.id;
-            famous.bag.register(id, isolate)
-
             scope.$emit('registerChild', isolate);
           }
         }
       }
     };
   }]);
+
+//UNTESTED as of 2014-05-13
+angular.module('famous.angular')
+  .directive('faPipeFrom', function (famous, famousDecorator) {
+    return {
+      restrict: 'A',
+      scope: false,
+      priority: 16,
+      compile: function() {
+        var Engine = famous['famous/core/Engine'];
+        
+        return { 
+          post: function(scope, element, attrs) {
+            var isolate = famousDecorator.ensureIsolate(scope);
+            scope.$watch(
+              function(){
+                return scope.$eval(attrs.faPipeFrom);
+              },
+              function(newTarget, oldTarget){
+                var source = isolate.renderNode || Engine;
+                if(oldTarget instanceof Array){
+                  for(var i = 0; i < oldTarget.length; i++){
+                    oldTarget[i].unpipe(source);
+                  }
+                }else if(oldTarget !== undefined){
+                  oldTarget.unpipe(source);
+                }
+
+                if(newTarget instanceof Array){
+                  for(var i = 0; i < newTarget.length; i++){
+                    newTarget[i].pipe(source);
+                  }
+                }else if(newTarget !== undefined){
+                  newTarget.pipe(source);
+                }
+              }
+            );
+          }
+        }
+      }
+    };
+  });
 
 
 
@@ -1011,7 +1045,6 @@ angular.module('famous.angular')
                 return scope.$eval(attrs.faPipeTo);
               },
               function(newPipe, oldPipe){
-                console.log('updating pipes')
                 var target = isolate.renderNode || Engine;
                 if(oldPipe instanceof Array){
                   for(var i = 0; i < oldPipe.length; i++){
@@ -1030,35 +1063,6 @@ angular.module('famous.angular')
                 }
               }
             );
-          }
-        }
-      }
-    };
-  });
-
-
-
-angular.module('famous.angular')
-  .directive('faPresenter', function ($controller) {
-    return {
-      restrict: 'A',
-      scope: false,
-      priority: 1001,
-      compile: function(tElement, tAttrs, transclude) {
-        return {
-          pre: function(scope, element, attrs){
-            //TODO:  fa-presenter might be able to sit elsewhere
-            //  in the compilation cycle, probably right as the post-compile
-            //  fires. (probably call it at the beginning of each component's
-            //  post-compile fn)
-            //  This would give the advantage/feature of being able to address
-            //  elements by their identifiers using HTML selectors
-            //  (this may be a good way to pass references from
-            //  the views/DOM to the controllers)
-          },
-          post: function(scope, element, attrs){
-            if(attrs.faPresenter)
-              $controller(attrs.faPresenter, {'$scope': scope})
           }
         }
       }
@@ -1147,10 +1151,6 @@ angular.module('famous.angular')
             var options = scope.$eval(attrs.faOptions) || {};
             isolate.renderNode = new ScrollView(options);
 
-            if (attrs.faPipeFrom) {
-              (scope.$eval(attrs.faPipeFrom)).pipe(isolate.renderNode);
-            }
-
             var updateScrollview = function(init){
               //$timeout hack used here because the
               //updateScrollview function will get called
@@ -1204,11 +1204,6 @@ angular.module('famous.angular')
               element.find('div').append(clone);
             });
 
-            //TODO:  support data-bound ids (supports only strings for now)
-            //Possibly make "fa-id" for databound ids?
-            //Register this modifier by ID in bag
-            var id = attrs.id;
-            famous.bag.register(id, isolate.renderNode)
             scope.$emit('registerChild', isolate);
 
           }
@@ -1325,12 +1320,6 @@ angular.module('famous.angular')
             transclude(scope, function(clone) {
               element.find('div.fa-surface').append(clone);
             });
-
-            //TODO:  support data-bound ids (supports only strings for now)
-            //Possibly make "fa-id" for databound ids?
-            //Register this modifier by ID in bag
-            var id = attrs.id;
-            famous.bag.register(id, isolate.renderNode)
 
             scope.$emit('registerChild', isolate);
           }

@@ -23,10 +23,6 @@ angular.module('famous.angular')
             var options = scope.$eval(attrs.faOptions) || {};
             isolate.renderNode = new ScrollView(options);
 
-            if (attrs.faPipeFrom) {
-              (scope.$eval(attrs.faPipeFrom)).pipe(isolate.renderNode);
-            }
-
             var updateScrollview = function(init){
               //$timeout hack used here because the
               //updateScrollview function will get called
@@ -80,11 +76,6 @@ angular.module('famous.angular')
               element.find('div').append(clone);
             });
 
-            //TODO:  support data-bound ids (supports only strings for now)
-            //Possibly make "fa-id" for databound ids?
-            //Register this modifier by ID in bag
-            var id = attrs.id;
-            famous.bag.register(id, isolate.renderNode)
             scope.$emit('registerChild', isolate);
 
           }

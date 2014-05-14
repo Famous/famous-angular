@@ -16,9 +16,9 @@
  * @description
  * This directive creates a Famo.us Modifier that will affect all children render nodes.  Its properties can be bound
  * to numbers (including using Angular's data-binding, though this is discouraged for performance reasons)
- * or to functions that return numbers (preferred, because the reference to the function is passed
+ * or to functions that return numbers.  The latter is  preferred, because the reference to the function is passed
  * directly on to Famo.us, where only the reference to that function needs to be
- * watched by Angular instead of needing to $watch the values returned by the function.)
+ * watched by Angular instead of needing to $watch the values returned by the function.
  * @usage
  * ```html
  * <fa-modifier fa-opacity=".25" fa-skew="myScopeSkewVariable" fa-translate="[25, 50, 2]" fa-scale="myScopeFunctionThatReturnsAnArray">
@@ -34,7 +34,7 @@ angular.module('famous.angular')
       template: '<div></div>',
       transclude: true,
       restrict: 'EA',
-      priority: 100,
+      priority: 2,
       scope: true,
       compile: function(tElement, tAttrs, transclude){
         return {
@@ -145,12 +145,6 @@ angular.module('famous.angular')
             transclude(scope, function(clone) {
               element.find('div').append(clone);
             });
-
-            //TODO:  support data-bound ids (supports only strings for now)
-            //Possibly make "fa-id" for databound ids?
-            //Register this modifier by ID in bag
-            var id = attrs.id;
-            famous.bag.register(id, isolate)
 
             scope.$emit('registerChild', isolate);
           }
