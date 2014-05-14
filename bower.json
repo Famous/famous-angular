@@ -1,23 +1,35 @@
 {
-  "name": "integration",
+  "name": "famous-angular",
+  "description": "Allow famo.us components to work seamlessly with other components inside existing or future Angular apps",
   "version": "0.0.0",
+  "license": "",
+  "homepage": "https://github.com/FamousInternal/famous-angular",
+  "main": "dist/scripts/famous.angular.js",
   "dependencies": {
     "angular": "1.2.16",
-    "json3": "~3.2.6",
-    "es5-shim": "~2.1.0",
     "requirejs": ">=2.1.0"
   },
   "devDependencies": {
     "angular-mocks": "1.2.6",
-    "angular-scenario": "1.2.6",
-    "requirejs": "~2.1.11",
-    "angular-ui-router": "~0.2.10",
-    "underscore": "~1.6.0",
-    "jquery": "~2.1.0",
-    "angular-animate": "~1.2.16",
-    "angular-touch": "~1.2.16"
+    "angular-scenario": "1.2.6"
   },
   "resolutions": {
     "angular": "1.2.16"
-  }
+  },
+  "ignore": [
+	"**/.*",
+	"node_modules",
+	"bower_components",
+	"test",
+	"gulpfile.js",
+	"angus-site",
+	"docs-generation",
+	"famous-angular-docs",
+	"src",
+	"famous-angular.pdf",
+	"init_submodules.sh",
+	"karma.conf.js",
+	"karma-e2e.conf.js",
+	"package.json"
+  ]
 }
