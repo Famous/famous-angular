@@ -39,7 +39,7 @@ module.exports = function(config) {
 	]);
 
 	config.set('source.files', [
-		{ pattern: 'dist/scripts/famous.angular.js', basePath: basePath }
+		{ pattern: 'src/scripts/**/*.js', basePath: basePath }
 	]);
 
 	config.append('processing.inlineTagDefinitions', [
