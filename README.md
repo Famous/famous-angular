@@ -11,6 +11,8 @@
 
 `npm install`
 
+`npm install -g gulp`
+
 ####Thereafter:
 `npm start`
 
