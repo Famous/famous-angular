@@ -80,11 +80,6 @@ angular.module('famous.angular')
               element.find('div').append(clone);
             });
 
-            //TODO:  support data-bound ids (supports only strings for now)
-            //Possibly make "fa-id" for databound ids?
-            //Register this modifier by ID in bag
-            var id = attrs.id;
-            famous.bag.register(id, isolate.renderNode)
             scope.$emit('registerChild', isolate);
 
           }

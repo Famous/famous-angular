@@ -76,8 +76,6 @@ angular.module('famous.angular')
               element.find('div').append(clone);
             });
 
-            var id = attrs.id;
-            famous.bag.register(id, isolate)
             scope.$emit('registerChild', isolate);
           }
         };

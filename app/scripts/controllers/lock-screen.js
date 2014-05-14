@@ -113,7 +113,7 @@ angular.module('integrationApp')
     }
 
     $scope.bgOpacity = function(){
-      var scrollView = famous.bag.first('main-scroll-view');
+      var scrollView = famous.find('#main-scroll-view')[0].renderNode;
       if(scrollView){
         var perPosition = $scope.scrollXPosition();
         return perPosition;
@@ -122,7 +122,7 @@ angular.module('integrationApp')
     };
 
     $scope.scrollXPosition = function(){
-      var scrollView = famous.bag.first('main-scroll-view');
+      var scrollView = famous.find('#main-scroll-view')[0].renderNode;
       if(scrollView){
         var page = scrollView._node.index;
         var absPosition = _width * page + scrollView.getPosition();
@@ -140,11 +140,11 @@ angular.module('integrationApp')
     }
 
     $scope.fireButtonAnimation = function(index){
-      famous.bag.first('number-button-animation-' + index).replay();
+      famous.find('#number-button-animation-' + index)[0].replay();
     }
 
     $scope.fireDotShakeAnimation = function(callback){
-      famous.bag.first('dot-shake-animation').replay(callback);
+      famous.find('#dot-shake-animation')[0].replay(callback);
     }
 
   });
