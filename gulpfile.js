@@ -124,8 +124,8 @@ gulp.task('build-site', ['docs'], function(done) {
 gulp.task('site-styl', function() {
   return gulp.src(SITE_DIR + "styl/*.styl")
     .pipe(stylus())
-    .pipe(concat('main.css'))
     .pipe(minifycss())
+    .pipe(concat('main.css'))
     .pipe(rename({suffix: '.min'}))
     .pipe(gulp.dest(SITE_DIR + "css/"));
 });
