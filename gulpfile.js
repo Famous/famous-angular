@@ -124,13 +124,32 @@ gulp.task('build-site', ['docs'], function(done) {
 gulp.task('site-styl', function() {
   return gulp.src(SITE_DIR + "styl/*.styl")
     .pipe(stylus())
+    .pipe(concat('main.css'))
+    .pipe(minifycss())
+    .pipe(rename({suffix: '.min'}))
     .pipe(gulp.dest(SITE_DIR + "css/"));
+});
+
+// Concat all js files and minify them
+gulp.task('site-js', function() {
+  return gulp.src([
+    SITE_DIR + "**/*.js",
+    // Exclude directories where compiled JS will end up
+    '!' + SITE_DIR + '_site/*',
+    '!' + SITE_DIR + 'js/*'
+  ])
+    .pipe(jshint('.jshintrc'))
+    .pipe(jshint.reporter('default'))
+    .pipe(concat('app.js'))
+    .pipe(uglify())
+    .pipe(rename({suffix: '.min'}))
+    .pipe(gulp.dest(SITE_DIR + "js/"));
 });
 
 
 // Only jekyll-build, without compiling docs, for faster run-time and to
 // prevent infinite loop when watching over files
-gulp.task('build-jekyll', ['site-styl'], function() {
+gulp.task('build-jekyll', ['site-styl', 'site-js'], function() {
   var jekyllCommand = 'jekyll build --source ' + SITE_DIR +  ' --destination ' + SITE_DIR + '_site/';
   // gulp-exec bugfix:
   // Need to call gulp.src('') exactly, before using .pipe(exec())
@@ -150,19 +169,22 @@ gulp.task('dev-site', ['build-jekyll'], function() {
 
 	  // Watch source files inside site submodule
 	  gulp.watch([
-      // because .styl compiles into .css, do not watch .css, else you will
+      // Because .styl compiles into .css, do not watch .css, else you will
       // an infinite loop
       SITE_DIR + '**/*.styl',
       SITE_DIR + '**/*.html',
       SITE_DIR + '**/*.md',
+      SITE_DIR + '**/*.js',
       // Do NOT watch the compile _site directory, else the watch will create
       // an infinite loop
-      '!' + SITE_DIR + '_site/'
+      '!' + SITE_DIR + '_site/**',
+      '!' + SITE_DIR + 'js/**'
     ],
     ['build-jekyll']
 	  );
   });
 
+  // Start the express server
   gulp.start('site');
 });
 
