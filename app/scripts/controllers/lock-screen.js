@@ -112,9 +112,10 @@ angular.module('integrationApp')
       $scope.shiftInputDots();
     }
 
+    var _scrollView = undefined;
     $scope.bgOpacity = function(){
-      var scrollView = famous.find('#main-scroll-view')[0].renderNode;
-      if(scrollView){
+      _scrollView = _scrollView || famous.find('#main-scroll-view')[0].renderNode;
+      if(_scrollView){
         var perPosition = $scope.scrollXPosition();
         return perPosition;
       } else
@@ -122,10 +123,10 @@ angular.module('integrationApp')
     };
 
     $scope.scrollXPosition = function(){
-      var scrollView = famous.find('#main-scroll-view')[0].renderNode;
-      if(scrollView){
-        var page = scrollView._node.index;
-        var absPosition = _width * page + scrollView.getPosition();
+      _scrollView = _scrollView || famous.find('#main-scroll-view')[0].renderNode;
+      if(_scrollView){
+        var page = _scrollView._node.index;
+        var absPosition = _width * page + _scrollView.getPosition();
         var perPosition = Math.max(0, Math.min(1, absPosition / (_width)));
         return 1 - perPosition;
       }
