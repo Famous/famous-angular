@@ -135,11 +135,8 @@ gulp.task('build-jekyll', ['site-styl'], function() {
   // gulp-exec bugfix:
   // Need to call gulp.src('') exactly, before using .pipe(exec())
   return gulp.src('')
-    .pipe(exec(jekyllCommand));
-});
-
-gulp.task('live-reload', function() {
-  return livereload(server);
+    .pipe(exec(jekyllCommand))
+    .pipe(livereload(server));
 });
 
 /***********************************************************************
@@ -153,15 +150,16 @@ gulp.task('dev-site', ['build-jekyll'], function() {
 
 	  // Watch source files inside site submodule
 	  gulp.watch([
-        // This might go over the watch limit
-	      SITE_DIR + '**/*.css',
-	      SITE_DIR + '**/*.html',
-	      SITE_DIR + '**/*.md',
-        // Do NOT watch the compile _site directory, else the watch will create
-        // an infinite loop
-        '!' + SITE_DIR + '_site'
-	    ],
-	    ['build-jekyll', 'live-reload']
+      // because .styl compiles into .css, do not watch .css, else you will
+      // an infinite loop
+      SITE_DIR + '**/*.styl',
+      SITE_DIR + '**/*.html',
+      SITE_DIR + '**/*.md',
+      // Do NOT watch the compile _site directory, else the watch will create
+      // an infinite loop
+      '!' + SITE_DIR + '_site/'
+    ],
+    ['build-jekyll']
 	  );
   });
 
