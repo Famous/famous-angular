@@ -37,10 +37,6 @@ angular.module('famous.angular')
             var options = scope.$eval(attrs.faOptions) || {};
             isolate.renderNode = new GridLayout(options);
 
-            if (attrs.faPipeFrom) {
-              (scope.$eval(attrs.faPipeFrom)).pipe(isolate.renderNode);
-            }
-
             var updateGridLayout = function(){
               _children.sort(function(a, b){
                 return a.index - b.index;
