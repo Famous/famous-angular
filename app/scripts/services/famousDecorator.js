@@ -1,7 +1,7 @@
 
 angular.module('famous.angular')
   .factory('famousDecorator', function () {
-    
+    //TODO:  add repeated logic to these roles
     var _roles = {
       child: {
 
@@ -12,6 +12,8 @@ angular.module('famous.angular')
     }
 
     return {
+      //TODO:  patch into _roles and assign the
+      // appropriate role to the given scope
       addRole: function(role, scope){
 
       },

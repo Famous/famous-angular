@@ -124,7 +124,7 @@ angular.module('integrationApp')
 
     $scope.scrollXPosition = function(){
       _scrollView = _scrollView || famous.find('#main-scroll-view')[0].renderNode;
-      if(_scrollView){
+      if(_scrollView && _scrollView._node){
         var page = _scrollView._node.index;
         var absPosition = _width * page + _scrollView.getPosition();
         var perPosition = Math.max(0, Math.min(1, absPosition / (_width)));
