@@ -1,9 +1,6 @@
 [submodule "app/scripts/famous"]
 	path = app/scripts/famous
 	url = git@github.com:Famous/famous.git
-[submodule "angus-site"]
-	path = angus-site
-	url = git@github.com:thomasstreet/angus-site.git
 [submodule "famous-angular-docs"]
 	path = famous-angular-docs
 	url = https://github.com/thomasstreet/famous-angular-docs.git
