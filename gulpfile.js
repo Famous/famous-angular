@@ -1,11 +1,16 @@
+var SITE_DIR = './famous-angular-docs/';
+var SITE_DIR_PATH = '/famous-angular-docs/';
+
 var EXPRESS_PORT = 4000;
 var EXPRESS_ROOT = __dirname + '/app';
-var EXPRESS_DOCS_ROOT = __dirname + '/angus-site/_site';
+var EXPRESS_DOCS_ROOT = __dirname + SITE_DIR_PATH + '_site';
+
 var LIVERELOAD_PORT = 35729;
 
 // Load plugins
 var gulp = require('gulp'),
   sass = require('gulp-ruby-sass'),
+  stylus = require('gulp-stylus'),
   autoprefixer = require('gulp-autoprefixer'),
   minifycss = require('gulp-minify-css'),
   jshint = require('gulp-jshint'),
@@ -22,6 +27,7 @@ var gulp = require('gulp'),
   gutil = require('gulp-util'),
   pkg = require('./package.json'),
   exec = require('gulp-exec');
+
 
 // Set up server
 function startExpress(root) {
@@ -111,11 +117,75 @@ gulp.task('docs', ['scripts'], function(done) {
 });
 
 gulp.task('build-site', ['docs'], function(done) {
-	return gulp.src('./angus-site/scss/*.scss')
-		.pipe(sass())
-		.pipe(gulp.dest('./angus-site/css'))
-		.pipe(exec("jekyll build --source ./angus-site/ --destination ./angus-site/_site/"))
-		.pipe(notify({ message: 'Jekyll build task complete' }));
+  return gulp.start('build-jekyll');
+});
+
+// Compile .styl for the site submodule
+gulp.task('site-styl', function() {
+  return gulp.src(SITE_DIR + "styl/*.styl")
+    .pipe(stylus())
+    .pipe(minifycss())
+    .pipe(concat('main.css'))
+    .pipe(rename({suffix: '.min'}))
+    .pipe(gulp.dest(SITE_DIR + "css/"));
+});
+
+// Concat all js files and minify them
+gulp.task('site-js', function() {
+  return gulp.src([
+    SITE_DIR + "**/*.js",
+    // Exclude directories where compiled JS will end up
+    '!' + SITE_DIR + '_site/*',
+    '!' + SITE_DIR + 'js/*'
+  ])
+    .pipe(jshint('.jshintrc'))
+    .pipe(jshint.reporter('default'))
+    .pipe(concat('app.js'))
+    .pipe(uglify())
+    .pipe(rename({suffix: '.min'}))
+    .pipe(gulp.dest(SITE_DIR + "js/"));
+});
+
+
+// Only jekyll-build, without compiling docs, for faster run-time and to
+// prevent infinite loop when watching over files
+gulp.task('build-jekyll', ['site-styl', 'site-js'], function() {
+  var jekyllCommand = 'jekyll build --source ' + SITE_DIR +  ' --destination ' + SITE_DIR + '_site/';
+  // gulp-exec bugfix:
+  // Need to call gulp.src('') exactly, before using .pipe(exec())
+  return gulp.src('')
+    .pipe(exec(jekyllCommand))
+    .pipe(livereload(server));
+});
+
+/***********************************************************************
+* Watch task for developing the angular-site submodule
+***********************************************************************/
+gulp.task('dev-site', ['build-jekyll'], function() {
+  server.listen(LIVERELOAD_PORT, function (err) {
+	  if (err) {
+	    return console.log(err);
+	  }
+
+	  // Watch source files inside site submodule
+	  gulp.watch([
+      // Because .styl compiles into .css, do not watch .css, else you will
+      // an infinite loop
+      SITE_DIR + '**/*.styl',
+      SITE_DIR + '**/*.html',
+      SITE_DIR + '**/*.md',
+      SITE_DIR + '**/*.js',
+      // Do NOT watch the compile _site directory, else the watch will create
+      // an infinite loop
+      '!' + SITE_DIR + '_site/**',
+      '!' + SITE_DIR + 'js/**'
+    ],
+    ['build-jekyll']
+	  );
+  });
+
+  // Start the express server
+  gulp.start('site');
 });
 
 gulp.task('site', function(done) {
