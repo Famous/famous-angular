@@ -42,8 +42,8 @@ gulp.task('build', ['clean'], function(event) {
 		''].join('\n');
 
 	return gulp.src([
-		'src/scripts/directives/**/*.js',
-		'src/scripts/services/**/*.js'
+    'src/scripts/services/**/*.js',
+    'src/scripts/directives/**/*.js'
 	])
 	.pipe(concat('famous.angular.js'))
 	.pipe(jshint('.jshintrc'))
