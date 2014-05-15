@@ -1361,10 +1361,10 @@ angular.module('famous.angular')
             var isolate = famousDecorator.ensureIsolate(scope);
 
             if (attrs.faTap) {
+              var renderNode = (isolate.renderNode._eventInput || isolate.renderNode)
+
               var _dragging = false;
 
-              //TODO:  refactor to isolate.renderNode
-              var renderNode = isolate.renderNode
               renderNode.on("touchmove", function(data) {
                 _dragging = true;
                 return data;
@@ -1399,7 +1399,9 @@ angular.module('famous.angular')
             var isolate = famousDecorator.ensureIsolate(scope);
 
             if (attrs.faTouchEnd) {
-              isolate.renderNode.on("touchend", function(data) {
+              var renderNode = (isolate.renderNode._eventInput || isolate.renderNode)
+
+              renderNode.on("touchend", function(data) {
                 var fn = $parse(attrs.faTouchMove);
                 fn(scope, {$event:data});
                 if(!scope.$$phase)
@@ -1427,7 +1429,9 @@ angular.module('famous.angular')
             var isolate = famousDecorator.ensureIsolate(scope);
 
             if (attrs.faTouchMove) {
-              isolate.renderNode.on("touchmove", function(data) {
+              var renderNode = (isolate.renderNode._eventInput || isolate.renderNode)
+
+              renderNode.on("touchmove", function(data) {
                 var fn = $parse(attrs.faTouchMove);
                 fn(scope, {$event:data});
                 if(!scope.$$phase)
@@ -1454,7 +1458,9 @@ angular.module('famous.angular')
             var isolate = famousDecorator.ensureIsolate(scope);
 
             if (attrs.faTouchStart) {
-              isolate.renderNode.on("touchstart", function(data) {
+              var renderNode = (isolate.renderNode._eventInput || isolate.renderNode)
+
+              renderNode.on("touchstart", function(data) {
                 var fn = $parse(attrs.faTouchStart);
                 fn(scope, {$event:data});
                 if(!scope.$$phase)
