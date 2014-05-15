@@ -1,4 +1,5 @@
 var SITE_DIR = 'famous-angular-docs/';
+var EXAMPLES_DIR = 'famous-angular-examples/';
 
 var EXPRESS_PORT = 4000;
 var EXPRESS_DOCS_ROOT = __dirname + '/' + SITE_DIR + '_site';
@@ -17,8 +18,7 @@ var gulp = require('gulp'),
   notify = require('gulp-notify'),
   cache = require('gulp-cache'),
   livereload = require('gulp-livereload'),
-  lr = require('tiny-lr'),
-  server = lr(),
+  server = livereload(),
   gutil = require('gulp-util'),
   pkg = require('./package.json'),
   exec = require('gulp-exec');
@@ -42,8 +42,8 @@ gulp.task('build', ['clean'], function(event) {
 		''].join('\n');
 
 	return gulp.src([
-    'src/scripts/services/**/*.js',
-    'src/scripts/directives/**/*.js'
+		'src/scripts/services/**/*.js',
+		'src/scripts/directives/**/*.js'
 	])
 	.pipe(concat('famous.angular.js'))
 	.pipe(jshint('.jshintrc'))
@@ -161,4 +161,43 @@ gulp.task('site', function(done) {
 	app.use(express.static(EXPRESS_DOCS_ROOT));
 	app.listen(EXPRESS_PORT);
 	gutil.log('Server running at Docs for', gutil.colors.cyan('http://localhost:'+EXPRESS_PORT+'/'));
+});
+
+/***********************************************************************
+ * Watch task for developing with the famous-angular-examples submodule
+ ***********************************************************************/
+gulp.task('build-to-examples', ['clean'], function(event) {
+	return gulp.src([
+		'src/scripts/services/**/*.js',
+		'src/scripts/directives/**/*.js'
+	])
+	.pipe(concat('famous.angular.js'))
+	.pipe(gulp.dest(EXAMPLES_DIR + 'app/bower_components/famous-angular/dist/scripts'))
+	.pipe(notify({ message: 'Build task complete' }));
+})
+
+// Watch
+gulp.task('watch-examples', function(event) {
+	var server = livereload();
+	// Watch .js files
+	gulp.watch([
+			'src/scripts/*/**/*.js',
+			EXAMPLES_DIR + 'app/*'
+		],
+		['build-to-examples']
+	).on('change',
+		function(file){
+			server.changed(file.path);
+		}
+	);
+});
+
+// Default task
+gulp.task('dev', function() {
+	var express = require('express');
+	var app = express();
+	app.use(require('connect-livereload')());
+	app.use(express.static(EXAMPLES_DIR + 'app/'));
+	app.listen(EXPRESS_PORT);
+	gulp.start('watch-examples');
 });
