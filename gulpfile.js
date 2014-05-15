@@ -97,25 +97,23 @@ gulp.task('site-styl', function() {
 });
 
 // Concat all js files and minify them
-gulp.task('site-js', function() {
-  return gulp.src([
-    SITE_DIR + "**/*.js",
-    // Exclude directories where compiled JS will end up
-    '!' + SITE_DIR + '_site/*',
-    '!' + SITE_DIR + 'js/*'
-  ])
-    .pipe(jshint('.jshintrc'))
-    .pipe(jshint.reporter('default'))
-    .pipe(concat('app.js'))
-    .pipe(uglify())
-    .pipe(rename({suffix: '.min'}))
-    .pipe(gulp.dest(SITE_DIR + "js/"));
-});
+//gulp.task('site-js', function() {
+  //return gulp.src([
+    //SITE_DIR + "**/*.js",
+    //// Exclude directories where compiled JS will end up
+    //'!' + SITE_DIR + '_site/*',
+    //'!' + SITE_DIR + 'js/*'
+  //])
+    //.pipe(concat('app.js'))
+    //.pipe(uglify())
+    //.pipe(rename({suffix: '.min'}))
+    //.pipe(gulp.dest(SITE_DIR + "js/"));
+//});
 
 
 // Only jekyll-build, without compiling docs, for faster run-time and to
 // prevent infinite loop when watching over files
-gulp.task('build-jekyll', ['site-styl', 'site-js'], function() {
+gulp.task('build-jekyll', ['site-styl'], function() {
   var jekyllCommand = 'jekyll build --source ' + SITE_DIR +  ' --destination ' + SITE_DIR + '_site/';
   // gulp-exec bugfix:
   // Need to call gulp.src('') exactly, before using .pipe(exec())
