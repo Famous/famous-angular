@@ -314,13 +314,10 @@ angular.module('famous.angular')
                   if(animate.attributes['targetmodselector']){
                     //dig out the reference to our modifier
                     //TODO:  support passing a direct reference to a modifier
-                    //       instead of performing a DOM lookup
-                    var modElements = element.parent().find(
-                      animate.attributes['targetmodselector'].value
-                    );
-                    
-                    
-                    _.each(modElements, function(modElement){
+                    // instead of performing a DOM lookup
+	                var modElements = angular.element(element[0].parentNode)[0].querySelectorAll(animate.attributes['targetmodselector'].value);
+
+                    angular.forEach(modElements, function(modElement){
                       var modScope = angular.element(modElement).scope();
                       var modifier = modScope.isolate[modScope.$id].modifier;
                       var getTransform = modScope.isolate[modScope.$id].getTransform;
@@ -561,7 +558,7 @@ angular.module('famous.angular')
 
             
             element.append('<div class="famous-angular-container"></div>');
-            var famousContainer = $(element.find('.famous-angular-container'))[0];
+            var famousContainer = element[0].querySelectorAll('.famous-angular-container')[0];
             scope.context = Engine.createContext(famousContainer);
 
             function AppView(){
@@ -610,7 +607,7 @@ angular.module('famous.angular')
           },
           post: function(scope, element, attrs){
             transclude(scope, function(clone) {
-              element.find('div div').append(clone);
+              angular.element(element[0].querySelectorAll('div div')).append(clone);
             });
             scope.readyToRender = true;
           }
@@ -689,7 +686,7 @@ angular.module('famous.angular')
               _children.sort(function(a, b){
                 return a.index - b.index;
               });
-              isolate.renderNode.sequenceFrom(_.map(_children, function(c){
+              isolate.renderNode.sequenceFrom(_children.map(function(c){
                 return c.renderNode
               }));
             }
@@ -704,9 +701,13 @@ angular.module('famous.angular')
 
             scope.$on('unregisterChild', function(evt, data){
               if(evt.targetScope.$id != scope.$id){
-                _children = _.reject(_children, function(c){
-                  return c.id === data.id
-                });
+	            var _c = [];
+	            angular.forEach(_children, function(c) {
+		          if(c.id !== data.id) {
+			        _c.push(c);
+		          }
+	            });
+                _children = _c;
                 updateGridLayout();
                 evt.stopPropagation();
               }
@@ -1192,7 +1193,7 @@ angular.module('famous.angular')
                 }); 
 
                 var options = {
-                  array: _.map(_children, function(c){ return c.renderNode }) 
+                  array: _children.map(function(c){ return c.renderNode })
                 };
                 //set the first page on the scrollview if
                 //specified
@@ -1215,9 +1216,13 @@ angular.module('famous.angular')
 
             scope.$on('unregisterChild', function(evt, data){
               if(evt.targetScope.$id != scope.$id){
-                _children = _.reject(_children, function(c){
-                  return c.id === data.id
-                });
+	            var _c = [];
+	            angular.forEach(_children, function(c) {
+		          if(c.id !== data.id) {
+			        _c.push(c);
+		          }
+	            });
+	            _children = _c;
                 updateScrollview();
                 evt.stopPropagation();
               }
@@ -1331,15 +1336,17 @@ angular.module('famous.angular')
             var isolate = famousDecorator.ensureIsolate(scope);
 
             var updateContent = function(){
-              var compiledEl = isolate.compiledEl = isolate.compiledEl || $compile(element.find('div.fa-surface').contents())(scope)
-              isolate.renderNode.setContent(isolate.compiledEl.context);
+//              var compiledEl = isolate.compiledEl = isolate.compiledEl || $compile(angular.element(element[0].querySelector('div.fa-surface')).contents())(scope);
+//              isolate.renderNode.setContent(isolate.compiledEl.context);
+	            //TODO check if $compile is needed ?
+	            isolate.renderNode.setContent(element[0].querySelector('div.fa-surface'));
             };
 
             updateContent();
 
             //boilerplate
             transclude(scope, function(clone) {
-              element.find('div.fa-surface').append(clone);
+              angular.element(element[0].querySelectorAll('div.fa-surface')).append(clone);
             });
 
             scope.$emit('registerChild', isolate);

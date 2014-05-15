@@ -100,13 +100,10 @@ angular.module('famous.angular')
                   if(animate.attributes['targetmodselector']){
                     //dig out the reference to our modifier
                     //TODO:  support passing a direct reference to a modifier
-                    //       instead of performing a DOM lookup
-                    var modElements = element.parent().find(
-                      animate.attributes['targetmodselector'].value
-                    );
-                    
-                    
-                    _.each(modElements, function(modElement){
+                    // instead of performing a DOM lookup
+	                var modElements = angular.element(element[0].parentNode)[0].querySelectorAll(animate.attributes['targetmodselector'].value);
+
+                    angular.forEach(modElements, function(modElement){
                       var modScope = angular.element(modElement).scope();
                       var modifier = modScope.isolate[modScope.$id].modifier;
                       var getTransform = modScope.isolate[modScope.$id].getTransform;
