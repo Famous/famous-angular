@@ -12,7 +12,9 @@ angular.module('famous.angular')
             var isolate = famousDecorator.ensureIsolate(scope);
 
             if (attrs.faTouchStart) {
-              isolate.renderNode.on("touchstart", function(data) {
+              var renderNode = (isolate.renderNode._eventInput || isolate.renderNode)
+
+              renderNode.on("touchstart", function(data) {
                 var fn = $parse(attrs.faTouchStart);
                 fn(scope, {$event:data});
                 if(!scope.$$phase)

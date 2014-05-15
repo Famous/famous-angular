@@ -63,12 +63,6 @@ angular.module('famous.angular')
             if(attrs.class)
               isolate.renderNode.setClasses(attrs['class'].split(' '));
 
-            if (attrs.faClick) {
-              isolate.renderNode.on("click", function() {
-                scope.$eval(attrs.faClick);
-              });
-            }
-
           },
           post: function(scope, element, attrs){
             var isolate = famousDecorator.ensureIsolate(scope);

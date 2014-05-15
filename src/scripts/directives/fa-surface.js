@@ -85,12 +85,6 @@ angular.module('famous.angular')
               return modifiers;
             };
 
-            if (attrs.faClick) {
-              isolate.renderNode.on("click", function() {
-                scope.$eval(attrs.faClick);
-              });
-            }
-
           },
           post: function(scope, element, attrs){
             var isolate = famousDecorator.ensureIsolate(scope);

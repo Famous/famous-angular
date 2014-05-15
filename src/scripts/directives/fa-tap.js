@@ -10,10 +10,10 @@ angular.module('famous.angular')
             var isolate = famousDecorator.ensureIsolate(scope);
 
             if (attrs.faTap) {
+              var renderNode = (isolate.renderNode._eventInput || isolate.renderNode)
+
               var _dragging = false;
 
-              //TODO:  refactor to isolate.renderNode
-              var renderNode = isolate.renderNode
               renderNode.on("touchmove", function(data) {
                 _dragging = true;
                 return data;
