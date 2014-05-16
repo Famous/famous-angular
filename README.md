@@ -1,8 +1,21 @@
 # Famo.us/Angular
+##Running (For using F/A in your Angular app)
 
-##Running
+####Before you start, tools you will need
+* Download and install [git](http://git-scm.com/downloads)
+* Download and install [nodeJS](http://nodejs.org/download/)
+* Install bower `npm install bower`
 
-####Before you start, tools your will need
+####Inside of your app:
+* Run `bower install famous-angular` (may not yet be added to the Bower repo; if not, add `"famous-angular": "git@github.com:Famous/famous-angular.git"` to your bower.json)
+* Add the `famous.angular` module to your Angular module list (e.g. in your main app.js file: `angular.module('yourMainModule',['famous.angular', 'ui.router', 'ngAnimate'])`)
+* Add the `famous-angular.css` dependency to your index.html (alternatively, handle container sizing+positioning+styling yourself if you know what you're doing)
+* And add an `<fa-app><fa-surface>Hello world</fa-surface></fa-app>` in one of your templates.  You should be good to go.
+
+
+##Running (For developing or contributing to the library)
+
+####Before you start, tools you will need
 * Download and install [git](http://git-scm.com/downloads)
 * Download and install [nodeJS](http://nodejs.org/download/)
 
@@ -19,20 +32,6 @@
 Npm start will use gulp to concatenate files into famous.angular.js, which is built into the app folder. It will also watch for changes inside app and livereload as necessary.
 
 As configured, you should be able to access the application at localhost:4000.
-
-##Overview:
-[Slide deck overview](http://thomas-street.s3.amazonaws.com/famous-angular-overview.pdf)
-
-##Goals:
-
-Allow famo.us components to work seamlessly with other components inside existing or future Angular apps.
-Maintain the same high standards of code-quality,  developer experience,  and performance as the core Famo.us project.
-Allow an Angular developer to write a Famo.us app while separating its view logic from the rest of its logic
-Create that view declaratively, using the DOM to represent the tree structure of an app -- bringing the declarative magic of Angular to Famo.us.
-Work with the Famo.us team to make sure Famous-Angular supports Famo.us’s long-term goals and vision.
-
-##Approach:
- Creating a Famo.us app inside angular is as simple as adding a <fa-app></fa-app> tag to an existing Angular app. Behind the scenes, our adapter traverses the Angular DOM and determines parent-child relationships, adding the necessary elements with the appropriate hierarchy to the famo.us context.  Developer-defined controllers can be added to any <fa-...> element, allowing the developer to continue to use Angular’s controllers as the atomic unit of component logic. 
 
 ##Development Roadmap:
 
