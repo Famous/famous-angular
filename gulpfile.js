@@ -126,13 +126,12 @@ gulp.task('build-jekyll', ['site-styl'], function() {
 * Watch task for developing the angular-site submodule
 ***********************************************************************/
 gulp.task('dev-site', ['build-jekyll'], function() {
-  server.listen(LIVERELOAD_PORT, function (err) {
-	  if (err) {
-	    return console.log(err);
-	  }
+  
 
-	  // Watch source files inside site submodule
-	  gulp.watch([
+  var server = livereload();
+
+  // Watch source files inside site submodule
+  gulp.watch([
 	      // Because .styl compiles into .css, do not watch .css, else you will
 	      // an infinite loop
 	      SITE_DIR + '**/*.styl',
@@ -145,12 +144,17 @@ gulp.task('dev-site', ['build-jekyll'], function() {
 	      '!' + SITE_DIR + 'js/**'
 	  ],
 	  ['build-jekyll']
-	);
-  });
+	).on('change',
+    function(file){
+      server.changed(file.path);
+    }
+  );
 
   // Start the express server
   gulp.start('site');
 });
+
+  
 
 gulp.task('site', function(done) {
 	var express = require('express'),
