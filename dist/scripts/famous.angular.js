@@ -36,6 +36,7 @@ var requirements = [
 	"famous/transitions/Easing",
 	"famous/transitions/SpringTransition",
 	"famous/transitions/Transitionable",
+	"famous/utilities/KeyCodes",
 	"famous/utilities/Timer",
 	"famous/views/Scrollview",
 	"famous/views/Scroller",
