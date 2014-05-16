@@ -40,17 +40,17 @@ As configured, you should be able to access the application at localhost:4000.
 
 `gulp dev`
 
-##To build the docs from the in-code comments
+##To build the docs
 
 `gulp docs`
 
-##To view and build the docs site (submodule) from the compiled markdown (the output of `gulp docs`)
+##To view and build the docs site
 
 `gulp dev-site`
 
-##Development Roadmap:
+##Support
 
-https://app.asana.com/0/11288022110976/11612210261574
+Please submit issues as Github issues
 
 ##Contributing
 
@@ -62,4 +62,4 @@ We would love to have community contributions and support!  A few areas we could
 * Bug reports and/or fixes
 * Continuing to wrap Famo.us layouts and views into directives [advanced]
 
-If you want to contribute, contact hello@thomasstreet.com for access to Asana.
+If you want to contribute, please submit a pull request, or contact hello@thomasstreet.com for more information.
