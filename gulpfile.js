@@ -31,7 +31,7 @@ gulp.task('clean', function() {
 
 // Build for dist
 gulp.task('build', ['clean'], function(event) {
-	var pkg = require('./package.json');
+
 	var header = require('gulp-header');
 	var banner = ['/**',
 		' * <%= pkg.name %> - <%= pkg.description %>',
@@ -41,6 +41,20 @@ gulp.task('build', ['clean'], function(event) {
 		' */',
 		''].join('\n');
 
+
+  // Build the CSS
+  gulp.src([
+    'src/styles/famous-angular.css'
+  ])
+	.pipe(header(banner, { pkg : pkg } ))
+	.pipe(gulp.dest('dist/'))
+  .pipe(minifycss())
+	.pipe(header(banner, { pkg : pkg } ))
+	.pipe(rename({suffix: '.min'}))
+	.pipe(gulp.dest('dist/'));
+
+
+  // Build the JS
 	return gulp.src([
 		'src/scripts/services/**/*.js',
 		'src/scripts/directives/**/*.js'
