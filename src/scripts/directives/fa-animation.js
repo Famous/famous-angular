@@ -15,14 +15,14 @@
  */
 
 angular.module('famous.angular')
-  .directive('faAnimation', function (famous, famousDecorator) {
+  .directive('faAnimation', ['$famous', '$famousDecorator', function ($famous, famousDecorator) {
     return {
       restrict: 'EA',
       scope: true,
       compile: function(tElement, tAttrs, transclude){
-        var Transform = famous['famous/core/Transform'];
-        var Transitionable = famous['famous/transitions/Transitionable'];
-        var Easing = famous['famous/transitions/Easing'];
+        var Transform = $famous['famous/core/Transform'];
+        var Transitionable = $famous['famous/transitions/Transitionable'];
+        var Easing = $famous['famous/transitions/Easing'];
         return {
           pre: function(scope, element, attrs){
             var isolate = famousDecorator.ensureIsolate(scope);
@@ -308,4 +308,4 @@ angular.module('famous.angular')
 
       }
     };
-  });
+  }]);

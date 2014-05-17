@@ -19,7 +19,7 @@
  */
 
 angular.module('famous.angular')
-  .directive('faApp', ["famous", "famousDecorator", function (famous, famousDecorator) {
+  .directive('faApp', ["$famous", "$famousDecorator", function ($famous, $famousDecorator) {
     return {
       template: '<div style="display: none;"><div></div></div>',
       transclude: true,
@@ -27,11 +27,11 @@ angular.module('famous.angular')
       compile: function(tElement, tAttrs, transclude){
         return {
           pre: function(scope, element, attrs){
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
             
-            var View = famous['famous/core/View'];
-            var Engine = famous['famous/core/Engine'];
-            var Transform = famous['famous/core/Transform']
+            var View = $famous['famous/core/View'];
+            var Engine = $famous['famous/core/Engine'];
+            var Transform = $famous['famous/core/Transform']
 
             
             element.append('<div class="famous-angular-container"></div>');

@@ -3,7 +3,7 @@
  * @name faImageSurface
  * @module famous.angular
  * @restrict EA
- * @property {string} faImageUrl  -  String url pointing to the image that should be loaded into the Famo.us ImageSurface
+ * @param {String} faImageUrl  -  String url pointing to the image that should be loaded into the Famo.us ImageSurface
  * @description
  * This directive creates a Famo.us ImageSurface and loads
  * the specified ImageUrl.
@@ -15,7 +15,7 @@
  */
 
 angular.module('famous.angular')
-  .directive('faImageSurface', function (famous, famousDecorator, $interpolate, $controller, $compile) {
+  .directive('faImageSurface', ["$famous", "$famousDecorator", function ($famous, $famousDecorator) {
     return {
       scope: true,
       template: '<div class="fa-image-surface"></div>',
@@ -23,11 +23,11 @@ angular.module('famous.angular')
       compile: function(tElem, tAttrs, transclude){
         return {
           pre: function(scope, element, attrs){
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
 
-            var ImageSurface = famous['famous/surfaces/ImageSurface'];
-            var Transform = famous['famous/core/Transform']
-            var EventHandler = famous['famous/core/EventHandler'];
+            var ImageSurface = $famous['famous/surfaces/ImageSurface'];
+            var Transform = $famous['famous/core/Transform']
+            var EventHandler = $famous['famous/core/EventHandler'];
             
             //update properties
             //TODO:  is this going to be a bottleneck?
@@ -65,7 +65,7 @@ angular.module('famous.angular')
 
           },
           post: function(scope, element, attrs){
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
             
             var updateContent = function(){
               isolate.renderNode.setContent(attrs.faImageUrl)
@@ -80,4 +80,4 @@ angular.module('famous.angular')
         }
       }
     };
-  });
+  }]);

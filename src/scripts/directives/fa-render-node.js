@@ -1,7 +1,22 @@
-
+/**
+ * @ngdoc directive
+ * @name faRenderNode
+ * @module famous.angular
+ * @restrict EA
+ * @description
+ * A directive to insert a {@link https://famo.us/docs/0.1.1/core/RenderNode/ Famo.us RenderNode} that is
+ * a wrapper for inserting a renderable component (like a Modifer or Surface) into the render tree.
+ *
+ * @usage
+ * ```html
+ * <fa-render-node>
+ *     <!-- content -->
+ * </fa-render-node>
+ * ```
+ */
 
 angular.module('famous.angular')
-  .directive('faRenderNode', ["famous", "famousDecorator", function (famous, famousDecorator) {
+  .directive('faRenderNode', ["$famous", "$famousDecorator", function ($famous, $famousDecorator) {
     return {
       template: '<div></div>',
       transclude: true,
@@ -10,9 +25,9 @@ angular.module('famous.angular')
       compile: function(tElement, tAttrs, transclude){
         return {
           pre: function(scope, element, attrs){
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
             
-            var Engine = famous['famous/core/Engine'];
+            var Engine = $famous['famous/core/Engine'];
 
             var getOrValue = function(x) {
               return x.get ? x.get() : x;
@@ -42,7 +57,7 @@ angular.module('famous.angular')
 
           },
           post: function(scope, element, attrs){
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
             
             transclude(scope, function(clone) {
               element.find('div').append(clone);

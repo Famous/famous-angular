@@ -186,7 +186,7 @@ gulp.task('watch-examples', function(event) {
 			'src/scripts/*/**/*.js',
 			EXAMPLES_DIR + 'app/*'
 		],
-		['build', 'build-to-examples']
+		['build-to-examples']
 	).on('change',
 		function(file){
 			server.changed(file.path);

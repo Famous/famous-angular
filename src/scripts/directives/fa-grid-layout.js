@@ -18,7 +18,7 @@
  */
 
 angular.module('famous.angular')
-  .directive('faGridLayout', function (famous, famousDecorator, $controller) {
+  .directive('faGridLayout', ["$famous", "$famousDecorator", function ($famous, $famousDecorator) {
     return {
       template: '<div></div>',
       restrict: 'E',
@@ -27,10 +27,10 @@ angular.module('famous.angular')
       compile: function(tElem, tAttrs, transclude){
         return  {
           pre: function(scope, element, attrs){
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
 
-            var GridLayout = famous["famous/views/GridLayout"];
-            var ViewSequence = famous['famous/core/ViewSequence'];
+            var GridLayout = $famous["famous/views/GridLayout"];
+            var ViewSequence = $famous['famous/core/ViewSequence'];
 
             var _children = [];
 
@@ -66,7 +66,7 @@ angular.module('famous.angular')
 
           },
           post: function(scope, element, attrs){
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
             
             transclude(scope, function(clone) {
               element.find('div').append(clone);
@@ -77,4 +77,4 @@ angular.module('famous.angular')
         };
       }
     };
-  });
+  }]);
