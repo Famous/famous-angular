@@ -10,6 +10,7 @@ fa-app, .fa-app {
     -webkit-tap-highlight-color: transparent;
     -webkit-perspective: 0;
     perspective: none;
+    position: relative;
 }
 
 .famous-angular-container, .famous-container-surface, .famous-group {
