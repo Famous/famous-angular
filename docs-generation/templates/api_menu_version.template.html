@@ -1,3 +1,5 @@
+{% assign lvl = page.url | append:'X' | split:'/' | size %}
+{% capture relative %}{% for i in (3..lvl) %}../{% endfor %}{% endcapture %}
 
   <!-- Directives -->
   <li class="menu-section">
@@ -7,7 +9,7 @@
     <ul>
         <@ for doc in docs @><@ if doc.docType == "directive" @>
         <li>
-            <a href="{{ page.versionHref }}/<$ doc.path $>">
+            <a href="{{relative}}{{ page.versionHref | replace_first: '/', '' }}/<$ doc.path $>">
                 <$ doc.name | dashCase $>
             </a>
         </li>
@@ -24,7 +26,7 @@
     <ul>
         <@ for doc in docs @><@ if doc.docType == "service" @>
         <li>
-            <a href="{{ page.versionHref }}/<$ doc.path $>">
+            <a href="{{relative}}{{ page.versionHref | replace_first: '/', '' }}/<$ doc.path $>">
                 <$ doc.name $>
             </a>
         </li>
@@ -41,7 +43,7 @@
     <ul>
         <@ for doc in docs @><@ if doc.docType == "provider" @>
         <li>
-            <a href="{{ page.versionHref }}/<$ doc.path $>">
+            <a href="{{relative}}{{ page.versionHref | replace_first: '/', '' }}/<$ doc.path $>">
                 <$ doc.name $>
             </a>
         </li>
