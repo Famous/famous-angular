@@ -14,8 +14,8 @@ window.name = "NG_DEFER_BOOTSTRAP!" + window.name;
 //       working around `ls -R1 app/scripts/famous` ?)
 var requirements = [
 	"famous/core/Engine",
-	"famous/core/EventHandler",
 	"famous/core/EventEmitter",
+	"famous/core/EventHandler",
 	"famous/core/Modifier",
 	"famous/core/RenderNode",
 	"famous/core/Surface",
@@ -25,22 +25,24 @@ var requirements = [
 	"famous/events/EventArbiter",
 	"famous/events/EventFilter",
 	"famous/events/EventMapper",
+	"famous/inputs/FastClick",
 	"famous/inputs/GenericSync",
-	"famous/inputs/RotateSync",
-	"famous/inputs/TouchSync",
 	"famous/inputs/MouseSync",
 	"famous/inputs/PinchSync",
-	"famous/inputs/FastClick",
+	"famous/inputs/RotateSync",
+	"famous/inputs/TouchSync",
 	"famous/surfaces/ImageSurface",
 	"famous/surfaces/InputSurface",
 	"famous/transitions/Easing",
 	"famous/transitions/SpringTransition",
 	"famous/transitions/Transitionable",
+	"famous/transitions/TransitionableTransform",
 	"famous/utilities/KeyCodes",
 	"famous/utilities/Timer",
-	"famous/views/Scrollview",
+	"famous/views/GridLayout",
+	"famous/views/RenderController",
 	"famous/views/Scroller",
-	"famous/views/GridLayout"
+	"famous/views/Scrollview"
 ]
 
 require.config({
@@ -59,7 +61,7 @@ require(requirements, function(/*args*/) {
 
 	/**
 	* @ngdoc provider
-	* @name famousProvider
+	* @name $famousProvider
 	* @module famous.angular
 	* @description
 	* This provider is loaded as an AMD module and will keep a reference on the complete Famo.us library.
@@ -70,17 +72,17 @@ require(requirements, function(/*args*/) {
 	*
 	* ```js
 	* angular.module('mySuperApp', ['famous.angular']).config(
-	*   function(famousProvider) {
+	*   function($famousProvider) {
 	*
 	*       // Register your modules
-	*       famousProvider.registerModule('moduleKey', module);
+	*       $famousProvider.registerModule('moduleKey', module);
 	*
 	*   };
 	* });
 	* ```
 	*
 	*/
-	ngFameApp.provider('famous', function() {
+	ngFameApp.provider('$famous', function() {
 		// hash for storing modules
 		var _modules = {};
 
@@ -89,7 +91,7 @@ require(requirements, function(/*args*/) {
 		 * @name famousProvider#registerModule
 		 * @module famous.angular
 		 * @description
-		 * Register the modules that will be available in the famous service
+		 * Register the modules that will be available in the $famous service
 	     *
 	     * @param {string} key the key that will be used to register the module
 	     * @param {misc} module the data that will be returned by the service
@@ -101,7 +103,7 @@ require(requirements, function(/*args*/) {
 
 			/**
 			 * @ngdoc method
-			 * @name famousProvider#find
+			 * @name $famousProvider#find
 			 * @module famous.angular
 			 * @description given a selector, retrieves
 		   * the isolate on a template-declared scene graph element.  This is useful
@@ -118,7 +120,7 @@ require(requirements, function(/*args*/) {
 		   * ```
 		   * Controller:
 		   * ```javascript
-		   * var scrollViewReference = famous.find('#myScrollView')[0].renderNode;
+		   * var scrollViewReference = $famous.find('#myScrollView')[0].renderNode;
 		   * //Now scrollViewReference is pointing to the Famo.us Scrollview object
 		   * //that we created in the view.
 		   * ```
@@ -139,7 +141,7 @@ require(requirements, function(/*args*/) {
 
 			/**
 			 * @ngdoc service
-			 * @name famous
+			 * @name $famous
 			 * @module famous.angular
 			 * @description
 			 * This service gives you access to the complete Famo.us library.
@@ -149,10 +151,10 @@ require(requirements, function(/*args*/) {
 			 *
 			 * ```js
 			 * angular.module('mySuperApp', ['famous.angular']).controller(
-			 *   function($scope, famous) {
+			 *   function($scope, $famous) {
 			 *
 			 *       // Access any registered module
-			 *       var EventHandler = famous['famous/core/EventHandler'];
+			 *       var EventHandler = $famous['famous/core/EventHandler'];
 			 *       $scope.eventHandler = new EventHandler();
 			 *
 			 *   };
@@ -164,12 +166,12 @@ require(requirements, function(/*args*/) {
 		};
 	});
 
-	ngFameApp.config(function(famousProvider) {
+	ngFameApp.config(['$famousProvider', function($famousProvider) {
 		for(var i = 0; i < requirements.length; i++) {
-			famousProvider.registerModule(requirements[i], required[i]);
+			$famousProvider.registerModule(requirements[i], required[i]);
 		}
 //		console.log('registered modules', famousProvider.$get());
-	});
+	}]);
 
 	angular.element(document).ready(function() {
 		angular.resumeBootstrap();
@@ -178,14 +180,12 @@ require(requirements, function(/*args*/) {
 })
 
 angular.module('famous.angular')
-  .factory('famousDecorator', function () {
+  .factory('$famousDecorator', function () {
     //TODO:  add repeated logic to these roles
     var _roles = {
       child: {
-
       },
       parent: {
-
       }
     }
 
@@ -230,14 +230,14 @@ angular.module('famous.angular')
  */
 
 angular.module('famous.angular')
-  .directive('faAnimation', function (famous, famousDecorator) {
+  .directive('faAnimation', ['$famous', '$famousDecorator', function ($famous, famousDecorator) {
     return {
       restrict: 'EA',
       scope: true,
       compile: function(tElement, tAttrs, transclude){
-        var Transform = famous['famous/core/Transform'];
-        var Transitionable = famous['famous/transitions/Transitionable'];
-        var Easing = famous['famous/transitions/Easing'];
+        var Transform = $famous['famous/core/Transform'];
+        var Transitionable = $famous['famous/transitions/Transitionable'];
+        var Easing = $famous['famous/transitions/Easing'];
         return {
           pre: function(scope, element, attrs){
             var isolate = famousDecorator.ensureIsolate(scope);
@@ -523,7 +523,7 @@ angular.module('famous.angular')
 
       }
     };
-  });
+  }]);
 
 /**
  * @ngdoc directive
@@ -546,7 +546,7 @@ angular.module('famous.angular')
  */
 
 angular.module('famous.angular')
-  .directive('faApp', ["famous", "famousDecorator", function (famous, famousDecorator) {
+  .directive('faApp', ["$famous", "$famousDecorator", function ($famous, $famousDecorator) {
     return {
       template: '<div style="display: none;"><div></div></div>',
       transclude: true,
@@ -554,11 +554,11 @@ angular.module('famous.angular')
       compile: function(tElement, tAttrs, transclude){
         return {
           pre: function(scope, element, attrs){
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
             
-            var View = famous['famous/core/View'];
-            var Engine = famous['famous/core/Engine'];
-            var Transform = famous['famous/core/Transform']
+            var View = $famous['famous/core/View'];
+            var Engine = $famous['famous/core/Engine'];
+            var Transform = $famous['famous/core/Transform']
 
             
             element.append('<div class="famous-angular-container"></div>');
@@ -623,13 +623,13 @@ angular.module('famous.angular')
 
 
 angular.module('famous.angular')
-  .directive('faClick', function ($parse, famousDecorator) {
+  .directive('faClick', ["$parse", "$famousDecorator",function ($parse, $famousDecorator) {
     return {
       restrict: 'A',
       compile: function() {
         return { 
           post: function(scope, element, attrs) {
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
 
             if (attrs.faClick) {
               var renderNode = (isolate.renderNode._eventInput || isolate.renderNode)
@@ -645,7 +645,7 @@ angular.module('famous.angular')
         }
       }
     };
-  });
+  }]);
 
 /**
  * @ngdoc directive
@@ -667,7 +667,7 @@ angular.module('famous.angular')
  */
 
 angular.module('famous.angular')
-  .directive('faGridLayout', function (famous, famousDecorator, $controller) {
+  .directive('faGridLayout', ["$famous", "$famousDecorator", function ($famous, $famousDecorator) {
     return {
       template: '<div></div>',
       restrict: 'E',
@@ -676,10 +676,10 @@ angular.module('famous.angular')
       compile: function(tElem, tAttrs, transclude){
         return  {
           pre: function(scope, element, attrs){
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
 
-            var GridLayout = famous["famous/views/GridLayout"];
-            var ViewSequence = famous['famous/core/ViewSequence'];
+            var GridLayout = $famous["famous/views/GridLayout"];
+            var ViewSequence = $famous['famous/core/ViewSequence'];
 
             var _children = [];
 
@@ -715,7 +715,7 @@ angular.module('famous.angular')
 
           },
           post: function(scope, element, attrs){
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
             
             transclude(scope, function(clone) {
               element.find('div').append(clone);
@@ -726,7 +726,7 @@ angular.module('famous.angular')
         };
       }
     };
-  });
+  }]);
 
 /**
  * @ngdoc directive
@@ -745,7 +745,7 @@ angular.module('famous.angular')
  */
 
 angular.module('famous.angular')
-  .directive('faImageSurface', function (famous, famousDecorator, $interpolate, $controller, $compile) {
+  .directive('faImageSurface', ["$famous", "$famousDecorator", function ($famous, $famousDecorator) {
     return {
       scope: true,
       template: '<div class="fa-image-surface"></div>',
@@ -753,11 +753,11 @@ angular.module('famous.angular')
       compile: function(tElem, tAttrs, transclude){
         return {
           pre: function(scope, element, attrs){
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
 
-            var ImageSurface = famous['famous/surfaces/ImageSurface'];
-            var Transform = famous['famous/core/Transform']
-            var EventHandler = famous['famous/core/EventHandler'];
+            var ImageSurface = $famous['famous/surfaces/ImageSurface'];
+            var Transform = $famous['famous/core/Transform']
+            var EventHandler = $famous['famous/core/EventHandler'];
             
             //update properties
             //TODO:  is this going to be a bottleneck?
@@ -795,7 +795,7 @@ angular.module('famous.angular')
 
           },
           post: function(scope, element, attrs){
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
             
             var updateContent = function(){
               isolate.renderNode.setContent(attrs.faImageUrl)
@@ -810,7 +810,7 @@ angular.module('famous.angular')
         }
       }
     };
-  });
+  }]);
 
 /**
  * @ngdoc directive
@@ -835,7 +835,7 @@ angular.module('famous.angular')
  */
 
 angular.module('famous.angular')
-  .directive('faIndex', function ($parse, famousDecorator) {
+  .directive('faIndex', ["$parse", "$famousDecorator", function ($parse, $famousDecorator) {
     return {
       restrict: 'A',
       scope: false,
@@ -843,7 +843,7 @@ angular.module('famous.angular')
       compile: function() {
         return { 
           post: function(scope, element, attrs) {
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
             isolate.index = scope.$eval(attrs.faIndex);
 
             scope.$watch(function(){
@@ -855,7 +855,7 @@ angular.module('famous.angular')
         }
       }
     };
-  });
+  }]);
 
 /**
  * @ngdoc directive
@@ -888,7 +888,7 @@ angular.module('famous.angular')
  */
 
 angular.module('famous.angular')
-  .directive('faModifier', ["famous", "famousDecorator", function (famous, famousDecorator) {
+  .directive('faModifier', ["$famous", "$famousDecorator", function ($famous, $famousDecorator) {
     return {
       template: '<div></div>',
       transclude: true,
@@ -898,11 +898,11 @@ angular.module('famous.angular')
       compile: function(tElement, tAttrs, transclude){
         return {
           post: function(scope, element, attrs){
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
 
-            var RenderNode = famous['famous/core/RenderNode']
-            var Modifier = famous['famous/core/Modifier']
-            var Transform = famous['famous/core/Transform']
+            var RenderNode = $famous['famous/core/RenderNode']
+            var Modifier = $famous['famous/core/Modifier']
+            var Transform = $famous['famous/core/Transform']
 
             var get = function(x) {
               if (x instanceof Function) return x();
@@ -1014,17 +1014,17 @@ angular.module('famous.angular')
 
 //UNTESTED as of 2014-05-13
 angular.module('famous.angular')
-  .directive('faPipeFrom', function (famous, famousDecorator) {
+  .directive('faPipeFrom', ['$famous', '$famousDecorator', function ($famous, $famousDecorator) {
     return {
       restrict: 'A',
       scope: false,
       priority: 16,
       compile: function() {
-        var Engine = famous['famous/core/Engine'];
+        var Engine = $famous['famous/core/Engine'];
         
         return { 
           post: function(scope, element, attrs) {
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
             scope.$watch(
               function(){
                 return scope.$eval(attrs.faPipeFrom);
@@ -1052,22 +1052,22 @@ angular.module('famous.angular')
         }
       }
     };
-  });
+  }]);
 
 
 
 angular.module('famous.angular')
-  .directive('faPipeTo', function (famous, famousDecorator) {
+  .directive('faPipeTo', ['$famous', '$famousDecorator', function ($famous, $famousDecorator) {
     return {
       restrict: 'A',
       scope: false,
       priority: 16,
       compile: function() {
-        var Engine = famous['famous/core/Engine'];
+        var Engine = $famous['famous/core/Engine'];
         
         return { 
           post: function(scope, element, attrs) {
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
             scope.$watch(
               function(){
                 return scope.$eval(attrs.faPipeTo);
@@ -1095,12 +1095,12 @@ angular.module('famous.angular')
         }
       }
     };
-  });
+  }]);
 
 
 
 angular.module('famous.angular')
-  .directive('faRenderNode', ["famous", "famousDecorator", function (famous, famousDecorator) {
+  .directive('faRenderNode', ["$famous", "$famousDecorator", function ($famous, $famousDecorator) {
     return {
       template: '<div></div>',
       transclude: true,
@@ -1109,9 +1109,9 @@ angular.module('famous.angular')
       compile: function(tElement, tAttrs, transclude){
         return {
           pre: function(scope, element, attrs){
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
             
-            var Engine = famous['famous/core/Engine'];
+            var Engine = $famous['famous/core/Engine'];
 
             var getOrValue = function(x) {
               return x.get ? x.get() : x;
@@ -1141,7 +1141,7 @@ angular.module('famous.angular')
 
           },
           post: function(scope, element, attrs){
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
             
             transclude(scope, function(clone) {
               element.find('div').append(clone);
@@ -1159,7 +1159,7 @@ angular.module('famous.angular')
 
 
 angular.module('famous.angular')
-  .directive('faScrollView', function (famous, famousDecorator, $timeout, $controller) {
+  .directive('faScrollView', ['$famous', '$famousDecorator', '$timeout', function ($famous, $famousDecorator, $timeout) {
     return {
       template: '<div></div>',
       restrict: 'E',
@@ -1168,11 +1168,11 @@ angular.module('famous.angular')
       compile: function(tElem, tAttrs, transclude){
         return  {
           pre: function(scope, element, attrs){
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
 
-            var ScrollView = famous["famous/views/Scrollview"];
-            var ViewSequence = famous['famous/core/ViewSequence'];
-            var Surface = famous['famous/core/Surface'];
+            var ScrollView = $famous["famous/views/Scrollview"];
+            var ViewSequence = $famous['famous/core/ViewSequence'];
+            var Surface = $famous['famous/core/Surface'];
 
             var _children = [];
 
@@ -1226,7 +1226,7 @@ angular.module('famous.angular')
 
           },
           post: function(scope, element, attrs){
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
 
             transclude(scope, function(clone) {
               element.find('div').append(clone);
@@ -1238,7 +1238,7 @@ angular.module('famous.angular')
         };
       }
     };
-  });
+  }]);
 
 /**
  * @ngdoc directive
@@ -1263,7 +1263,7 @@ angular.module('famous.angular')
  */
 
 angular.module('famous.angular')
-  .directive('faSurface', function (famous, famousDecorator, $interpolate, $controller, $compile) {
+  .directive('faSurface', ['$famous', '$famousDecorator', '$interpolate', '$controller', '$compile', function ($famous, $famousDecorator, $interpolate, $controller, $compile) {
     return {
       scope: true,
       transclude: true,
@@ -1272,11 +1272,11 @@ angular.module('famous.angular')
       compile: function(tElem, tAttrs, transclude){
         return {
           pre: function(scope, element, attrs){
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
 
-            var Surface = famous['famous/core/Surface'];
-            var Transform = famous['famous/core/Transform']
-            var EventHandler = famous['famous/core/EventHandler'];
+            var Surface = $famous['famous/core/Surface'];
+            var Transform = $famous['famous/core/Transform']
+            var EventHandler = $famous['famous/core/EventHandler'];
             
             //update properties
             //TODO:  is this going to be a bottleneck?
@@ -1329,7 +1329,7 @@ angular.module('famous.angular')
 
           },
           post: function(scope, element, attrs){
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
 
             var updateContent = function(){
               var compiledEl = isolate.compiledEl = isolate.compiledEl || $compile(element.find('div.fa-surface').contents())(scope)
@@ -1348,18 +1348,18 @@ angular.module('famous.angular')
         }
       }
     };
-  });
+  }]);
 
 
 
 angular.module('famous.angular')
-  .directive('faTap', function ($parse, famousDecorator) {
+  .directive('faTap', ['$parse', '$famousDecorator', function ($parse, $famousDecorator) {
     return {
       restrict: 'A',
       compile: function() {
         return { 
           post: function(scope, element, attrs) {
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
 
             if (attrs.faTap) {
               var renderNode = (isolate.renderNode._eventInput || isolate.renderNode)
@@ -1385,19 +1385,19 @@ angular.module('famous.angular')
         }
       }
     };
-  });
+  }]);
 
 
 
 angular.module('famous.angular')
-  .directive('faTouchend', function ($parse, famousDecorator) {
+  .directive('faTouchend', ['$parse', '$famousDecorator', function ($parse, $famousDecorator) {
     return {
       restrict: 'A',
       scope: false,
       compile: function() {
         return { 
           post: function(scope, element, attrs) {
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
 
             if (attrs.faTouchEnd) {
               var renderNode = (isolate.renderNode._eventInput || isolate.renderNode)
@@ -1409,25 +1409,24 @@ angular.module('famous.angular')
                   scope.$apply();
               });
 
-
             }
           }
         }
       }
     };
-  });
+  }]);
 
 
 
 angular.module('famous.angular')
-  .directive('faTouchmove', function ($parse, famousDecorator) {
+  .directive('faTouchmove', ['$parse', '$famousDecorator', function ($parse, $famousDecorator) {
     return {
       restrict: 'A',
       scope: false,
       compile: function() {
         return { 
           post: function(scope, element, attrs) {
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
 
             if (attrs.faTouchMove) {
               var renderNode = (isolate.renderNode._eventInput || isolate.renderNode)
@@ -1443,20 +1442,20 @@ angular.module('famous.angular')
         }
       }
     };
-  });
+  }]);
 
 
 
 
 angular.module('famous.angular')
-  .directive('faTouchstart', function ($parse, famousDecorator) {
+  .directive('faTouchstart', ['$parse', '$famousDecorator', function ($parse, $famousDecorator) {
     return {
       restrict: 'A',
       scope: false,
       compile: function() {
         return { 
           post: function(scope, element, attrs) {
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
 
             if (attrs.faTouchStart) {
               var renderNode = (isolate.renderNode._eventInput || isolate.renderNode)
@@ -1472,7 +1471,7 @@ angular.module('famous.angular')
         }
       }
     };
-  });
+  }]);
 
 /**
  * @ngdoc directive
@@ -1492,18 +1491,18 @@ angular.module('famous.angular')
  */
 
 angular.module('famous.angular')
-  .directive('faView', ["famous", "famousDecorator", "$controller", function (famous, famousDecorator, $controller) {
+  .directive('faView', ["$famous", "$famousDecorator", function ($famous, $famousDecorator) {
     return {
       template: '<div></div>',
       transclude: true,
       scope: true,
       restrict: 'EA',
       compile: function(tElement, tAttrs, transclude){
-        var View = famous['famous/core/View'];
+        var View = $famous['famous/core/View'];
         
         return {
           pre: function(scope, element, attrs){
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
 
             isolate.children = [];
 
@@ -1529,7 +1528,7 @@ angular.module('famous.angular')
 
           },
           post: function(scope, element, attrs){
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
             
             transclude(scope, function(clone) {
               element.find('div').append(clone);

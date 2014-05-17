@@ -21,7 +21,7 @@
  */
 
 angular.module('famous.angular')
-  .directive('faIndex', function ($parse, famousDecorator) {
+  .directive('faIndex', ["$parse", "$famousDecorator", function ($parse, $famousDecorator) {
     return {
       restrict: 'A',
       scope: false,
@@ -29,7 +29,7 @@ angular.module('famous.angular')
       compile: function() {
         return { 
           post: function(scope, element, attrs) {
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
             isolate.index = scope.$eval(attrs.faIndex);
 
             scope.$watch(function(){
@@ -41,4 +41,4 @@ angular.module('famous.angular')
         }
       }
     };
-  });
+  }]);

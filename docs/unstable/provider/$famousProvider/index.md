@@ -2,15 +2,15 @@
 layout: "docs_api"
 version: "unstable"
 versionHref: "/docs/unstable"
-path: "api/provider/famousProvider/"
-title: "famousProvider"
+path: "api/provider/$famousProvider/"
+title: "$famousProvider"
 header_sub_title: "Provider in module famous.angular"
-doc: "famousProvider"
+doc: "$famousProvider"
 docType: "provider"
 ---
 
 <div class="improve-docs">
-  <a href='https://github.com/FamousInternal/famous-angular/edit/master/src/scripts/services/famous.js#L53'>
+  <a href='https://github.com/FamousInternal/famous-angular/edit/master/src/scripts/services/famous.js#L56'>
     Improve this doc
   </a>
 </div>
@@ -20,7 +20,7 @@ docType: "provider"
 
 <h1 class="api-title">
 
-  famousProvider
+  $famousProvider
 
 
 
@@ -46,10 +46,10 @@ You probably won't have to configure this provider
 
 ```js
 angular.module('mySuperApp', ['famous.angular']).config(
-  function(famousProvider) {
+  function($famousProvider) {
 
       // Register your modules
-      famousProvider.registerModule('moduleKey', module);
+      $famousProvider.registerModule('moduleKey', module);
 
   };
 });
@@ -60,71 +60,6 @@ angular.module('mySuperApp', ['famous.angular']).config(
 
   
 ## Methods
-
-<div id="registerModule"></div>
-<h2>
-  <code>registerModule(key, module)</code>
-
-</h2>
-
-Register the modules that will be available in the famous service
-
-
-
-<table class="table" style="margin:0;">
-  <thead>
-    <tr>
-      <th>Param</th>
-      <th>Type</th>
-      <th>Details</th>
-    </tr>
-  </thead>
-  <tbody>
-    
-    <tr>
-      <td>
-        key
-        
-        
-      </td>
-      <td>
-        
-  <code>string</code>
-      </td>
-      <td>
-        <p>the key that will be used to register the module</p>
-
-        
-      </td>
-    </tr>
-    
-    <tr>
-      <td>
-        module
-        
-        
-      </td>
-      <td>
-        
-  <code>misc</code>
-      </td>
-      <td>
-        <p>the data that will be returned by the service</p>
-
-        
-      </td>
-    </tr>
-    
-  </tbody>
-</table>
-
-
-
-
-
-
-
-
 
 <div id="find"></div>
 <h2>

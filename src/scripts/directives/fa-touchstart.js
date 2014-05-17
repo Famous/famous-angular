@@ -2,14 +2,14 @@
 
 
 angular.module('famous.angular')
-  .directive('faTouchstart', function ($parse, famousDecorator) {
+  .directive('faTouchstart', ['$parse', '$famousDecorator', function ($parse, $famousDecorator) {
     return {
       restrict: 'A',
       scope: false,
       compile: function() {
         return { 
           post: function(scope, element, attrs) {
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
 
             if (attrs.faTouchStart) {
               var renderNode = (isolate.renderNode._eventInput || isolate.renderNode)
@@ -25,4 +25,4 @@ angular.module('famous.angular')
         }
       }
     };
-  });
+  }]);

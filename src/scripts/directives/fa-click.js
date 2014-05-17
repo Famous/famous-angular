@@ -1,13 +1,13 @@
 
 
 angular.module('famous.angular')
-  .directive('faClick', function ($parse, famousDecorator) {
+  .directive('faClick', ["$parse", "$famousDecorator",function ($parse, $famousDecorator) {
     return {
       restrict: 'A',
       compile: function() {
         return { 
           post: function(scope, element, attrs) {
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
 
             if (attrs.faClick) {
               var renderNode = (isolate.renderNode._eventInput || isolate.renderNode)
@@ -23,4 +23,4 @@ angular.module('famous.angular')
         }
       }
     };
-  });
+  }]);

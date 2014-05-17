@@ -1,13 +1,13 @@
 
 
 angular.module('famous.angular')
-  .directive('faTap', function ($parse, famousDecorator) {
+  .directive('faTap', ['$parse', '$famousDecorator', function ($parse, $famousDecorator) {
     return {
       restrict: 'A',
       compile: function() {
         return { 
           post: function(scope, element, attrs) {
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
 
             if (attrs.faTap) {
               var renderNode = (isolate.renderNode._eventInput || isolate.renderNode)
@@ -33,4 +33,4 @@ angular.module('famous.angular')
         }
       }
     };
-  });
+  }]);

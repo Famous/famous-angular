@@ -21,7 +21,7 @@
  */
 
 angular.module('famous.angular')
-  .directive('faSurface', function (famous, famousDecorator, $interpolate, $controller, $compile) {
+  .directive('faSurface', ['$famous', '$famousDecorator', '$interpolate', '$controller', '$compile', function ($famous, $famousDecorator, $interpolate, $controller, $compile) {
     return {
       scope: true,
       transclude: true,
@@ -30,11 +30,11 @@ angular.module('famous.angular')
       compile: function(tElem, tAttrs, transclude){
         return {
           pre: function(scope, element, attrs){
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
 
-            var Surface = famous['famous/core/Surface'];
-            var Transform = famous['famous/core/Transform']
-            var EventHandler = famous['famous/core/EventHandler'];
+            var Surface = $famous['famous/core/Surface'];
+            var Transform = $famous['famous/core/Transform']
+            var EventHandler = $famous['famous/core/EventHandler'];
             
             //update properties
             //TODO:  is this going to be a bottleneck?
@@ -87,7 +87,7 @@ angular.module('famous.angular')
 
           },
           post: function(scope, element, attrs){
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
 
             var updateContent = function(){
               var compiledEl = isolate.compiledEl = isolate.compiledEl || $compile(element.find('div.fa-surface').contents())(scope)
@@ -106,4 +106,4 @@ angular.module('famous.angular')
         }
       }
     };
-  });
+  }]);

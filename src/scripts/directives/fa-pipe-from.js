@@ -1,16 +1,16 @@
 //UNTESTED as of 2014-05-13
 angular.module('famous.angular')
-  .directive('faPipeFrom', function (famous, famousDecorator) {
+  .directive('faPipeFrom', ['$famous', '$famousDecorator', function ($famous, $famousDecorator) {
     return {
       restrict: 'A',
       scope: false,
       priority: 16,
       compile: function() {
-        var Engine = famous['famous/core/Engine'];
+        var Engine = $famous['famous/core/Engine'];
         
         return { 
           post: function(scope, element, attrs) {
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
             scope.$watch(
               function(){
                 return scope.$eval(attrs.faPipeFrom);
@@ -38,4 +38,4 @@ angular.module('famous.angular')
         }
       }
     };
-  });
+  }]);

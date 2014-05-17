@@ -29,7 +29,7 @@
  */
 
 angular.module('famous.angular')
-  .directive('faModifier', ["famous", "famousDecorator", function (famous, famousDecorator) {
+  .directive('faModifier', ["$famous", "$famousDecorator", function ($famous, $famousDecorator) {
     return {
       template: '<div></div>',
       transclude: true,
@@ -39,11 +39,11 @@ angular.module('famous.angular')
       compile: function(tElement, tAttrs, transclude){
         return {
           post: function(scope, element, attrs){
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
 
-            var RenderNode = famous['famous/core/RenderNode']
-            var Modifier = famous['famous/core/Modifier']
-            var Transform = famous['famous/core/Transform']
+            var RenderNode = $famous['famous/core/RenderNode']
+            var Modifier = $famous['famous/core/Modifier']
+            var Transform = $famous['famous/core/Transform']
 
             var get = function(x) {
               if (x instanceof Function) return x();

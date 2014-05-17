@@ -1,7 +1,7 @@
 
 
 angular.module('famous.angular')
-  .directive('faRenderNode', ["famous", "famousDecorator", function (famous, famousDecorator) {
+  .directive('faRenderNode', ["$famous", "$famousDecorator", function ($famous, $famousDecorator) {
     return {
       template: '<div></div>',
       transclude: true,
@@ -10,9 +10,9 @@ angular.module('famous.angular')
       compile: function(tElement, tAttrs, transclude){
         return {
           pre: function(scope, element, attrs){
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
             
-            var Engine = famous['famous/core/Engine'];
+            var Engine = $famous['famous/core/Engine'];
 
             var getOrValue = function(x) {
               return x.get ? x.get() : x;
@@ -42,7 +42,7 @@ angular.module('famous.angular')
 
           },
           post: function(scope, element, attrs){
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
             
             transclude(scope, function(clone) {
               element.find('div').append(clone);

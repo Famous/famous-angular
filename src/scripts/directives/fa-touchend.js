@@ -1,14 +1,14 @@
 
 
 angular.module('famous.angular')
-  .directive('faTouchend', function ($parse, famousDecorator) {
+  .directive('faTouchend', ['$parse', '$famousDecorator', function ($parse, $famousDecorator) {
     return {
       restrict: 'A',
       scope: false,
       compile: function() {
         return { 
           post: function(scope, element, attrs) {
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
 
             if (attrs.faTouchEnd) {
               var renderNode = (isolate.renderNode._eventInput || isolate.renderNode)
@@ -20,10 +20,9 @@ angular.module('famous.angular')
                   scope.$apply();
               });
 
-
             }
           }
         }
       }
     };
-  });
+  }]);
