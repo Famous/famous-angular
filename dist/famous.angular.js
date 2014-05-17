@@ -14,8 +14,8 @@ window.name = "NG_DEFER_BOOTSTRAP!" + window.name;
 //       working around `ls -R1 app/scripts/famous` ?)
 var requirements = [
 	"famous/core/Engine",
-	"famous/core/EventHandler",
 	"famous/core/EventEmitter",
+	"famous/core/EventHandler",
 	"famous/core/Modifier",
 	"famous/core/RenderNode",
 	"famous/core/Surface",
@@ -25,22 +25,24 @@ var requirements = [
 	"famous/events/EventArbiter",
 	"famous/events/EventFilter",
 	"famous/events/EventMapper",
+	"famous/inputs/FastClick",
 	"famous/inputs/GenericSync",
-	"famous/inputs/RotateSync",
-	"famous/inputs/TouchSync",
 	"famous/inputs/MouseSync",
 	"famous/inputs/PinchSync",
-	"famous/inputs/FastClick",
+	"famous/inputs/RotateSync",
+	"famous/inputs/TouchSync",
 	"famous/surfaces/ImageSurface",
 	"famous/surfaces/InputSurface",
 	"famous/transitions/Easing",
 	"famous/transitions/SpringTransition",
 	"famous/transitions/Transitionable",
+	"famous/transitions/TransitionableTransform",
 	"famous/utilities/KeyCodes",
 	"famous/utilities/Timer",
-	"famous/views/Scrollview",
+	"famous/views/GridLayout",
+	"famous/views/RenderController",
 	"famous/views/Scroller",
-	"famous/views/GridLayout"
+	"famous/views/Scrollview"
 ]
 
 require.config({

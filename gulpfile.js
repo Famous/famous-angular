@@ -25,7 +25,7 @@ var gulp = require('gulp'),
 
 // Clean
 gulp.task('clean', function() {
-  return gulp.src(['dist/scripts'], {read: false})
+  return gulp.src(['dist/'], {read: false})
   .pipe(clean());
 });
 
@@ -45,17 +45,17 @@ gulp.task('build', ['clean'], function(event) {
 		'src/scripts/services/**/*.js',
 		'src/scripts/directives/**/*.js'
 	])
-	.pipe(concat('famous.angular.js'))
+	.pipe(concat('famous-angular.js'))
 	.pipe(jshint('.jshintrc'))
 	.pipe(jshint.reporter('default'))
 	.pipe(header(banner, { pkg : pkg } ))
-	.pipe(gulp.dest('dist/scripts'))
+	.pipe(gulp.dest('dist/'))
 	.pipe(uglify())
 	.pipe(rename({suffix: '.min'}))
 	.pipe(header(banner, { pkg : pkg } ))
-	.pipe(gulp.dest('dist/scripts'))
+	.pipe(gulp.dest('dist/'))
 	.pipe(notify({ message: 'Build task complete' }));
-})
+});
 
 gulp.task('docs', ['build'], function(done) {
 	var dgeni = require('dgeni'),
@@ -179,8 +179,8 @@ gulp.task('build-to-examples', ['clean'], function(event) {
 		'src/scripts/services/**/*.js',
 		'src/scripts/directives/**/*.js'
 	])
-	.pipe(concat('famous.angular.js'))
-	.pipe(gulp.dest(EXAMPLES_DIR + 'app/bower_components/famous-angular/dist/scripts'))
+	.pipe(concat('famous-angular.js'))
+	.pipe(gulp.dest(EXAMPLES_DIR + 'app/bower_components/famous-angular/dist'))
 	.pipe(notify({ message: 'Build task complete' }));
 })
 
