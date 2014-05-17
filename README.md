@@ -32,7 +32,7 @@ Project page and documentation:  [Famo.us/Angular](http://famo.us/angular)
 ####Thereafter:
 `npm start`
 
-Npm start will use gulp to concatenate files into famous.angular.js, which is built into the app folder. It will also watch for changes inside app and livereload as necessary.
+Npm start will use gulp to concatenate files into famous-angular.js, which is built into the app folder. It will also watch for changes inside app and livereload as necessary.
 
 As configured, you should be able to access the application at localhost:4000.
 
