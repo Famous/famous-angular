@@ -29,12 +29,14 @@ var requirements = [
 	"famous/surfaces/InputSurface",
 	"famous/transitions/Easing",
 	"famous/transitions/SpringTransition",
+	"famous/transitions/TransitionableTransform",
 	"famous/transitions/Transitionable",
 	"famous/utilities/KeyCodes",
 	"famous/utilities/Timer",
 	"famous/views/Scrollview",
 	"famous/views/Scroller",
-	"famous/views/GridLayout"
+	"famous/views/GridLayout",
+	"famous/views/RenderController"
 ]
 
 require.config({
