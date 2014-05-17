@@ -3,7 +3,7 @@
  * @name faImageSurface
  * @module famous.angular
  * @restrict EA
- * @property {string} faImageUrl  -  String url pointing to the image that should be loaded into the Famo.us ImageSurface
+ * @param {String} faImageUrl  -  String url pointing to the image that should be loaded into the Famo.us ImageSurface
  * @description
  * This directive creates a Famo.us ImageSurface and loads
  * the specified ImageUrl.

@@ -1,4 +1,20 @@
-
+/**
+ * @ngdoc directive
+ * @name faClick
+ * @module famous.angular
+ * @restrict A
+ * @param {expression} faClick {@link https://docs.angularjs.org/guide/expression Expression} to evaluate upon
+ * click. ({@link https://docs.angularjs.org/guide/expression#-event- Event object is available as `$event`})
+ * @description
+ * This directive allows you to specify custom behavior when an element is clicked.
+ *
+ * @usage
+ * ```html
+ * <ANY fa-click="expression">
+ *
+ * </ANY>
+ * ```
+ */
 
 angular.module('famous.angular')
   .directive('faClick', ["$parse", "$famousDecorator",function ($parse, $famousDecorator) {

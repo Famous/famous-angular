@@ -93,7 +93,7 @@ of a directive.
       </td>
       <td>
         
-  <code>string</code>
+  <code>String</code>
       </td>
       <td>
         <p>the selector for the elements to look up</p>

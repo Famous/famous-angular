@@ -19,7 +19,7 @@ module.exports = {
 					linkInfo.title = 'TODO:' + linkInfo.title;
 				}
 
-				return '<a href="' + versionData.current.href + '/' + linkInfo.url + '">' + linkInfo.title + '</a>';
+				return '<a href="' + linkInfo.url + '">' + linkInfo.title + '</a>';
 			});
 		};
 	}

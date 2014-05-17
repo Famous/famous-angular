@@ -1,4 +1,19 @@
-
+/**
+ * @ngdoc directive
+ * @name faPipeTo
+ * @module famous.angular
+ * @restrict A
+ * @param {Object} EventHandler - Event handler target object
+ * @description
+ * This directive add an event handler object to set of downstream handlers.
+ *
+ * @usage
+ * ```html
+ * <ANY fa-pipe-to="eventHandler">
+ *   <!-- zero or more render nodes -->
+ * </ANY>
+ * ```
+ */
 
 angular.module('famous.angular')
   .directive('faPipeTo', ['$famous', '$famousDecorator', function ($famous, $famousDecorator) {

@@ -1,4 +1,19 @@
-
+/**
+ * @ngdoc directive
+ * @name faRenderNode
+ * @module famous.angular
+ * @restrict EA
+ * @description
+ * A directive to insert a {@link https://famo.us/docs/0.1.1/core/RenderNode/ Famo.us RenderNode} that is
+ * a wrapper for inserting a renderable component (like a Modifer or Surface) into the render tree.
+ *
+ * @usage
+ * ```html
+ * <fa-render-node>
+ *     <!-- content -->
+ * </fa-render-node>
+ * ```
+ */
 
 angular.module('famous.angular')
   .directive('faRenderNode', ["$famous", "$famousDecorator", function ($famous, $famousDecorator) {

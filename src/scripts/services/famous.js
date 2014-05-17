@@ -87,26 +87,26 @@ require(requirements, function(/*args*/) {
 		 * @description
 		 * Register the modules that will be available in the $famous service
 	     *
-	     * @param {string} key the key that will be used to register the module
-	     * @param {misc} module the data that will be returned by the service
+	     * @param {String} key the key that will be used to register the module
+	     * @param {Misc} module the data that will be returned by the service
 		 */
 		this.registerModule = function(key, module) {
 			//TODO warning if the key is already registered ?
 			_modules[key] = module;
 		};
 
-			/**
-			 * @ngdoc method
-			 * @name $famousProvider#find
-			 * @module famous.angular
-			 * @description given a selector, retrieves
+		   /**
+		   * @ngdoc method
+		   * @name $famousProvider#find
+		   * @module famous.angular
+		   * @description given a selector, retrieves
 		   * the isolate on a template-declared scene graph element.  This is useful
 		   * for manipulating Famo.us objects directly after they've been declared in the DOM.
 		   * As in normal Angular, this DOM look-up should be performed in the postLink function
 		   * of a directive.
-			 * @returns {Array} an array of the isolate objects of the selected elements.
-		     *
-		     * @param {string} selector - the selector for the elements to look up
+		   * @returns {Array} an array of the isolate objects of the selected elements.
+		   *
+		   * @param {String} selector - the selector for the elements to look up
 		   * @usage
 		   * View:
 		   * ```html

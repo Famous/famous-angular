@@ -1,4 +1,19 @@
-
+/**
+ * @ngdoc directive
+ * @name faTap
+ * @module famous.angular
+ * @restrict A
+ * @param {expression} faTap Expression to evaluate upon tap. (Event object is available as `$event`)
+ * @description
+ * This directive allows you to specify custom behavior when an element is taped.
+ *
+ * @usage
+ * ```html
+ * <ANY fa-tap="expression">
+ *
+ * </ANY>
+ * ```
+ */
 
 angular.module('famous.angular')
   .directive('faTap', ['$parse', '$famousDecorator', function ($parse, $famousDecorator) {

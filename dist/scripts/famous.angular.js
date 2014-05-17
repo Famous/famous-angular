@@ -93,26 +93,26 @@ require(requirements, function(/*args*/) {
 		 * @description
 		 * Register the modules that will be available in the $famous service
 	     *
-	     * @param {string} key the key that will be used to register the module
-	     * @param {misc} module the data that will be returned by the service
+	     * @param {String} key the key that will be used to register the module
+	     * @param {Misc} module the data that will be returned by the service
 		 */
 		this.registerModule = function(key, module) {
 			//TODO warning if the key is already registered ?
 			_modules[key] = module;
 		};
 
-			/**
-			 * @ngdoc method
-			 * @name $famousProvider#find
-			 * @module famous.angular
-			 * @description given a selector, retrieves
+		   /**
+		   * @ngdoc method
+		   * @name $famousProvider#find
+		   * @module famous.angular
+		   * @description given a selector, retrieves
 		   * the isolate on a template-declared scene graph element.  This is useful
 		   * for manipulating Famo.us objects directly after they've been declared in the DOM.
 		   * As in normal Angular, this DOM look-up should be performed in the postLink function
 		   * of a directive.
-			 * @returns {Array} an array of the isolate objects of the selected elements.
-		     *
-		     * @param {string} selector - the selector for the elements to look up
+		   * @returns {Array} an array of the isolate objects of the selected elements.
+		   *
+		   * @param {String} selector - the selector for the elements to look up
 		   * @usage
 		   * View:
 		   * ```html
@@ -620,7 +620,23 @@ angular.module('famous.angular')
     };
   }]);
 
-
+/**
+ * @ngdoc directive
+ * @name faClick
+ * @module famous.angular
+ * @restrict A
+ * @param {expression} faClick {@link https://docs.angularjs.org/guide/expression Expression} to evaluate upon
+ * click. ({@link https://docs.angularjs.org/guide/expression#-event- Event object is available as `$event`})
+ * @description
+ * This directive allows you to specify custom behavior when an element is clicked.
+ *
+ * @usage
+ * ```html
+ * <ANY fa-click="expression">
+ *
+ * </ANY>
+ * ```
+ */
 
 angular.module('famous.angular')
   .directive('faClick', ["$parse", "$famousDecorator",function ($parse, $famousDecorator) {
@@ -733,7 +749,7 @@ angular.module('famous.angular')
  * @name faImageSurface
  * @module famous.angular
  * @restrict EA
- * @property {string} faImageUrl  -  String url pointing to the image that should be loaded into the Famo.us ImageSurface
+ * @param {String} faImageUrl  -  String url pointing to the image that should be loaded into the Famo.us ImageSurface
  * @description
  * This directive creates a Famo.us ImageSurface and loads
  * the specified ImageUrl.
@@ -862,16 +878,16 @@ angular.module('famous.angular')
  * @name faModifier
  * @module famous.angular
  * @restrict EA
- * @property {Array|Function} faRotate  -  Array of numbers or function returning an array of numbers to which this Modifier's rotate should be bound. 
- * @property {Number|Function} faRotateX  -  Number or function returning a number to which this Modifier's rotateX should be bound
- * @property {Number|Function} faRotateY  -  Number or function returning a number to which this Modifier's rotateY should be bound
- * @property {Number|Function} faRotateZ  -  Number or function returning a number to which this Modifier's rotateZ should be bound
- * @property {Array|Function} faScale  -  Array of numbers or function returning an array of numbers to which this Modifier's scale should be bound
- * @property {Array|Function} faSkew  -  Array of numbers or function returning an array of numbers to which this Modifier's skew should be bound
- * @property {Transform} faTransform - Manually created Famo.us Transform object (an array) that can be passed to the modifier
- * @property {Number|Function} faOpacity  -  Number or function returning a number to which this Modifier's opacity should be bound
- * @property {Array|Function} faSize  -  Array of numbers (e.g. [100, 500] for the x- and y-sizes) or function returning an array of numbers to which this Modifier's size should be bound
- * @property {Array|Function} faOrigin  -  Array of numbers (e.g. [.5, 0] for the x- and y-origins) or function returning an array of numbers to which this Modifier's origin should be bound
+ * @param {Array|Function} faRotate  -  Array of numbers or function returning an array of numbers to which this Modifier's rotate should be bound.
+ * @param {Number|Function} faRotateX  -  Number or function returning a number to which this Modifier's rotateX should be bound
+ * @param {Number|Function} faRotateY  -  Number or function returning a number to which this Modifier's rotateY should be bound
+ * @param {Number|Function} faRotateZ  -  Number or function returning a number to which this Modifier's rotateZ should be bound
+ * @param {Array|Function} faScale  -  Array of numbers or function returning an array of numbers to which this Modifier's scale should be bound
+ * @param {Array|Function} faSkew  -  Array of numbers or function returning an array of numbers to which this Modifier's skew should be bound
+ * @param {Transform} faTransform - Manually created Famo.us Transform object (an array) that can be passed to the modifier
+ * @param {Number|Function} faOpacity  -  Number or function returning a number to which this Modifier's opacity should be bound
+ * @param {Array|Function} faSize  -  Array of numbers (e.g. [100, 500] for the x- and y-sizes) or function returning an array of numbers to which this Modifier's size should be bound
+ * @param {Array|Function} faOrigin  -  Array of numbers (e.g. [.5, 0] for the x- and y-origins) or function returning an array of numbers to which this Modifier's origin should be bound
  * @description
  * This directive creates a Famo.us Modifier that will affect all children render nodes.  Its properties can be bound
  * to numbers (including using Angular's data-binding, though this is discouraged for performance reasons)
@@ -1012,6 +1028,25 @@ angular.module('famous.angular')
     };
   }]);
 
+/**
+ * @ngdoc directive
+ * @name faPipeFrom
+ * @module famous.angular
+ * @restrict A
+ * @priority 16
+ * @param {Object} EventHandler - target handler object
+ * @description
+ * This directive remove an handler object from set of downstream handlers. Undoes work of "pipe"
+ * from a faPipeTo directive.
+ *
+ * @usage
+ * ```html
+ * <ANY fa-pipe-from="EventHandler">
+ *   <!-- zero or more render nodes -->
+ * </ANY>
+ * ```
+ */
+
 //UNTESTED as of 2014-05-13
 angular.module('famous.angular')
   .directive('faPipeFrom', ['$famous', '$famousDecorator', function ($famous, $famousDecorator) {
@@ -1054,7 +1089,22 @@ angular.module('famous.angular')
     };
   }]);
 
-
+/**
+ * @ngdoc directive
+ * @name faPipeTo
+ * @module famous.angular
+ * @restrict A
+ * @param {Object} EventHandler - Event handler target object
+ * @description
+ * This directive add an event handler object to set of downstream handlers.
+ *
+ * @usage
+ * ```html
+ * <ANY fa-pipe-to="eventHandler">
+ *   <!-- zero or more render nodes -->
+ * </ANY>
+ * ```
+ */
 
 angular.module('famous.angular')
   .directive('faPipeTo', ['$famous', '$famousDecorator', function ($famous, $famousDecorator) {
@@ -1097,7 +1147,22 @@ angular.module('famous.angular')
     };
   }]);
 
-
+/**
+ * @ngdoc directive
+ * @name faRenderNode
+ * @module famous.angular
+ * @restrict EA
+ * @description
+ * A directive to insert a {@link https://famo.us/docs/0.1.1/core/RenderNode/ Famo.us RenderNode} that is
+ * a wrapper for inserting a renderable component (like a Modifer or Surface) into the render tree.
+ *
+ * @usage
+ * ```html
+ * <fa-render-node>
+ *     <!-- content -->
+ * </fa-render-node>
+ * ```
+ */
 
 angular.module('famous.angular')
   .directive('faRenderNode', ["$famous", "$famousDecorator", function ($famous, $famousDecorator) {
@@ -1154,9 +1219,25 @@ angular.module('famous.angular')
     };
   }]);
 
-
-
-
+/**
+ * @ngdoc directive
+ * @name faScrollView
+ * @module famous.angular
+ * @restrict E
+ * @description
+ * This directive allows you to specify a {@link https://famo.us/docs/0.1.1/views/Scrollview/ famo.us Scrollview}
+ * that will lay out a collection of renderables sequentially in the specified direction
+ * and will allow you to scroll through them with mousewheel or touch events.
+ *
+ * @usage
+ * ```html
+ * <fa-scroll-view>
+ *   <fa-view>
+ *     <!-- content -->
+ *   </fa-view>
+ * </fa-scroll-view>
+ * ```
+ */
 
 angular.module('famous.angular')
   .directive('faScrollView', ['$famous', '$famousDecorator', '$timeout', function ($famous, $famousDecorator, $timeout) {
@@ -1350,7 +1431,22 @@ angular.module('famous.angular')
     };
   }]);
 
-
+/**
+ * @ngdoc directive
+ * @name faTap
+ * @module famous.angular
+ * @restrict A
+ * @param {expression} faTap Expression to evaluate upon tap. (Event object is available as `$event`)
+ * @description
+ * This directive allows you to specify custom behavior when an element is taped.
+ *
+ * @usage
+ * ```html
+ * <ANY fa-tap="expression">
+ *
+ * </ANY>
+ * ```
+ */
 
 angular.module('famous.angular')
   .directive('faTap', ['$parse', '$famousDecorator', function ($parse, $famousDecorator) {
@@ -1387,7 +1483,22 @@ angular.module('famous.angular')
     };
   }]);
 
-
+/**
+ * @ngdoc directive
+ * @name faTouchend
+ * @module famous.angular
+ * @restrict A
+ * @param {expression} faTouchend Expression to evaluate upon touchend. (Event object is available as `$event`)
+ * @description
+ * This directive allows you to specify custom behavior after an element that {@link https://developer.mozilla.org/en-US/docs/Web/Reference/Events/touchend has been touched}.
+ *
+ * @usage
+ * ```html
+ * <ANY fa-touchend="expression">
+ *
+ * </ANY>
+ * ```
+ */
 
 angular.module('famous.angular')
   .directive('faTouchend', ['$parse', '$famousDecorator', function ($parse, $famousDecorator) {
@@ -1416,7 +1527,22 @@ angular.module('famous.angular')
     };
   }]);
 
-
+/**
+ * @ngdoc directive
+ * @name faTouchmove
+ * @module famous.angular
+ * @restrict A
+ * @param {expression} faTouchmove Expression to evaluate upon touchmove. (Event object is available as `$event`)
+ * @description
+ * This directive allows you to specify custom behavior when an element is {@link https://developer.mozilla.org/en-US/docs/Web/Reference/Events/touchmove moved along a touch surface}.
+ *
+ * @usage
+ * ```html
+ * <ANY fa-touchmove="expression">
+ *
+ * </ANY>
+ * ```
+ */
 
 angular.module('famous.angular')
   .directive('faTouchmove', ['$parse', '$famousDecorator', function ($parse, $famousDecorator) {
@@ -1444,8 +1570,22 @@ angular.module('famous.angular')
     };
   }]);
 
-
-
+/**
+ * @ngdoc directive
+ * @name faTouchstart
+ * @module famous.angular
+ * @restrict A
+ * @param {expression} faTouchstart Expression to evaluate upon touchstart. (Event object is available as `$event`)
+ * @description
+ * This directive allows you to specify custom behavior when an element is {@link https://developer.mozilla.org/en-US/docs/Web/Reference/Events/touchstart touched upon a touch surface}.
+ *
+ * @usage
+ * ```html
+ * <ANY fa-touchstart="expression">
+ *
+ * </ANY>
+ * ```
+ */
 
 angular.module('famous.angular')
   .directive('faTouchstart', ['$parse', '$famousDecorator', function ($parse, $famousDecorator) {
