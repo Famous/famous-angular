@@ -1,9 +1,25 @@
-
-
-
+/**
+ * @ngdoc directive
+ * @name faScrollView
+ * @module famous.angular
+ * @restrict E
+ * @description
+ * This directive allows you to specify a {@link https://famo.us/docs/0.1.1/views/Scrollview/ famo.us Scrollview}
+ * that will lay out a collection of renderables sequentially in the specified direction
+ * and will allow you to scroll through them with mousewheel or touch events.
+ *
+ * @usage
+ * ```html
+ * <fa-scroll-view>
+ *   <fa-view>
+ *     <!-- content -->
+ *   </fa-view>
+ * </fa-scroll-view>
+ * ```
+ */
 
 angular.module('famous.angular')
-  .directive('faScrollView', function (famous, famousDecorator, $timeout, $controller) {
+  .directive('faScrollView', ['$famous', '$famousDecorator', '$timeout', function ($famous, $famousDecorator, $timeout) {
     return {
       template: '<div></div>',
       restrict: 'E',
@@ -12,11 +28,11 @@ angular.module('famous.angular')
       compile: function(tElem, tAttrs, transclude){
         return  {
           pre: function(scope, element, attrs){
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
 
-            var ScrollView = famous["famous/views/Scrollview"];
-            var ViewSequence = famous['famous/core/ViewSequence'];
-            var Surface = famous['famous/core/Surface'];
+            var ScrollView = $famous["famous/views/Scrollview"];
+            var ViewSequence = $famous['famous/core/ViewSequence'];
+            var Surface = $famous['famous/core/Surface'];
 
             var _children = [];
 
@@ -70,7 +86,7 @@ angular.module('famous.angular')
 
           },
           post: function(scope, element, attrs){
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
 
             transclude(scope, function(clone) {
               element.find('div').append(clone);
@@ -82,4 +98,4 @@ angular.module('famous.angular')
         };
       }
     };
-  });
+  }]);

@@ -3,16 +3,16 @@
  * @name faModifier
  * @module famous.angular
  * @restrict EA
- * @property {Array|Function} faRotate  -  Array of numbers or function returning an array of numbers to which this Modifier's rotate should be bound. 
- * @property {Number|Function} faRotateX  -  Number or function returning a number to which this Modifier's rotateX should be bound
- * @property {Number|Function} faRotateY  -  Number or function returning a number to which this Modifier's rotateY should be bound
- * @property {Number|Function} faRotateZ  -  Number or function returning a number to which this Modifier's rotateZ should be bound
- * @property {Array|Function} faScale  -  Array of numbers or function returning an array of numbers to which this Modifier's scale should be bound
- * @property {Array|Function} faSkew  -  Array of numbers or function returning an array of numbers to which this Modifier's skew should be bound
- * @property {Transform} faTransform - Manually created Famo.us Transform object (an array) that can be passed to the modifier
- * @property {Number|Function} faOpacity  -  Number or function returning a number to which this Modifier's opacity should be bound
- * @property {Array|Function} faSize  -  Array of numbers (e.g. [100, 500] for the x- and y-sizes) or function returning an array of numbers to which this Modifier's size should be bound
- * @property {Array|Function} faOrigin  -  Array of numbers (e.g. [.5, 0] for the x- and y-origins) or function returning an array of numbers to which this Modifier's origin should be bound
+ * @param {Array|Function} faRotate  -  Array of numbers or function returning an array of numbers to which this Modifier's rotate should be bound.
+ * @param {Number|Function} faRotateX  -  Number or function returning a number to which this Modifier's rotateX should be bound
+ * @param {Number|Function} faRotateY  -  Number or function returning a number to which this Modifier's rotateY should be bound
+ * @param {Number|Function} faRotateZ  -  Number or function returning a number to which this Modifier's rotateZ should be bound
+ * @param {Array|Function} faScale  -  Array of numbers or function returning an array of numbers to which this Modifier's scale should be bound
+ * @param {Array|Function} faSkew  -  Array of numbers or function returning an array of numbers to which this Modifier's skew should be bound
+ * @param {Transform} faTransform - Manually created Famo.us Transform object (an array) that can be passed to the modifier
+ * @param {Number|Function} faOpacity  -  Number or function returning a number to which this Modifier's opacity should be bound
+ * @param {Array|Function} faSize  -  Array of numbers (e.g. [100, 500] for the x- and y-sizes) or function returning an array of numbers to which this Modifier's size should be bound
+ * @param {Array|Function} faOrigin  -  Array of numbers (e.g. [.5, 0] for the x- and y-origins) or function returning an array of numbers to which this Modifier's origin should be bound
  * @description
  * This directive creates a Famo.us Modifier that will affect all children render nodes.  Its properties can be bound
  * to numbers (including using Angular's data-binding, though this is discouraged for performance reasons)
@@ -29,7 +29,7 @@
  */
 
 angular.module('famous.angular')
-  .directive('faModifier', ["famous", "famousDecorator", function (famous, famousDecorator) {
+  .directive('faModifier', ["$famous", "$famousDecorator", function ($famous, $famousDecorator) {
     return {
       template: '<div></div>',
       transclude: true,
@@ -39,11 +39,11 @@ angular.module('famous.angular')
       compile: function(tElement, tAttrs, transclude){
         return {
           post: function(scope, element, attrs){
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
 
-            var RenderNode = famous['famous/core/RenderNode']
-            var Modifier = famous['famous/core/Modifier']
-            var Transform = famous['famous/core/Transform']
+            var RenderNode = $famous['famous/core/RenderNode']
+            var Modifier = $famous['famous/core/Modifier']
+            var Transform = $famous['famous/core/Transform']
 
             var get = function(x) {
               if (x instanceof Function) return x();

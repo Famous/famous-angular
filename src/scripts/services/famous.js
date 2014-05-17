@@ -55,7 +55,7 @@ require(requirements, function(/*args*/) {
 
 	/**
 	* @ngdoc provider
-	* @name famousProvider
+	* @name $famousProvider
 	* @module famous.angular
 	* @description
 	* This provider is loaded as an AMD module and will keep a reference on the complete Famo.us library.
@@ -66,17 +66,17 @@ require(requirements, function(/*args*/) {
 	*
 	* ```js
 	* angular.module('mySuperApp', ['famous.angular']).config(
-	*   function(famousProvider) {
+	*   function($famousProvider) {
 	*
 	*       // Register your modules
-	*       famousProvider.registerModule('moduleKey', module);
+	*       $famousProvider.registerModule('moduleKey', module);
 	*
 	*   };
 	* });
 	* ```
 	*
 	*/
-	ngFameApp.provider('famous', function() {
+	ngFameApp.provider('$famous', function() {
 		// hash for storing modules
 		var _modules = {};
 
@@ -85,28 +85,28 @@ require(requirements, function(/*args*/) {
 		 * @name famousProvider#registerModule
 		 * @module famous.angular
 		 * @description
-		 * Register the modules that will be available in the famous service
+		 * Register the modules that will be available in the $famous service
 	     *
-	     * @param {string} key the key that will be used to register the module
-	     * @param {misc} module the data that will be returned by the service
+	     * @param {String} key the key that will be used to register the module
+	     * @param {Misc} module the data that will be returned by the service
 		 */
 		this.registerModule = function(key, module) {
 			//TODO warning if the key is already registered ?
 			_modules[key] = module;
 		};
 
-			/**
-			 * @ngdoc method
-			 * @name famousProvider#find
-			 * @module famous.angular
-			 * @description given a selector, retrieves
+		   /**
+		   * @ngdoc method
+		   * @name $famousProvider#find
+		   * @module famous.angular
+		   * @description given a selector, retrieves
 		   * the isolate on a template-declared scene graph element.  This is useful
 		   * for manipulating Famo.us objects directly after they've been declared in the DOM.
 		   * As in normal Angular, this DOM look-up should be performed in the postLink function
 		   * of a directive.
-			 * @returns {Array} an array of the isolate objects of the selected elements.
-		     *
-		     * @param {string} selector - the selector for the elements to look up
+		   * @returns {Array} an array of the isolate objects of the selected elements.
+		   *
+		   * @param {String} selector - the selector for the elements to look up
 		   * @usage
 		   * View:
 		   * ```html
@@ -114,7 +114,7 @@ require(requirements, function(/*args*/) {
 		   * ```
 		   * Controller:
 		   * ```javascript
-		   * var scrollViewReference = famous.find('#myScrollView')[0].renderNode;
+		   * var scrollViewReference = $famous.find('#myScrollView')[0].renderNode;
 		   * //Now scrollViewReference is pointing to the Famo.us Scrollview object
 		   * //that we created in the view.
 		   * ```
@@ -135,7 +135,7 @@ require(requirements, function(/*args*/) {
 
 			/**
 			 * @ngdoc service
-			 * @name famous
+			 * @name $famous
 			 * @module famous.angular
 			 * @description
 			 * This service gives you access to the complete Famo.us library.
@@ -145,10 +145,10 @@ require(requirements, function(/*args*/) {
 			 *
 			 * ```js
 			 * angular.module('mySuperApp', ['famous.angular']).controller(
-			 *   function($scope, famous) {
+			 *   function($scope, $famous) {
 			 *
 			 *       // Access any registered module
-			 *       var EventHandler = famous['famous/core/EventHandler'];
+			 *       var EventHandler = $famous['famous/core/EventHandler'];
 			 *       $scope.eventHandler = new EventHandler();
 			 *
 			 *   };
@@ -160,12 +160,12 @@ require(requirements, function(/*args*/) {
 		};
 	});
 
-	ngFameApp.config(function(famousProvider) {
+	ngFameApp.config(['$famousProvider', function($famousProvider) {
 		for(var i = 0; i < requirements.length; i++) {
-			famousProvider.registerModule(requirements[i], required[i]);
+			$famousProvider.registerModule(requirements[i], required[i]);
 		}
 //		console.log('registered modules', famousProvider.$get());
-	});
+	}]);
 
 	angular.element(document).ready(function() {
 		angular.resumeBootstrap();

@@ -30,7 +30,7 @@ docType: "directive"
 
 
 
-This directive is used to specify the animation of an element in a <a href="/docs/unstable/api/directive/faAnimation">faAnimation</a> directive
+This directive is used to specify the animation of an element in a <a href="api/directive/faAnimation">faAnimation</a> directive
 
 
 

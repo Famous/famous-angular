@@ -1,15 +1,29 @@
-
-
+/**
+ * @ngdoc directive
+ * @name faTouchstart
+ * @module famous.angular
+ * @restrict A
+ * @param {expression} faTouchstart Expression to evaluate upon touchstart. (Event object is available as `$event`)
+ * @description
+ * This directive allows you to specify custom behavior when an element is {@link https://developer.mozilla.org/en-US/docs/Web/Reference/Events/touchstart touched upon a touch surface}.
+ *
+ * @usage
+ * ```html
+ * <ANY fa-touchstart="expression">
+ *
+ * </ANY>
+ * ```
+ */
 
 angular.module('famous.angular')
-  .directive('faTouchstart', function ($parse, famousDecorator) {
+  .directive('faTouchstart', ['$parse', '$famousDecorator', function ($parse, $famousDecorator) {
     return {
       restrict: 'A',
       scope: false,
       compile: function() {
         return { 
           post: function(scope, element, attrs) {
-            var isolate = famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope);
 
             if (attrs.faTouchStart) {
               var renderNode = (isolate.renderNode._eventInput || isolate.renderNode)
@@ -25,4 +39,4 @@ angular.module('famous.angular')
         }
       }
     };
-  });
+  }]);

@@ -30,7 +30,7 @@ docType: "directive"
 
 
 
-This directive is used to animate an element in conjunction with an <a href="/docs/unstable/api/directive/animate">animate</a> directive
+This directive is used to animate an element in conjunction with an <a href="api/directive/animate">animate</a> directive
 
 
 

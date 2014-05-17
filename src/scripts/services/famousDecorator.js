@@ -1,13 +1,11 @@
 
 angular.module('famous.angular')
-  .factory('famousDecorator', function () {
+  .factory('$famousDecorator', function () {
     //TODO:  add repeated logic to these roles
     var _roles = {
       child: {
-
       },
       parent: {
-
       }
     }
 

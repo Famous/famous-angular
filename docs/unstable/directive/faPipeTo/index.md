@@ -2,15 +2,15 @@
 layout: "docs_api"
 version: "unstable"
 versionHref: "/docs/unstable"
-path: "api/directive/faImageSurface/"
-title: "fa-image-surface"
+path: "api/directive/faPipeTo/"
+title: "fa-pipe-to"
 header_sub_title: "Directive in module famous.angular"
-doc: "faImageSurface"
+doc: "faPipeTo"
 docType: "directive"
 ---
 
 <div class="improve-docs">
-  <a href='https://github.com/FamousInternal/famous-angular/edit/master/src/scripts/directives/fa-image-surface.js#L1'>
+  <a href='https://github.com/FamousInternal/famous-angular/edit/master/src/scripts/directives/fa-pipe-to.js#L1'>
     Improve this doc
   </a>
 </div>
@@ -20,7 +20,7 @@ docType: "directive"
 
 <h1 class="api-title">
 
-  fa-image-surface
+  fa-pipe-to
 
 
 
@@ -30,8 +30,7 @@ docType: "directive"
 
 
 
-This directive creates a Famo.us ImageSurface and loads
-the specified ImageUrl.
+This directive add an event handler object to set of downstream handlers.
 
 
 
@@ -44,8 +43,9 @@ the specified ImageUrl.
 <h2 id="usage">Usage</h2>
   
 ```html
-<fa-image-surface fa-image-url="img/my-image.png">
-</fa-image-surface>
+<ANY fa-pipe-to="eventHandler">
+  <!-- zero or more render nodes -->
+</ANY>
 ```
   
   
@@ -63,16 +63,16 @@ the specified ImageUrl.
     
     <tr>
       <td>
-        faImageUrl
+        EventHandler
         
         
       </td>
       <td>
         
-  <code>String</code>
+  <code>Object</code>
       </td>
       <td>
-        <p>String url pointing to the image that should be loaded into the Famo.us ImageSurface</p>
+        <p>Event handler target object</p>
 
         
       </td>
