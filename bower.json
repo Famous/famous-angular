@@ -17,19 +17,21 @@
     "angular": "1.2.16"
   },
   "ignore": [
-	"**/.*",
-	"node_modules",
-	"bower_components",
-	"test",
-	"gulpfile.js",
-	"angus-site",
-	"docs-generation",
-	"famous-angular-docs",
-	"src",
-	"famous-angular.pdf",
-	"init_submodules.sh",
-	"karma.conf.js",
-	"karma-e2e.conf.js",
-	"package.json"
+    "**/.*",
+    "node_modules",
+    "docs",
+    "bower_components",
+    "test",
+    "gulpfile.js",
+    "angus-site",
+    "docs-generation",
+    "famous-angular-docs",
+    "famous-angular-examples",
+    "src",
+    "famous-angular.pdf",
+    "init_submodules.sh",
+    "karma.conf.js",
+    "karma-e2e.conf.js",
+    "package.json"
   ]
 }
