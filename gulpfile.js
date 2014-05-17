@@ -80,54 +80,15 @@ gulp.task('docs', ['build'], function(done) {
 	});
 });
 
-gulp.task('build-site', ['docs'], function(done) {
-  return gulp.start('build-jekyll');
-});
-
-// Compile .styl for the site submodule
-gulp.task('site-styl', function() {
-  var stylus = require('gulp-stylus');
-
-  return gulp.src(SITE_DIR + "styl/*.styl")
-    .pipe(stylus())
-    .pipe(minifycss())
-    .pipe(concat('main.css'))
-    .pipe(rename({suffix: '.min'}))
-    .pipe(gulp.dest(SITE_DIR + "css/"));
-});
-
-// Concat all js files and minify them
-//gulp.task('site-js', function() {
-  //return gulp.src([
-    //SITE_DIR + "**/*.js",
-    //// Exclude directories where compiled JS will end up
-    //'!' + SITE_DIR + '_site/*',
-    //'!' + SITE_DIR + 'js/*'
-  //])
-    //.pipe(concat('app.js'))
-    //.pipe(uglify())
-    //.pipe(rename({suffix: '.min'}))
-    //.pipe(gulp.dest(SITE_DIR + "js/"));
-//});
-
-
-// Only jekyll-build, without compiling docs, for faster run-time and to
-// prevent infinite loop when watching over files
-gulp.task('build-jekyll', ['site-styl'], function() {
-  var jekyllCommand = 'jekyll build --source ' + SITE_DIR +  ' --destination ' + SITE_DIR + '_site/';
-  // gulp-exec bugfix:
-  // Need to call gulp.src('') exactly, before using .pipe(exec())
-  return gulp.src('')
-    .pipe(exec(jekyllCommand))
-    .pipe(livereload(server));
-});
 
 /***********************************************************************
-* Watch task for developing the angular-site submodule
+*
+* Tasks for the famous-angular-docs submodule
+*
 ***********************************************************************/
-gulp.task('dev-site', ['build-jekyll'], function() {
-  
 
+// Main watch task for development
+gulp.task('dev-site', ['build-jekyll'], function() {
   var server = livereload();
 
   // Watch source files inside site submodule
@@ -137,7 +98,8 @@ gulp.task('dev-site', ['build-jekyll'], function() {
 	      SITE_DIR + '**/*.styl',
 	      SITE_DIR + '**/*.html',
 	      SITE_DIR + '**/*.md',
-	      SITE_DIR + '**/*.js',
+        // Only watch the js from app/
+	      SITE_DIR + 'app/*.js',
 	      // Do NOT watch the compile _site directory, else the watch will create
 	      // an infinite loop
 	      '!' + SITE_DIR + '_site/**',
@@ -154,7 +116,49 @@ gulp.task('dev-site', ['build-jekyll'], function() {
   gulp.start('site');
 });
 
-  
+
+// jekyll build the docs site
+gulp.task('build-jekyll', ['site-styl', 'site-js'], function() {
+  var jekyllCommand = 'jekyll build --source ' + SITE_DIR +  ' --destination ' + SITE_DIR + '_site/';
+  // gulp-exec bugfix:
+  // Need to call gulp.src('') exactly, before using .pipe(exec())
+  return gulp.src('')
+    .pipe(exec(jekyllCommand))
+    .pipe(livereload(server));
+});
+
+
+// First generate the docs, and then run jekyll build to create a new _site
+// with the fresh docs
+gulp.task('build-site', ['docs'], function(done) {
+  return gulp.start('build-jekyll');
+});
+
+
+// Compile .styl for the site submodule
+gulp.task('site-styl', function() {
+  var stylus = require('gulp-stylus');
+
+  return gulp.src(SITE_DIR + "styl/*.styl")
+    .pipe(stylus())
+    .pipe(minifycss())
+    .pipe(concat('main.css'))
+    .pipe(rename({suffix: '.min'}))
+    .pipe(gulp.dest(SITE_DIR + "css/"));
+});
+
+
+// Concat all app/ js files and minify them
+gulp.task('site-js', function() {
+  return gulp.src([
+    SITE_DIR + "app/*.js",
+  ])
+    .pipe(concat('app.js'))
+    .pipe(uglify())
+    .pipe(rename({suffix: '.min'}))
+    .pipe(gulp.dest(SITE_DIR + "js/"));
+});
+
 
 gulp.task('site', function(done) {
 	var express = require('express'),
@@ -164,6 +168,8 @@ gulp.task('site', function(done) {
 	app.listen(EXPRESS_PORT);
 	gutil.log('Server running at Docs for', gutil.colors.cyan('http://localhost:'+EXPRESS_PORT+'/'));
 });
+
+
 
 /***********************************************************************
  * Watch task for developing with the famous-angular-examples submodule
