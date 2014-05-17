@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "license": "",
   "homepage": "https://github.com/FamousInternal/famous-angular",
-  "main": "dist/scripts/famous.angular.js",
+  "main": "dist/famous-angular.js",
   "dependencies": {
     "angular": "1.2.16",
     "requirejs": ">=2.1.0"
