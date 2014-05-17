@@ -90,15 +90,17 @@ angular.module('famous.angular')
             var isolate = famousDecorator.ensureIsolate(scope);
 
             var updateContent = function(){
-              var compiledEl = isolate.compiledEl = isolate.compiledEl || $compile(element.find('div.fa-surface').contents())(scope)
-              isolate.renderNode.setContent(isolate.compiledEl.context);
+//              var compiledEl = isolate.compiledEl = isolate.compiledEl || $compile(angular.element(element[0].querySelector('div.fa-surface')).contents())(scope);
+//              isolate.renderNode.setContent(isolate.compiledEl.context);
+	            //TODO check if $compile is needed ?
+	            isolate.renderNode.setContent(element[0].querySelector('div.fa-surface'));
             };
 
             updateContent();
 
             //boilerplate
             transclude(scope, function(clone) {
-              element.find('div.fa-surface').append(clone);
+              angular.element(element[0].querySelectorAll('div.fa-surface')).append(clone);
             });
 
             scope.$emit('registerChild', isolate);
