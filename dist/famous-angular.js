@@ -242,7 +242,7 @@ angular.module('famous.angular')
             var isolate = famousDecorator.ensureIsolate(scope);
             
             setTimeout(function(){
-              var timeline = scope.$eval(attrs.timeline);
+              isolate.timeline = scope.$eval(attrs.timeline);
               isolate._trans = new Transitionable(0);
 
               isolate.play = function(callback){
@@ -253,8 +253,11 @@ angular.module('famous.angular')
                 isolate._trans.set(1, transition, function(){
                   if(callback)
                     callback();
-                  if(attrs.autoReplay)
-                    isolate.replay();
+                  if(attrs.loop){
+                    //Famo.us silently breaks its transitionable if this runs in
+                    //the same execution context.  Maybe a suppressed SO error somewhere?
+                    setTimeout(function(){isolate.replay(callback)}, 0);
+                  }
                 });
                 //TODO:  handle $animate with a callback
               }
@@ -280,12 +283,12 @@ angular.module('famous.angular')
 
               var id = attrs.id;
 
-              if(timeline === undefined){
-                timeline = isolate._trans.get.bind(isolate._trans);
+              if(isolate.timeline === undefined){
+                isolate.timeline = isolate._trans.get.bind(isolate._trans);
                 if(attrs.autoplay)
                   isolate.play();
               }
-              if(!timeline instanceof Function)
+              if(!isolate.timeline instanceof Function)
                 throw 'timeline must be a reference to a function or duration must be provided';
 
 	            /**
@@ -418,7 +421,7 @@ angular.module('famous.angular')
                         //TODO:  if needed:  make this more efficient.  This is a hot-running
                         //       function and we should be able to optimize.
                         var transformFunction = function(){
-                          var x = timeline() || 0;
+                          var x = isolate.timeline() || 0;
                           var relevantIndex = 0;
                           var relevantSegment = segments[relevantIndex];
 
