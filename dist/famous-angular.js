@@ -45,10 +45,6 @@ var requirements = [
 	"famous/views/Scrollview"
 ]
 
-require.config({
-	baseUrl: "/scripts"
-});
-
 //declare the module before the async callback so that
 //it will be accessible to other synchronously loaded angular
 //components

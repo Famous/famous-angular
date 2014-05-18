@@ -15,7 +15,7 @@ Project page and documentation:  [Famo.us/Angular](http://famo.us/angular)
 ```html
   <script src="bower_components/requirejs/require.js"></script>
   <script>
-    //set the requirejs's base to where the famous lib folder lives
+    //set requirejs's base to where the famous lib folder lives
     require.config({baseUrl: 'bower_components'});
   </script>
   <script src="bower_components/famous-angular/dist/famous-angular.js"></script>
