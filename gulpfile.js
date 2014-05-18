@@ -168,6 +168,7 @@ gulp.task('site-js', function() {
     SITE_DIR + "app/*.js",
   ])
     .pipe(concat('app.js'))
+    .pipe(gulp.dest(SITE_DIR + "js/"))
     .pipe(uglify())
     .pipe(rename({suffix: '.min'}))
     .pipe(gulp.dest(SITE_DIR + "js/"));
