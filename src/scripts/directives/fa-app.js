@@ -23,6 +23,7 @@ angular.module('famous.angular')
     return {
       template: '<div style="display: none;"><div></div></div>',
       transclude: true,
+      scope: {},
       restrict: 'EA',
       compile: function(tElement, tAttrs, transclude){
         return {
