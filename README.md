@@ -11,9 +11,19 @@ Project page and documentation:  [Famo.us/Angular](http://famo.us/angular)
 
 ####Inside of your app:
 * Run `bower install famous-angular` (may not yet be added to the Bower repo; if not, add `"famous-angular": "git@github.com:Famous/famous-angular.git"` to your bower.json first)
+* Add the following to your index.html
+```html
+  <script src="bower_components/requirejs/require.js"></script>
+  <script>
+    //set requirejs's base to where the famous lib folder lives
+    require.config({baseUrl: 'bower_components'});
+  </script>
+  <script src="bower_components/famous-angular/dist/famous-angular.js"></script>
+```
+* Add`<link rel="stylesheet" href="bower_components/famous-angular/dist/famous-angular.css">` to the `<head>` of your index.html
 * Add the `famous.angular` module to your Angular module list (e.g. in a main app.js file: `angular.module('yourMainModule',['famous.angular', 'ui.router', 'ngAnimate'])`)
-* Add the `famous-angular.css` dependency to your index.html (alternatively, handle container sizing+positioning+styling yourself if you know what you're doing)
-* And add an `<fa-app><fa-surface>Hello world</fa-surface></fa-app>` in one of your templates.  You should be good to go.
+* And add an `<fa-app style="height: 200px"><fa-surface fa-background-color="'red'">Hello world</fa-surface></fa-app>` in one of your templates.  If you see 'Hello world' on a red background, you should be good to go.
+**Note: currently, the element that the `<fa-app>` is on must be display: block (like a `<div fa-app>` or a `<p fa-app>`, or just `<fa-app>`) and must have a set height (like `style="height: 200px"` in this example.)  Future versions will not have these requirements.**
 
 
 ##Running (For developing or contributing to the library)

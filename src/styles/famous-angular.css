@@ -1,7 +1,9 @@
+body {
+    margin: 0;
+}
+
 fa-app, .fa-app {
     display: block;
-    width: 100%;
-    height: 100%;
     margin: 0px;
     padding: 0px;
     -webkit-transform-style: preserve-3d;
@@ -13,7 +15,7 @@ fa-app, .fa-app {
     position: relative;
 }
 
-.famous-angular-container, .famous-container-surface, .famous-group {
+.famous-container-surface, .famous-group {
     overflow: visible;
     -webkit-transform-style: preserve-3d;
     transform-style: preserve-3d;
@@ -21,6 +23,18 @@ fa-app, .fa-app {
     backface-visibility: visible;
     pointer-events: none;
     height: 100%;
+    width: 100%;
+}
+
+.famous-angular-container {
+    overflow: hidden;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    -webkit-backface-visibility: visible;
+    backface-visibility: visible;
+    pointer-events: none;
+    height: 100%;
+    width: 100%;
 }
 
 .famous-group {
