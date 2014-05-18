@@ -11,6 +11,7 @@ var gulp = require('gulp'),
   autoprefixer = require('gulp-autoprefixer'),
   minifycss = require('gulp-minify-css'),
   jshint = require('gulp-jshint'),
+  ngmin = require('gulp-ngmin'),
   uglify = require('gulp-uglify'),
   rename = require('gulp-rename'),
   clean = require('gulp-clean'),
@@ -64,7 +65,8 @@ gulp.task('build', ['clean'], function(event) {
 	.pipe(jshint.reporter('default'))
 	.pipe(header(banner, { pkg : pkg } ))
 	.pipe(gulp.dest('dist/'))
-	.pipe(uglify())
+  .pipe(ngmin())
+  .pipe(uglify({ mangle: false }))
 	.pipe(rename({suffix: '.min'}))
 	.pipe(header(banner, { pkg : pkg } ))
 	.pipe(gulp.dest('dist/'))
@@ -167,8 +169,10 @@ gulp.task('site-js', function() {
   return gulp.src([
     SITE_DIR + "app/*.js",
   ])
-    .pipe(concat('app.js'))
-    .pipe(uglify())
+    .pipe(concat('main.js'))
+    .pipe(gulp.dest(SITE_DIR + "js/"))
+    .pipe(ngmin())
+    .pipe(uglify({ mangle: false }))
     .pipe(rename({suffix: '.min'}))
     .pipe(gulp.dest(SITE_DIR + "js/"));
 });
