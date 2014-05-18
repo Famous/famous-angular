@@ -169,7 +169,7 @@ gulp.task('site-js', function() {
   return gulp.src([
     SITE_DIR + "app/*.js",
   ])
-    .pipe(concat('app.js'))
+    .pipe(concat('main.js'))
     .pipe(gulp.dest(SITE_DIR + "js/"))
     .pipe(ngmin())
     .pipe(uglify({ mangle: false }))
