@@ -23,6 +23,7 @@ Project page and documentation:  [Famo.us/Angular](http://famo.us/angular)
 * Add`<link rel="stylesheet" href="bower_components/famous-angular/dist/famous-angular.css">` to the `<head>` of your index.html
 * Add the `famous.angular` module to your Angular module list (e.g. in a main app.js file: `angular.module('yourMainModule',['famous.angular', 'ui.router', 'ngAnimate'])`)
 * And add an `<fa-app style="height: 200px"><fa-surface fa-background-color="'red'">Hello world</fa-surface></fa-app>` in one of your templates.  If you see 'Hello world' on a red background, you should be good to go.
+**Note: currently, the element that the `<fa-app>` is on must be display: block (like a `<div fa-app>` or a `<p fa-app>`, or just `<fa-app>`) and must have a set height (like `style="height: 200px"` in this example.)  Future versions will not have these requirements.**
 
 
 ##Running (For developing or contributing to the library)
