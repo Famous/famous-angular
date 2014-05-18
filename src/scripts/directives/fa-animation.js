@@ -39,9 +39,13 @@ angular.module('famous.angular')
                   duration: scope.$eval(attrs.duration),
                   curve: scope.$eval(attrs.curve) || 'linear'
                 };
-                isolate._trans.set(1, transition, callback);
+                isolate._trans.set(1, transition, function(){
+                  if(callback)
+                    callback();
+                  if(attrs.autoReplay)
+                    isolate.replay();
+                });
                 //TODO:  handle $animate with a callback
-                //       support custom callbacks?
               }
               isolate.reset = function(){
                 isolate._trans.set(0);
