@@ -41,7 +41,7 @@ angular.module('famous.angular')
               _children.sort(function(a, b){
                 return a.index - b.index;
               });
-              isolate.renderNode.sequenceFrom(_children.map(function(c){
+              isolate.renderNode.sequenceFrom(_.map(_children, function(c){
                 return c.renderNode
               }));
             }
@@ -56,13 +56,9 @@ angular.module('famous.angular')
 
             scope.$on('unregisterChild', function(evt, data){
               if(evt.targetScope.$id != scope.$id){
-	            var _c = [];
-	            angular.forEach(_children, function(c) {
-		          if(c.id !== data.id) {
-			        _c.push(c);
-		          }
-	            });
-                _children = _c;
+                _children = _.reject(_children, function(c){
+                  return c.id === data.id
+                });
                 updateGridLayout();
                 evt.stopPropagation();
               }

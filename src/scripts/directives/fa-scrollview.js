@@ -53,7 +53,7 @@ angular.module('famous.angular')
                 }); 
 
                 var options = {
-                  array: _children.map(function(c){ return c.renderNode })
+                  array: _.map(_children, function(c){ return c.renderNode }) 
                 };
                 //set the first page on the scrollview if
                 //specified
@@ -76,13 +76,9 @@ angular.module('famous.angular')
 
             scope.$on('unregisterChild', function(evt, data){
               if(evt.targetScope.$id != scope.$id){
-	            var _c = [];
-	            angular.forEach(_children, function(c) {
-		          if(c.id !== data.id) {
-			        _c.push(c);
-		          }
-	            });
-	            _children = _c;
+                _children = _.reject(_children, function(c){
+                  return c.id === data.id
+                });
                 updateScrollview();
                 evt.stopPropagation();
               }
