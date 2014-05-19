@@ -1,7 +1,7 @@
 {
   "name": "famous-angular",
   "description": "Allow famo.us components to work seamlessly with other components inside existing or future Angular apps",
-  "version": "0.0.0",
+  "version": "0.0.9",
   "license": "",
   "homepage": "https://github.com/FamousInternal/famous-angular",
   "repository": {
@@ -14,7 +14,7 @@
   "scripts": {
     "install": "bower install",
     "postinstall": "git submodule update --init --recursive",
-    "start": "gulp",
+    "start": "gulp dev",
     "test": "grunt test"
   },
   "dependencies": {},
