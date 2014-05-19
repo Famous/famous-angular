@@ -36,7 +36,7 @@ angular.module('famous.angular')
 
             
             element.append('<div class="famous-angular-container"></div>');
-            var famousContainer = $(element.find('.famous-angular-container'))[0];
+            var famousContainer = element[0].querySelectorAll('.famous-angular-container')[0];
             scope.context = Engine.createContext(famousContainer);
 
             function AppView(){
@@ -85,7 +85,7 @@ angular.module('famous.angular')
           },
           post: function(scope, element, attrs){
             transclude(scope, function(clone) {
-              element.find('div div').append(clone);
+              angular.element(element[0].querySelectorAll('div div')).append(clone);
             });
             scope.readyToRender = true;
           }
