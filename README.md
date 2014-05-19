@@ -8,7 +8,7 @@ Famo.us/Angular is a library that brings Famo.us and AngularJS together.  Using 
 * Easily embed existing Famo.us apps into AngularJS apps.
 
 
-Read more on the project page: [Famo.us/Angular](http://famo.us/angular)
+###Read more on the project page: [Famo.us/Angular](http://famo.us/angular)
 
 
 This library is under active development and is currently in alpha.  The library is at a point where you can create powerful apps, and a lot of the core API is reasonably stabilized, but some things are expected to change as the project moves forward.  Contributors welcome! (see below)
