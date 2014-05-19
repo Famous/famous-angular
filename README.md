@@ -22,7 +22,7 @@ This library is under active development and is currently in alpha.  The library
 * Install bower `npm install bower`
 
 ####Inside of your app:
-* Run `bower install famous-angular` (may not yet be added to the Bower repo; if not, add `"famous-angular": "git@github.com:Famous/famous-angular.git"` to your bower.json first)
+* Run `bower install famous-angular`
 * Add the following to your index.html
 ```html
   <script src="bower_components/requirejs/require.js"></script>
