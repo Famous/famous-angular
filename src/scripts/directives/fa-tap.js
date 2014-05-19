@@ -5,7 +5,7 @@
  * @restrict A
  * @param {expression} faTap Expression to evaluate upon tap. (Event object is available as `$event`)
  * @description
- * This directive allows you to specify custom behavior when an element is taped.
+ * This directive allows you to specify custom behavior when an element is tapped.
  *
  * @usage
  * ```html
