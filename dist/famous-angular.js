@@ -945,17 +945,17 @@ angular.module('famous.angular')
             isolate.getTransform = function() {
               //var transforms = [Transform.translate(0, 0, 0)];
               var transforms = [];
-              if (attrs.faTranslate) {
+              if (attrs.faTranslate && scope.$eval(attrs.faTranslate)) {
                 var values = scope.$eval(attrs.faTranslate).map(get)
                 transforms.push(Transform.translate.apply(this, values));
               }
 
-              if(attrs.faRotate){
+              if(attrs.faRotate && scope.$eval(attrs.faRotate)){
                 var values = scope.$eval(attrs.faRotate).map(get)
                 transforms.push(Transform.rotate.apply(this, values));
               }
               //only apply faRotateX, etc. if faRotate is not defined
-              if (attrs.faRotateX){
+              if (attrs.faRotateX && scope.$eval(attrs.faRotateX)){
                 transforms.push(
                   Transform.rotateX(
                     get(
@@ -964,7 +964,7 @@ angular.module('famous.angular')
                   )
                 );
               }
-              if (attrs.faRotateY) {
+              if (attrs.faRotateY && scope.$eval(attrs.faRotateY)) {
                 transforms.push(
                   Transform.rotateY(
                     get(
@@ -973,7 +973,7 @@ angular.module('famous.angular')
                   )
                 );
               }
-              if (attrs.faRotateZ) {
+              if (attrs.faRotateZ && scope.$eval(attrs.faRotateZ)) {
                 transforms.push(
                   Transform.rotateZ(
                     get(
@@ -983,13 +983,13 @@ angular.module('famous.angular')
                 );
               }
 
-              if (attrs.faScale){
+              if (attrs.faScale && scope.$eval(attrs.faScale)){
                 var values = scope.$eval(attrs.faScale).map(get)
                 transforms.push(Transform.scale.apply(this, values));
               }
 
               
-              if (attrs.faSkew) {
+              if (attrs.faSkew && scope.$eval(attrs.faSkew)) {
                 var values = scope.$eval(attrs.faSkew).map(get)
                 transforms.push(Transform.skew.apply(this, values));
               }
@@ -1003,7 +1003,7 @@ angular.module('famous.angular')
             };
 
             isolate.getOpacity = function(){
-              if (attrs.faOpacity)
+              if (attrs.faOpacity && scope.$eval(attrs.faOpacity))
                 return get(scope.$eval(attrs.faOpacity));
               return 1;
             }
