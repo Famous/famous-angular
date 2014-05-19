@@ -553,7 +553,7 @@ angular.module('famous.angular')
     return {
       template: '<div style="display: none;"><div></div></div>',
       transclude: true,
-      scope: {},
+      scope: true,
       restrict: 'EA',
       compile: function(tElement, tAttrs, transclude){
         return {
@@ -567,7 +567,7 @@ angular.module('famous.angular')
             
             element.append('<div class="famous-angular-container"></div>');
             var famousContainer = $(element.find('.famous-angular-container'))[0];
-            scope.context = Engine.createContext(famousContainer);
+            isolate.context = Engine.createContext(famousContainer);
 
             function AppView(){
               View.apply(this, arguments);
@@ -593,8 +593,15 @@ angular.module('famous.angular')
               return Transform.multiply.apply(this, transforms);
             };
 
-            scope.view = new AppView();
-            scope.context.add(scope.view);
+            isolate.view = new AppView();
+            isolate.context.add(isolate.view);
+
+            //HACK:  Since Famo.us Engine doesn't yet
+            //support unregistering contexts, this will keep
+            //the context from getting updated by the engine
+            scope.$on('$destroy', function(){
+              isolate.context.update = angular.noop;
+            })
 
 
             //TODO:  What if the actual scope hierarchy
@@ -609,7 +616,7 @@ angular.module('famous.angular')
             //require a bit of replumbing.  Would need to investigate
             //the overhead of $watching a potentially complex scene graph, too
             scope.$on('registerChild', function(evt, data){
-              scope.view.add(data.renderNode);
+              isolate.view.add(data.renderNode);
               evt.stopPropagation();
             })
           },
@@ -617,7 +624,7 @@ angular.module('famous.angular')
             transclude(scope, function(clone) {
               element.find('div div').append(clone);
             });
-            scope.readyToRender = true;
+            isolate.readyToRender = true;
           }
         }
       }
