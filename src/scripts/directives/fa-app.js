@@ -4,7 +4,7 @@
  * @module famous.angular
  * @restrict EA
  * @description
- * This directive is the container and entry point to Ang.us.  Behind the scenes,
+ * This directive is the container and entry point to Famo.us/Angular.  Behind the scenes,
  * it creates a Famous context and then adds child elements
  * to that context as they get compiled.  Inside of this directive,
  * normal HTML content will not get rendered to the screen unless
@@ -91,7 +91,7 @@ angular.module('famous.angular')
             })
           },
           post: function(scope, element, attrs){
-            
+
             var isolate = $famousDecorator.ensureIsolate(scope);
             transclude(scope, function(clone) {
               element.find('div div').append(clone);
