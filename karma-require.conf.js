@@ -1,5 +1,5 @@
 // Karma configuration
-// Generated on Mon May 19 2014 16:26:29 GMT-0700 (PDT)
+// Generated on Mon May 19 2014 16:19:09 GMT-0700 (PDT)
 
 module.exports = function(config) {
   config.set({
@@ -10,16 +10,19 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine'],
+    frameworks: ['jasmine', 'requirejs'],
 
 
     // list of files / patterns to load in the browser
     files: [
+      'test-main.js',
       'bower_components/angular/angular.js',
       'bower_components/angular-mocks/angular-mocks.js',
       'bower_components/requirejs/require.js',
-      //'src/scripts/**/*.js',
-      'test/**/*.js',
+      'src/scripts/**/*.js',
+      'test/spec/**/*.js',
+      {pattern: 'src/scripts/**/*.js', included: false},
+      {pattern: 'test/**/*.js', included: false}
     ],
 
 
@@ -39,7 +42,7 @@ module.exports = function(config) {
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['spec'],
+    reporters: ['progress'],
 
 
     // web server port
