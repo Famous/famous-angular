@@ -8,7 +8,9 @@
   "dependencies": {
     "angular": "1.2.16",
     "requirejs": ">=2.1.0",
-    "famous": "~0.2.0"
+    "famous": "~0.2.0",
+    "jquery": "~2.1.1",
+    "underscore": "~1.6.0"
   },
   "devDependencies": {
     "angular-mocks": "1.2.6",
