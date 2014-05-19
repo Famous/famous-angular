@@ -1,6 +1,17 @@
 # Famo.us/Angular
 
-Project page and documentation:  [Famo.us/Angular](http://famo.us/angular)
+
+Famo.us/Angular is a library that brings Famo.us and AngularJS together.  Using F/A, you can:
+* Create Famo.us apps using familiar AngularJS tools like controllers, directives, and services.
+* Use HTML to declare Famo.us UIs, complete with Angular's two-way databinding.
+* Easily embed existing Famo.us apps into AngularJS apps
+
+
+Read more on the project page: [Famo.us/Angular](http://famo.us/angular)
+
+
+This library is under active development and is currently in alpha.  The library is at a point where you can create powerful apps, and a lot of the core API is reasonably stabilized, but some things are expected to change as the project moves forward.  Contributors welcome! (see below)
+
 
 ##Running (For using F/A in your Angular app)
 
@@ -46,25 +57,25 @@ Npm start will use gulp to concatenate files into famous-angular.js, which is bu
 
 As configured, you should be able to access the application at localhost:4000.
 
-##To develop the library using the famous-angular-examples submodule
+####To develop the library using the famous-angular-examples submodule
 
 `gulp dev`
 
-##To build the docs
+####To build the docs
 
 `gulp docs`
 
-##To view and build the docs site
+####To view and build the docs site
 
 `gulp dev-site`
 
 ##Support
 
-Please submit issues as Github issues
+Please submit issues as Github issues or reach out for support on the Famous IRC channel on Freenode
 
 ##Contributing
 
-We would love to have community contributions and support!  A few areas we could really use help right now:
+We would love to have community contributions and support!  A few areas where could use help right now:
 
 * Writing tests
 * Elaborating on documentation
@@ -73,3 +84,5 @@ We would love to have community contributions and support!  A few areas we could
 * Continuing to wrap Famo.us layouts and views into directives [advanced]
 
 If you want to contribute, please submit a pull request, or contact hello@thomasstreet.com for more information.
+
+Famo.us/Angular is being developed by [Thomas Street](http://thomasstreet.com) in partnership with [Famo.us](https://famo.us), along with community support.
