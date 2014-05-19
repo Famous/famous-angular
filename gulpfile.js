@@ -194,7 +194,7 @@ gulp.task('build-to-examples', ['clean'], function(event) {
 		'src/scripts/directives/**/*.js'
 	])
 	.pipe(concat('famous-angular.js'))
-	.pipe(gulp.dest(EXAMPLES_DIR + 'app/bower_components/famous-angular/'))
+	.pipe(gulp.dest(EXAMPLES_DIR + 'app/bower_components/famous-angular/dist/'))
 	.pipe(notify({ message: 'Build task complete' }));
 })
 

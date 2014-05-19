@@ -91,6 +91,8 @@ angular.module('famous.angular')
             })
           },
           post: function(scope, element, attrs){
+            
+            var isolate = $famousDecorator.ensureIsolate(scope);
             transclude(scope, function(clone) {
               element.find('div div').append(clone);
             });
