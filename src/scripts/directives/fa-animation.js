@@ -108,9 +108,7 @@ angular.module('famous.angular')
                     //dig out the reference to our modifier
                     //TODO:  support passing a direct reference to a modifier
                     //       instead of performing a DOM lookup
-                    var modElements = element.parent().find(
-                      animate.attributes['targetmodselector'].value
-                    );
+	                var modElements = angular.element(element[0].parentNode)[0].querySelectorAll(animate.attributes['targetmodselector'].value);
                     
                     
                     _.each(modElements, function(modElement){

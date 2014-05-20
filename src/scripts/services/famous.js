@@ -117,7 +117,7 @@ require(requirements, function(/*args*/) {
 		   */
 		   
 		_modules.find = function(selector){
-			var elems = angular.element(selector);
+			var elems = angular.element(window.document.querySelector(selector));
 			var scopes = _.map(elems, function(elem){
 				return angular.element(elem).scope();
 			});
