@@ -172,7 +172,13 @@ require(requirements, function(/*args*/) {
 	}]);
 
 	angular.element(document).ready(function() {
-		angular.resumeBootstrap();
+    // For some reason Karma evaluates angular.resumeBootstrap as undefined.
+    // Our versions of angular, angular-mocks and karma the latest stable
+    // releases, so not sure why this is happening.
+    // Quick fix until then.
+    if (angular.resumeBootstrap) {
+      angular.resumeBootstrap();
+    }
 	});
 
   // To delay Karma's bootstrapping until $famous is ready, fire off a global
