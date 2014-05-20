@@ -139,7 +139,7 @@ require(requirements, function(/*args*/) {
 				return _s;
 			}(scopes);
 			return isolates;
-		}
+		};
 
 		this.$get = function() {
 
@@ -181,7 +181,10 @@ require(requirements, function(/*args*/) {
 	}]);
 
 	angular.element(document).ready(function() {
-		angular.resumeBootstrap();
+    // TOOD: Find out why this is undefined when running Karma
+    if (angular.resumeBootstrap) {
+      angular.resumeBootstrap();
+    }
 	});
 
   // To delay Karma's bootstrapping until $famous is ready, fire off a global
