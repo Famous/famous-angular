@@ -41,9 +41,13 @@ angular.module('famous.angular')
               _children.sort(function(a, b){
                 return a.index - b.index;
               });
-              isolate.renderNode.sequenceFrom(_.map(_children, function(c){
-                return c.renderNode
-              }));
+              isolate.renderNode.sequenceFrom(function(_children) {
+	              var _ch = [];
+	              angular.forEach(_children, function(c, i) {
+		              _ch[i] = c.renderNode;
+	              })
+	              return _ch;
+              }(_children));
             }
 
             scope.$on('registerChild', function(evt, data){
@@ -56,9 +60,15 @@ angular.module('famous.angular')
 
             scope.$on('unregisterChild', function(evt, data){
               if(evt.targetScope.$id != scope.$id){
-                _children = _.reject(_children, function(c){
-                  return c.id === data.id
-                });
+	            _children = function(_children) {
+		          var _ch = [];
+		          angular.forEach(_children, function(c) {
+			        if(c.id !== data.id) {
+				      _ch.push(c);
+			        }
+		          });
+		          return _ch;
+	            }(_children);
                 updateGridLayout();
                 evt.stopPropagation();
               }

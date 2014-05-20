@@ -113,7 +113,7 @@ angular.module('famous.angular')
                     );
                     
                     
-                    _.each(modElements, function(modElement){
+                    angular.forEach(modElements, function(modElement){
                       var modScope = angular.element(modElement).scope();
                       var modifier = modScope.isolate[modScope.$id].modifier;
                       var getTransform = modScope.isolate[modScope.$id].getTransform;

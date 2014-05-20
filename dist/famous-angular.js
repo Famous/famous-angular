@@ -324,7 +324,7 @@ angular.module('famous.angular')
                     );
                     
                     
-                    _.each(modElements, function(modElement){
+                    angular.forEach(modElements, function(modElement){
                       var modScope = angular.element(modElement).scope();
                       var modifier = modScope.isolate[modScope.$id].modifier;
                       var getTransform = modScope.isolate[modScope.$id].getTransform;
@@ -719,9 +719,13 @@ angular.module('famous.angular')
               _children.sort(function(a, b){
                 return a.index - b.index;
               });
-              isolate.renderNode.sequenceFrom(_.map(_children, function(c){
-                return c.renderNode
-              }));
+              isolate.renderNode.sequenceFrom(function(_children) {
+	              var _ch = [];
+	              angular.forEach(_children, function(c, i) {
+		              _ch[i] = c.renderNode;
+	              })
+	              return _ch;
+              }(_children));
             }
 
             scope.$on('registerChild', function(evt, data){
@@ -734,9 +738,15 @@ angular.module('famous.angular')
 
             scope.$on('unregisterChild', function(evt, data){
               if(evt.targetScope.$id != scope.$id){
-                _children = _.reject(_children, function(c){
-                  return c.id === data.id
-                });
+	            _children = function(_children) {
+		          var _ch = [];
+		          angular.forEach(_children, function(c) {
+			        if(c.id !== data.id) {
+				      _ch.push(c);
+			        }
+		          });
+		          return _ch;
+	            }(_children);
                 updateGridLayout();
                 evt.stopPropagation();
               }
@@ -1287,7 +1297,13 @@ angular.module('famous.angular')
                 }); 
 
                 var options = {
-                  array: _.map(_children, function(c){ return c.renderNode }) 
+                  array: function(_children) {
+	                  var _ch = [];
+	                  angular.forEach(_children, function(c, i) {
+		                  _ch[i] = c.renderNode;
+	                  })
+	                  return _ch;
+                  }(_children)
                 };
                 //set the first page on the scrollview if
                 //specified
@@ -1310,9 +1326,16 @@ angular.module('famous.angular')
 
             scope.$on('unregisterChild', function(evt, data){
               if(evt.targetScope.$id != scope.$id){
-                _children = _.reject(_children, function(c){
-                  return c.id === data.id
-                });
+
+	            _children = function(_children) {
+		          var _ch = [];
+		          angular.forEach(_children, function(c) {
+			        if(c.id !== data.id) {
+				      _ch.push(c);
+			        }
+		          });
+		          return _ch;
+	            }(_children);
                 updateScrollview();
                 evt.stopPropagation();
               }
@@ -1451,7 +1474,7 @@ angular.module('famous.angular')
  * @restrict A
  * @param {expression} faTap Expression to evaluate upon tap. (Event object is available as `$event`)
  * @description
- * This directive allows you to specify custom behavior when an element is taped.
+ * This directive allows you to specify custom behavior when an element is tapped.
  *
  * @usage
  * ```html
