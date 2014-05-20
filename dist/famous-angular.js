@@ -184,13 +184,10 @@ require(requirements, function(/*args*/) {
 		angular.resumeBootstrap();
 	});
 
-
-  // For the sake of testability, fire off a global event to allow karma
-  // to know when the $famous provider has been declared
-  var $famousDeclared = new Event('$famousDeclared');
-  window.dispatchEvent($famousDeclared);
-
-})
+  // To delay Karma's bootstrapping until $famous is ready, fire off a global
+  // event to allow karma to know when the $famous provider has been declared.
+  window.dispatchEvent(new Event('$famousDeclared'));
+});
 
 angular.module('famous.angular')
   .factory('$famousDecorator', function () {
