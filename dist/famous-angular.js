@@ -166,6 +166,9 @@ require(requirements, function(/*args*/) {
 			 * ```
 			 *
 			 */
+
+
+
 			return _modules;
 		};
 	});
@@ -180,6 +183,12 @@ require(requirements, function(/*args*/) {
 	angular.element(document).ready(function() {
 		angular.resumeBootstrap();
 	});
+
+
+  // For the sake of testability, fire off a global event to allow karma
+  // to know when the $famous provider has been declared
+  var $famousDeclared = new Event('$famousDeclared');
+  window.dispatchEvent($famousDeclared);
 
 })
 
