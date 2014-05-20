@@ -36,8 +36,7 @@ angular.module('famous.angular')
 
             
             element.append('<div class="famous-angular-container"></div>');
-            var famousContainer = $(element.find('.famous-angular-container'))[0];
-            isolate.context = Engine.createContext(famousContainer);
+            isolate.context = Engine.createContext(element[0].querySelector('.famous-angular-container'));
 
             function AppView(){
               View.apply(this, arguments);
@@ -94,7 +93,7 @@ angular.module('famous.angular')
 
             var isolate = $famousDecorator.ensureIsolate(scope);
             transclude(scope, function(clone) {
-              element.find('div div').append(clone);
+	            angular.element(element[0].querySelectorAll('div div')[0]).append(clone);
             });
             isolate.readyToRender = true;
           }

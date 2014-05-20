@@ -123,7 +123,7 @@ require(requirements, function(/*args*/) {
 		   */
 		   
 		_modules.find = function(selector){
-			var elems = angular.element(selector);
+			var elems = angular.element(window.document.querySelector(selector));
 			var scopes = _.map(elems, function(elem){
 				return angular.element(elem).scope();
 			});
@@ -319,9 +319,7 @@ angular.module('famous.angular')
                     //dig out the reference to our modifier
                     //TODO:  support passing a direct reference to a modifier
                     //       instead of performing a DOM lookup
-                    var modElements = element.parent().find(
-                      animate.attributes['targetmodselector'].value
-                    );
+	                var modElements = angular.element(element[0].parentNode)[0].querySelectorAll(animate.attributes['targetmodselector'].value);
                     
                     
                     angular.forEach(modElements, function(modElement){
@@ -566,8 +564,7 @@ angular.module('famous.angular')
 
             
             element.append('<div class="famous-angular-container"></div>');
-            var famousContainer = $(element.find('.famous-angular-container'))[0];
-            isolate.context = Engine.createContext(famousContainer);
+            isolate.context = Engine.createContext(element[0].querySelector('.famous-angular-container'));
 
             function AppView(){
               View.apply(this, arguments);
@@ -624,7 +621,7 @@ angular.module('famous.angular')
 
             var isolate = $famousDecorator.ensureIsolate(scope);
             transclude(scope, function(clone) {
-              element.find('div div').append(clone);
+	            angular.element(element[0].querySelectorAll('div div')[0]).append(clone);
             });
             isolate.readyToRender = true;
           }
@@ -1449,15 +1446,17 @@ angular.module('famous.angular')
             var isolate = $famousDecorator.ensureIsolate(scope);
 
             var updateContent = function(){
-              var compiledEl = isolate.compiledEl = isolate.compiledEl || $compile(element.find('div.fa-surface').contents())(scope)
-              isolate.renderNode.setContent(isolate.compiledEl.context);
+//              var compiledEl = isolate.compiledEl = isolate.compiledEl || $compile(element.find('div.fa-surface').contents())(scope)
+//              isolate.renderNode.setContent(isolate.compiledEl.context);
+	            //TODO check if $compile is needed ?
+	            isolate.renderNode.setContent(element[0].querySelector('div.fa-surface'));
             };
 
             updateContent();
 
             //boilerplate
             transclude(scope, function(clone) {
-              element.find('div.fa-surface').append(clone);
+	          angular.element(element[0].querySelectorAll('div.fa-surface')).append(clone);
             });
 
             scope.$emit('registerChild', isolate);
