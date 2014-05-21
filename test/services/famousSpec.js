@@ -18,10 +18,15 @@ describe('$famous', function() {
 
   describe('provider', function() {
     it('will register and store famous requirejs modules', function() {
+
+    });
+
+    it('will give a warning if trying to register a module using a key is already being used', function() {
+
     });
   });
 
-  it('should return a hashmap of famo.us constructor functions', function() {
+  it('should return a hashmap of loaded famo.us modules', function() {
     expect(typeof $famous).toBe('object');
     var EventHandler = $famous['famous/core/EventHandler'];
     expect(typeof EventHandler).toBe('function');
