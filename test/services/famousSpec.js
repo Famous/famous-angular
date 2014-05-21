@@ -21,13 +21,14 @@ describe('$famous', function() {
 
     });
 
-    it('will give a warning if trying to register a module using a key is already being used', function() {
+    it('will give a warning if trying to register a module with a key that already eists', function() {
 
     });
   });
 
   it('should return a hashmap of loaded famo.us modules', function() {
     expect(typeof $famous).toBe('object');
+    expect(Object.keys($famous).length).toBeGreaterThan(0);
     var EventHandler = $famous['famous/core/EventHandler'];
     expect(typeof EventHandler).toBe('function');
   });
