@@ -60,6 +60,8 @@ module.exports = function(config) {
     // enable / disable watching file and executing tests whenever any file changes
     autoWatch: true,
 
+    // Give gulp time to re-build dist, in the src/ files change
+    autoWatchBatchDelay: 1000,
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
