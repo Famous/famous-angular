@@ -16,8 +16,6 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       {pattern: 'bower_components/famous/**/*.js', included: false},
-      'bower_components/underscore/underscore.js',
-      'bower_components/jquery/dist/jquery.js',
       'bower_components/angular/angular.js',
       'bower_components/angular-mocks/angular-mocks.js',
       'bower_components/requirejs/require.js',
