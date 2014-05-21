@@ -57,17 +57,17 @@ angular.module('famous.angular')
             isolate.getTransform = function() {
               //var transforms = [Transform.translate(0, 0, 0)];
               var transforms = [];
-              if (attrs.faTranslate && scope.$eval(attrs.faTranslate)) {
+              if (attrs.faTranslate && scope.$eval(attrs.faTranslate) !== undefined) {
                 var values = scope.$eval(attrs.faTranslate).map(get)
                 transforms.push(Transform.translate.apply(this, values));
               }
 
-              if(attrs.faRotate && scope.$eval(attrs.faRotate)){
+              if(attrs.faRotate && scope.$eval(attrs.faRotate) !== undefined){
                 var values = scope.$eval(attrs.faRotate).map(get)
                 transforms.push(Transform.rotate.apply(this, values));
               }
               //only apply faRotateX, etc. if faRotate is not defined
-              if (attrs.faRotateX && scope.$eval(attrs.faRotateX)){
+              if (attrs.faRotateX && scope.$eval(attrs.faRotateX) !== undefined){
                 transforms.push(
                   Transform.rotateX(
                     get(
@@ -76,7 +76,7 @@ angular.module('famous.angular')
                   )
                 );
               }
-              if (attrs.faRotateY && scope.$eval(attrs.faRotateY)) {
+              if (attrs.faRotateY && scope.$eval(attrs.faRotateY) !== undefined) {
                 transforms.push(
                   Transform.rotateY(
                     get(
@@ -85,7 +85,7 @@ angular.module('famous.angular')
                   )
                 );
               }
-              if (attrs.faRotateZ && scope.$eval(attrs.faRotateZ)) {
+              if (attrs.faRotateZ && scope.$eval(attrs.faRotateZ) !== undefined) {
                 transforms.push(
                   Transform.rotateZ(
                     get(
@@ -95,13 +95,12 @@ angular.module('famous.angular')
                 );
               }
 
-              if (attrs.faScale && scope.$eval(attrs.faScale)){
+              if (attrs.faScale && scope.$eval(attrs.faScale) !== undefined){
                 var values = scope.$eval(attrs.faScale).map(get)
                 transforms.push(Transform.scale.apply(this, values));
               }
-
               
-              if (attrs.faSkew && scope.$eval(attrs.faSkew)) {
+              if (attrs.faSkew && scope.$eval(attrs.faSkew) !== undefined) {
                 var values = scope.$eval(attrs.faSkew).map(get)
                 transforms.push(Transform.skew.apply(this, values));
               }
@@ -115,7 +114,7 @@ angular.module('famous.angular')
             };
 
             isolate.getOpacity = function(){
-              if (attrs.faOpacity && scope.$eval(attrs.faOpacity))
+              if (attrs.faOpacity && scope.$eval(attrs.faOpacity) !== undefined)
                 return get(scope.$eval(attrs.faOpacity));
               return 1;
             }
