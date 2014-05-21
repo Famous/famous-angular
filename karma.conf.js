@@ -7,17 +7,23 @@ module.exports = function(config) {
     basePath: '',
 
     // testing framework to use (jasmine/mocha/qunit/...)
-    frameworks: ['jasmine'],
+    frameworks: ['jasmine', 'requirejs'],
 
     // list of files / patterns to load in the browser
     files: [
-      'angular/angular.js',
-      'angular-mocks/angular-mocks.js',
-      'angular-ui-router/release/angular-ui-router.min.js',
-      'angular-mocks/angular-mocks.js',
-      'requirejs/require.js',
-      'src/scripts/*.js',
-      'test/spec/*/*.js'
+	    'test/requirejs.config.js',
+	    'famous-angular-examples/app/bower_components/angular/angular.js',
+	    'bower_components/angular-mocks/angular-mocks.js',
+	    'famous-angular-examples/app/bower_components/angular-animate/angular-animate.js',
+	    'famous-angular-examples/app/bower_components/angular-ui-router/release/angular-ui-router.min.js',
+	    'famous-angular-examples/app/bower_components/requirejs/require.js',
+	    'famous-angular-examples/app/bower_components/underscore/underscore.js',
+	    'famous-angular-examples/app/bower_components/angular-touch/angular-touch.js',
+	    'http://code.famo.us/famous/0.2.0/famous.min.js',
+	    'dist/famous-angular.js',
+	    'famous-angular-examples/app/scripts/app.js',
+	    'famous-angular-examples/app/scripts/**/*js',
+	    'test/spec/**/*.js'
     ],
 
     // list of files / patterns to exclude
