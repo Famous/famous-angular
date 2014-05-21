@@ -124,12 +124,20 @@ require(requirements, function(/*args*/) {
 		   
 		_modules.find = function(selector){
 			var elems = angular.element(window.document.querySelector(selector));
-			var scopes = _.map(elems, function(elem){
-				return angular.element(elem).scope();
-			});
-			var isolates = _.map(scopes,function(scope){
-				return scope.isolate[scope.$id];
-			});
+			var scopes = function(elems) {
+				var _s = [];
+				angular.forEach(elems, function(elem, i) {
+					_s[i] = angular.element(elem).scope();
+				});
+				return _s;
+			}(elems);
+			var isolates = function(scopes) {
+				var _s = [];
+				angular.forEach(scopes, function(scope, i) {
+					_s[i] = scope.isolate[scope.$id];
+				});
+				return _s;
+			}(scopes);
 			return isolates;
 		}
 
