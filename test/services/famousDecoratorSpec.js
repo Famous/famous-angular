@@ -23,23 +23,20 @@ describe('$famousDecorator', function() {
 
     describe('should return', function() {
       it("an isolate scope with the passed-in scope's $id.", function() {
-        var $scopeId = $scope.$id;
         var isolate = $famousDecorator.ensureIsolate($scope);
-        expect(isolate.id).toBeDefined();
-        expect(isolate.id).toEqual($scopeId);
+        expect(isolate).toBeDefined();
+        expect(isolate.id).toEqual($scope.$id);
       });
 
-      iit('an existing isolate property, if scope.isolate already exists', function() {
-        var existingIsolate = $scope.isolate = {};
-        existingIsolate[$scope.$id] = { id: $scope.$id };
+      it('an existing isolate property, if scope.isolate already exists', function() {
+        $scope.isolate = {};
+        $scope.isolate[$scope.$id] = { id: $scope.$id };
         var isolate = $famousDecorator.ensureIsolate($scope);
-        console.log(isolate);
-        expect(isolate).toEqual(existingIsolate);
+        expect(isolate).toBeDefined();
+        expect(isolate).toEqual($scope.isolate[$scope.$id]);
       });
 
       it('an isolate scope with an $index property, if the $scope is being used with ng-repeat.', function() {
-        var isolate = $famousDecorator.ensureIsolate($scope);
-        //expect(isolate.$index).toBeDefined();
       });
     });
 

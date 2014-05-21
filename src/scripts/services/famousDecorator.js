@@ -23,13 +23,10 @@ angular.module('famous.angular')
         var isolate = scope.isolate[scope.$id];
         isolate.id = scope.$id;
 
-
-        console.log(isolate);
         //assign default ng-repeat index if it exists
         //and index isn't already assigned
         var i = scope.$eval("$index");
         if(i && i !== '$index' && !isolate.index) isolate.index = i;
-
 
         return isolate;
       }
