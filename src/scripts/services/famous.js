@@ -78,7 +78,7 @@ require(requirements, function(/*args*/) {
 
 		/**
 		 * @ngdoc method
-		 * @name famousProvider#registerModule
+		 * @name $famousProvider#registerModule
 		 * @module famous.angular
 		 * @description
 		 * Register the modules that will be available in the $famous service

@@ -61,6 +61,71 @@ angular.module('mySuperApp', ['famous.angular']).config(
   
 ## Methods
 
+<div id="registerModule"></div>
+<h2>
+  <code>registerModule(key, module)</code>
+
+</h2>
+
+Register the modules that will be available in the $famous service
+
+
+
+<table class="table" style="margin:0;">
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>
+        key
+        
+        
+      </td>
+      <td>
+        
+  <code>String</code>
+      </td>
+      <td>
+        <p>the key that will be used to register the module</p>
+
+        
+      </td>
+    </tr>
+    
+    <tr>
+      <td>
+        module
+        
+        
+      </td>
+      <td>
+        
+  <code>Misc</code>
+      </td>
+      <td>
+        <p>the data that will be returned by the service</p>
+
+        
+      </td>
+    </tr>
+    
+  </tbody>
+</table>
+
+
+
+
+
+
+
+
+
 <div id="find"></div>
 <h2>
   <code>find(selector)</code>
