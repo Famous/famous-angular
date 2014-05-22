@@ -1,5 +1,4 @@
 'use strict';
-
 describe('faApp', function() {
   var element, $compile, $scope, $famous;
 
@@ -42,9 +41,17 @@ describe('faApp', function() {
     document.body.appendChild(faApp[0]);
     // Get fa-app's newly created scope
     var faAppScope = angular.element(document.querySelector('fa-app')).scope();
+
+    // Spy on isolate.view.add();
+    var isolateView = faAppScope.isolate[faAppScope.$id].view;
+    spyOn(isolateView, 'add');
+
     // Create a child scope of that, so that we can emit events up to fa-app
     var secondScope = faAppScope.$new();
-    secondScope.$emit('registerChild', {});
+    var mockData = { renderNode: 1 };
+
+    secondScope.$emit('registerChild', mockData);
+    expect(isolateView.add).toHaveBeenCalled();
   });
 
 
