@@ -2,6 +2,7 @@
 
 describe('faSurface', function() {
   var element, $compile, $scope, $famous;
+  var compileFaSurface, getSurfaceProperties;
 
   beforeEach(module('famous.angular'));
 
@@ -9,13 +10,27 @@ describe('faSurface', function() {
     $compile = _$compile_;
     $scope = _$rootScope_.$new();
     $famous = _$famous_;
-    element = $compile('<div></div>')($scope);
+
+    compileFaSurface = function(attr) {
+      return $compile('<fa-surface ' + attr + '></fa-surface>')($scope);
+    };
+
+    // faSurface must be an angular element so that .scope() can be called on it
+    getSurfaceProperties = function(faSurface) {
+      var scope = faSurface.scope();
+      var surface = scope.isolate[scope.$id].renderNode;
+      return surface.getProperties();
+    };
   }));
 
-  describe('should accept attribute', function() {
+  ddescribe('should accept attribute', function() {
   
-    it('fa-background-color', function() {
-    
+    it("fa-background-color to set the surface's color", function() {
+    // Have to escape the third level of quotes for string literals
+      var faSurface = compileFaSurface("fa-background-color='\"#97DED\"'");
+      var properties = getSurfaceProperties(faSurface);
+      expect(properties.backgroundColor).toBeDefined();
+      expect(properties.backgroundColor).toEqual("#97DED");
     });
 
     it('fa-color', function() {
