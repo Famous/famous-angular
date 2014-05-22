@@ -13,21 +13,21 @@ describe('faApp', function() {
   }));
 
 
-  it('should work as an element or an attribute', function() {
-    function faAppElement() {
-      $compile("<fa-app></fa-app>")($scope);
-    }
-    function faAppAttribute() {
-      $compile("<div class='fa-app'></div>")($scope);
-    }
-    expect(faAppElement).not.toThrow();
-    expect(faAppAttribute).not.toThrow();
-  });
-
-
   it('should append a div.famous-angular-container pre-compilation', function() {
     expect(element[0].querySelector('.famous-angular-container')).toBeNull();
     element.append($compile("<fa-app></fa-app>")($scope));
+    expect(element[0].querySelector('.famous-angular-container')).not.toBeNull();
+  });
+
+
+  it('should work as an element', function() {
+    element.append($compile("<fa-app></fa-app>")($scope));
+    expect(element[0].querySelector('.famous-angular-container')).not.toBeNull();
+  });
+
+
+  it('should work as an attirbute', function() {
+    element.append($compile("<div fa-app></div>")($scope));
     expect(element[0].querySelector('.famous-angular-container')).not.toBeNull();
   });
 
@@ -38,18 +38,13 @@ describe('faApp', function() {
   
 
   it('should add a node to its view when receiving a "registerChild" event', function() {
-    var faApp = $compile("<fa-app><fa-scroll-view></fa-scroll-view></fa-app>")($scope);
-    //var faApp = $compile("<fa-app></fa-app>")($scope);
-
+    var faApp = $compile("<fa-app></fa-app>")($scope);
     document.body.appendChild(faApp[0]);
-    faApp.append($compile("<fa-scroll-view></fa-scrol-view>")($scope));
-
-    //var faAppView = $famous.find('fa-app');
-    //var secondScope = $scope.$new();
-    //console.log(secondScope.$parent.$id);
-    //secondScope.$emit('registerChild', {});
-    //expect(faAppView[0]).toBeDefined();
-    //faAppView[0].$emit('register', {});
+    // Get fa-app's newly created scope
+    var faAppScope = angular.element(document.querySelector('fa-app')).scope();
+    // Create a child scope of that, so that we can emit events up to fa-app
+    var secondScope = faAppScope.$new();
+    secondScope.$emit('registerChild', {});
   });
 
 
