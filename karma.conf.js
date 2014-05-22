@@ -10,18 +10,24 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine', 'requirejs'],
+    //frameworks: ['jasmine', 'requirejs'],
+    frameworks: ['jasmine'],
 
 
     // list of files / patterns to load in the browser
     files: [
-      {pattern: 'bower_components/famous/**/*.js', included: false},
       'bower_components/angular/angular.js',
       'bower_components/angular-mocks/angular-mocks.js',
       'bower_components/requirejs/require.js',
+      'http://code.famo.us/famous/0.2.0/famous.min.js',
       'dist/famous-angular.js',
       'test/**/*Spec.js',
-      'test-main.js',
+
+      // Dependencies for famous-angular-examples
+			//'famous-angular-examples/app/bower_components/angular-animate/angular-animate.js',
+			//'famous-angular-examples/app/bower_components/angular-ui-router/release/angular-ui-router.min.js',
+			//'famous-angular-examples/app/scripts/app.js',
+			//'famous-angular-examples/app/scripts/**/*js',
     ],
 
 
