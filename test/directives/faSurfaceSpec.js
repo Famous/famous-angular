@@ -23,10 +23,9 @@ describe('faSurface', function() {
     };
   }));
 
-  ddescribe('should accept attribute', function() {
+  describe('should accept attribute', function() {
      
     it('fa-size - to set the size of the surface', function() {
-      //var faSurface = $compile('<fa-surface fa-size="[300,300]"></fa-surface>')($scope);
       var faSurface = compileFaSurface('fa-size="[300, 300]"');
       var surface = getSurface(faSurface);
       expect(surface.getSize()).toEqual([300, 300]);
@@ -53,6 +52,16 @@ describe('faSurface', function() {
       var surface = getSurface(faSurface);
       expect(surface.classList).toEqual(["test-class"]);
     });
+  });
+
+  it("should set it's children as the content for the created surface", function() {
+    var surfaceContent;
+    $scope.$on('registerChild', function(event, isolate) {
+      surfaceContent = angular.element(isolate.renderNode.content)[0];
+    });
+    var faSurface = $compile('<fa-surface><span></span></fa-surface>')($scope);
+    var children = faSurface[0].firstChild;
+    expect(surfaceContent).toEqual(children);
   });
 });
 
