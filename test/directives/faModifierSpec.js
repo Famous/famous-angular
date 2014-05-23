@@ -1,6 +1,6 @@
 'use strict';
 
-describe('faModifier', function() {
+describe('$faModifier', function() {
   var element, $compile, $scope, $famous;
   var compileFaModifier, getModifier;
 
@@ -10,6 +10,7 @@ describe('faModifier', function() {
     $compile = _$compile_;
     $scope = _$rootScope_.$new();
     $famous = _$famous_;
+    spyOn($famous, 'famous/core/Modifier');
 
     compileFaModifier = function(attr) {
       return $compile('<fa-modifier ' + attr + '></fa-modifier>')($scope);
@@ -30,12 +31,20 @@ describe('faModifier', function() {
   }));
 
 
+  it("should create an instance of Famo.us Modifier", function() {
+      //var Modifier = $famous['famous/core/Modifier'];
+      //var faModifier = compileFaModifier('fa-translate-x="300"');
+      //var modifier = getModifier(faModifier);
+      ////expect(typeof modifier).toBe('object');
+      //expect(modifier instanceof Modifier).toBe(true);
+  });
+
   iit("should create an instance of Famo.us Modifier", function() {
-      var Modifier = $famous['famous/core/Modifier'];
-      var faModifier = compileFaModifier('fa-translate-x="300"');
+      var faModifier = compileFaModifier('fa-opacity="0.5"');
       var modifier = getModifier(faModifier);
-      //expect(typeof modifier).toBe('object');
-      expect(modifier instanceof Modifier).toBe(true);
+      var args = $famous['famous/core/Modifier'].calls.count();
+      console.log(args);
+      //expect(args.opacity()).toEqual(0.5);
   });
 
 
@@ -50,8 +59,7 @@ describe('faModifier', function() {
   });
 
 
-  ddescribe('should accept attribute', function() {
-     
+  describe('should accept attribute', function() {
     it('fa-rotate - to set the size of the modifier', function() {
       var faModifier = compileFaModifier('fa-rotate-z="-0.785"');
       var modifier = getModifier(faModifier);
