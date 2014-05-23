@@ -170,6 +170,7 @@ require(requirements, function(/*args*/) {
     };
   });
 
+
   ngFameApp.config(['$famousProvider', function($famousProvider) {
     for(var i = 0; i < requirements.length; i++) {
       $famousProvider.registerModule(requirements[i], required[i]);
@@ -178,7 +179,7 @@ require(requirements, function(/*args*/) {
   }]);
 
   angular.element(document).ready(function() {
-    angular.resumeBootstrap();
+    if(angular.resumeBootstrap) angular.resumeBootstrap();
   });
 });
 

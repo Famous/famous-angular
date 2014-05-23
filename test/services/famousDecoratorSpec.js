@@ -13,7 +13,7 @@ describe('$famousDecorator', function() {
   }));
 
 
-  describe('addRoll', function() {
+  describe('addRole', function() {
     it('should assign a role to a specific scope', function() {
     });
   });
