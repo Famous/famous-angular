@@ -49,130 +49,129 @@ require(requirements, function(/*args*/) {
 	//child scopes
 	var required = arguments;
 
-	/**
-	* @ngdoc provider
-	* @name $famousProvider
-	* @module famous.angular
-	* @description
-	* This provider is loaded as an AMD module and will keep a reference on the complete Famo.us library.
-	* We use this provider to avoid needing to deal with AMD on any other angular files.
-	*
-	* @usage
-	* You probably won't have to configure this provider
-	*
-	* ```js
-	* angular.module('mySuperApp', ['famous.angular']).config(
-	*   function($famousProvider) {
-	*
-	*       // Register your modules
-	*       $famousProvider.registerModule('moduleKey', module);
-	*
-	*   };
-	* });
-	* ```
-	*
-	*/
-	ngFameApp.provider('$famous', function() {
-		// hash for storing modules
-		var _modules = {};
+  /**
+   * @ngdoc provider
+   * @name $famousProvider
+   * @module famous.angular
+   * @description
+   * This provider is loaded as an AMD module and will keep a reference on the complete Famo.us library.
+   * We use this provider to avoid needing to deal with AMD on any other angular files.
+   *
+   * @usage
+   * You probably won't have to configure this provider
+   *
+   * ```js
+   * angular.module('mySuperApp', ['famous.angular']).config(
+   *   function($famousProvider) {
+   *
+   *       // Register your modules
+   *       $famousProvider.registerModule('moduleKey', module);
+   *
+   *   };
+   * });
+   * ```
+   *
+   */
+  ngFameApp.provider('$famous', function() {
+    // hash for storing modules
+    var _modules = {};
 
-		/**
-		 * @ngdoc method
-		 * @name $famousProvider#registerModule
-		 * @module famous.angular
-		 * @description
-		 * Register the modules that will be available in the $famous service
-	     *
-	     * @param {String} key the key that will be used to register the module
-	     * @param {Misc} module the data that will be returned by the service
-		 */
-		this.registerModule = function(key, module) {
-			//TODO warning if the key is already registered ?
-			_modules[key] = module;
-		};
+    /**
+     * @ngdoc method
+     * @name famousProvider#registerModule
+     * @module famous.angular
+     * @description
+     * Register the modules that will be available in the $famous service
+     *
+     * @param {String} key the key that will be used to register the module
+     * @param {Misc} module the data that will be returned by the service
+     */
+    this.registerModule = function(key, module) {
+      //TODO warning if the key is already registered ?
+      _modules[key] = module;
+    };
 
-		   /**
-		   * @ngdoc method
-		   * @name $famousProvider#find
-		   * @module famous.angular
-		   * @description given a selector, retrieves
-		   * the isolate on a template-declared scene graph element.  This is useful
-		   * for manipulating Famo.us objects directly after they've been declared in the DOM.
-		   * As in normal Angular, this DOM look-up should be performed in the postLink function
-		   * of a directive.
-		   * @returns {Array} an array of the isolate objects of the selected elements.
-		   *
-		   * @param {String} selector - the selector for the elements to look up
-		   * @usage
-		   * View:
-		   * ```html
-		   * <fa-scroll-view id="myScrollView"></fa-scroll-view>
-		   * ```
-		   * Controller:
-		   * ```javascript
-		   * var scrollViewReference = $famous.find('#myScrollView')[0].renderNode;
-		   * //Now scrollViewReference is pointing to the Famo.us Scrollview object
-		   * //that we created in the view.
-		   * ```
-		   */
-		   
-		_modules.find = function(selector){
-			var elems = angular.element(window.document.querySelector(selector));
-			var scopes = function(elems) {
-				var _s = [];
-				angular.forEach(elems, function(elem, i) {
-					_s[i] = angular.element(elem).scope();
-				});
-				return _s;
-			}(elems);
-			var isolates = function(scopes) {
-				var _s = [];
-				angular.forEach(scopes, function(scope, i) {
-					_s[i] = scope.isolate[scope.$id];
-				});
-				return _s;
-			}(scopes);
-			return isolates;
-		}
+    /**
+     * @ngdoc method
+     * @name $famousProvider#find
+     * @module famous.angular
+     * @description given a selector, retrieves
+     * the isolate on a template-declared scene graph element.  This is useful
+     * for manipulating Famo.us objects directly after they've been declared in the DOM.
+     * As in normal Angular, this DOM look-up should be performed in the postLink function
+     * of a directive.
+     * @returns {Array} an array of the isolate objects of the selected elements.
+     *
+     * @param {String} selector - the selector for the elements to look up
+     * @usage
+     * View:
+     * ```html
+     * <fa-scroll-view id="myScrollView"></fa-scroll-view>
+     * ```
+     * Controller:
+     * ```javascript
+     * var scrollViewReference = $famous.find('#myScrollView')[0].renderNode;
+     * //Now scrollViewReference is pointing to the Famo.us Scrollview object
+     * //that we created in the view.
+     * ```
+     */
 
-		this.$get = function() {
+    _modules.find = function(selector){
+      var elems = angular.element(window.document.querySelector(selector));
+      var scopes = function(elems) {
+        var _s = [];
+        angular.forEach(elems, function(elem, i) {
+          _s[i] = angular.element(elem).scope();
+        });
+        return _s;
+      }(elems);
+      var isolates = function(scopes) {
+        var _s = [];
+        angular.forEach(scopes, function(scope, i) {
+          _s[i] = scope.isolate[scope.$id];
+        });
+        return _s;
+      }(scopes);
+      return isolates;
+    }
 
-			/**
-			 * @ngdoc service
-			 * @name $famous
-			 * @module famous.angular
-			 * @description
-			 * This service gives you access to the complete Famo.us library.
-			 *
-			 * @usage
-			 * Use this service to access the registered Famo.us modules as an object.
-			 *
-			 * ```js
-			 * angular.module('mySuperApp', ['famous.angular']).controller(
-			 *   function($scope, $famous) {
-			 *
-			 *       // Access any registered module
-			 *       var EventHandler = $famous['famous/core/EventHandler'];
-			 *       $scope.eventHandler = new EventHandler();
-			 *
-			 *   };
-			 * });
-			 * ```
-			 *
-			 */
-			return _modules;
-		};
-	});
+    this.$get = function() {
 
-	ngFameApp.config(['$famousProvider', function($famousProvider) {
-		for(var i = 0; i < requirements.length; i++) {
-			$famousProvider.registerModule(requirements[i], required[i]);
-		}
-//		console.log('registered modules', famousProvider.$get());
-	}]);
+      /**
+       * @ngdoc service
+       * @name $famous
+       * @module famous.angular
+       * @description
+       * This service gives you access to the complete Famo.us library.
+       *
+       * @usage
+       * Use this service to access the registered Famo.us modules as an object.
+       *
+       * ```js
+       * angular.module('mySuperApp', ['famous.angular']).controller(
+       *   function($scope, $famous) {
+       *
+       *       // Access any registered module
+       *       var EventHandler = $famous['famous/core/EventHandler'];
+       *       $scope.eventHandler = new EventHandler();
+       *
+       *   };
+       * });
+       * ```
+       *
+       */
+      return _modules;
+    };
+  });
 
-	angular.element(document).ready(function() {
-		angular.resumeBootstrap();
-	});
+  ngFameApp.config(['$famousProvider', function($famousProvider) {
+    for(var i = 0; i < requirements.length; i++) {
+      $famousProvider.registerModule(requirements[i], required[i]);
+    }
+    //		console.log('registered modules', famousProvider.$get());
+  }]);
 
-})
+  angular.element(document).ready(function() {
+    angular.resumeBootstrap();
+  });
+});
