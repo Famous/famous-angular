@@ -10,6 +10,7 @@ describe('$faModifier', function() {
     $compile = _$compile_;
     $scope = _$rootScope_.$new();
     $famous = _$famous_;
+
     spyOn($famous, 'famous/core/Modifier');
 
     compileFaModifier = function(attr) {
@@ -22,29 +23,24 @@ describe('$faModifier', function() {
       var modifier = scope.isolate[scope.$id].modifier;
       return modifier;
     };
-
-    //getRenderNode = function(faModifier) {
-      //var scope = faModifier.scope();
-      //var modifier = scope.isolate[scope.$id].renderNode;
-      //return modifier;
-    //};
   }));
 
 
-  it("should create an instance of Famo.us Modifier", function() {
-      //var Modifier = $famous['famous/core/Modifier'];
-      //var faModifier = compileFaModifier('fa-translate-x="300"');
-      //var modifier = getModifier(faModifier);
-      ////expect(typeof modifier).toBe('object');
-      //expect(modifier instanceof Modifier).toBe(true);
+  it("should accept functions for the attribute values", function() {
+    $scope.translateValue = function() {
+      return 300;
+    };
+    var faModifier = compileFaModifier('fa-rotate-x="300"');
+    var modifier = getModifier(faModifier);
+    var args = $famous['famous/core/Modifier'].calls.mostRecent().args;
   });
 
-  iit("should create an instance of Famo.us Modifier", function() {
-      var faModifier = compileFaModifier('fa-opacity="0.5"');
-      var modifier = getModifier(faModifier);
-      var args = $famous['famous/core/Modifier'].calls.count();
-      console.log(args);
-      //expect(args.opacity()).toEqual(0.5);
+
+  it("should create an instance of Famo.us Modifier", function() {
+    var Modifier = $famous['famous/core/Modifier'];
+    var faModifier = compileFaModifier('fa-translate-x="300"');
+    var modifier = getModifier(faModifier);
+    expect(modifier instanceof Modifier).toBe(true);
   });
 
 
@@ -60,35 +56,70 @@ describe('$faModifier', function() {
 
 
   describe('should accept attribute', function() {
-    it('fa-rotate - to set the size of the modifier', function() {
-      var faModifier = compileFaModifier('fa-rotate-z="-0.785"');
+
+    it('fa-opacity - to set the size of the modifier', function() {
+      var faModifier = compileFaModifier('fa-opacity="0.5"');
       var modifier = getModifier(faModifier);
-      //console.log(modifier);
-      //expect(modifier.getSize()).toEqual([300, 300]);
+      var args = $famous['famous/core/Modifier'].calls.mostRecent().args[0];
+      expect(args.opacity()).toEqual(0.5);
     });
 
+
+    it('fa-rotate - to set the size of the modifier', function() {
+      var Transform = $famous['famous/core/Transform'];
+      spyOn(Transform, 'rotate');
+
+      var faModifier = compileFaModifier('fa-rotate="[0, 0.5, -0.5]"');
+      var args = $famous['famous/core/Modifier'].calls.mostRecent().args[0];
+
+      // Modifier.transform() is not called until the render loop, so execute
+      // it directly
+      args.transform();
+
+      expect(Transform.rotate).toHaveBeenCalledWith(0, 0.5, -0.5);
+    });
+
+
     it('fa-rotate-x - to set the size of the modifier', function() {
-      var faModifier = compileFaModifier('fa-size="[300, 300]"');
-      var modifier = getModifier(faModifier);
-      expect(modifier.getSize()).toEqual([300, 300]);
+      var Transform = $famous['famous/core/Transform'];
+      spyOn(Transform, 'rotateX');
+
+      var faModifier = compileFaModifier('fa-rotate-x="-0.785"');
+      var args = $famous['famous/core/Modifier'].calls.mostRecent().args[0];
+
+      // Modifier.transform() is not called until the render loop, so execute
+      // it directly
+      args.transform();
+
+      expect(Transform.rotateX).toHaveBeenCalledWith(-0.785);
     });
 
     it('fa-rotate-y - to set the size of the modifier', function() {
-      var faModifier = compileFaModifier('fa-size="[300, 300]"');
-      var modifier = getModifier(faModifier);
-      expect(modifier.getSize()).toEqual([300, 300]);
+      var Transform = $famous['famous/core/Transform'];
+      spyOn(Transform, 'rotateY');
+
+      var faModifier = compileFaModifier('fa-rotate-y="-0.785"');
+      var args = $famous['famous/core/Modifier'].calls.mostRecent().args[0];
+
+      // Modifier.transform() is not called until the render loop, so execute
+      // it directly
+      args.transform();
+
+      expect(Transform.rotateY).toHaveBeenCalledWith(-0.785);
     });
 
-    it('fa-rotate-x - to set the size of the modifier', function() {
-      var faModifier = compileFaModifier('fa-size="[300, 300]"');
-      var modifier = getModifier(faModifier);
-      expect(modifier.getSize()).toEqual([300, 300]);
-    });
+    iit('fa-scale - to set the size of the modifier', function() {
+      var Transform = $famous['famous/core/Transform'];
+      spyOn(Transform, 'scale');
 
-    it('fa-scale - to set the size of the modifier', function() {
-      var faModifier = compileFaModifier('fa-size="[300, 300]"');
-      var modifier = getModifier(faModifier);
-      expect(modifier.getSize()).toEqual([300, 300]);
+      var faModifier = compileFaModifier('fa-scale="[0, 0.5, 1]"');
+      var args = $famous['famous/core/Modifier'].calls.mostRecent().args[0];
+
+      // Modifier.transform() is not called until the render loop, so execute
+      // it directly
+      args.transform();
+
+      expect(Transform.scale).toHaveBeenCalledWith(0, 0.5, 1);
     });
 
     it('fa-skew - to set the size of the modifier', function() {
@@ -98,12 +129,6 @@ describe('$faModifier', function() {
     });
 
     it('fa-transform - to set the size of the modifier', function() {
-      var faModifier = compileFaModifier('fa-size="[300, 300]"');
-      var modifier = getModifier(faModifier);
-      expect(modifier.getSize()).toEqual([300, 300]);
-    });
-
-    it('fa-opacity - to set the size of the modifier', function() {
       var faModifier = compileFaModifier('fa-size="[300, 300]"');
       var modifier = getModifier(faModifier);
       expect(modifier.getSize()).toEqual([300, 300]);
@@ -120,27 +145,6 @@ describe('$faModifier', function() {
       var modifier = getModifier(faModifier);
       expect(modifier.getSize()).toEqual([300, 300]);
     });
-
-    //it("fa-background-color - to set the modifier's background color", function() {
-    //// Have to escape the third level of quotes for string literals
-      //var faModifier = compileFaModifier('fa-background-color="\'#97DED\'"');
-      //var modifier = getModifier(faModifier);
-      //var properties = modifier.getProperties();
-      //expect(properties.backgroundColor).toEqual("#97DED");
-    //});
-
-    //it("fa-color - to set the modifier's color", function() {
-      //var faModifier = compileFaModifier('fa-color="\'red\'"');
-      //var modifier = getModifier(faModifier);
-      //var properties = modifier.getProperties();
-      //expect(properties.color).toEqual("red");
-    //});
-
-    //it("class - to pass classes to the modifier div", function() {
-      //var faModifier = compileFaModifier('class="test-class"');
-      //var modifier = getModifier(faModifier);
-      //expect(modifier.classList).toEqual(["test-class"]);
-    //});
   });
 });
 
