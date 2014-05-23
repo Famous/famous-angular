@@ -56,21 +56,6 @@ angular.module('famous.angular')
               };
             };
 
-            var getOrValue = function(x) {
-              return x.get ? x.get() : x;
-            };
-
-            //TODO: $observe attributes and pass updated values
-            // into variables that are returned by functions that
-            // can then be passed into modifiers
-
-            var modifiers = {
-              origin: scope.$eval(attrs.faOrigin),
-              translate: scope.$eval(attrs.faTranslate),
-              rotateZ: scope.$eval(attrs.faRotateZ),
-              skew: scope.$eval(attrs.faSkew)
-            };
-
             isolate.renderNode = new Surface({
               size: scope.$eval(attrs.faSize),
               class: scope.$eval(attrs.class),
@@ -80,10 +65,6 @@ angular.module('famous.angular')
             //TODO:  support ng-class
             if(attrs.class)
               isolate.renderNode.setClasses(attrs['class'].split(' '));
-
-            isolate.modifier = function() {
-              return modifiers;
-            };
 
           },
           post: function(scope, element, attrs){
@@ -100,7 +81,7 @@ angular.module('famous.angular')
 
             //boilerplate
             transclude(scope, function(clone) {
-	          angular.element(element[0].querySelectorAll('div.fa-surface')).append(clone);
+              angular.element(element[0].querySelectorAll('div.fa-surface')).append(clone);
             });
 
             scope.$emit('registerChild', isolate);
