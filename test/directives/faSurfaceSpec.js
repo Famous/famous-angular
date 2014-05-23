@@ -23,6 +23,27 @@ describe('faSurface', function() {
     };
   }));
 
+
+  it("should create an instance of Famo.us Surface", function() {
+      var Surface = $famous['famous/core/Surface'];
+      var faSurface = compileFaSurface('fa-size="[300, 300]"');
+      var surface = getSurface(faSurface);
+      expect(typeof surface).toBe('object');
+      expect(surface instanceof Surface).toBe(true);
+  });
+
+
+  it("should set it's children as the content for the created surface", function() {
+    var surfaceContent;
+    $scope.$on('registerChild', function(event, isolate) {
+      surfaceContent = angular.element(isolate.renderNode.content)[0];
+    });
+    var faSurface = $compile('<fa-surface><span></span></fa-surface>')($scope);
+    var children = faSurface[0].firstChild;
+    expect(surfaceContent).toEqual(children);
+  });
+
+
   describe('should accept attribute', function() {
      
     it('fa-size - to set the size of the surface', function() {
@@ -52,16 +73,6 @@ describe('faSurface', function() {
       var surface = getSurface(faSurface);
       expect(surface.classList).toEqual(["test-class"]);
     });
-  });
-
-  it("should set it's children as the content for the created surface", function() {
-    var surfaceContent;
-    $scope.$on('registerChild', function(event, isolate) {
-      surfaceContent = angular.element(isolate.renderNode.content)[0];
-    });
-    var faSurface = $compile('<fa-surface><span></span></fa-surface>')($scope);
-    var children = faSurface[0].firstChild;
-    expect(surfaceContent).toEqual(children);
   });
 });
 
