@@ -1,24 +1,5 @@
-console.log('Delay starting of Karma until $famous is declared');
+console.log('Delay Karma until $famousModulesLoaded');
 
-// Check every 1 second whehter $famous is declared and now injectable
-var check$FamousLoaded = setInterval(function() {
-  console.log('Wait for $famous to load!');
-
-  angular.module('famous.angular')
-    .controller('test', function($famous) {
-      console.log("contructing with ", $famous);
-      if ($famous) {
-        __karma__.start();
-      }
-    })
-  ;
-
-  var $injector = angular.injector(['famous.angular']);
-  var controller = $injector.get('$controller')('test')
-  console.log("controller", controller)
-
-  //var $injector = angular.injector(['famous.angular']);
-  //console.log($injector.has('$famous'));
-
-  //__karma__.start();
-}, 100);
+window.addEventListener('$famousModulesLoaded', function() {
+  __karma__.start();
+});

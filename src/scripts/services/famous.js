@@ -171,7 +171,18 @@ require(requirements, function(/*args*/) {
     //		console.log('registered modules', famousProvider.$get());
   }]);
 
-  angular.element(document).ready(function() {
-    if(angular.resumeBootstrap) angular.resumeBootstrap();
-  });
+	angular.element(document).ready(function() {
+    // For some reason Karma evaluates angular.resumeBootstrap as undefined.
+    // Our versions of angular, angular-mocks and karma the latest stable
+    // releases, so not sure why this is happening.
+    // Quick fix until then.
+    if (angular.resumeBootstrap) {
+      angular.resumeBootstrap();
+    }
+	});
+
+  // To delay Karma's bootstrapping until $famous is ready, fire off a global
+  // event to allow karma to know when the $famous provider has been declared.
+  window.dispatchEvent(new Event('$famousModulesLoaded'));
+
 });
