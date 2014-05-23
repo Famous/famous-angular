@@ -25,13 +25,13 @@ describe('faApp', function() {
   });
 
 
-  it('should work as an attirbute', function() {
+  it('should work as an attribute', function() {
     element.append($compile("<div fa-app></div>")($scope));
     expect(element[0].querySelector('.famous-angular-container')).not.toBeNull();
   });
 
 
-  it('should unregister its context when recieving a "$destroy" event', function() {
+  it('should unregister its context when receiving a "$destroy" event', function() {
     // Not implemented yet due to a Famo.us Engine limitation
   });
   
@@ -47,10 +47,10 @@ describe('faApp', function() {
     spyOn(isolateView, 'add');
 
     // Create a child scope of that, so that we can emit events up to fa-app
-    var secondScope = faAppScope.$new();
+    var childScope = faAppScope.$new();
     var mockData = { renderNode: 1 };
 
-    secondScope.$emit('registerChild', mockData);
+    childScope.$emit('registerChild', mockData);
     expect(isolateView.add).toHaveBeenCalled();
   });
 
