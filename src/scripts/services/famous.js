@@ -164,7 +164,6 @@ require(requirements, function(/*args*/) {
     };
   });
 
-
   ngFameApp.config(['$famousProvider', function($famousProvider) {
     for(var i = 0; i < requirements.length; i++) {
       $famousProvider.registerModule(requirements[i], required[i]);
