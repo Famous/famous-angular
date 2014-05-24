@@ -3,10 +3,10 @@
   "description": "Allow famo.us components to work seamlessly with other components inside existing or future Angular apps",
   "version": "0.0.11",
   "license": "",
-  "homepage": "https://github.com/FamousInternal/famous-angular",
+  "homepage": "https://github.com/Famous/famous-angular",
   "repository": {
     "type": "git",
-    "url": "https://github.com/FamousInternal/famous-angular.git"
+    "url": "https://github.com/Famous/famous-angular.git"
   },
   "engines": {
     "node": ">=0.8.0"
