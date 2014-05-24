@@ -35,7 +35,7 @@ angular.module('famous.angular')
             var Surface = $famous['famous/core/Surface'];
             var Transform = $famous['famous/core/Transform']
             var EventHandler = $famous['famous/core/EventHandler'];
-            
+
             //update properties
             //TODO:  is this going to be a bottleneck?
             scope.$watch(
@@ -47,7 +47,19 @@ angular.module('famous.angular')
                   isolate.renderNode.setProperties(isolate.getProperties());
               },
               true
-            )
+            );
+
+            // Listener for size changes
+            if (attrs.faSize) {
+              scope.$watch(
+                attrs.faSize,
+                function(value) {
+                  if (isolate.renderNode)
+                    isolate.renderNode.setSize(value);
+                },
+                true
+              );
+            }
 
             isolate.getProperties = function(){
               return {
