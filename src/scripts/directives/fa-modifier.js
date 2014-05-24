@@ -51,11 +51,35 @@ angular.module('famous.angular')
               return x.get ? x.get() : x;
             };
 
+
+
+            //TODO:  allow this list to be overridden
+            // by passing in a fa-transform-order (array) param
+            var _transformFields = [
+              "aboutOrigin",
+              "perspective",
+              "rotate",
+              "rotateAxis",
+              "rotateX",
+              "rotateY",
+              "rotateZ",
+              "scale",
+              "skew",
+              "translate"
+            ];
+
             //TODO:  refactor to remove the need for scope.$eval's on every property on every frame.
             //Instead, $scope.$watch the necessary values, and update a private reference, which
             //will be returned by the getTransform function.  Should further decouple Angular
             //digest overhead from Famo.us rendering performance.
             isolate.getTransform = function() {
+
+              
+
+
+
+
+              
               //var transforms = [Transform.translate(0, 0, 0)];
               var transforms = [];
               if (attrs.faTranslate && scope.$eval(attrs.faTranslate) !== undefined) {
