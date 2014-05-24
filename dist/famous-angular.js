@@ -1077,12 +1077,34 @@ angular.module('famous.angular')
               else if(ret instanceof Function) return ret();
               return ret;
             }
+
+            var _sizeFn = angular.noop;
+            attrs.$observe('faSize', function(){
+              _sizeFn = $parse(attrs.faSize);
+            });
+            isolate.getSize = function(){
+              var ret = _sizeFn(scope);
+              if(ret === undefined) return 1;
+              else if(ret instanceof Function) return ret();
+              return ret;
+            }
+
+            var _originFn = angular.noop;
+            attrs.$observe('faOrigin', function(){
+              _originFn = $parse(attrs.faOrigin);
+            });
+            isolate.getOrigin = function(){
+              var ret = _originFn(scope);
+              if(ret === undefined) return 1;
+              else if(ret instanceof Function) return ret();
+              return ret;
+            }
             
             isolate.modifier = new Modifier({
               transform: isolate.getTransform,
-              size: scope.$eval(attrs.faSize),
+              size: isolate.getSize,
               opacity: isolate.getOpacity,
-              origin: scope.$eval(attrs.faOrigin),
+              origin: isolate.getOrigin,
               align: isolate.getAlign
             });
 
