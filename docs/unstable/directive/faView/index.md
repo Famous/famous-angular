@@ -31,7 +31,7 @@ docType: "directive"
 
 
 This directive is used to wrap child elements into a View render node.  This is especially useful for grouping.
-Use an <fa-view> surrounded by a <fa-modifier> in order to affect the View's position, scale, etc.
+Use an `<fa-view>` surrounded by a `<fa-modifier>` in order to affect the View's position, scale, etc.
 
 
 
