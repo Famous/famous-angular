@@ -66,10 +66,6 @@ As configured, you should be able to access the application at localhost:4000.
 
 `gulp docs`
 
-####To view and build the docs site
-
-`gulp dev-site`
-
 ##Support
 
 Please submit issues as Github issues or reach out for support on the Famous IRC channel on Freenode
