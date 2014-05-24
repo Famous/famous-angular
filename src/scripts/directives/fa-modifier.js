@@ -13,6 +13,7 @@
  * @param {Number|Function} faOpacity  -  Number or function returning a number to which this Modifier's opacity should be bound
  * @param {Array|Function} faSize  -  Array of numbers (e.g. [100, 500] for the x- and y-sizes) or function returning an array of numbers to which this Modifier's size should be bound
  * @param {Array|Function} faOrigin  -  Array of numbers (e.g. [.5, 0] for the x- and y-origins) or function returning an array of numbers to which this Modifier's origin should be bound
+ * @param {Array|Function} faAlign  -  Array of numbers (e.g. [.5, 0] for the x- and y-aligns) or function returning an array of numbers to which this Modifier's align should be bound
  * @description
  * This directive creates a Famo.us Modifier that will affect all children render nodes.  Its properties can be bound
  * to numbers (including using Angular's data-binding, though this is discouraged for performance reasons)
@@ -29,7 +30,7 @@
  */
 
 angular.module('famous.angular')
-  .directive('faModifier', ["$famous", "$famousDecorator", function ($famous, $famousDecorator) {
+  .directive('faModifier', ["$famous", "$famousDecorator", "$parse", function ($famous, $famousDecorator, $parse) {
     return {
       template: '<div></div>',
       transclude: true,
@@ -113,18 +114,34 @@ angular.module('famous.angular')
                 return Transform.multiply.apply(this, transforms);
             };
 
-            isolate.getOpacity = function(){
-              if (attrs.faOpacity && scope.$eval(attrs.faOpacity) !== undefined)
-                return get(scope.$eval(attrs.faOpacity));
-              return 1;
+
+            var _alignFn = angular.noop;
+            attrs.$observe('faAlign', function(){
+              _alignFn = $parse(attrs.faAlign);
+            });
+            isolate.getAlign = function(){
+              var ret = _alignFn(scope);
+              if(ret instanceof Function) return ret();
+              return ret;
             }
 
+            var _opacityFn = angular.noop;
+            attrs.$observe('faOpacity', function(){
+              _opacityFn = $parse(attrs.faOpacity);
+            });
+            isolate.getOpacity = function(){
+              var ret = _opacityFn(scope);
+              if(ret === undefined) return 1;
+              else if(ret instanceof Function) return ret();
+              return ret;
+            }
             
             isolate.modifier = new Modifier({
               transform: isolate.getTransform,
               size: scope.$eval(attrs.faSize),
               opacity: isolate.getOpacity,
-              origin: scope.$eval(attrs.faOrigin)
+              origin: scope.$eval(attrs.faOrigin),
+              align: isolate.getAlign
             });
 
             isolate.renderNode = new RenderNode().add(isolate.modifier)
