@@ -98,11 +98,18 @@ Installation:
  * ln -s ../../validate-commit-msg.js .git/hooks/commit-msg
 ```
 
-The `type` can be one of the following :
-- fix
+The following types are accepted in the commit messages:
 - feat
-- perf
+- fix
 - docs
+- style
+- refactor
+- perf
+- test
+- chore
+- revert
+
+But only feat/fix/docs/perf will be in the changelog.
 
 If you do a breaking change, add an explanation preceded by `BREAKING CHANGE: `. For example:
 ```no-highlight
