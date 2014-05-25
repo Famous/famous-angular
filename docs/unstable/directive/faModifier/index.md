@@ -31,10 +31,7 @@ docType: "directive"
 
 
 This directive creates a Famo.us Modifier that will affect all children render nodes.  Its properties can be bound
-to numbers (including using Angular's data-binding, though this is discouraged for performance reasons)
-or to functions that return numbers.  The latter is  preferred, because the reference to the function is passed
-directly on to Famo.us, where only the reference to that function needs to be
-watched by Angular instead of needing to $watch the values returned by the function.
+to values (e.g. `fa-translate="[15, 20, 1]"`, Famo.us Transitionable objects, or to functions that return numbers.
 
 
 
@@ -170,91 +167,6 @@ watched by Angular instead of needing to $watch the values returned by the funct
     
     <tr>
       <td>
-        faTransform
-        
-        
-      </td>
-      <td>
-        
-  <code>Transform</code>
-      </td>
-      <td>
-        <p>Manually created Famo.us Transform object (an array) that can be passed to the modifier</p>
-
-        
-      </td>
-    </tr>
-    
-    <tr>
-      <td>
-        faOpacity
-        
-        
-      </td>
-      <td>
-        
-  <code>Number</code>|<code>function()</code>
-      </td>
-      <td>
-        <p>Number or function returning a number to which this Modifier&#39;s opacity should be bound</p>
-
-        
-      </td>
-    </tr>
-    
-    <tr>
-      <td>
-        faSize
-        
-        
-      </td>
-      <td>
-        
-  <code>Array</code>|<code>function()</code>
-      </td>
-      <td>
-        <p>Array of numbers (e.g. [100, 500] for the x- and y-sizes) or function returning an array of numbers to which this Modifier&#39;s size should be bound</p>
-
-        
-      </td>
-    </tr>
-    
-    <tr>
-      <td>
-        faOrigin
-        
-        
-      </td>
-      <td>
-        
-  <code>Array</code>|<code>function()</code>
-      </td>
-      <td>
-        <p>Array of numbers (e.g. [.5, 0] for the x- and y-origins) or function returning an array of numbers to which this Modifier&#39;s origin should be bound</p>
-
-        
-      </td>
-    </tr>
-    
-    <tr>
-      <td>
-        faAlign
-        
-        
-      </td>
-      <td>
-        
-  <code>Array</code>|<code>function()</code>
-      </td>
-      <td>
-        <p>Array of numbers (e.g. [.5, 0] for the x- and y-aligns) or function returning an array of numbers to which this Modifier&#39;s align should be bound</p>
-
-        
-      </td>
-    </tr>
-    
-    <tr>
-      <td>
         faAboutOrigin
         
         
@@ -282,6 +194,91 @@ watched by Angular instead of needing to $watch the values returned by the funct
       </td>
       <td>
         <p>Number or array returning a number to which this modifier&#39;s perspective (focusZ) should be bound.</p>
+
+        
+      </td>
+    </tr>
+    
+    <tr>
+      <td>
+        faTransform
+        
+        
+      </td>
+      <td>
+        
+  <code>Transform</code>
+      </td>
+      <td>
+        <p>Manually created Famo.us Transform object (an array) that can be passed to the modifier.  <em>Will override all other transform attributes.</em></p>
+
+        
+      </td>
+    </tr>
+    
+    <tr>
+      <td>
+        faOpacity
+        
+        
+      </td>
+      <td>
+        
+  <code>Number</code>|<code>function()</code>|<code>Transitionable</code>
+      </td>
+      <td>
+        <p>Number or function returning a number to which this Modifier&#39;s opacity should be bound</p>
+
+        
+      </td>
+    </tr>
+    
+    <tr>
+      <td>
+        faSize
+        
+        
+      </td>
+      <td>
+        
+  <code>Array</code>|<code>function()</code>|<code>Transitionable</code>
+      </td>
+      <td>
+        <p>Array of numbers (e.g. [100, 500] for the x- and y-sizes) or function returning an array of numbers to which this Modifier&#39;s size should be bound</p>
+
+        
+      </td>
+    </tr>
+    
+    <tr>
+      <td>
+        faOrigin
+        
+        
+      </td>
+      <td>
+        
+  <code>Array</code>|<code>function()</code>|<code>Transitionable</code>
+      </td>
+      <td>
+        <p>Array of numbers (e.g. [.5, 0] for the x- and y-origins) or function returning an array of numbers to which this Modifier&#39;s origin should be bound</p>
+
+        
+      </td>
+    </tr>
+    
+    <tr>
+      <td>
+        faAlign
+        
+        
+      </td>
+      <td>
+        
+  <code>Array</code>|<code>function()</code>|<code>Transitionable</code>
+      </td>
+      <td>
+        <p>Array of numbers (e.g. [.5, 0] for the x- and y-aligns) or function returning an array of numbers to which this Modifier&#39;s align should be bound</p>
 
         
       </td>
