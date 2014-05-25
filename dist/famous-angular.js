@@ -1,7 +1,7 @@
 /**
  * famous-angular - Allow famo.us components to work seamlessly with other components inside existing or future Angular apps
- * @version v0.0.9
- * @link https://github.com/FamousInternal/famous-angular
+ * @version v0.0.11
+ * @link https://github.com/Famous/famous-angular
  * @license 
  */
 'use strict';
