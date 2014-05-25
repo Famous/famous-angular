@@ -236,6 +236,74 @@ watched by Angular instead of needing to $watch the values returned by the funct
       </td>
     </tr>
     
+    <tr>
+      <td>
+        faAlign
+        
+        
+      </td>
+      <td>
+        
+  <code>Array</code>|<code>function()</code>
+      </td>
+      <td>
+        <p>Array of numbers (e.g. [.5, 0] for the x- and y-aligns) or function returning an array of numbers to which this Modifier&#39;s align should be bound</p>
+
+        
+      </td>
+    </tr>
+    
+    <tr>
+      <td>
+        faAboutOrigin
+        
+        
+      </td>
+      <td>
+        
+  <code>Array</code>|<code>function()</code>
+      </td>
+      <td>
+        <p>Array of arguments (or a function returning an array of arguments) to pass to Transform.aboutOrigin</p>
+
+        
+      </td>
+    </tr>
+    
+    <tr>
+      <td>
+        faPerspective
+        
+        
+      </td>
+      <td>
+        
+  <code>Number</code>|<code>function()</code>
+      </td>
+      <td>
+        <p>Number or array returning a number to which this modifier&#39;s perspective (focusZ) should be bound.</p>
+
+        
+      </td>
+    </tr>
+    
+    <tr>
+      <td>
+        faTransformOrder
+        
+        
+      </td>
+      <td>
+        
+  <code>Array.String</code>
+      </td>
+      <td>
+        <p>Optional array of strings to specify which transforms to apply and in which order. (e.g. <code>fa-transform-order=&quot;[&#39;rotateZ&#39;, &#39;translate&#39;, &#39;scale&#39;]&quot;</code>)  Default behavior is to evaluate all supported transforms and apply them in alphabetical order.</p>
+
+        
+      </td>
+    </tr>
+    
   </tbody>
 </table>
 
