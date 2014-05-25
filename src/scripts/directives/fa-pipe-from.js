@@ -19,15 +19,15 @@
 
 //UNTESTED as of 2014-05-13
 angular.module('famous.angular')
-  .directive('faPipeFrom', ['$famous', '$famousDecorator', function ($famous, $famousDecorator) {
+  .directive('faPipeFrom', ['$famous', '$famousDecorator', '$famousPipe', function ($famous, $famousDecorator, $famousPipe) {
     return {
       restrict: 'A',
       scope: false,
       priority: 16,
       compile: function() {
         var Engine = $famous['famous/core/Engine'];
-        
-        return { 
+
+        return {
           post: function(scope, element, attrs) {
             var isolate = $famousDecorator.ensureIsolate(scope);
             scope.$watch(
@@ -36,23 +36,18 @@ angular.module('famous.angular')
               },
               function(newTarget, oldTarget){
                 var source = isolate.renderNode || Engine;
-                if(oldTarget instanceof Array){
-                  for(var i = 0; i < oldTarget.length; i++){
-                    oldTarget[i].unpipe(source);
-                  }
-                }else if(oldTarget !== undefined){
-                  oldTarget.unpipe(source);
-                }
-
-                if(newTarget instanceof Array){
-                  for(var i = 0; i < newTarget.length; i++){
-                    newTarget[i].pipe(source);
-                  }
-                }else if(newTarget !== undefined){
-                  newTarget.pipe(source);
-                }
+                $famousPipe.unpipesFromTargets(oldTarget, source);
+                $famousPipe.pipesToTargets(newTarget, source);
               }
             );
+
+            // Destroy listeners along with scope
+            scope.$on('$destroy', function() {
+              $famousPipe.unpipesFromTargets(
+                scope.$eval(attrs.faPipeFrom),
+                isolate.renderNode || Engine
+              );
+            });
           }
         }
       }
