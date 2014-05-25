@@ -82,4 +82,46 @@ We would love to have community contributions and support!  A few areas where co
 
 If you want to contribute, please submit a pull request, or contact hello@thomasstreet.com for more information.
 
+The commits messages need to be validated. Use the following commands to add a git hook that will check if you follow the convention :
+* `cd <famous-angular-repo>`
+* `ln -s ../../validate-commit-msg.js .git/hooks/commit-msg`
+
+When you commit your messages, follow this convention :
+`<type>: <subject> <BLANK LINE> <optional message>`
+
+For example:
+```no-highlight
+feat: Added validation commit msg file
+
+Installation:
+ * cd <famous-angular-repo>
+ * ln -s ../../validate-commit-msg.js .git/hooks/commit-msg
+```
+
+The `type` can be one of the following :
+- fix
+- feat
+- perf
+- docs
+
+If you do a breaking change, add an explanation preceded by `BREAKING CHANGE: `. For example:
+```no-highlight
+fix: remove deprecated promise unwrapping
+
+BREAKING CHANGE: promise unwrapping has been removed.
+It can no longer be turned on.
+```
+
+If you want to reference an issue, you can add a new line with either `Closes` or `Fixes` followed by the issue number. For example:
+```no-highlight
+feat: Added changelog auto generation
+
+Usage: gulp changelog
+
+Fixes #62
+```
+
+You can fix / close multiple issue with one commit, just add a new line for each.
+
+
 Famo.us/Angular is being developed by [Thomas Street](http://thomasstreet.com) in partnership with [Famo.us](https://famo.us), along with community support.
