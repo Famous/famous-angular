@@ -32,6 +32,8 @@
     "init_submodules.sh",
     "karma.conf.js",
     "karma-e2e.conf.js",
-    "package.json"
+    "package.json",
+    "changelog.js",
+    "validateCommitMsg.js"
   ]
 }
