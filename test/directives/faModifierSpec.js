@@ -57,7 +57,7 @@ describe('$faModifier', function() {
   });
 
 
-  describe('should accept attribute', function() {
+  xdescribe('should accept attribute', function() {
 
     it('fa-opacity - to set the opacity of the modifier', function() {
       var faModifier = compileFaModifier('fa-opacity="0.5"');
