@@ -21,7 +21,7 @@ module.exports = function(config) {
       'bower_components/requirejs/require.js',
       'http://code.famo.us/famous/0.2.0/famous.min.js',
       'dist/famous-angular.js',
-      'test/**/*Spec.js',
+      'test/**/*Spec.js'
 
       // Dependencies for famous-angular-examples
 			//'famous-angular-examples/app/bower_components/angular-animate/angular-animate.js',

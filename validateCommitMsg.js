@@ -87,7 +87,7 @@ var firstLineFromBuffer = function(buffer) {
 exports.validateMessage = validateMessage;
 
 // hacky start if not run by jasmine :-D
-if(process.argv.join('').indexOf('jasmine-node') === -1) {
+if(process.argv.join('').indexOf('jasmine') === -1) {
   var commitMsgFile = process.argv[2];
   var incorrectLogFile = commitMsgFile.replace('COMMIT_EDITMSG', 'logs/incorrect-commit-msgs');
 

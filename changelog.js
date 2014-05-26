@@ -201,6 +201,6 @@ var generate = function(version, file) {
 exports.parseRawCommit = parseRawCommit;
 
 // hacky start if not run by jasmine :-D
-if(process.argv.join('').indexOf('jasmine-node') === -1) {
+if(process.argv.join('').indexOf('jasmine') === -1) {
   generate(process.argv[2], process.argv[3]);
 }
