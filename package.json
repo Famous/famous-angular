@@ -15,7 +15,7 @@
     "install": "bower install",
     "postinstall": "git submodule update --init --recursive",
     "start": "gulp dev",
-    "test": "grunt test"
+    "test": "karma start --single-run"
   },
   "dependencies": {},
   "devDependencies": {
@@ -42,6 +42,7 @@
     "gulp-uglify": "^0.2.1",
     "gulp-util": "^2.2.14",
     "karma": "^0.12.1",
+    "karma-cli": "^0.0.4",
     "karma-jasmine": "~0.1.5",
     "karma-ng-html2js-preprocessor": "^0.1.0",
     "karma-ng-scenario": "^0.1.0",
