@@ -15,7 +15,7 @@
     "install": "bower install",
     "postinstall": "git submodule update --init --recursive",
     "start": "gulp dev",
-    "test": "grunt test"
+    "test": "karma start --single-run"
   },
   "dependencies": {},
   "devDependencies": {
