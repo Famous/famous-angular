@@ -114,8 +114,9 @@ angular.module('famous.angular')
               angular.forEach(_transformFields, function(field){
                 var candidate = _parsedTransforms[field] ? _parsedTransforms[field](scope) : undefined;
                 if(candidate !== undefined){
-                  if(candidate instanceof Function) transforms.push(candidate())
-                  else if(candidate instanceof Array) transforms.push(Transform[field].apply(this, candidate))
+                  //TODO:feat Support Transitionables
+                  if(candidate instanceof Function) candidate = candidate();
+                  if(candidate instanceof Array) transforms.push(Transform[field].apply(this, candidate))
                   else transforms.push(Transform[field].call(this, candidate));
                 }
               });
