@@ -21,6 +21,7 @@ module.exports = function(config) {
       'bower_components/requirejs/require.js',
       'http://code.famo.us/famous/0.2.0/famous.min.js',
       'dist/famous-angular.js',
+      'test/bootstrap/common.js',
       'test/**/*Spec.js',
       //'test/directives/faModifierSpec.js',
       // Delay the starting of karma until $famous provider is declared
@@ -35,14 +36,14 @@ module.exports = function(config) {
 
     // list of files to exclude
     exclude: [
-      
+
     ],
 
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-    
+
     },
 
 
