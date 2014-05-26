@@ -96,7 +96,7 @@ angular.module('famous.angular')
 	             * ```
 	             */
 
-              var animates = element.find('animate');
+              var animates = element[0].querySelectorAll('animate');
               var declarations = {};
 
               for(var i = 0; i < animates.length; i++){
