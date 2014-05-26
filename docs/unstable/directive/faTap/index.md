@@ -30,7 +30,7 @@ docType: "directive"
 
 
 
-This directive allows you to specify custom behavior when an element is taped.
+This directive allows you to specify custom behavior when an element is tapped.
 
 
 

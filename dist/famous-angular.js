@@ -1,7 +1,7 @@
 /**
- * famous-angular - Allow famo.us components to work seamlessly with other components inside existing or future Angular apps
- * @version v0.0.9
- * @link https://github.com/FamousInternal/famous-angular
+ * famous-angular - Integrate Famo.us into AngularJS apps and build Famo.us apps using AngularJS tools
+ * @version v0.0.12
+ * @link https://github.com/Famous/famous-angular
  * @license 
  */
 'use strict';
@@ -962,16 +962,17 @@ angular.module('famous.angular')
  * @param {Number|Function} faRotateZ  -  Number or function returning a number to which this Modifier's rotateZ should be bound
  * @param {Array|Function} faScale  -  Array of numbers or function returning an array of numbers to which this Modifier's scale should be bound
  * @param {Array|Function} faSkew  -  Array of numbers or function returning an array of numbers to which this Modifier's skew should be bound
- * @param {Transform} faTransform - Manually created Famo.us Transform object (an array) that can be passed to the modifier
- * @param {Number|Function} faOpacity  -  Number or function returning a number to which this Modifier's opacity should be bound
- * @param {Array|Function} faSize  -  Array of numbers (e.g. [100, 500] for the x- and y-sizes) or function returning an array of numbers to which this Modifier's size should be bound
- * @param {Array|Function} faOrigin  -  Array of numbers (e.g. [.5, 0] for the x- and y-origins) or function returning an array of numbers to which this Modifier's origin should be bound
+ * @param {Array|Function} faAboutOrigin  -  Array of arguments (or a function returning an array of arguments) to pass to Transform.aboutOrigin
+ * @param {Number|Function} faPerspective  -  Number or array returning a number to which this modifier's perspective (focusZ) should be bound.
+ * @param {Transform} faTransform - Manually created Famo.us Transform object (an array) that can be passed to the modifier.  *Will override all other transform attributes.*
+ * @param {Number|Function|Transitionable} faOpacity  -  Number or function returning a number to which this Modifier's opacity should be bound
+ * @param {Array|Function|Transitionable} faSize  -  Array of numbers (e.g. [100, 500] for the x- and y-sizes) or function returning an array of numbers to which this Modifier's size should be bound
+ * @param {Array|Function|Transitionable} faOrigin  -  Array of numbers (e.g. [.5, 0] for the x- and y-origins) or function returning an array of numbers to which this Modifier's origin should be bound
+ * @param {Array|Function|Transitionable} faAlign  -  Array of numbers (e.g. [.5, 0] for the x- and y-aligns) or function returning an array of numbers to which this Modifier's align should be bound
+ * @param {Array.String} faTransformOrder  -  Optional array of strings to specify which transforms to apply and in which order. (e.g. `fa-transform-order="['rotateZ', 'translate', 'scale']"`)  Default behavior is to evaluate all supported transforms and apply them in alphabetical order.
  * @description
  * This directive creates a Famo.us Modifier that will affect all children render nodes.  Its properties can be bound
- * to numbers (including using Angular's data-binding, though this is discouraged for performance reasons)
- * or to functions that return numbers.  The latter is  preferred, because the reference to the function is passed
- * directly on to Famo.us, where only the reference to that function needs to be
- * watched by Angular instead of needing to $watch the values returned by the function.
+ * to values (e.g. `fa-translate="[15, 20, 1]"`, Famo.us Transitionable objects, or to functions that return numbers.
  * @usage
  * ```html
  * <fa-modifier fa-opacity=".25" fa-skew="myScopeSkewVariable" fa-translate="[25, 50, 2]" fa-scale="myScopeFunctionThatReturnsAnArray">
@@ -982,7 +983,7 @@ angular.module('famous.angular')
  */
 
 angular.module('famous.angular')
-  .directive('faModifier', ["$famous", "$famousDecorator", function ($famous, $famousDecorator) {
+  .directive('faModifier', ["$famous", "$famousDecorator", "$parse", function ($famous, $famousDecorator, $parse) {
     return {
       template: '<div></div>',
       transclude: true,
@@ -1003,81 +1004,131 @@ angular.module('famous.angular')
               return x.get ? x.get() : x;
             };
 
-            //TODO:  refactor to remove the need for scope.$eval's on every property on every frame.
-            //Instead, $scope.$watch the necessary values, and update a private reference, which
-            //will be returned by the getTransform function.  Should further decouple Angular
-            //digest overhead from Famo.us rendering performance.
+            //TODO:  make a stand-alone window-level utility
+            //       object to store stuff like this
+            /* Copied from angular.js */
+            var SPECIAL_CHARS_REGEXP = /([\:\-\_]+(.))/g;
+            var MOZ_HACK_REGEXP = /^moz([A-Z])/;
+            function camelCase(name) {
+              return name.
+                replace(SPECIAL_CHARS_REGEXP, function(_, separator, letter, offset) {
+                  return offset ? letter.toUpperCase() : letter;
+                }).
+                replace(MOZ_HACK_REGEXP, 'Moz$1');
+            }
+            var PREFIX_REGEXP = /^(x[\:\-_]|data[\:\-_])/i;
+            function directiveNormalize(name) {
+              return camelCase(name.replace(PREFIX_REGEXP, ''));
+            }
+            /* end copy from angular.js */
+
+            var _transformFields = [
+              "aboutOrigin",
+              "perspective",
+              "rotate",
+              "rotateAxis",
+              "rotateX",
+              "rotateY",
+              "rotateZ",
+              "scale",
+              "skew",
+              "translate"
+            ];
+
+            attrs.$observe('faTransformOrder', function(){
+              var candidate = scope.$eval(attrs.faTransformOrder);
+              if(candidate !== undefined) _transformFields = candidate;
+            });
+
+            var _parsedTransforms = {};
+            angular.forEach(_transformFields, function(field){
+              var attrName = directiveNormalize('fa-' + field);
+              attrs.$observe(attrName, function(){
+                _parsedTransforms[field] = $parse(attrs[attrName]);
+              })
+            })
+
+
+            var _transformFn = angular.noop;
+            attrs.$observe('faTransform', function(){
+              _transformFn = $parse(attrs.faTransform);
+            });
             isolate.getTransform = function() {
-              //var transforms = [Transform.translate(0, 0, 0)];
+              //if faTransform is provided, return it
+              //instead of looping through the other transforms.
+              var override = _transformFn(scope);
+              if(override !== undefined){
+                if(override instanceof Function) return override();
+                else if(override instanceof Object && override.get !== undefined) return override.get();
+                else return override;
+              }
+
               var transforms = [];
-              if (attrs.faTranslate && scope.$eval(attrs.faTranslate) !== undefined) {
-                var values = scope.$eval(attrs.faTranslate).map(get)
-                transforms.push(Transform.translate.apply(this, values));
-              }
+              angular.forEach(_transformFields, function(field){
+                var candidate = _parsedTransforms[field] ? _parsedTransforms[field](scope) : undefined;
+                if(candidate !== undefined){
+                  if(candidate instanceof Function) transforms.push(candidate())
+                  else if(candidate instanceof Array) transforms.push(Transform[field].apply(this, candidate))
+                  else transforms.push(Transform[field].call(this, candidate));
+                }
+              });
 
-              if(attrs.faRotate && scope.$eval(attrs.faRotate) !== undefined){
-                var values = scope.$eval(attrs.faRotate).map(get)
-                transforms.push(Transform.rotate.apply(this, values));
-              }
-              //only apply faRotateX, etc. if faRotate is not defined
-              if (attrs.faRotateX && scope.$eval(attrs.faRotateX) !== undefined){
-                transforms.push(
-                  Transform.rotateX(
-                    get(
-                      scope.$eval(attrs.faRotateX)
-                    )
-                  )
-                );
-              }
-              if (attrs.faRotateY && scope.$eval(attrs.faRotateY) !== undefined) {
-                transforms.push(
-                  Transform.rotateY(
-                    get(
-                      scope.$eval(attrs.faRotateY)
-                    )
-                  )
-                );
-              }
-              if (attrs.faRotateZ && scope.$eval(attrs.faRotateZ) !== undefined) {
-                transforms.push(
-                  Transform.rotateZ(
-                    get(
-                      scope.$eval(attrs.faRotateZ)
-                    )
-                  )
-                );
-              }
-
-              if (attrs.faScale && scope.$eval(attrs.faScale) !== undefined){
-                var values = scope.$eval(attrs.faScale).map(get)
-                transforms.push(Transform.scale.apply(this, values));
-              }
-              
-              if (attrs.faSkew && scope.$eval(attrs.faSkew) !== undefined) {
-                var values = scope.$eval(attrs.faSkew).map(get)
-                transforms.push(Transform.skew.apply(this, values));
-              }
-
-              if(!transforms.length)
-                return undefined;
-              else if (transforms.length === 1)
-                return transforms[0]
-              else
-                return Transform.multiply.apply(this, transforms);
+              if(!transforms.length) return undefined;
+              else if (transforms.length === 1) return transforms[0]
+              else return Transform.multiply.apply(this, transforms);
             };
 
-            isolate.getOpacity = function(){
-              if (attrs.faOpacity && scope.$eval(attrs.faOpacity) !== undefined)
-                return get(scope.$eval(attrs.faOpacity));
-              return 1;
+            var _alignFn = angular.noop;
+            attrs.$observe('faAlign', function(){
+              _alignFn = $parse(attrs.faAlign);
+            });
+            isolate.getAlign = function(){
+              var ret = _alignFn(scope);
+              if(ret instanceof Function) return ret();
+              else if(ret instanceof Object && ret.get !== undefined) return ret.get();
+              else return ret;
             }
 
+            var _opacityFn = angular.noop;
+            attrs.$observe('faOpacity', function(){
+              _opacityFn = $parse(attrs.faOpacity);
+            });
+            isolate.getOpacity = function(){
+              var ret = _opacityFn(scope);
+              if(ret === undefined) return 1;
+              else if(ret instanceof Function) return ret();
+              else if(ret instanceof Object && ret.get !== undefined) return ret.get();
+              else return ret;
+            }
+
+            var _sizeFn = angular.noop;
+            attrs.$observe('faSize', function(){
+              _sizeFn = $parse(attrs.faSize);
+            });
+            isolate.getSize = function(){
+              var ret = _sizeFn(scope);
+              if(ret instanceof Function) return ret();
+              else if(ret instanceof Object && ret.get !== undefined) return ret.get();
+              else return ret;
+            }
+
+            var _originFn = angular.noop;
+            attrs.$observe('faOrigin', function(){
+              _originFn = $parse(attrs.faOrigin);
+            });
+            isolate.getOrigin = function(){
+              var ret = _originFn(scope);
+              if(ret instanceof Function) return ret();
+              else if(ret instanceof Object && ret.get !== undefined) return ret.get();
+              else return ret;
+            }
             
             isolate.modifier = new Modifier({
               transform: isolate.getTransform,
-              size: scope.$eval(attrs.faSize),
+              size: isolate.getSize,
               opacity: isolate.getOpacity,
-              origin: scope.$eval(attrs.faOrigin)
+              origin: isolate.getOrigin,
+              align: isolate.getAlign
             });
 
             isolate.renderNode = new RenderNode().add(isolate.modifier)
@@ -1693,7 +1744,7 @@ angular.module('famous.angular')
  * @restrict EA
  * @description
  * This directive is used to wrap child elements into a View render node.  This is especially useful for grouping.
- * Use an <fa-view> surrounded by a <fa-modifier> in order to affect the View's position, scale, etc.
+ * Use an `<fa-view>` surrounded by a `<fa-modifier>` in order to affect the View's position, scale, etc.
  *
  * @usage
  * ```html
