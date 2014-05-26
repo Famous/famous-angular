@@ -58,6 +58,7 @@
     "requirejs": "~2.1.11",
     "semver": "^2.3.0",
     "streamqueue": "0.0.7",
-    "winston": "^0.7.3"
+    "winston": "^0.7.3",
+    "karma-cli": "0.0.4"
   }
 }
