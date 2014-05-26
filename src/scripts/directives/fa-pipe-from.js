@@ -36,16 +36,16 @@ angular.module('famous.angular')
               },
               function(newTarget, oldTarget){
                 var source = isolate.renderNode || Engine;
-                $famousPipe.unpipesFromTargets(oldTarget, source);
-                $famousPipe.pipesToTargets(newTarget, source);
+                $famousPipe.unpipesFromTargets(source, oldTarget);
+                $famousPipe.pipesToTargets(source, newTarget);
               }
             );
 
             // Destroy listeners along with scope
             scope.$on('$destroy', function() {
               $famousPipe.unpipesFromTargets(
-                scope.$eval(attrs.faPipeFrom),
-                isolate.renderNode || Engine
+                isolate.renderNode || Engine,
+                scope.$eval(attrs.faPipeFrom)
               );
             });
           }
