@@ -44,20 +44,22 @@ describe('$faModifier', function() {
   });
 
 
-  it("should set it's children as the content for the created modifier", function() {
+  it("should listen to 'registerChild' events from nested fa- directives, and add their data to fa-modifier's renderNode", function() {
+    var RenderNode = $famous['famous/core/RenderNode'];
+    var isolate;
     var modifierContent;
-    $scope.$on('registerChild', function(event, isolate) {
-      modifierContent = angular.element(isolate.renderNode.content)[0];
+    $scope.$on('registerChild', function(event, data) {
+      isolate = data;
     });
-    var faModifier = $compile('<fa-modifier><span></span></fa-modifier>')($scope);
-    var children = faModifier[0].firstChild;
-    expect(modifierContent).toEqual(children);
+    var faModifier = $compile('<fa-modifier><fa-surface></fa-surface></fa-modifier>')($scope);
+    //var children = faModifier[0].firstChild;
+    expect(isolate.renderNode instanceof RenderNode).toBe(true);
   });
 
 
   describe('should accept attribute', function() {
 
-    it('fa-opacity - to set the size of the modifier', function() {
+    it('fa-opacity - to set the opacity of the modifier', function() {
       var faModifier = compileFaModifier('fa-opacity="0.5"');
       var modifier = getModifier(faModifier);
       var args = $famous['famous/core/Modifier'].calls.mostRecent().args[0];
@@ -65,7 +67,7 @@ describe('$faModifier', function() {
     });
 
 
-    it('fa-rotate - to set the size of the modifier', function() {
+    it('fa-rotate - to set the [X, Y, Z] rotate of the modifier', function() {
       var Transform = $famous['famous/core/Transform'];
       spyOn(Transform, 'rotate');
 
@@ -80,7 +82,7 @@ describe('$faModifier', function() {
     });
 
 
-    it('fa-rotate-x - to set the size of the modifier', function() {
+    it('fa-rotate-x - to set the rotate X of the modifier', function() {
       var Transform = $famous['famous/core/Transform'];
       spyOn(Transform, 'rotateX');
 
@@ -94,7 +96,7 @@ describe('$faModifier', function() {
       expect(Transform.rotateX).toHaveBeenCalledWith(-0.785);
     });
 
-    it('fa-rotate-y - to set the size of the modifier', function() {
+    it('fa-rotate-y - to set the rotate Y of the modifier', function() {
       var Transform = $famous['famous/core/Transform'];
       spyOn(Transform, 'rotateY');
 
@@ -108,7 +110,7 @@ describe('$faModifier', function() {
       expect(Transform.rotateY).toHaveBeenCalledWith(-0.785);
     });
 
-    iit('fa-scale - to set the size of the modifier', function() {
+    it('fa-scale - to set the scale of the modifier', function() {
       var Transform = $famous['famous/core/Transform'];
       spyOn(Transform, 'scale');
 
@@ -122,28 +124,16 @@ describe('$faModifier', function() {
       expect(Transform.scale).toHaveBeenCalledWith(0, 0.5, 1);
     });
 
-    it('fa-skew - to set the size of the modifier', function() {
-      var faModifier = compileFaModifier('fa-size="[300, 300]"');
-      var modifier = getModifier(faModifier);
-      expect(modifier.getSize()).toEqual([300, 300]);
+    it('fa-skew - to set the skew of the modifier', function() {
     });
 
-    it('fa-transform - to set the size of the modifier', function() {
-      var faModifier = compileFaModifier('fa-size="[300, 300]"');
-      var modifier = getModifier(faModifier);
-      expect(modifier.getSize()).toEqual([300, 300]);
+    it('fa-transform - to set the transform of the modifier', function() {
     });
 
     it('fa-size - to set the size of the modifier', function() {
-      var faModifier = compileFaModifier('fa-size="[300, 300]"');
-      var modifier = getModifier(faModifier);
-      expect(modifier.getSize()).toEqual([300, 300]);
     });
 
-    it('fa-origin - to set the size of the modifier', function() {
-      var faModifier = compileFaModifier('fa-size="[300, 300]"');
-      var modifier = getModifier(faModifier);
-      expect(modifier.getSize()).toEqual([300, 300]);
+    it('fa-origin - to set the origin of the modifier', function() {
     });
   });
 });

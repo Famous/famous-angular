@@ -21,8 +21,8 @@ module.exports = function(config) {
       'bower_components/requirejs/require.js',
       'http://code.famo.us/famous/0.2.0/famous.min.js',
       'dist/famous-angular.js',
-      //'test/**/*Spec.js',
-      'test/directives/faModifierSpec.js',
+      'test/**/*Spec.js',
+      //'test/directives/faModifierSpec.js',
       // Delay the starting of karma until $famous provider is declared
       'karma-start.js'
 
