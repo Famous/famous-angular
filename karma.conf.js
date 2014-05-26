@@ -8,10 +8,10 @@ module.exports = function(config) {
     basePath: '',
 
 
-    // frameworks to use
-    // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    //frameworks: ['jasmine', 'requirejs'],
-    frameworks: ['jasmine'],
+    // Even though we do not need the requirejs framework to load requirejs
+    // modules, we need to add it to frameworks so that karma will wait to 
+    // start until __karma__.start() is called in karma-start.js
+    frameworks: ['jasmine', 'requirejs'],
 
 
     // list of files / patterns to load in the browser
@@ -22,6 +22,9 @@ module.exports = function(config) {
       'http://code.famo.us/famous/0.2.0/famous.min.js',
       'dist/famous-angular.js',
       'test/**/*Spec.js',
+      //'test/directives/faModifierSpec.js',
+      // Delay the starting of karma until $famous provider is declared
+      'karma-start.js'
 
       // Dependencies for famous-angular-examples
 			//'famous-angular-examples/app/bower_components/angular-animate/angular-animate.js',
@@ -29,7 +32,6 @@ module.exports = function(config) {
 			//'famous-angular-examples/app/scripts/app.js',
 			//'famous-angular-examples/app/scripts/**/*js',
     ],
-
 
     // list of files to exclude
     exclude: [
