@@ -13,36 +13,36 @@ window.name = "NG_DEFER_BOOTSTRAP!" + window.name;
 //       the filesystem (maybe write a bash script
 //       working around `ls -R1 app/scripts/famous` ?)
 var requirements = [
-	"famous/core/Engine",
-	"famous/core/EventEmitter",
-	"famous/core/EventHandler",
-	"famous/core/Modifier",
-	"famous/core/RenderNode",
-	"famous/core/Surface",
-	"famous/core/Transform",
-	"famous/core/View",
-	"famous/core/ViewSequence",
-	"famous/events/EventArbiter",
-	"famous/events/EventFilter",
-	"famous/events/EventMapper",
-	"famous/inputs/FastClick",
-	"famous/inputs/GenericSync",
-	"famous/inputs/MouseSync",
-	"famous/inputs/PinchSync",
-	"famous/inputs/RotateSync",
-	"famous/inputs/TouchSync",
-	"famous/surfaces/ImageSurface",
-	"famous/surfaces/InputSurface",
-	"famous/transitions/Easing",
-	"famous/transitions/SpringTransition",
-	"famous/transitions/Transitionable",
-	"famous/transitions/TransitionableTransform",
-	"famous/utilities/KeyCodes",
-	"famous/utilities/Timer",
-	"famous/views/GridLayout",
-	"famous/views/RenderController",
-	"famous/views/Scroller",
-	"famous/views/Scrollview"
+  "famous/core/Engine",
+  "famous/core/EventEmitter",
+  "famous/core/EventHandler",
+  "famous/core/Modifier",
+  "famous/core/RenderNode",
+  "famous/core/Surface",
+  "famous/core/Transform",
+  "famous/core/View",
+  "famous/core/ViewSequence",
+  "famous/events/EventArbiter",
+  "famous/events/EventFilter",
+  "famous/events/EventMapper",
+  "famous/inputs/FastClick",
+  "famous/inputs/GenericSync",
+  "famous/inputs/MouseSync",
+  "famous/inputs/PinchSync",
+  "famous/inputs/RotateSync",
+  "famous/inputs/TouchSync",
+  "famous/surfaces/ImageSurface",
+  "famous/surfaces/InputSurface",
+  "famous/transitions/Easing",
+  "famous/transitions/SpringTransition",
+  "famous/transitions/Transitionable",
+  "famous/transitions/TransitionableTransform",
+  "famous/utilities/KeyCodes",
+  "famous/utilities/Timer",
+  "famous/views/GridLayout",
+  "famous/views/RenderController",
+  "famous/views/Scroller",
+  "famous/views/Scrollview"
 ]
 
 //declare the module before the async callback so that
@@ -51,9 +51,9 @@ var requirements = [
 var ngFameApp = angular.module('famous.angular', []);
 
 require(requirements, function(/*args*/) {
-	//capture 'arguments' in a variable that will exist in
-	//child scopes
-	var required = arguments;
+  //capture 'arguments' in a variable that will exist in
+  //child scopes
+  var required = arguments;
 
   /**
    * @ngdoc provider
@@ -177,7 +177,7 @@ require(requirements, function(/*args*/) {
     //		console.log('registered modules', famousProvider.$get());
   }]);
 
-	angular.element(document).ready(function() {
+  angular.element(document).ready(function() {
     // For some reason Karma evaluates angular.resumeBootstrap as undefined.
     // Our versions of angular, angular-mocks and karma the latest stable
     // releases, so not sure why this is happening.
@@ -185,7 +185,7 @@ require(requirements, function(/*args*/) {
     if (angular.resumeBootstrap) {
       angular.resumeBootstrap();
     }
-	});
+  });
 
   // To delay Karma's bootstrapping until $famous is ready, fire off a global
   // event to allow karma to know when the $famous provider has been declared.
@@ -1067,8 +1067,9 @@ angular.module('famous.angular')
               angular.forEach(_transformFields, function(field){
                 var candidate = _parsedTransforms[field] ? _parsedTransforms[field](scope) : undefined;
                 if(candidate !== undefined){
-                  if(candidate instanceof Function) transforms.push(candidate())
-                  else if(candidate instanceof Array) transforms.push(Transform[field].apply(this, candidate))
+                  //TODO:feat Support Transitionables
+                  if(candidate instanceof Function) candidate = candidate();
+                  if(candidate instanceof Array) transforms.push(Transform[field].apply(this, candidate))
                   else transforms.push(Transform[field].call(this, candidate));
                 }
               });
