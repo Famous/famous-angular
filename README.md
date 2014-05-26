@@ -80,7 +80,7 @@ We would love to have community contributions and support!  A few areas where co
 * Bug reports and/or fixes
 * Continuing to wrap Famo.us layouts and views into directives [advanced]
 
-If you want to contribute, please submit a pull request, or contact hello@thomasstreet.com for more information.
+If you want to contribute, please submit a pull request, or contact famous-angular@thomasstreet.com for more information.
 
 The commits messages need to be validated. Use the following commands to add a git hook that will check if you follow the convention :
 * `cd <famous-angular-repo>`
@@ -91,7 +91,7 @@ When you commit your messages, follow this convention :
 
 For example:
 ```no-highlight
-feat: Added validation commit msg file
+feat: add validation commit msg file
 
 Installation:
  * cd <famous-angular-repo>
@@ -121,7 +121,7 @@ It can no longer be turned on.
 
 If you want to reference an issue, you can add a new line with either `Closes` or `Fixes` followed by the issue number. For example:
 ```no-highlight
-feat: Added changelog auto generation
+feat: add changelog auto generation
 
 Usage: gulp changelog
 
