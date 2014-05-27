@@ -3,10 +3,10 @@
 ddescribe('$faModifier', function() {
   var element, $compile, $scope, $famous;
   var TransformSpy;
-  var compileFaModifier, getModifier, getIsolate;
+  var compileFaModifier, getModifier, getIsolate, callGetTransform;
 
-  //beforeEach(module('famous.angular'));
-
+  // Set up spies to replace the famo.us Transform module, so we can ensure
+  // that the right args are being passed to the Transform functions
   beforeEach(module('famous.angular', function($provide, _$famousProvider_) {
     // Set mockFamous as an instance of default $famous service
     var mockFamous = _$famousProvider_.$get();
@@ -49,42 +49,17 @@ ddescribe('$faModifier', function() {
       var scope = faModifier.scope();
       return scope.isolate[scope.$id];
     };
+
+    // getTransform is usually only called in the render loop, but invoke it
+    // so that the Transform object calls its functions like rotateX, translate
+    callGetTransform = function(faModifier) {
+      var scope = faModifier.scope();
+      var isolate = scope.isolate[scope.$id];
+      isolate.getTransform();
+    };
+
   }));
 
-
-  iit("should accept function references passed for the attribute values", function() {
-    $scope.getRotateX = function() { return 0.5; };
-    var faModifier = compileFaModifier('fa-rotate-x="getRotateX"');
-    $scope.$apply();
-
-    var isolate = getIsolate(faModifier);
-    isolate.getTransform();
-
-    expect(TransformSpy['rotateX']).toHaveBeenCalledWith(0.5);
-  });
-
-
-  iit("should accept expressions passed for the attribute values", function() {
-    $scope.getRotateX = function() { return 0.5; };
-    var faModifier = compileFaModifier('fa-rotate-x="getRotateX() + 0.25"');
-    $scope.$apply();
-
-    var isolate = getIsolate(faModifier);
-    var transformMatrix = isolate.getTransform();
-
-    expect(TransformSpy['rotateX']).toHaveBeenCalledWith(0.75);
-  });
-
-  iit("should accept expressions within an array", function() {
-    $scope.getRotateX = function() { return 0.5; };
-    var faModifier = compileFaModifier('fa-rotate="[getRotateX() + 0.25, 0.5, 1]"');
-    $scope.$apply();
-
-    var isolate = getIsolate(faModifier);
-    var transformMatrix = isolate.getTransform();
-
-    expect(TransformSpy['rotate']).toHaveBeenCalledWith(0.75, 0.5, 1);
-  });
 
 
   it("should create an instance of Famo.us Modifier", function() {
@@ -93,6 +68,52 @@ ddescribe('$faModifier', function() {
     var modifier = getModifier(faModifier);
     expect(modifier instanceof Modifier).toBe(true);
   });
+
+
+  ddescribe("should accept attributes of", function() {
+    it("numbers", function() {
+      var faModifier = compileFaModifier('fa-rotate-x="0.5"');
+      callGetTransform(faModifier);
+      expect(TransformSpy['rotateX']).toHaveBeenCalledWith(0.5);
+    });
+
+    it("function references", function() {
+      $scope.getRotateX = function() { return 0.5; };
+      var faModifier = compileFaModifier('fa-rotate-x="getRotateX"');
+      callGetTransform(faModifier);
+      expect(TransformSpy['rotateX']).toHaveBeenCalledWith(0.5);
+    });
+
+    it("expressions", function() {
+      $scope.getRotateX = function() { return 0.5; };
+      var faModifier = compileFaModifier('fa-rotate-x="getRotateX() + 0.25"');
+      callGetTransform(faModifier);
+      expect(TransformSpy['rotateX']).toHaveBeenCalledWith(0.75);
+    });
+
+    it("arrays with expressions inside", function() {
+      $scope.getRotateX = function() { return 0.5; };
+      var faModifier = compileFaModifier('fa-rotate="[getRotateX() + 0.25, 0.5, 1]"');
+      callGetTransform(faModifier);
+      expect(TransformSpy['rotate']).toHaveBeenCalledWith(0.75, 0.5, 1);
+
+    });
+    it("transitionable objects", function() {
+      var mockTransitionable = {
+        _state: 3,
+        get: function() { return this._state; }
+      };
+      spyOn(mockTransitionable, 'get');
+      $scope.mockTransitionable = mockTransitionable;
+      var faModifier = compileFaModifier('fa-transform="mockTransitionable"');
+      callGetTransform(faModifier);
+
+      // The transitionable's get should be called when calling getTransform()
+      expect(mockTransitionable.get).toHaveBeenCalled();
+    });
+  });
+
+
 
 
   it("should listen to 'registerChild' events from nested fa- directives, and add their data to fa-modifier's renderNode", function() {
