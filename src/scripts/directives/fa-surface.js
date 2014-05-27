@@ -33,9 +33,7 @@ angular.module('famous.angular')
             var isolate = $famousDecorator.ensureIsolate(scope);
 
             var Surface = $famous['famous/core/Surface'];
-            var Transform = $famous['famous/core/Transform']
-            var EventHandler = $famous['famous/core/EventHandler'];
-            
+
             //update properties
             //TODO:  is this going to be a bottleneck?
             scope.$watch(
@@ -82,6 +80,17 @@ angular.module('famous.angular')
             //boilerplate
             transclude(scope, function(clone) {
               angular.element(element[0].querySelectorAll('div.fa-surface')).append(clone);
+            });
+
+            // Remove DOM when the scope of an fa-surface is destroyed.
+            // We no longer have access to it at this point, so it's just taking up space.
+            scope.$on('$destroy', function() {
+              // Capture the dangling HTML node because Surface.cleanup will unset it
+              var containerNode = isolate.renderNode.content.parentNode;
+              // Invoke Surface.cleanup to unbind anything that might not get picked up by garbage collection
+              isolate.renderNode.cleanup(scope.getContext().getAllocator());
+              // Remove the dangling HTML node.
+              containerNode.parentNode.removeChild(containerNode);
             });
 
             scope.$emit('registerChild', isolate);

@@ -29,12 +29,12 @@ angular.module('famous.angular')
         return {
           pre: function(scope, element, attrs){
             var isolate = $famousDecorator.ensureIsolate(scope);
-            
+
             var View = $famous['famous/core/View'];
             var Engine = $famous['famous/core/Engine'];
             var Transform = $famous['famous/core/Transform']
 
-            
+
             element.append('<div class="famous-angular-container"></div>');
             isolate.context = Engine.createContext(element[0].querySelector('.famous-angular-container'));
 
@@ -95,6 +95,12 @@ angular.module('famous.angular')
             transclude(scope, function(clone) {
 	            angular.element(element[0].querySelectorAll('div div')[0]).append(clone);
             });
+
+            // Make the app Context available to child scopes of faApp.
+            scope.getContext = function() {
+              return isolate.context;
+            };
+
             isolate.readyToRender = true;
           }
         }
