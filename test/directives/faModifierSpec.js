@@ -139,12 +139,39 @@ describe('$faModifier', function() {
   });
 
 
-  describe('should accept Transform attributes', function() {
+  ddescribe('should accept Transform attributes', function() {
 
-    it('fa-rotate - to set the [X, Y, Z] rotate of the modifier', function() {
-      var faModifier = compileFaModifier('fa-rotate="[0, 0.5, -0.5]"');
-      callGetTransform(faModifier);
-      expect(TransformSpy.rotate).toHaveBeenCalledWith(0, 0.5, -0.5);
+    describe('fa-rotate should accept', function() {
+
+      var acceptableValues = {
+        arrays: '[0, 0.5, -0.5]',
+        functions: 'fn',
+        expressions: 'fn()',
+        transitionables: 'transitionable'
+      };
+
+      beforeEach(function() {
+        $scope.fn = function() {
+          return [0, 0.5, -0.5];
+        };
+        $scope.transitionable = {
+          get: function() { return [0, 0.5, -0.5]; }
+        }
+      });
+
+      for (var type in acceptableValues) {
+        it(type, function(types) {
+          return function() {
+            var value = acceptableValues[types];
+            var faModifier = compileFaModifier('fa-rotate="' + value + '"');
+            //console.log(types, value);
+            //console.log(faModifier);
+            callGetTransform(faModifier);
+            expect(TransformSpy.rotate).toHaveBeenCalledWith(0, 0.5, -0.5);
+          };
+        }(type));
+      }
+
     });
 
     it('fa-rotate-x - to set the rotate X of the modifier', function() {
