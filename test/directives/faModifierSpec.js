@@ -2,7 +2,7 @@
 
 ddescribe('$faModifier', function() {
   var element, $compile, $scope, $famous;
-  var TransformSpy;
+  var TransformSpy, ModifierSpy;
   var compileFaModifier, getModifier, getIsolate, callGetTransform;
 
   // Set up spies to replace the famo.us Transform module, so we can ensure
@@ -24,6 +24,10 @@ ddescribe('$faModifier', function() {
     ]);
     // Replace the Transform module with a spy
     mockFamous['famous/core/Transform'] = TransformSpy;
+
+    ModifierSpy = jasmine.createSpy('Modifier');
+    mockFamous['famous/core/Modifier'] = ModifierSpy;
+
     $provide.value('$famous', mockFamous);
   }));
 
@@ -31,8 +35,6 @@ ddescribe('$faModifier', function() {
     $compile = _$compile_;
     $scope = _$rootScope_.$new();
     $famous = _$famous_;
-
-    spyOn($famous, 'famous/core/Modifier');
 
     compileFaModifier = function(attr) {
       return $compile('<fa-modifier ' + attr + '></fa-modifier>')($scope);
@@ -57,7 +59,6 @@ ddescribe('$faModifier', function() {
       var isolate = scope.isolate[scope.$id];
       isolate.getTransform();
     };
-
   }));
 
 
@@ -70,7 +71,7 @@ ddescribe('$faModifier', function() {
   });
 
 
-  ddescribe("should accept attributes of", function() {
+  describe("should accept attributes of", function() {
     it("numbers", function() {
       var faModifier = compileFaModifier('fa-rotate-x="0.5"');
       callGetTransform(faModifier);
@@ -98,9 +99,10 @@ ddescribe('$faModifier', function() {
       expect(TransformSpy['rotate']).toHaveBeenCalledWith(0.75, 0.5, 1);
 
     });
+
     it("transitionable objects", function() {
       var mockTransitionable = {
-        _state: 3,
+        _state: [0, 0, 1, 1],
         get: function() { return this._state; }
       };
       spyOn(mockTransitionable, 'get');
@@ -111,9 +113,122 @@ ddescribe('$faModifier', function() {
       // The transitionable's get should be called when calling getTransform()
       expect(mockTransitionable.get).toHaveBeenCalled();
     });
+
+
+    // Currently Transform attributes do not support transitionables
+    it("transitionable objects for Transform attributes", function() {
+      var mockTransitionable = {
+        _state: [30, 20],
+        get: function() { return this._state; }
+      };
+      spyOn(mockTransitionable, 'get');
+      $scope.mockTransitionable = mockTransitionable;
+      var faModifier = compileFaModifier('fa-translate="mockTransitionable"');
+      callGetTransform(faModifier);
+
+      // The transitionable's get should be called when calling getTransform()
+      expect(mockTransitionable.get).toHaveBeenCalled();
+    });
+
   });
 
 
+
+
+  describe('should accept Transform attributes', function() {
+
+    it('fa-rotate - to set the [X, Y, Z] rotate of the modifier', function() {
+      var faModifier = compileFaModifier('fa-rotate="[0, 0.5, -0.5]"');
+      callGetTransform(faModifier);
+      expect(TransformSpy.rotate).toHaveBeenCalledWith(0, 0.5, -0.5);
+    });
+
+    it('fa-rotate-x - to set the rotate X of the modifier', function() {
+      var faModifier = compileFaModifier('fa-rotate-x="-0.785"');
+      callGetTransform(faModifier);
+      expect(TransformSpy.rotateX).toHaveBeenCalledWith(-0.785);
+    });
+
+    it('fa-rotate-y - to set the rotate Y of the modifier', function() {
+      var faModifier = compileFaModifier('fa-rotate-y="-0.785"');
+      callGetTransform(faModifier);
+      expect(TransformSpy.rotateY).toHaveBeenCalledWith(-0.785);
+    });
+
+    it('fa-rotate-z - to set the rotate Y of the modifier', function() {
+      var faModifier = compileFaModifier('fa-rotate-z="-0.785"');
+      callGetTransform(faModifier);
+      expect(TransformSpy.rotateZ).toHaveBeenCalledWith(-0.785);
+    });
+
+    it('fa-scale - to set the scale of the modifier', function() {
+      var faModifier = compileFaModifier('fa-scale="[0, 0.5, 1]"');
+      callGetTransform(faModifier);
+      expect(TransformSpy.scale).toHaveBeenCalledWith(0, 0.5, 1);
+    });
+
+    it('fa-skew - to set the skew of the modifier', function() {
+      var faModifier = compileFaModifier('fa-skew="-0.2"');
+      callGetTransform(faModifier);
+      expect(TransformSpy.skew).toHaveBeenCalledWith(-0.2);
+    });
+
+    describe('fa-transform', function() {
+      it('to directly set the transform matrix', function() {
+        $scope.matrix = [0, 1, 2, 3];
+        var faModifier = compileFaModifier('fa-transform="matrix"');
+        var args = ModifierSpy.calls.mostRecent().args[0];
+        expect(args.transform()).toEqual($scope.matrix);
+      });
+
+      it('to override any existing transform attributes', function() {
+        $scope.matrix = [0, 1, 2, 3];
+        // Add additional transform attribute that should be ignored
+        var faModifier = compileFaModifier('fa-transform="matrix" fa-rotate="[0.5, 0.25, 0]"');
+        var args = ModifierSpy.calls.mostRecent().args[0];
+        expect(args.transform()).toEqual($scope.matrix);
+      });
+    });
+
+    describe('fa-transform-order', function() {
+      it('should control the transformation order', function() {
+        $scope.order = ['translate', 'rotateZ'];
+        var faModifier = compileFaModifier('fa-transform-order="order" fa-translate="[30, 50]" fa-rotate-z="0.5"');
+        var args = ModifierSpy.calls.mostRecent().args[0];
+        console.log(args.transform());
+        //expect(args.transform()).toEqual($scope.matrix);
+      });
+    });
+
+  });
+
+  describe('should accept main Modifier attributes', function() {
+  
+    it('fa-opacity - to set the opacity of the modifier', function() {
+      var faModifier = compileFaModifier('fa-opacity="0.5"');
+      var args = ModifierSpy.calls.mostRecent().args[0];
+      expect(args.opacity()).toEqual(0.5);
+    });
+
+    it('fa-size - to set the size of the modifier', function() {
+      var faModifier = compileFaModifier('fa-size="[300,200]"');
+      var args = ModifierSpy.calls.mostRecent().args[0];
+      expect(args.size()).toEqual([300, 200]);
+    });
+
+    it('fa-origin - to set the origin of the modifier', function() {
+      var faModifier = compileFaModifier('fa-origin="[0.5,0.5]"');
+      var args = ModifierSpy.calls.mostRecent().args[0];
+      expect(args.origin()).toEqual([0.5, 0.5]);
+    });
+
+    it('fa-align - to set the align of the modifier', function() {
+      var faModifier = compileFaModifier('fa-align="[0.5,0.5]"');
+      var args = ModifierSpy.calls.mostRecent().args[0];
+      expect(args.align()).toEqual([0.5, 0.5]);
+    });
+
+  });
 
 
   it("should listen to 'registerChild' events from nested fa- directives, and add their data to fa-modifier's renderNode", function() {
@@ -128,85 +243,5 @@ ddescribe('$faModifier', function() {
     expect(isolate.renderNode instanceof RenderNode).toBe(true);
   });
 
-
-  xdescribe('should accept attribute', function() {
-
-    it('fa-opacity - to set the opacity of the modifier', function() {
-      var faModifier = compileFaModifier('fa-opacity="0.5"');
-      var modifier = getModifier(faModifier);
-      var args = $famous['famous/core/Modifier'].calls.mostRecent().args[0];
-      expect(args.opacity()).toEqual(0.5);
-    });
-
-
-    it('fa-rotate - to set the [X, Y, Z] rotate of the modifier', function() {
-      var Transform = $famous['famous/core/Transform'];
-      spyOn(Transform, 'rotate');
-
-      var faModifier = compileFaModifier('fa-rotate="[0, 0.5, -0.5]"');
-      var args = $famous['famous/core/Modifier'].calls.mostRecent().args[0];
-
-      // Modifier.transform() is not called until the render loop, so execute
-      // it directly
-      args.transform();
-
-      expect(Transform.rotate).toHaveBeenCalledWith(0, 0.5, -0.5);
-    });
-
-
-    it('fa-rotate-x - to set the rotate X of the modifier', function() {
-      var Transform = $famous['famous/core/Transform'];
-      spyOn(Transform, 'rotateX');
-
-      var faModifier = compileFaModifier('fa-rotate-x="-0.785"');
-      var args = $famous['famous/core/Modifier'].calls.mostRecent().args[0];
-
-      // Modifier.transform() is not called until the render loop, so execute
-      // it directly
-      args.transform();
-
-      expect(Transform.rotateX).toHaveBeenCalledWith(-0.785);
-    });
-
-    it('fa-rotate-y - to set the rotate Y of the modifier', function() {
-      var Transform = $famous['famous/core/Transform'];
-      spyOn(Transform, 'rotateY');
-
-      var faModifier = compileFaModifier('fa-rotate-y="-0.785"');
-      var args = $famous['famous/core/Modifier'].calls.mostRecent().args[0];
-
-      // Modifier.transform() is not called until the render loop, so execute
-      // it directly
-      args.transform();
-
-      expect(Transform.rotateY).toHaveBeenCalledWith(-0.785);
-    });
-
-    it('fa-scale - to set the scale of the modifier', function() {
-      var Transform = $famous['famous/core/Transform'];
-      spyOn(Transform, 'scale');
-
-      var faModifier = compileFaModifier('fa-scale="[0, 0.5, 1]"');
-      var args = $famous['famous/core/Modifier'].calls.mostRecent().args[0];
-
-      // Modifier.transform() is not called until the render loop, so execute
-      // it directly
-      args.transform();
-
-      expect(Transform.scale).toHaveBeenCalledWith(0, 0.5, 1);
-    });
-
-    it('fa-skew - to set the skew of the modifier', function() {
-    });
-
-    it('fa-transform - to set the transform of the modifier', function() {
-    });
-
-    it('fa-size - to set the size of the modifier', function() {
-    });
-
-    it('fa-origin - to set the origin of the modifier', function() {
-    });
-  });
 });
 
