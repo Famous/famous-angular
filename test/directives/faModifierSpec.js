@@ -20,7 +20,8 @@ ddescribe('$faModifier', function() {
       "rotateZ",
       "scale",
       "skew",
-      "translate"
+      "translate",
+      "multiply"
     ]);
     // Replace the Transform module with a spy
     mockFamous['famous/core/Transform'] = TransformSpy;
@@ -133,8 +134,6 @@ ddescribe('$faModifier', function() {
   });
 
 
-
-
   describe('should accept Transform attributes', function() {
 
     it('fa-rotate - to set the [X, Y, Z] rotate of the modifier', function() {
@@ -193,10 +192,10 @@ ddescribe('$faModifier', function() {
     describe('fa-transform-order', function() {
       it('should control the transformation order', function() {
         $scope.order = ['translate', 'rotateZ'];
-        var faModifier = compileFaModifier('fa-transform-order="order" fa-translate="[30, 50]" fa-rotate-z="0.5"');
+        var faModifier = compileFaModifier('fa-transform-order="order" fa-rotate-z="0.5" fa-translate="[30, 50, 1]"');
         var args = ModifierSpy.calls.mostRecent().args[0];
-        console.log(args.transform());
-        //expect(args.transform()).toEqual($scope.matrix);
+        args.transform();
+        expect(TransformSpy.translate).toHaveBeenCalledWith(30, 50, 1);
       });
     });
 
