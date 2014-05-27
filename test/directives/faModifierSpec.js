@@ -1,6 +1,6 @@
 'use strict';
 
-ddescribe('$faModifier', function() {
+describe('$faModifier', function() {
   var element, $compile, $scope, $famous;
   var TransformSpy, ModifierSpy;
   var compileFaModifier, getModifier, getIsolate, callGetTransform;
@@ -10,21 +10,26 @@ ddescribe('$faModifier', function() {
   beforeEach(module('famous.angular', function($provide, _$famousProvider_) {
     // Set mockFamous as an instance of default $famous service
     var mockFamous = _$famousProvider_.$get();
-    TransformSpy = jasmine.createSpyObj('TransformSpy', [
-      "aboutOrigin",
-      "perspective",
-      "rotate",
-      "rotateAxis",
-      "rotateX",
-      "rotateY",
-      "rotateZ",
-      "scale",
-      "skew",
-      "translate",
-      "multiply"
-    ]);
-    // Replace the Transform module with a spy
-    mockFamous['famous/core/Transform'] = TransformSpy;
+    var methods = [
+      'aboutOrigin',
+      'perspective',
+      'rotate',
+      'rotateAxis',
+      'rotateX',
+      'rotateY',
+      'rotateZ',
+      'scale',
+      'skew',
+      'translate',
+      'multiply'
+    ];
+
+    TransformSpy = mockFamous['famous/core/Transform'];
+
+    // Spy on all the methods of Transform
+    for (var i = 0; i < methods.length; i++) {
+      spyOn(TransformSpy, methods[i]).and.callThrough();
+    }
 
     ModifierSpy = jasmine.createSpy('Modifier');
     mockFamous['famous/core/Modifier'] = ModifierSpy;
@@ -119,7 +124,7 @@ ddescribe('$faModifier', function() {
     // Currently Transform attributes do not support transitionables
     it("transitionable objects for Transform attributes", function() {
       var mockTransitionable = {
-        _state: [30, 20],
+        _state: [30, 20, 1],
         get: function() { return this._state; }
       };
       spyOn(mockTransitionable, 'get');
@@ -190,14 +195,29 @@ ddescribe('$faModifier', function() {
     });
 
     describe('fa-transform-order', function() {
-      it('should control the transformation order', function() {
+
+      it('to control the transformation order', function() {
         $scope.order = ['translate', 'rotateZ'];
         var faModifier = compileFaModifier('fa-transform-order="order" fa-rotate-z="0.5" fa-translate="[30, 50, 1]"');
         var args = ModifierSpy.calls.mostRecent().args[0];
+        var transformResult = TransformSpy['translate'].apply(this, [30, 50, 1]);
         args.transform();
-        expect(TransformSpy.translate).toHaveBeenCalledWith(30, 50, 1);
+
+        var firstArgument = TransformSpy.multiply.calls.first().args[0];
+        expect(firstArgument).toEqual(transformResult);
       });
     });
+
+      it('if missing, will result in the transforms being in alphabetical order', function() {
+        $scope.order = ['translate', 'rotateZ'];
+        var faModifier = compileFaModifier('fa-rotate-z="0.5" fa-translate="[30, 50, 1]"');
+        var args = ModifierSpy.calls.mostRecent().args[0];
+        var transformResult = TransformSpy['translate'].apply(this, [30, 50, 1]);
+        args.transform();
+
+        var firstArgument = TransformSpy.multiply.calls.first().args[0];
+        expect(firstArgument).not.toEqual(transformResult);
+      });
 
   });
 
