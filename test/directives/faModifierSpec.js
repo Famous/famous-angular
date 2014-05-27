@@ -1,10 +1,31 @@
 'use strict';
 
-describe('$faModifier', function() {
+ddescribe('$faModifier', function() {
   var element, $compile, $scope, $famous;
-  var compileFaModifier, getModifier;
+  var TransformSpy;
+  var compileFaModifier, getModifier, getIsolate;
 
-  beforeEach(module('famous.angular'));
+  //beforeEach(module('famous.angular'));
+
+  beforeEach(module('famous.angular', function($provide, _$famousProvider_) {
+    // Set mockFamous as an instance of default $famous service
+    var mockFamous = _$famousProvider_.$get();
+    TransformSpy = jasmine.createSpyObj('TransformSpy', [
+      "aboutOrigin",
+      "perspective",
+      "rotate",
+      "rotateAxis",
+      "rotateX",
+      "rotateY",
+      "rotateZ",
+      "scale",
+      "skew",
+      "translate"
+    ]);
+    // Replace the Transform module with a spy
+    mockFamous['famous/core/Transform'] = TransformSpy;
+    $provide.value('$famous', mockFamous);
+  }));
 
   beforeEach(inject(function(_$compile_, _$rootScope_, _$famous_) {
     $compile = _$compile_;
@@ -23,16 +44,46 @@ describe('$faModifier', function() {
       var modifier = scope.isolate[scope.$id].modifier;
       return modifier;
     };
+
+    getIsolate = function(faModifier) {
+      var scope = faModifier.scope();
+      return scope.isolate[scope.$id];
+    };
   }));
 
 
-  it("should accept functions for the attribute values", function() {
-    $scope.translateValue = function() {
-      return 300;
-    };
-    var faModifier = compileFaModifier('fa-rotate-x="300"');
-    var modifier = getModifier(faModifier);
-    var args = $famous['famous/core/Modifier'].calls.mostRecent().args;
+  iit("should accept function references passed for the attribute values", function() {
+    $scope.getRotateX = function() { return 0.5; };
+    var faModifier = compileFaModifier('fa-rotate-x="getRotateX"');
+    $scope.$apply();
+
+    var isolate = getIsolate(faModifier);
+    isolate.getTransform();
+
+    expect(TransformSpy['rotateX']).toHaveBeenCalledWith(0.5);
+  });
+
+
+  iit("should accept expressions passed for the attribute values", function() {
+    $scope.getRotateX = function() { return 0.5; };
+    var faModifier = compileFaModifier('fa-rotate-x="getRotateX() + 0.25"');
+    $scope.$apply();
+
+    var isolate = getIsolate(faModifier);
+    var transformMatrix = isolate.getTransform();
+
+    expect(TransformSpy['rotateX']).toHaveBeenCalledWith(0.75);
+  });
+
+  iit("should accept expressions within an array", function() {
+    $scope.getRotateX = function() { return 0.5; };
+    var faModifier = compileFaModifier('fa-rotate="[getRotateX() + 0.25, 0.5, 1]"');
+    $scope.$apply();
+
+    var isolate = getIsolate(faModifier);
+    var transformMatrix = isolate.getTransform();
+
+    expect(TransformSpy['rotate']).toHaveBeenCalledWith(0.75, 0.5, 1);
   });
 
 
