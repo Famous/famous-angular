@@ -2,8 +2,8 @@
 
 window.famousAngularCommon = function($scope, $compile) {
   return {
-    compileFaSurface: function(attr) {
-      return $compile('<fa-surface ' + attr + '></fa-surface>')($scope);
+    compileFaSurface: function(attr, scope) {
+      return $compile('<fa-surface ' + attr + '></fa-surface>')(scope || $scope);
     },
     // faSurface must be an angular element so that .scope() can be called on it
     getSurface: function(faSurface) {
