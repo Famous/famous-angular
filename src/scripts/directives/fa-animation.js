@@ -279,16 +279,20 @@ angular.module('famous.angular')
                           })
 
                           modifier.transformFrom(function(){
-
+                            var usedFields = {};
                             var mult = getTransform && getTransform() ? [getTransform()] : [];
                             for(var j = 0; j < transformComponents.length; j++){
                               ((function(){
-                                var transVal = transformComponents[j].fn();
                                 var f = transformComponents[j].field;
-                                if(Array.isArray(transVal))
-                                  mult.push(Transform[f].apply(this, transVal));
-                                else
-                                  mult.push(Transform[f](transVal));  
+                                if(!usedFields[f]){
+                                  var transVal = transformComponents[j].fn();
+
+                                  if(Array.isArray(transVal))
+                                    mult.push(Transform[f].apply(this, transVal));
+                                  else
+                                    mult.push(Transform[f](transVal));  
+                                  usedFields[f] = true;
+                                }
                               })());
                             }
 
