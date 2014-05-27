@@ -141,15 +141,40 @@ describe('$faModifier', function() {
 
   ddescribe('should accept Transform attributes', function() {
 
+    var values = {
+      numbers: '0.5',
+      arrays: '[0, 0.5, -0.5]',
+      functions: 'fn',
+      expressions: 'fn()',
+      transitionables: 'transitionable'
+    };
+
+    function generateTests(attr, method, acceptableValues, expectedOutput) {
+      for (var valueType in values) {
+        // If the valueType is one of the acceptableValues to test
+        if (acceptableValues.indexOf(valueType) !== -1) {
+          // Generate a new spec
+          it(valueType, function(type) {
+            return function() {
+              var value = values[type];
+              var faModifier = compileFaModifier(attr + '="' + value + '"');
+              callGetTransform(faModifier);
+              var expectation = expect(TransformSpy[method]);
+              // If the expectedOutput is an array, we must convert the array
+              // into individual arguments to match the expected arguments
+              if (expectedOutput instanceof Array) {
+                expectation.toHaveBeenCalledWith.apply(expectation, expectedOutput);
+              // if the expectedOutput is a number, just check that it matches
+              } else if (typeof expectedOutput === 'number') {
+                expectation.toHaveBeenCalledWith(expectedOutput);
+              }
+            };
+          }(valueType));
+        }
+      }
+    };
+
     describe('fa-rotate should accept', function() {
-
-      var acceptableValues = {
-        arrays: '[0, 0.5, -0.5]',
-        functions: 'fn',
-        expressions: 'fn()',
-        transitionables: 'transitionable'
-      };
-
       beforeEach(function() {
         $scope.fn = function() {
           return [0, 0.5, -0.5];
@@ -158,21 +183,41 @@ describe('$faModifier', function() {
           get: function() { return [0, 0.5, -0.5]; }
         }
       });
-
-      for (var type in acceptableValues) {
-        it(type, function(types) {
-          return function() {
-            var value = acceptableValues[types];
-            var faModifier = compileFaModifier('fa-rotate="' + value + '"');
-            //console.log(types, value);
-            //console.log(faModifier);
-            callGetTransform(faModifier);
-            expect(TransformSpy.rotate).toHaveBeenCalledWith(0, 0.5, -0.5);
-          };
-        }(type));
-      }
-
+      generateTests(
+        // Attribute
+        'fa-rotate',
+        // Transform method
+        'rotate',
+        // Acceptable values
+        ['arrays', 'functions', 'expressions'],
+        // Expected output
+        [0, 0.5, -0.5]
+      );
     });
+
+    describe('fa-rotate-x should accept', function() {
+      beforeEach(function() {
+        $scope.fn = function() {
+          return 0.5;
+        };
+        $scope.transitionable = {
+          get: function() { return 0.5; }
+        }
+      });
+      generateTests(
+        // Attribute
+        'fa-rotate-x',
+        // Transform method
+        'rotateX',
+        // Acceptable values
+        ['numbers', 'functions', 'expressions'],
+        // Expected output
+        0.5
+      );
+    });
+
+
+
 
     it('fa-rotate-x - to set the rotate X of the modifier', function() {
       var faModifier = compileFaModifier('fa-rotate-x="-0.785"');
