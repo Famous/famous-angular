@@ -3,13 +3,14 @@
  * @name faPipeTo
  * @module famous.angular
  * @restrict A
- * @param {Object} EventHandler - Event handler target object
+ * @priority 16
+ * @param {Object} EventHandler - Event handler source object
  * @description
- * This directive add an event handler object to set of downstream handlers.
+ * This directive pipes an element's event handler to a source event handler.
  *
  * @usage
  * ```html
- * <ANY fa-pipe-to="eventHandler">
+ * <ANY fa-pipe-to="EventHandler">
  *   <!-- zero or more render nodes -->
  * </ANY>
  * ```
@@ -31,10 +32,10 @@ angular.module('famous.angular')
               function(){
                 return scope.$eval(attrs.faPipeTo);
               },
-              function(newPipe, oldPipe){
+              function(newSource, oldSource) {
                 var target = isolate.renderNode || Engine;
-                $famousPipe.unpipesFromTargets(oldPipe, target);
-                $famousPipe.pipesToTargets(newPipe, target);
+                $famousPipe.unpipesFromTargets(oldSource, target);
+                $famousPipe.pipesToTargets(newSource, target);
               }
             );
 
