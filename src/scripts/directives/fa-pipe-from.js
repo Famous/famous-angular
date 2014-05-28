@@ -4,10 +4,9 @@
  * @module famous.angular
  * @restrict A
  * @priority 16
- * @param {Object} EventHandler - target handler object
+ * @param {Object} EventHandler - Event handler target object
  * @description
- * This directive remove an handler object from set of downstream handlers. Undoes work of "pipe"
- * from a faPipeTo directive.
+ * This directive pipes a target event handler to an element's event handler.
  *
  * @usage
  * ```html
@@ -17,7 +16,6 @@
  * ```
  */
 
-// UNTESTED as of 2014-05-26
 angular.module('famous.angular')
   .directive('faPipeFrom', ['$famous', '$famousDecorator', '$famousPipe', function ($famous, $famousDecorator, $famousPipe) {
     return {
