@@ -1261,26 +1261,16 @@ angular.module('famous.angular')
               },
               function(newTarget, oldTarget){
                 var source = isolate.renderNode || Engine;
-<<<<<<< HEAD
-                $famousPipe.unpipesFromTargets(oldTarget, source);
-                $famousPipe.pipesToTargets(newTarget, source);
-=======
                 $famousPipe.unpipesFromTargets(source, oldTarget);
                 $famousPipe.pipesToTargets(source, newTarget);
->>>>>>> add some pending tests; update build
               }
             );
 
             // Destroy listeners along with scope
             scope.$on('$destroy', function() {
               $famousPipe.unpipesFromTargets(
-<<<<<<< HEAD
-                scope.$eval(attrs.faPipeFrom),
-                isolate.renderNode || Engine
-=======
                 isolate.renderNode || Engine,
                 scope.$eval(attrs.faPipeFrom)
->>>>>>> add some pending tests; update build
               );
             });
           }
@@ -1325,13 +1315,8 @@ angular.module('famous.angular')
               },
               function(newSource, oldSource) {
                 var target = isolate.renderNode || Engine;
-<<<<<<< HEAD
-                $famousPipe.unpipesFromTargets(oldPipe, target);
-                $famousPipe.pipesToTargets(newPipe, target);
-=======
                 $famousPipe.unpipesFromTargets(oldSource, target);
                 $famousPipe.pipesToTargets(newSource, target);
->>>>>>> add some pending tests; update build
               }
             );
 
