@@ -93,6 +93,20 @@ require(requirements, function(/*args*/) {
 
     /**
      * @ngdoc method
+     * @name $famousProvider#getIsolate
+     * @module famous.angular
+     * @description
+     * Given an scope, retrieves the corresponding isolate.
+     * @param {Object} scope
+     * @returns {Object} The requested isolate
+     */
+
+    _modules.getIsolate = function(scope) {
+      return ('isolate' in scope) ? scope.isolate[scope.$id] : {};
+    };
+
+    /**
+     * @ngdoc method
      * @name $famousProvider#find
      * @module famous.angular
      * @description given a selector, retrieves
@@ -128,7 +142,7 @@ require(requirements, function(/*args*/) {
       var isolates = function(scopes) {
         var _s = [];
         angular.forEach(scopes, function(scope, i) {
-          _s[i] = scope.isolate[scope.$id];
+          _s[i] = _modules.getIsolate(scope);
         });
         return _s;
       }(scopes);
