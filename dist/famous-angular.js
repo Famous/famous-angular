@@ -1015,7 +1015,6 @@ angular.module('famous.angular')
       }
     };
   }]);
-
 /**
  * @ngdoc directive
  * @name faModifier
@@ -1232,10 +1231,9 @@ angular.module('famous.angular')
  * @module famous.angular
  * @restrict A
  * @priority 16
- * @param {Object} EventHandler - target handler object
+ * @param {Object} EventHandler - Event handler target object
  * @description
- * This directive remove an handler object from set of downstream handlers. Undoes work of "pipe"
- * from a faPipeTo directive.
+ * This directive pipes a target event handler to an element's event handler.
  *
  * @usage
  * ```html
@@ -1245,7 +1243,6 @@ angular.module('famous.angular')
  * ```
  */
 
-//UNTESTED as of 2014-05-13
 angular.module('famous.angular')
   .directive('faPipeFrom', ['$famous', '$famousDecorator', '$famousPipe', function ($famous, $famousDecorator, $famousPipe) {
     return {
@@ -1264,16 +1261,26 @@ angular.module('famous.angular')
               },
               function(newTarget, oldTarget){
                 var source = isolate.renderNode || Engine;
+<<<<<<< HEAD
                 $famousPipe.unpipesFromTargets(oldTarget, source);
                 $famousPipe.pipesToTargets(newTarget, source);
+=======
+                $famousPipe.unpipesFromTargets(source, oldTarget);
+                $famousPipe.pipesToTargets(source, newTarget);
+>>>>>>> add some pending tests; update build
               }
             );
 
             // Destroy listeners along with scope
             scope.$on('$destroy', function() {
               $famousPipe.unpipesFromTargets(
+<<<<<<< HEAD
                 scope.$eval(attrs.faPipeFrom),
                 isolate.renderNode || Engine
+=======
+                isolate.renderNode || Engine,
+                scope.$eval(attrs.faPipeFrom)
+>>>>>>> add some pending tests; update build
               );
             });
           }
@@ -1287,13 +1294,14 @@ angular.module('famous.angular')
  * @name faPipeTo
  * @module famous.angular
  * @restrict A
- * @param {Object} EventHandler - Event handler target object
+ * @priority 16
+ * @param {Object} EventHandler - Event handler source object
  * @description
- * This directive add an event handler object to set of downstream handlers.
+ * This directive pipes an element's event handler to a source event handler.
  *
  * @usage
  * ```html
- * <ANY fa-pipe-to="eventHandler">
+ * <ANY fa-pipe-to="EventHandler">
  *   <!-- zero or more render nodes -->
  * </ANY>
  * ```
@@ -1315,10 +1323,15 @@ angular.module('famous.angular')
               function(){
                 return scope.$eval(attrs.faPipeTo);
               },
-              function(newPipe, oldPipe){
+              function(newSource, oldSource) {
                 var target = isolate.renderNode || Engine;
+<<<<<<< HEAD
                 $famousPipe.unpipesFromTargets(oldPipe, target);
                 $famousPipe.pipesToTargets(newPipe, target);
+=======
+                $famousPipe.unpipesFromTargets(oldSource, target);
+                $famousPipe.pipesToTargets(newSource, target);
+>>>>>>> add some pending tests; update build
               }
             );
 

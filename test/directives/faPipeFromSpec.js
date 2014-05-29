@@ -15,7 +15,15 @@ describe('faPipeFrom', function() {
     eventHandler = new $famous['famous/core/EventHandler']();
   }));
 
-  it('should undo the work of fa-pipe-to', function() {
+  it('should correctly pipe from an array of eventhandlers', function(){
+    pending();
+  });
+
+  it('should correctly watch eventhandlers, updating piping when the eventhandlers change', function(){
+    pending();
+  });
+
+  it('should pipe events from a provided eventhandler to the specified target', function() {
 
     $scope.toEventHandler = eventHandler;
 
