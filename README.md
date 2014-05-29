@@ -37,6 +37,9 @@ This library is under active development and is currently in alpha.  The library
 * And add an `<fa-app style="height: 200px"><fa-surface fa-background-color="'red'">Hello world</fa-surface></fa-app>` in one of your templates.  If you see 'Hello world' on a red background, you should be good to go.
 **Note: currently, the element that the `<fa-app>` is on must be display: block (like a `<div fa-app>` or a `<p fa-app>`, or just `<fa-app>`) and must have a set height (like `style="height: 200px"` in this example.)  Future versions will not have these requirements.**
 
+####Try the starter app
+To get started even faster, try our [starter app](https://github.com/thomasstreet/famous-angular-starter) with everything already in place !
+
 
 ##Running (For developing or contributing to the library)
 

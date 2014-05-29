@@ -20,9 +20,17 @@ describe('faPipeTo', function() {
     common = window.famousAngularCommon($scope, $compile);
   }));
 
-  it('should not fail or update on an undefined event listener', function() {
+  it('should not fail or update on an undefined eventhandler', function() {
     var faSurface = common.compileFaSurface('fa-pipe-to="foobar"');
     expect(listenerValue).toBe(false);
+  });
+
+  it('should correctly pipe to an array of target eventhandlers', function(){
+    pending();
+  });
+
+  it('should correctly watch eventhandlers, updating piping when the eventhandlers change', function(){
+    pending();
   });
 
   it('should trigger events on a defined event listener', function() {

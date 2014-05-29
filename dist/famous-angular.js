@@ -268,6 +268,67 @@ angular.module('famous.angular')
 
 
 /**
+ * @ngdoc service
+ * @name $famousPipe
+ * @module famous.angular
+ * @description
+ * Provides common helpers for the event pipe directives fa-pipe-from and fa-pipe-to.
+ */
+
+angular.module('famous.angular')
+  .service('$famousPipe', function() {
+
+    /**
+     * @param {EventHandler|Array} pipes - pipes to negotatiate
+     * @param {Engine|RenderNode|Array} targets - nodes to negotiate
+     * @param {String} method - action to apply from targets to pipes, e.g. "pipe" or "unpipe"
+     */
+    function bulkUpdatePipes(pipes, targets, method) {
+      if (! (pipes instanceof Array)) {
+        pipes = [pipes];
+      }
+
+      if (! (targets instanceof Array)) {
+        targets = [targets];
+      }
+
+      for (var i = 0; i < pipes.length; i++) {
+        for (var j = 0; j < targets.length; j++) {
+          if (targets[j] !== undefined && pipes[i] !== undefined) {
+            targets[j][method](pipes[i]);
+          }
+        }
+      }
+    }
+
+    /**
+     * @ngdoc method
+     * @name $famousPipe#unpipesFromTargets
+     * @module famous.angular
+     * @param {EventHandler|Array} pipes - pipes to unpipe
+     * @param {Engine|RenderNode|Array} targets - nodes to unpipe from
+     * @description
+     * Unpipes the specified pipes from the specified targets.
+     */
+    this.unpipesFromTargets = function(pipes, targets) {
+      bulkUpdatePipes(pipes, targets, "unpipe");
+    };
+
+    /**
+     * @ngdoc method
+     * @name $famousPipe#pipesToTargets
+     * @module famous.angular
+     * @param {EventHandler|Array} pipes - pipes to pipe
+     * @param {Engine|RenderNode|Array} targets - nodes to pipe to
+     * @description
+     * Pipes the specified pipes to the specified targets.
+     */
+    this.pipesToTargets = function(pipes, targets) {
+      bulkUpdatePipes(pipes, targets, "pipe");
+    };
+  });
+
+/**
  * @ngdoc directive
  * @name faAnimation
  * @module famous.angular
@@ -954,7 +1015,6 @@ angular.module('famous.angular')
       }
     };
   }]);
-
 /**
  * @ngdoc directive
  * @name faModifier
@@ -1155,6 +1215,10 @@ angular.module('famous.angular')
             });
 
             scope.$emit('registerChild', isolate);
+
+            // Trigger a $digest loop to make sure that callbacks for the
+            // $observe listeners are executed in the compilation phase.
+            if(!scope.$$phase) scope.$apply();
           }
         }
       }
@@ -1167,10 +1231,9 @@ angular.module('famous.angular')
  * @module famous.angular
  * @restrict A
  * @priority 16
- * @param {Object} EventHandler - target handler object
+ * @param {Object} EventHandler - Event handler target object
  * @description
- * This directive remove an handler object from set of downstream handlers. Undoes work of "pipe"
- * from a faPipeTo directive.
+ * This directive pipes a target event handler to an element's event handler.
  *
  * @usage
  * ```html
@@ -1180,17 +1243,16 @@ angular.module('famous.angular')
  * ```
  */
 
-//UNTESTED as of 2014-05-13
 angular.module('famous.angular')
-  .directive('faPipeFrom', ['$famous', '$famousDecorator', function ($famous, $famousDecorator) {
+  .directive('faPipeFrom', ['$famous', '$famousDecorator', '$famousPipe', function ($famous, $famousDecorator, $famousPipe) {
     return {
       restrict: 'A',
       scope: false,
       priority: 16,
       compile: function() {
         var Engine = $famous['famous/core/Engine'];
-        
-        return { 
+
+        return {
           post: function(scope, element, attrs) {
             var isolate = $famousDecorator.ensureIsolate(scope);
             scope.$watch(
@@ -1199,23 +1261,18 @@ angular.module('famous.angular')
               },
               function(newTarget, oldTarget){
                 var source = isolate.renderNode || Engine;
-                if(oldTarget instanceof Array){
-                  for(var i = 0; i < oldTarget.length; i++){
-                    oldTarget[i].unpipe(source);
-                  }
-                }else if(oldTarget !== undefined){
-                  oldTarget.unpipe(source);
-                }
-
-                if(newTarget instanceof Array){
-                  for(var i = 0; i < newTarget.length; i++){
-                    newTarget[i].pipe(source);
-                  }
-                }else if(newTarget !== undefined){
-                  newTarget.pipe(source);
-                }
+                $famousPipe.unpipesFromTargets(source, oldTarget);
+                $famousPipe.pipesToTargets(source, newTarget);
               }
             );
+
+            // Destroy listeners along with scope
+            scope.$on('$destroy', function() {
+              $famousPipe.unpipesFromTargets(
+                isolate.renderNode || Engine,
+                scope.$eval(attrs.faPipeFrom)
+              );
+            });
           }
         }
       }
@@ -1227,53 +1284,49 @@ angular.module('famous.angular')
  * @name faPipeTo
  * @module famous.angular
  * @restrict A
- * @param {Object} EventHandler - Event handler target object
+ * @priority 16
+ * @param {Object} EventHandler - Event handler source object
  * @description
- * This directive add an event handler object to set of downstream handlers.
+ * This directive pipes an element's event handler to a source event handler.
  *
  * @usage
  * ```html
- * <ANY fa-pipe-to="eventHandler">
+ * <ANY fa-pipe-to="EventHandler">
  *   <!-- zero or more render nodes -->
  * </ANY>
  * ```
  */
 
 angular.module('famous.angular')
-  .directive('faPipeTo', ['$famous', '$famousDecorator', function ($famous, $famousDecorator) {
+  .directive('faPipeTo', ['$famous', '$famousDecorator', '$famousPipe', function ($famous, $famousDecorator, $famousPipe) {
     return {
       restrict: 'A',
       scope: false,
       priority: 16,
       compile: function() {
         var Engine = $famous['famous/core/Engine'];
-        
-        return { 
+
+        return {
           post: function(scope, element, attrs) {
             var isolate = $famousDecorator.ensureIsolate(scope);
             scope.$watch(
               function(){
                 return scope.$eval(attrs.faPipeTo);
               },
-              function(newPipe, oldPipe){
+              function(newSource, oldSource) {
                 var target = isolate.renderNode || Engine;
-                if(oldPipe instanceof Array){
-                  for(var i = 0; i < oldPipe.length; i++){
-                    target.unpipe(oldPipe[i]);
-                  }
-                }else if(oldPipe !== undefined){
-                  target.unpipe(oldPipe);
-                }
-
-                if(newPipe instanceof Array){
-                  for(var i = 0; i < newPipe.length; i++){
-                    target.pipe(newPipe[i]);
-                  }
-                }else if(newPipe !== undefined){
-                  target.pipe(newPipe);
-                }
+                $famousPipe.unpipesFromTargets(oldSource, target);
+                $famousPipe.pipesToTargets(newSource, target);
               }
             );
+
+            // Destroy listeners along with scope
+            scope.$on('$destroy', function() {
+              $famousPipe.unpipesFromTargets(
+                scope.$eval(attrs.faPipeTo),
+                isolate.renderNode || Engine
+              );
+            });
           }
         }
       }
