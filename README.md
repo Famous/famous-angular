@@ -1,7 +1,9 @@
 # Famo.us/Angular
 
 
-Famo.us/Angular is a library that brings Famo.us and AngularJS together.  Using F/A, you can:
+Famo.us/Angular is an MVC for building Famo.us apps, powered by AngularJS.
+
+Using F/A, you can:
 * Create Famo.us apps using familiar AngularJS tools like controllers, directives, and services.
 * Bring rich Famo.us animations to new or existing AngularJS apps.
 * Use HTML to declare Famo.us UIs, complete with Angular's two-way databinding.
@@ -41,6 +43,7 @@ This library is under active development and is currently in alpha.  The library
 To get started even faster, try our [starter app](https://github.com/thomasstreet/famous-angular-starter) with everything already in place !
 
 
+
 ##Running (For developing or contributing to the library)
 
 ####Before you start, tools you will need
@@ -74,6 +77,7 @@ As configured, you should be able to access the application at localhost:4000.
 `karma start`
 
 
+
 ##Support
 
 Please submit issues as Github issues or reach out for support on the Famous IRC channel on Freenode
@@ -90,53 +94,6 @@ We would love to have community contributions and support!  A few areas where co
 
 If you want to contribute, please submit a pull request, or contact famous-angular@thomasstreet.com for more information.
 
-The commits messages need to be validated. Use the following commands to add a git hook that will check if you follow the convention :
-* `cd <famous-angular-repo>`
-* `ln -s ../../validateCommitMsg.js .git/hooks/commit-msg`
-
-When you commit your messages, follow this convention :
-`<type>: <subject> <BLANK LINE> <optional message>`
-
-For example:
-```no-highlight
-feat: add validation commit msg file
-
-Installation:
- * cd <famous-angular-repo>
- * ln -s ../../validate-commit-msg.js .git/hooks/commit-msg
-```
-
-The following types are accepted in the commit messages:
-- feat
-- fix
-- docs
-- style
-- refactor
-- perf
-- test
-- chore
-- revert
-
-But only feat/fix/docs/perf will be in the changelog.
-
-If you do a breaking change, add an explanation preceded by `BREAKING CHANGE: `. For example:
-```no-highlight
-fix: remove deprecated promise unwrapping
-
-BREAKING CHANGE: promise unwrapping has been removed.
-It can no longer be turned on.
-```
-
-If you want to reference an issue, you can add a new line with either `Closes` or `Fixes` followed by the issue number. For example:
-```no-highlight
-feat: add changelog auto generation
-
-Usage: gulp changelog
-
-Fixes #62
-```
-
-You can fix / close multiple issue with one commit, just add a new line for each.
-
+Please read the contribution guidelines in [CONTRIBUTING.md](https://github.com/Famous/famous-angular/blob/master/CONTRIBUTING.md)
 
 Famo.us/Angular is being developed by [Thomas Street](http://thomasstreet.com) in partnership with [Famo.us](https://famo.us), along with community support.
