@@ -92,7 +92,7 @@ If you want to contribute, please submit a pull request, or contact famous-angul
 
 The commits messages need to be validated. Use the following commands to add a git hook that will check if you follow the convention :
 * `cd <famous-angular-repo>`
-* `ln -s ../../validate-commit-msg.js .git/hooks/commit-msg`
+* `ln -s ../../validateCommitMsg.js .git/hooks/commit-msg`
 
 When you commit your messages, follow this convention :
 `<type>: <subject> <BLANK LINE> <optional message>`
