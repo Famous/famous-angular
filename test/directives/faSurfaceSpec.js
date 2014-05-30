@@ -44,7 +44,7 @@ describe('faSurface', function() {
 
 
     it("fa-background-color - to set the surface's background color", function() {
-    // Have to escape the third level of quotes for string literals
+      // Have to escape the third level of quotes for string literals
       var faSurface = common.compileFaSurface('fa-background-color="\'#97DED\'"');
       var surface = common.getSurface(faSurface);
       var properties = surface.getProperties();
@@ -62,6 +62,60 @@ describe('faSurface', function() {
       var faSurface = common.compileFaSurface('class="test-class"');
       var surface = common.getSurface(faSurface);
       expect(surface.classList).toEqual(["test-class"]);
+    });
+
+    describe("ng-class is fully supported on surfaces", function() {
+      it("adds a single class", function() {
+        var faSurface = common.compileFaSurface('ng-class="className"');
+        var surface   = common.getSurface(faSurface);
+
+        $scope.className = 'added-class';
+        $scope.$apply();
+
+        expect(surface.classList).toEqual(['added-class']);
+      });
+
+      it("removes a single class", function() {
+        var faSurface = common.compileFaSurface('ng-class="className"');
+        var surface   = common.getSurface(faSurface);
+
+        $scope.className = 'added-class';
+        $scope.$apply();
+
+        expect(surface.classList).toEqual(['added-class']);
+
+        $scope.className = '';
+        $scope.$apply();
+
+        expect(surface.classList).toEqual([]);
+      });
+
+      it("adds and removes classes in a single step", function() {
+        var faSurface = common.compileFaSurface('ng-class="{class1: val1, class2: val2}"');
+        var surface   = common.getSurface(faSurface);
+
+        $scope.val1 = true;
+        $scope.val2 = false;
+        $scope.$apply();
+
+        expect(surface.classList).toEqual(['class1']);
+
+        $scope.val1 = false;
+        $scope.val2 = true;
+        $scope.$apply();
+
+        expect(surface.classList).toEqual(['class2']);
+      });
+
+      it("is compatible with existing classes", function() {
+        var faSurface = common.compileFaSurface('class="existing-class" ng-class="className"');
+        var surface   = common.getSurface(faSurface);
+
+        $scope.className = 'added-class';
+        $scope.$apply();
+
+        expect(surface.classList).toEqual(['existing-class', 'added-class']);
+      });
     });
   });
 });

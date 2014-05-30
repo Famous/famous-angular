@@ -28,7 +28,7 @@ angular.module('famous.angular')
             var ImageSurface = $famous['famous/surfaces/ImageSurface'];
             var Transform = $famous['famous/core/Transform']
             var EventHandler = $famous['famous/core/EventHandler'];
-            
+
             //update properties
             //TODO:  is this going to be a bottleneck?
             scope.$watch(
@@ -59,14 +59,13 @@ angular.module('famous.angular')
               properties: isolate.getProperties()
             });
 
-            //TODO:  support ng-class
-            if(attrs.class)
+            if (attrs.class) {
               isolate.renderNode.setClasses(attrs['class'].split(' '));
-
+            }
           },
           post: function(scope, element, attrs){
             var isolate = $famousDecorator.ensureIsolate(scope);
-            
+
             var updateContent = function(){
               isolate.renderNode.setContent(attrs.faImageUrl)
             };
