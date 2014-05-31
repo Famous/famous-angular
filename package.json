@@ -1,7 +1,7 @@
 {
   "name": "famous-angular",
-  "description": "Integrate Famo.us into AngularJS apps and build Famo.us apps using AngularJS tools",
-  "version": "0.0.13",
+  "description": "An MVC for Famo.us apps, powered by AngularJS. Integrates seamlessly with existing Angular and Famo.us apps.",
+  "version": "0.0.14",
   "license": "",
   "homepage": "https://github.com/Famous/famous-angular",
   "repository": {

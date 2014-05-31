@@ -1,3 +1,13 @@
+<a name="0.0.14"></a>
+# 0.0.14 (2014-05-31)
+
+
+## Bug Fixes
+
+- fix 'undefined is not a function' error from angular-animate
+ ([022f8a75](https://github.com/Famous/famous-angular/commit/022f8a7528c60ec9cdbe7219bb7be2e3322a1e29))
+
+
 <a name="0.0.13"></a>
 # 0.0.13 (2014-05-30)
 
