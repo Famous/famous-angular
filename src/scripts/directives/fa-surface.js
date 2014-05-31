@@ -43,6 +43,7 @@ angular.module('famous.angular')
       // 2. The element is an fa-element with an in-scope isolate
       // 3. The isolate's renderNode is some kind of Surface
       return {
+        enabled: $delegate.enabled,
         enter: $delegate.enter,
         leave: $delegate.leave,
         move: $delegate.move,

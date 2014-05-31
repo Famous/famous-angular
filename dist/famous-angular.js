@@ -1,6 +1,6 @@
 /**
  * famous-angular - Integrate Famo.us into AngularJS apps and build Famo.us apps using AngularJS tools
- * @version v0.0.12
+ * @version v0.0.13
  * @link https://github.com/Famous/famous-angular
  * @license 
  */
@@ -1578,6 +1578,7 @@ angular.module('famous.angular')
       // 2. The element is an fa-element with an in-scope isolate
       // 3. The isolate's renderNode is some kind of Surface
       return {
+        enabled: $delegate.enabled,
         enter: $delegate.enter,
         leave: $delegate.leave,
         move: $delegate.move,
