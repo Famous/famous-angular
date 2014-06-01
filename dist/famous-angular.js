@@ -853,8 +853,8 @@ angular.module('famous.angular')
 
               isolate.children = [];
 
-              var flip = function () {
-                isolate.renderNode.flip(options);
+              isolate.flip = function (overrideOptions) {
+                isolate.renderNode.flip(overrideOptions || options);
               };
 
               scope.$on('$destroy', function() {
