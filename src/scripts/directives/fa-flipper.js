@@ -18,48 +18,55 @@
  */
 
 angular.module('famous.angular')
-    .directive('faFlipper', ["$famous", "$famousDecorator",
-            function ($famous, $famousDecorator) {
-            return {
-                template: '<div></div>',
-                restrict: 'E',
-                transclude: true,
-                scope: true,
-                compile: function (tElem, tAttrs, transclude) {
-                    return {
-                        pre: function (scope, element, attrs) {
-                            var isolate = $famousDecorator.ensureIsolate(scope);
-                            var Flipper = $famous["famous/views/Flipper"];
-                            var options = scope.$eval(attrs.faOptions) || {};
-                            isolate.renderNode = new Flipper(options);
+  .directive('faFlipper', ["$famous", "$famousDecorator",
+    function ($famous, $famousDecorator) {
+      return {
+        template: '<div></div>',
+        restrict: 'E',
+        transclude: true,
+        scope: true,
+        compile: function (tElem, tAttrs, transclude) {
+          return {
+            pre: function (scope, element, attrs) {
+              var isolate = $famousDecorator.ensureIsolate(scope);
+              var Flipper = $famous["famous/views/Flipper"];
+              var options = scope.$eval(attrs.faOptions) || {};
+              isolate.renderNode = new Flipper(options);
 
-                            var flip = function () {
-                                isolate.renderNode.flip(options);
-                            };
+              isolate.children = [];
 
-                            var childCount = 0;
-                            scope.$on('registerChild', function (evt, data) {
-                                if (evt.targetScope.$id != scope.$id) {
-                                    if (childCount == 0) {
-                                        isolate.renderNode.setFront(data.renderNode);
-                                    }
-                                    if (childCount == 1) {
-                                        isolate.renderNode.setBack(data.renderNode);
-                                    }
-                                    data.renderNode.on('click', flip);
-                                    childCount += 1;
-                                    evt.stopPropagation();
-                                };
-                            });
-                        },
-                        post: function (scope, element, attrs) {
-                            var isolate = $famousDecorator.ensureIsolate(scope);
-                            transclude(scope, function (clone) {
-                                element.find('div').append(clone);
-                            });
-                            scope.$emit('registerChild', isolate);
-                        }
-                    };
-                }
-            };
-            }]);
+              isolate.flip = function (overrideOptions) {
+                isolate.renderNode.flip(overrideOptions || options);
+              };
+
+              scope.$on('$destroy', function() {
+                scope.$emit('unregisterChild', {id: scope.$id});
+              });
+              
+              scope.$on('registerChild', function (evt, data) {
+                if (evt.targetScope.$id != scope.$id) {
+                  var _childCount = isolate.children.length;
+                  if (_childCount == 0) {
+                    isolate.renderNode.setFront(data.renderNode);
+                  }else if (_childCount == 1) {
+                    isolate.renderNode.setBack(data.renderNode);
+                  }else{
+                    throw "fa-flipper accepts only two child elements; more than two have been provided"
+                  }
+                  isolate.children.push(data.renderNode);
+                  evt.stopPropagation();
+                };
+              });
+            },
+            post: function (scope, element, attrs) {
+              var isolate = $famousDecorator.ensureIsolate(scope);
+              transclude(scope, function (clone) {
+                element.find('div').append(clone);
+              });
+              scope.$emit('registerChild', isolate);
+            }
+          };
+        }
+      };
+    }
+  ]);

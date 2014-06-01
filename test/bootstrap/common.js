@@ -10,6 +10,11 @@ window.famousAngularCommon = function($scope, $compile) {
       var scope = faSurface.scope();
       var surface = scope.isolate[scope.$id].renderNode;
       return surface;
+    },
+    getIsolateFromElement: function(elem){
+      var scope = elem.scope();
+      var isolate = scope.isolate[scope.$id];
+      return isolate;
     }
   }
 };

@@ -1,6 +1,11 @@
 /**
+<<<<<<< HEAD
  * famous-angular - An MVC for Famo.us apps, powered by AngularJS. Integrates seamlessly with existing Angular and Famo.us apps.
  * @version v0.0.14
+=======
+ * famous-angular - Integrate Famo.us into AngularJS apps and build Famo.us apps using AngularJS tools
+ * @version v0.0.13
+>>>>>>> ab79e49... add flipper spec; tweak fa-flipper directive a bit
  * @link https://github.com/Famous/famous-angular
  * @license MPL v2.0
  */
@@ -42,7 +47,8 @@ var requirements = [
   "famous/views/GridLayout",
   "famous/views/RenderController",
   "famous/views/Scroller",
-  "famous/views/Scrollview"
+  "famous/views/Scrollview",
+  "famous/views/Flipper"
 ]
 
 //declare the module before the async callback so that
@@ -810,6 +816,78 @@ angular.module('famous.angular')
     };
   }]);
 
+/**
+ * @ngdoc directive
+ * @name faFlipper
+ * @module famous.angular
+ * @restrict EA
+ * @description
+ * This directive will create a Famo.us Flipper containing the
+ * specified front and back elements. The provided `options` object
+ * will pass directly through to the Famo.us Flipper's
+ * constructor.  See [https://famo.us/docs/0.2.0/views/Flipper/]
+ *
+ * @usage
+ * ```html
+ * <fa-flipper fa-options="scopeOptionsObject">
+ *   <!-- two render nodes -->
+ * </fa-flipper>
+ * ```
+ */
+
+angular.module('famous.angular')
+  .directive('faFlipper', ["$famous", "$famousDecorator",
+    function ($famous, $famousDecorator) {
+      return {
+        template: '<div></div>',
+        restrict: 'E',
+        transclude: true,
+        scope: true,
+        compile: function (tElem, tAttrs, transclude) {
+          return {
+            pre: function (scope, element, attrs) {
+              var isolate = $famousDecorator.ensureIsolate(scope);
+              var Flipper = $famous["famous/views/Flipper"];
+              var options = scope.$eval(attrs.faOptions) || {};
+              isolate.renderNode = new Flipper(options);
+
+              isolate.children = [];
+
+              var flip = function () {
+                isolate.renderNode.flip(options);
+              };
+
+              scope.$on('$destroy', function() {
+                scope.$emit('unregisterChild', {id: scope.$id});
+              });
+              
+              scope.$on('registerChild', function (evt, data) {
+                if (evt.targetScope.$id != scope.$id) {
+                  var _childCount = isolate.children.length;
+                  if (_childCount == 0) {
+                    isolate.renderNode.setFront(data.renderNode);
+                  }else if (_childCount == 1) {
+                    isolate.renderNode.setBack(data.renderNode);
+                  }else{
+                    throw "fa-flipper accepts only two child elements; more than two have been provided"
+                  }
+                  isolate.children.push(data.renderNode);
+                  evt.stopPropagation();
+                };
+              });
+            },
+            post: function (scope, element, attrs) {
+              var isolate = $famousDecorator.ensureIsolate(scope);
+              transclude(scope, function (clone) {
+                element.find('div').append(clone);
+              });
+              scope.$emit('registerChild', isolate);
+            }
+          };
+        }
+      };
+    }
+  ]);
 /**
  * @ngdoc directive
  * @name faGridLayout
