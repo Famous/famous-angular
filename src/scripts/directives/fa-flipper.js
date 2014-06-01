@@ -30,13 +30,15 @@ angular.module('famous.angular')
             pre: function (scope, element, attrs) {
               var isolate = $famousDecorator.ensureIsolate(scope);
               var Flipper = $famous["famous/views/Flipper"];
-              var options = scope.$eval(attrs.faOptions) || {};
-              isolate.renderNode = new Flipper(options);
 
+              //TODO:  $watch and update, or $parse and attr.$observe
+              var options = scope.$eval(attrs.faOptions) || {};
+              
+              isolate.renderNode = new Flipper(options);
               isolate.children = [];
 
               isolate.flip = function (overrideOptions) {
-                isolate.renderNode.flip(overrideOptions || options);
+                isolate.renderNode.flip(overrideOptions || scope.$eval(attrs.faOptions));
               };
 
               scope.$on('$destroy', function() {
@@ -57,6 +59,14 @@ angular.module('famous.angular')
                   evt.stopPropagation();
                 };
               });
+
+              //TODO:  handle unregisterChild
+              scope.$on('unregisterChild', function(evt, data){
+                if(evt.targetScope.$id != scope.$id){
+
+                }
+              });
+
             },
             post: function (scope, element, attrs) {
               var isolate = $famousDecorator.ensureIsolate(scope);
