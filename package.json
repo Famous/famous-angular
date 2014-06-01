@@ -2,7 +2,7 @@
   "name": "famous-angular",
   "description": "An MVC for Famo.us apps, powered by AngularJS. Integrates seamlessly with existing Angular and Famo.us apps.",
   "version": "0.0.14",
-  "license": "",
+  "license": "MPL v2.0",
   "homepage": "https://github.com/Famous/famous-angular",
   "repository": {
     "type": "git",
