@@ -1,7 +1,7 @@
 'use strict';
 
 describe('faPipeFrom', function() {
-  var eventHandler, $compile, $scope, $rootScope, $famous;
+  var eventHandler, common, $compile, $scope, $rootScope, $famous;
   var listenerValue = false;
 
   beforeEach(module('famous.angular'));
@@ -13,6 +13,8 @@ describe('faPipeFrom', function() {
     $famous = _$famous_;
 
     eventHandler = new $famous['famous/core/EventHandler']();
+
+    common = window.famousAngularCommon($scope, $compile);
   }));
 
   it('should correctly pipe from an array of eventhandlers', function(){
@@ -28,13 +30,11 @@ describe('faPipeFrom', function() {
     $scope.toEventHandler = eventHandler;
 
     // Inject a simple disconnected pipeline into the document body
-    var pipeline = $compile(
+    var pipeline = common.createApp(
       '<fa-view fa-pipe-from="fromEventHandler" id="pipe-from">' +
         '<fa-surface fa-pipe-to="toEventHandler" id="pipe-to"></fa-surface>' +
       '</fa-view>'
-    )($scope);
-
-    document.body.appendChild(pipeline[0]);
+    );
 
     var toHandler   = $famous.find('#pipe-to')[0].renderNode.eventHandler;
     var fromHandler = $famous.find('#pipe-from')[0].renderNode._eventInput;
@@ -55,5 +55,8 @@ describe('faPipeFrom', function() {
     // the pipeline is connected
     toHandler.trigger('testevent');
     expect(listenerValue).toBe(true);
+
+    // Cleanup
+    common.destroyApp(pipeline);
   });
 });
