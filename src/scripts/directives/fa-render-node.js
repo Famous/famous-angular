@@ -6,10 +6,10 @@
  * @description
  * A directive to insert a {@link https://famo.us/docs/0.1.1/core/RenderNode/ Famo.us RenderNode} that is
  * a wrapper for inserting a renderable component (like a Modifer or Surface) into the render tree.
- *
+ * allows you to pass a reference to an arbitrary render node from your controller.
  * @usage
  * ```html
- * <fa-render-node>
+ * <fa-render-node fa-node="arbitrary render node reference">
  *     <!-- content -->
  * </fa-render-node>
  * ```
