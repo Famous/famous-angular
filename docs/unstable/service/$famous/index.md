@@ -10,7 +10,7 @@ docType: "service"
 ---
 
 <div class="improve-docs">
-  <a href='https://github.com/Famous/famous-angular/edit/master/src/scripts/services/famous.js#L140'>
+  <a href='https://github.com/Famous/famous-angular/edit/master/src/scripts/services/famous.js#L154'>
     Improve this doc
   </a>
 </div>
