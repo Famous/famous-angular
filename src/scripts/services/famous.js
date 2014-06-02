@@ -58,7 +58,6 @@ require(requirements, function ( /*args*/ ) {
      * This provider is loaded as an AMD module and will keep a reference on the complete Famo.us library.
      * We use this provider to avoid needing to deal with AMD on any other angular files.
      *
-<<<<<<< HEAD
      * @param {String} key the key that will be used to register the module
      * @param {Misc} module the data that will be returned by the service
      */
@@ -93,8 +92,6 @@ require(requirements, function ( /*args*/ ) {
      * @returns {Array} an array of the isolate objects of the selected elements.
      *
      * @param {String} selector - the selector for the elements to look up
-=======
->>>>>>> 52615ec... Implement faFlipper directive
      * @usage
      * You probably won't have to configure this provider
      *
@@ -154,45 +151,24 @@ require(requirements, function ( /*args*/ ) {
          * ```
          */
 
-<<<<<<< HEAD
-    _modules.find = function(selector){
-      var elems = angular.element(window.document.querySelector(selector));
-      var scopes = function(elems) {
-        var _s = [];
-        angular.forEach(elems, function(elem, i) {
-          _s[i] = angular.element(elem).scope();
-        });
-        return _s;
-      }(elems);
-      var isolates = function(scopes) {
-        var _s = [];
-        angular.forEach(scopes, function(scope, i) {
-          _s[i] = _modules.getIsolate(scope);
-        });
-        return _s;
-      }(scopes);
-      return isolates;
-    }
-=======
-        _modules.find = function (selector) {
-            var elems = angular.element(window.document.querySelector(selector));
-            var scopes = function (elems) {
-                var _s = [];
-                angular.forEach(elems, function (elem, i) {
-                    _s[i] = angular.element(elem).scope();
-                });
-                return _s;
-            }(elems);
-            var isolates = function (scopes) {
-                var _s = [];
-                angular.forEach(scopes, function (scope, i) {
-                    _s[i] = scope.isolate[scope.$id];
-                });
-                return _s;
-            }(scopes);
-            return isolates;
+        _modules.find = function(selector){
+          var elems = angular.element(window.document.querySelector(selector));
+          var scopes = function(elems) {
+            var _s = [];
+            angular.forEach(elems, function(elem, i) {
+              _s[i] = angular.element(elem).scope();
+            });
+            return _s;
+          }(elems);
+          var isolates = function(scopes) {
+            var _s = [];
+            angular.forEach(scopes, function(scope, i) {
+              _s[i] = _modules.getIsolate(scope);
+            });
+            return _s;
+          }(scopes);
+          return isolates;
         }
->>>>>>> 52615ec... Implement faFlipper directive
 
         this.$get = function () {
 
@@ -229,7 +205,7 @@ require(requirements, function ( /*args*/ ) {
                 $famousProvider.registerModule(requirements[i], required[i]);
             }
             //		console.log('registered modules', famousProvider.$get());
-  }]);
+    }]);
 
     angular.element(document).ready(function () {
         // For some reason Karma evaluates angular.resumeBootstrap as undefined.
