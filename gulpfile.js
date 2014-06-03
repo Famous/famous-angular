@@ -219,12 +219,19 @@ gulp.task('release', ['docs'], function() { // docs task includes build task
 	});
 })
 
+gulp.task('jasmine', function() {
+  var jasmine = require('gulp-jasmine');
+
+  return gulp.src('test/**/*Test.js')
+    .pipe(jasmine());
+})
+
 // Default task
 gulp.task('dev', function() {
-	var express = require('express');
-	var app = express();
-	app.use(require('connect-livereload')());
-	app.use(express.static(EXAMPLES_DIR + 'app/'));
-	app.listen(EXPRESS_PORT);
-	gulp.start('watch-examples');
+  var express = require('express');
+  var app = express();
+  app.use(require('connect-livereload')());
+  app.use(express.static(EXAMPLES_DIR + 'app/'));
+  app.listen(EXPRESS_PORT);
+  gulp.start('watch-examples');
 });

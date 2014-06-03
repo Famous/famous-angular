@@ -30,8 +30,7 @@ docType: "directive"
 
 
 
-This directive remove an handler object from set of downstream handlers. Undoes work of "pipe"
-from a faPipeTo directive.
+This directive pipes a target event handler to an element's event handler.
 
 
 
@@ -73,7 +72,7 @@ from a faPipeTo directive.
   <code>Object</code>
       </td>
       <td>
-        <p>target handler object</p>
+        <p>Event handler target object</p>
 
         
       </td>

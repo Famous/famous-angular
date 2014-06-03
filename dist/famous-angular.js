@@ -1,8 +1,8 @@
 /**
- * famous-angular - Integrate Famo.us into AngularJS apps and build Famo.us apps using AngularJS tools
- * @version v0.0.12
+ * famous-angular - An MVC for Famo.us apps, powered by AngularJS. Integrates seamlessly with existing Angular and Famo.us apps.
+ * @version v0.0.14
  * @link https://github.com/Famous/famous-angular
- * @license 
+ * @license MPL v2.0
  */
 'use strict';
 
@@ -39,6 +39,7 @@ var requirements = [
   "famous/transitions/TransitionableTransform",
   "famous/utilities/KeyCodes",
   "famous/utilities/Timer",
+  "famous/views/Flipper",
   "famous/views/GridLayout",
   "famous/views/RenderController",
   "famous/views/Scroller",
@@ -99,6 +100,20 @@ require(requirements, function(/*args*/) {
 
     /**
      * @ngdoc method
+     * @name $famousProvider#getIsolate
+     * @module famous.angular
+     * @description
+     * Given an scope, retrieves the corresponding isolate.
+     * @param {Object} scope
+     * @returns {Object} The requested isolate
+     */
+
+    _modules.getIsolate = function(scope) {
+      return ('isolate' in scope) ? scope.isolate[scope.$id] : {};
+    };
+
+    /**
+     * @ngdoc method
      * @name $famousProvider#find
      * @module famous.angular
      * @description given a selector, retrieves
@@ -134,7 +149,7 @@ require(requirements, function(/*args*/) {
       var isolates = function(scopes) {
         var _s = [];
         angular.forEach(scopes, function(scope, i) {
-          _s[i] = scope.isolate[scope.$id];
+          _s[i] = _modules.getIsolate(scope);
         });
         return _s;
       }(scopes);
@@ -174,7 +189,7 @@ require(requirements, function(/*args*/) {
     for(var i = 0; i < requirements.length; i++) {
       $famousProvider.registerModule(requirements[i], required[i]);
     }
-    //		console.log('registered modules', famousProvider.$get());
+    //    console.log('registered modules', famousProvider.$get());
   }]);
 
   angular.element(document).ready(function() {
@@ -266,6 +281,67 @@ angular.module('famous.angular')
     };
   });
 
+
+/**
+ * @ngdoc service
+ * @name $famousPipe
+ * @module famous.angular
+ * @description
+ * Provides common helpers for the event pipe directives fa-pipe-from and fa-pipe-to.
+ */
+
+angular.module('famous.angular')
+  .service('$famousPipe', function() {
+
+    /**
+     * @param {EventHandler|Array} pipes - pipes to negotatiate
+     * @param {Engine|RenderNode|Array} targets - nodes to negotiate
+     * @param {String} method - action to apply from targets to pipes, e.g. "pipe" or "unpipe"
+     */
+    function bulkUpdatePipes(pipes, targets, method) {
+      if (! (pipes instanceof Array)) {
+        pipes = [pipes];
+      }
+
+      if (! (targets instanceof Array)) {
+        targets = [targets];
+      }
+
+      for (var i = 0; i < pipes.length; i++) {
+        for (var j = 0; j < targets.length; j++) {
+          if (targets[j] !== undefined && pipes[i] !== undefined) {
+            targets[j][method](pipes[i]);
+          }
+        }
+      }
+    }
+
+    /**
+     * @ngdoc method
+     * @name $famousPipe#unpipesFromTargets
+     * @module famous.angular
+     * @param {EventHandler|Array} pipes - pipes to unpipe
+     * @param {Engine|RenderNode|Array} targets - nodes to unpipe from
+     * @description
+     * Unpipes the specified pipes from the specified targets.
+     */
+    this.unpipesFromTargets = function(pipes, targets) {
+      bulkUpdatePipes(pipes, targets, "unpipe");
+    };
+
+    /**
+     * @ngdoc method
+     * @name $famousPipe#pipesToTargets
+     * @module famous.angular
+     * @param {EventHandler|Array} pipes - pipes to pipe
+     * @param {Engine|RenderNode|Array} targets - nodes to pipe to
+     * @description
+     * Pipes the specified pipes to the specified targets.
+     */
+    this.pipesToTargets = function(pipes, targets) {
+      bulkUpdatePipes(pipes, targets, "pipe");
+    };
+  });
 
 /**
  * @ngdoc directive
@@ -737,6 +813,88 @@ angular.module('famous.angular')
 
 /**
  * @ngdoc directive
+ * @name faFlipper
+ * @module famous.angular
+ * @restrict EA
+ * @description
+ * This directive will create a Famo.us Flipper containing the
+ * specified front and back elements. The provided `options` object
+ * will pass directly through to the Famo.us Flipper's
+ * constructor.  See [https://famo.us/docs/0.2.0/views/Flipper/]
+ *
+ * @usage
+ * ```html
+ * <fa-flipper fa-options="scopeOptionsObject">
+ *   <!-- two render nodes -->
+ * </fa-flipper>
+ * ```
+ */
+
+angular.module('famous.angular')
+  .directive('faFlipper', ["$famous", "$famousDecorator",
+    function ($famous, $famousDecorator) {
+      return {
+        template: '<div></div>',
+        restrict: 'E',
+        transclude: true,
+        scope: true,
+        compile: function (tElem, tAttrs, transclude) {
+          return {
+            pre: function (scope, element, attrs) {
+              var isolate = $famousDecorator.ensureIsolate(scope);
+              var Flipper = $famous["famous/views/Flipper"];
+
+              //TODO:  $watch and update, or $parse and attr.$observe
+              var options = scope.$eval(attrs.faOptions) || {};
+              
+              isolate.renderNode = new Flipper(options);
+              isolate.children = [];
+
+              isolate.flip = function (overrideOptions) {
+                isolate.renderNode.flip(overrideOptions || scope.$eval(attrs.faOptions));
+              };
+
+              scope.$on('$destroy', function() {
+                scope.$emit('unregisterChild', {id: scope.$id});
+              });
+              
+              scope.$on('registerChild', function (evt, data) {
+                if (evt.targetScope.$id != scope.$id) {
+                  var _childCount = isolate.children.length;
+                  if (_childCount == 0) {
+                    isolate.renderNode.setFront(data.renderNode);
+                  }else if (_childCount == 1) {
+                    isolate.renderNode.setBack(data.renderNode);
+                  }else{
+                    throw "fa-flipper accepts only two child elements; more than two have been provided"
+                  }
+                  isolate.children.push(data.renderNode);
+                  evt.stopPropagation();
+                };
+              });
+
+              //TODO:  handle unregisterChild
+              scope.$on('unregisterChild', function(evt, data){
+                if(evt.targetScope.$id != scope.$id){
+
+                }
+              });
+
+            },
+            post: function (scope, element, attrs) {
+              var isolate = $famousDecorator.ensureIsolate(scope);
+              transclude(scope, function (clone) {
+                element.find('div').append(clone);
+              });
+              scope.$emit('registerChild', isolate);
+            }
+          };
+        }
+      };
+    }
+  ]);
+/**
+ * @ngdoc directive
  * @name faGridLayout
  * @module famous.angular
  * @restrict EA
@@ -856,7 +1014,7 @@ angular.module('famous.angular')
             var ImageSurface = $famous['famous/surfaces/ImageSurface'];
             var Transform = $famous['famous/core/Transform']
             var EventHandler = $famous['famous/core/EventHandler'];
-            
+
             //update properties
             //TODO:  is this going to be a bottleneck?
             scope.$watch(
@@ -887,14 +1045,13 @@ angular.module('famous.angular')
               properties: isolate.getProperties()
             });
 
-            //TODO:  support ng-class
-            if(attrs.class)
+            if (attrs.class) {
               isolate.renderNode.setClasses(attrs['class'].split(' '));
-
+            }
           },
           post: function(scope, element, attrs){
             var isolate = $famousDecorator.ensureIsolate(scope);
-            
+
             var updateContent = function(){
               isolate.renderNode.setContent(attrs.faImageUrl)
             };
@@ -954,7 +1111,6 @@ angular.module('famous.angular')
       }
     };
   }]);
-
 /**
  * @ngdoc directive
  * @name faModifier
@@ -1155,6 +1311,10 @@ angular.module('famous.angular')
             });
 
             scope.$emit('registerChild', isolate);
+
+            // Trigger a $digest loop to make sure that callbacks for the
+            // $observe listeners are executed in the compilation phase.
+            if(!scope.$$phase) scope.$apply();
           }
         }
       }
@@ -1167,10 +1327,9 @@ angular.module('famous.angular')
  * @module famous.angular
  * @restrict A
  * @priority 16
- * @param {Object} EventHandler - target handler object
+ * @param {Object} EventHandler - Event handler target object
  * @description
- * This directive remove an handler object from set of downstream handlers. Undoes work of "pipe"
- * from a faPipeTo directive.
+ * This directive pipes a target event handler to an element's event handler.
  *
  * @usage
  * ```html
@@ -1180,17 +1339,16 @@ angular.module('famous.angular')
  * ```
  */
 
-//UNTESTED as of 2014-05-13
 angular.module('famous.angular')
-  .directive('faPipeFrom', ['$famous', '$famousDecorator', function ($famous, $famousDecorator) {
+  .directive('faPipeFrom', ['$famous', '$famousDecorator', '$famousPipe', function ($famous, $famousDecorator, $famousPipe) {
     return {
       restrict: 'A',
       scope: false,
       priority: 16,
       compile: function() {
         var Engine = $famous['famous/core/Engine'];
-        
-        return { 
+
+        return {
           post: function(scope, element, attrs) {
             var isolate = $famousDecorator.ensureIsolate(scope);
             scope.$watch(
@@ -1199,23 +1357,18 @@ angular.module('famous.angular')
               },
               function(newTarget, oldTarget){
                 var source = isolate.renderNode || Engine;
-                if(oldTarget instanceof Array){
-                  for(var i = 0; i < oldTarget.length; i++){
-                    oldTarget[i].unpipe(source);
-                  }
-                }else if(oldTarget !== undefined){
-                  oldTarget.unpipe(source);
-                }
-
-                if(newTarget instanceof Array){
-                  for(var i = 0; i < newTarget.length; i++){
-                    newTarget[i].pipe(source);
-                  }
-                }else if(newTarget !== undefined){
-                  newTarget.pipe(source);
-                }
+                $famousPipe.unpipesFromTargets(source, oldTarget);
+                $famousPipe.pipesToTargets(source, newTarget);
               }
             );
+
+            // Destroy listeners along with scope
+            scope.$on('$destroy', function() {
+              $famousPipe.unpipesFromTargets(
+                isolate.renderNode || Engine,
+                scope.$eval(attrs.faPipeFrom)
+              );
+            });
           }
         }
       }
@@ -1227,53 +1380,49 @@ angular.module('famous.angular')
  * @name faPipeTo
  * @module famous.angular
  * @restrict A
- * @param {Object} EventHandler - Event handler target object
+ * @priority 16
+ * @param {Object} EventHandler - Event handler source object
  * @description
- * This directive add an event handler object to set of downstream handlers.
+ * This directive pipes an element's event handler to a source event handler.
  *
  * @usage
  * ```html
- * <ANY fa-pipe-to="eventHandler">
+ * <ANY fa-pipe-to="EventHandler">
  *   <!-- zero or more render nodes -->
  * </ANY>
  * ```
  */
 
 angular.module('famous.angular')
-  .directive('faPipeTo', ['$famous', '$famousDecorator', function ($famous, $famousDecorator) {
+  .directive('faPipeTo', ['$famous', '$famousDecorator', '$famousPipe', function ($famous, $famousDecorator, $famousPipe) {
     return {
       restrict: 'A',
       scope: false,
       priority: 16,
       compile: function() {
         var Engine = $famous['famous/core/Engine'];
-        
-        return { 
+
+        return {
           post: function(scope, element, attrs) {
             var isolate = $famousDecorator.ensureIsolate(scope);
             scope.$watch(
               function(){
                 return scope.$eval(attrs.faPipeTo);
               },
-              function(newPipe, oldPipe){
+              function(newSource, oldSource) {
                 var target = isolate.renderNode || Engine;
-                if(oldPipe instanceof Array){
-                  for(var i = 0; i < oldPipe.length; i++){
-                    target.unpipe(oldPipe[i]);
-                  }
-                }else if(oldPipe !== undefined){
-                  target.unpipe(oldPipe);
-                }
-
-                if(newPipe instanceof Array){
-                  for(var i = 0; i < newPipe.length; i++){
-                    target.pipe(newPipe[i]);
-                  }
-                }else if(newPipe !== undefined){
-                  target.pipe(newPipe);
-                }
+                $famousPipe.unpipesFromTargets(oldSource, target);
+                $famousPipe.pipesToTargets(newSource, target);
               }
             );
+
+            // Destroy listeners along with scope
+            scope.$on('$destroy', function() {
+              $famousPipe.unpipesFromTargets(
+                scope.$eval(attrs.faPipeTo),
+                isolate.renderNode || Engine
+              );
+            });
           }
         }
       }
@@ -1490,6 +1639,66 @@ angular.module('famous.angular')
  */
 
 angular.module('famous.angular')
+  .config(['$provide', '$animateProvider', function($provide, $animateProvider) {
+    // Hook into the animation system to emit ng-class syncers to surfaces
+    $provide.decorator('$animate', ['$delegate', '$$asyncCallback', '$famous', function($delegate, $$asyncCallback, $famous) {
+
+      var Surface = $famous['famous/core/Surface'];
+
+      /**
+       * Check if the element selected has an isolate renderNode that accepts classes.
+       * @param {Array} element - derived element
+       * @return {boolean}
+       */
+      function isClassable(element) {
+        return $famous.getIsolate(element.scope()).renderNode instanceof Surface;
+      }
+
+      // Fork $animateProvider methods that update class lists with ng-class
+      // in the most efficient way we can. Delegate directly to irrelevant methods
+      // (enter, leave, move). These method forks only get invoked when:
+      // 1. The element has a directive like ng-class that is updating classes
+      // 2. The element is an fa-element with an in-scope isolate
+      // 3. The isolate's renderNode is some kind of Surface
+      return {
+        enabled: $delegate.enabled,
+        enter: $delegate.enter,
+        leave: $delegate.leave,
+        move: $delegate.move,
+        addClass: function(element, className, done) {
+          $delegate.addClass(element, className, done);
+
+          if (isClassable(element)) {
+            $famous.getIsolate(element.scope()).renderNode.addClass(className);
+          }
+        },
+        removeClass: function(element, className, done) {
+          $delegate.removeClass(element, className, done);
+
+          if (isClassable(element)) {
+            $famous.getIsolate(element.scope()).renderNode.removeClass(className);
+          }
+        },
+        setClass: function(element, add, remove, done) {
+          $delegate.setClass(element, add, remove, done);
+
+          if (isClassable(element)) {
+            var surface = $famous.getIsolate(element.scope()).renderNode;
+            // There isn't a good way to delegate down to Surface.setClasses
+            // because Angular has already negotiated the list of items to add
+            // and items to remove. Manually loop through both lists.
+            angular.forEach(add.split(' '), function(className) {
+              surface.addClass(className);
+            });
+
+            angular.forEach(remove.split(' '), function(className) {
+              surface.removeClass(className);
+            });
+          }
+        }
+      }
+    }]);
+  }])
   .directive('faSurface', ['$famous', '$famousDecorator', '$interpolate', '$controller', '$compile', function ($famous, $famousDecorator, $interpolate, $controller, $compile) {
     return {
       scope: true,
@@ -1531,18 +1740,15 @@ angular.module('famous.angular')
               properties: isolate.getProperties()
             });
 
-            //TODO:  support ng-class
-            if(attrs.class)
+            if (attrs.class) {
               isolate.renderNode.setClasses(attrs['class'].split(' '));
+            }
 
           },
           post: function(scope, element, attrs){
             var isolate = $famousDecorator.ensureIsolate(scope);
 
-            var updateContent = function(){
-//              var compiledEl = isolate.compiledEl = isolate.compiledEl || $compile(element.find('div.fa-surface').contents())(scope)
-//              isolate.renderNode.setContent(isolate.compiledEl.context);
-	            //TODO check if $compile is needed ?
+            var updateContent = function() {
 	            isolate.renderNode.setContent(element[0].querySelector('div.fa-surface'));
             };
 

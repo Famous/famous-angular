@@ -4,10 +4,9 @@
  * @module famous.angular
  * @restrict A
  * @priority 16
- * @param {Object} EventHandler - target handler object
+ * @param {Object} EventHandler - Event handler target object
  * @description
- * This directive remove an handler object from set of downstream handlers. Undoes work of "pipe"
- * from a faPipeTo directive.
+ * This directive pipes a target event handler to an element's event handler.
  *
  * @usage
  * ```html
@@ -17,17 +16,16 @@
  * ```
  */
 
-//UNTESTED as of 2014-05-13
 angular.module('famous.angular')
-  .directive('faPipeFrom', ['$famous', '$famousDecorator', function ($famous, $famousDecorator) {
+  .directive('faPipeFrom', ['$famous', '$famousDecorator', '$famousPipe', function ($famous, $famousDecorator, $famousPipe) {
     return {
       restrict: 'A',
       scope: false,
       priority: 16,
       compile: function() {
         var Engine = $famous['famous/core/Engine'];
-        
-        return { 
+
+        return {
           post: function(scope, element, attrs) {
             var isolate = $famousDecorator.ensureIsolate(scope);
             scope.$watch(
@@ -36,23 +34,18 @@ angular.module('famous.angular')
               },
               function(newTarget, oldTarget){
                 var source = isolate.renderNode || Engine;
-                if(oldTarget instanceof Array){
-                  for(var i = 0; i < oldTarget.length; i++){
-                    oldTarget[i].unpipe(source);
-                  }
-                }else if(oldTarget !== undefined){
-                  oldTarget.unpipe(source);
-                }
-
-                if(newTarget instanceof Array){
-                  for(var i = 0; i < newTarget.length; i++){
-                    newTarget[i].pipe(source);
-                  }
-                }else if(newTarget !== undefined){
-                  newTarget.pipe(source);
-                }
+                $famousPipe.unpipesFromTargets(source, oldTarget);
+                $famousPipe.pipesToTargets(source, newTarget);
               }
             );
+
+            // Destroy listeners along with scope
+            scope.$on('$destroy', function() {
+              $famousPipe.unpipesFromTargets(
+                isolate.renderNode || Engine,
+                scope.$eval(attrs.faPipeFrom)
+              );
+            });
           }
         }
       }

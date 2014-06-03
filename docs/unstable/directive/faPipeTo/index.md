@@ -30,7 +30,7 @@ docType: "directive"
 
 
 
-This directive add an event handler object to set of downstream handlers.
+This directive pipes an element's event handler to a source event handler.
 
 
 
@@ -43,7 +43,7 @@ This directive add an event handler object to set of downstream handlers.
 <h2 id="usage">Usage</h2>
   
 ```html
-<ANY fa-pipe-to="eventHandler">
+<ANY fa-pipe-to="EventHandler">
   <!-- zero or more render nodes -->
 </ANY>
 ```
@@ -72,7 +72,7 @@ This directive add an event handler object to set of downstream handlers.
   <code>Object</code>
       </td>
       <td>
-        <p>Event handler target object</p>
+        <p>Event handler source object</p>
 
         
       </td>

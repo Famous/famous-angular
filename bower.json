@@ -1,7 +1,7 @@
 {
   "name": "famous-angular",
   "description": "Integrate Famo.us into AngularJS apps and build Famo.us apps using AngularJS tools",
-  "version": "0.0.12",
+  "version": "0.0.14",
   "license": "MPL v2.0",
   "homepage": "https://github.com/Famous/famous-angular",
   "main": "dist/famous-angular.js",
@@ -32,6 +32,8 @@
     "init_submodules.sh",
     "karma.conf.js",
     "karma-e2e.conf.js",
-    "package.json"
+    "package.json",
+    "changelog.js",
+    "validateCommitMsg.js"
   ]
 }

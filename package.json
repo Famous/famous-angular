@@ -1,8 +1,8 @@
 {
   "name": "famous-angular",
-  "description": "Integrate Famo.us into AngularJS apps and build Famo.us apps using AngularJS tools",
-  "version": "0.0.12",
-  "license": "",
+  "description": "An MVC for Famo.us apps, powered by AngularJS. Integrates seamlessly with existing Angular and Famo.us apps.",
+  "version": "0.0.14",
+  "license": "MPL v2.0",
   "homepage": "https://github.com/Famous/famous-angular",
   "repository": {
     "type": "git",
@@ -33,6 +33,7 @@
     "gulp-concat": "^2.2.0",
     "gulp-exec": "^2.0.1",
     "gulp-header": "^1.0.2",
+    "gulp-jasmine": "^0.2.0",
     "gulp-jshint": "^1.5.3",
     "gulp-json-editor": "^2.0.2",
     "gulp-livereload": "^1.3.1",

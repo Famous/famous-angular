@@ -33,6 +33,7 @@ var requirements = [
   "famous/transitions/TransitionableTransform",
   "famous/utilities/KeyCodes",
   "famous/utilities/Timer",
+  "famous/views/Flipper",
   "famous/views/GridLayout",
   "famous/views/RenderController",
   "famous/views/Scroller",
@@ -93,6 +94,20 @@ require(requirements, function(/*args*/) {
 
     /**
      * @ngdoc method
+     * @name $famousProvider#getIsolate
+     * @module famous.angular
+     * @description
+     * Given an scope, retrieves the corresponding isolate.
+     * @param {Object} scope
+     * @returns {Object} The requested isolate
+     */
+
+    _modules.getIsolate = function(scope) {
+      return ('isolate' in scope) ? scope.isolate[scope.$id] : {};
+    };
+
+    /**
+     * @ngdoc method
      * @name $famousProvider#find
      * @module famous.angular
      * @description given a selector, retrieves
@@ -128,7 +143,7 @@ require(requirements, function(/*args*/) {
       var isolates = function(scopes) {
         var _s = [];
         angular.forEach(scopes, function(scope, i) {
-          _s[i] = scope.isolate[scope.$id];
+          _s[i] = _modules.getIsolate(scope);
         });
         return _s;
       }(scopes);
@@ -168,7 +183,7 @@ require(requirements, function(/*args*/) {
     for(var i = 0; i < requirements.length; i++) {
       $famousProvider.registerModule(requirements[i], required[i]);
     }
-    //		console.log('registered modules', famousProvider.$get());
+    //    console.log('registered modules', famousProvider.$get());
   }]);
 
   angular.element(document).ready(function() {
