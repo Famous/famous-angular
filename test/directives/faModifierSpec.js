@@ -1,6 +1,6 @@
 'use strict';
 
-describe('$faModifier', function() {
+ddescribe('$faModifier', function() {
   var element, $compile, $scope, $famous;
   var TransformSpy, ModifierSpy;
   var compileFaModifier, getModifier, getIsolate, callGetTransform;
@@ -68,7 +68,6 @@ describe('$faModifier', function() {
   }));
 
 
-
   it("should create an instance of Famo.us Modifier", function() {
     var Modifier = $famous['famous/core/Modifier'];
     var faModifier = compileFaModifier('fa-translate-x="300"');
@@ -77,79 +76,45 @@ describe('$faModifier', function() {
   });
 
 
-  describe("should accept attributes of", function() {
-    it("numbers", function() {
-      var faModifier = compileFaModifier('fa-rotate-x="0.5"');
-      callGetTransform(faModifier);
-      expect(TransformSpy['rotateX']).toHaveBeenCalledWith(0.5);
+  it("should listen to 'registerChild' events from nested fa- directives, and add their data to fa-modifier's renderNode", function() {
+    var RenderNode = $famous['famous/core/RenderNode'];
+    var isolate;
+    var modifierContent;
+    $scope.$on('registerChild', function(event, data) {
+      isolate = data;
     });
-
-    it("function references", function() {
-      $scope.getRotateX = function() { return 0.5; };
-      var faModifier = compileFaModifier('fa-rotate-x="getRotateX"');
-      callGetTransform(faModifier);
-      expect(TransformSpy['rotateX']).toHaveBeenCalledWith(0.5);
-    });
-
-    it("expressions", function() {
-      $scope.getRotateX = function() { return 0.5; };
-      var faModifier = compileFaModifier('fa-rotate-x="getRotateX() + 0.25"');
-      callGetTransform(faModifier);
-      expect(TransformSpy['rotateX']).toHaveBeenCalledWith(0.75);
-    });
-
-    it("arrays with expressions inside", function() {
-      $scope.getRotateX = function() { return 0.5; };
-      var faModifier = compileFaModifier('fa-rotate="[getRotateX() + 0.25, 0.5, 1]"');
-      callGetTransform(faModifier);
-      expect(TransformSpy['rotate']).toHaveBeenCalledWith(0.75, 0.5, 1);
-
-    });
-
-    it("transitionable objects", function() {
-      var mockTransitionable = {
-        _state: [0, 0, 1, 1],
-        get: function() { return this._state; }
-      };
-      spyOn(mockTransitionable, 'get');
-      $scope.mockTransitionable = mockTransitionable;
-      var faModifier = compileFaModifier('fa-transform="mockTransitionable"');
-      callGetTransform(faModifier);
-
-      // The transitionable's get should be called when calling getTransform()
-      expect(mockTransitionable.get).toHaveBeenCalled();
-    });
-
-
-    // Currently Transform attributes do not support transitionables
-    it("transitionable objects for Transform attributes", function() {
-      var mockTransitionable = {
-        _state: [30, 20, 1],
-        get: function() { return this._state; }
-      };
-      spyOn(mockTransitionable, 'get');
-      $scope.mockTransitionable = mockTransitionable;
-      var faModifier = compileFaModifier('fa-translate="mockTransitionable"');
-      callGetTransform(faModifier);
-
-      // The transitionable's get should be called when calling getTransform()
-      expect(mockTransitionable.get).toHaveBeenCalled();
-    });
-
+    var faModifier = $compile('<fa-modifier><fa-surface></fa-surface></fa-modifier>')($scope);
+    //var children = faModifier[0].firstChild;
+    expect(isolate.renderNode instanceof RenderNode).toBe(true);
   });
 
 
-  ddescribe('should accept Transform attributes', function() {
+  /********************************************************************
+  
+    Test Generation
+    ---------------
 
-    var values = {
-      numbers: '0.5',
-      arrays: '[0, 0.5, -0.5]',
-      functions: 'fn',
-      expressions: 'fn()',
-      transitionables: 'transitionable'
-    };
+    generateTests() should be called before the actual execution of Jasmine,
+    in order for the it() blocks to be created and ran in time.
+
+    These tests check which values the attribute will accept.  All attributes
+    will be $parse'd.
+  
+  ********************************************************************/
 
     function generateTests(attr, method, acceptableValues, expectedOutput) {
+
+      // All values need to be strings that can $parse'd by Angular
+      var values = {
+        numbers: expectedOutput + '',
+        arrays: '[' + expectedOutput + ']',
+        functions: 'fn',
+        expressions: 'fn()',
+        transitionables: 'transitionable'
+      };
+
+      // Generate tests.  Use closures to ensure that the current loop value
+      // is passed to the it() block
       for (var valueType in values) {
         // If the valueType is one of the acceptableValues to test
         if (acceptableValues.indexOf(valueType) !== -1) {
@@ -159,6 +124,7 @@ describe('$faModifier', function() {
               var value = values[type];
               var faModifier = compileFaModifier(attr + '="' + value + '"');
               callGetTransform(faModifier);
+              // Check the arguments that are passed to the Transform module
               var expectation = expect(TransformSpy[method]);
               // If the expectedOutput is an array, we must convert the array
               // into individual arguments to match the expected arguments
@@ -169,10 +135,22 @@ describe('$faModifier', function() {
                 expectation.toHaveBeenCalledWith(expectedOutput);
               }
             };
+          // Immediately invoke the function passing in the loop's current
+          // var value
           }(valueType));
         }
       }
     };
+
+
+
+  /********************************************************************
+  
+    Transform properties
+  
+  ********************************************************************/
+
+  describe('should accept Transform attributes', function() {
 
     describe('fa-rotate should accept', function() {
       beforeEach(function() {
@@ -186,7 +164,7 @@ describe('$faModifier', function() {
       generateTests(
         // Attribute
         'fa-rotate',
-        // Transform method
+        // Transform method expected to be called
         'rotate',
         // Acceptable values
         ['arrays', 'functions', 'expressions'],
@@ -207,7 +185,7 @@ describe('$faModifier', function() {
       generateTests(
         // Attribute
         'fa-rotate-x',
-        // Transform method
+        // Transform method expected to be called
         'rotateX',
         // Acceptable values
         ['numbers', 'functions', 'expressions'],
@@ -216,48 +194,119 @@ describe('$faModifier', function() {
       );
     });
 
-
-
-
-    it('fa-rotate-x - to set the rotate X of the modifier', function() {
-      var faModifier = compileFaModifier('fa-rotate-x="-0.785"');
-      callGetTransform(faModifier);
-      expect(TransformSpy.rotateX).toHaveBeenCalledWith(-0.785);
+    describe('fa-rotate-y should accept', function() {
+      beforeEach(function() {
+        $scope.fn = function() {
+          return 0.5;
+        };
+        $scope.transitionable = {
+          get: function() { return 0.5; }
+        }
+      });
+      generateTests(
+        // Attribute
+        'fa-rotate-y',
+        // Transform method expected to be called
+        'rotateY',
+        // Acceptable values
+        ['numbers', 'functions', 'expressions'],
+        // Expected output
+        0.5
+      );
     });
 
-    it('fa-rotate-y - to set the rotate Y of the modifier', function() {
-      var faModifier = compileFaModifier('fa-rotate-y="-0.785"');
-      callGetTransform(faModifier);
-      expect(TransformSpy.rotateY).toHaveBeenCalledWith(-0.785);
+    describe('fa-rotate-z should accept', function() {
+      beforeEach(function() {
+        $scope.fn = function() {
+          return -0.785;
+        };
+        $scope.transitionable = {
+          get: function() { return -0.785; }
+        }
+      });
+      generateTests(
+        // Attribute
+        'fa-rotate-z',
+        // Transform method expected to be called
+        'rotateZ',
+        // Acceptable values
+        ['numbers', 'functions', 'expressions'],
+        // Expected output
+        -0.785 
+      );
     });
 
-    it('fa-rotate-z - to set the rotate Y of the modifier', function() {
-      var faModifier = compileFaModifier('fa-rotate-z="-0.785"');
-      callGetTransform(faModifier);
-      expect(TransformSpy.rotateZ).toHaveBeenCalledWith(-0.785);
+    describe('fa-scale should accept', function() {
+      beforeEach(function() {
+        $scope.fn = function() {
+          return [0, 0.5, 1];
+        };
+        $scope.transitionable = {
+          get: function() { return [0, 0.5, 1]; }
+        }
+      });
+      generateTests(
+        // Attribute
+        'fa-rotate-z',
+        // Transform method expected to be called
+        'rotateZ',
+        // Acceptable values
+        ['arrays', 'functions', 'expressions'],
+        // Expected output
+        [0, 0.5, 1] 
+      );
     });
 
-    it('fa-scale - to set the scale of the modifier', function() {
-      var faModifier = compileFaModifier('fa-scale="[0, 0.5, 1]"');
-      callGetTransform(faModifier);
-      expect(TransformSpy.scale).toHaveBeenCalledWith(0, 0.5, 1);
+    describe('fa-skew should accept', function() {
+      beforeEach(function() {
+        $scope.fn = function() {
+          return -0.2;
+        };
+        $scope.transitionable = {
+          get: function() { return -0.2; }
+        }
+      });
+      generateTests(
+        // Attribute
+        'fa-rotate-z',
+        // Transform method expected to be called
+        'rotateZ',
+        // Acceptable values
+        ['arrays', 'functions', 'expressions'],
+        // Expected output
+        -0.2
+      );
     });
 
-    it('fa-skew - to set the skew of the modifier', function() {
-      var faModifier = compileFaModifier('fa-skew="-0.2"');
-      callGetTransform(faModifier);
-      expect(TransformSpy.skew).toHaveBeenCalledWith(-0.2);
-    });
+    describe('fa-transform should accept', function() {
+      beforeEach(function() {
+        $scope.fn = function() {
+          return [0, 1, 0, 1];
+        };
+        $scope.transitionable = {
+          get: function() { return [0, 1, 0, 1]; }
+        }
+      });
+      generateTests(
+        // Attribute
+        'fa-rotate-z',
+        // Transform method expected to be called
+        'rotateZ',
+        // Acceptable values
+        ['arrays', 'functions', 'expressions'],
+        // Expected output
+        [0, 1, 0, 1] 
+      );
 
-    describe('fa-transform', function() {
-      it('to directly set the transform matrix', function() {
+
+      it('directly set the transform matrix', function() {
         $scope.matrix = [0, 1, 2, 3];
         var faModifier = compileFaModifier('fa-transform="matrix"');
         var args = ModifierSpy.calls.mostRecent().args[0];
         expect(args.transform()).toEqual($scope.matrix);
       });
 
-      it('to override any existing transform attributes', function() {
+      it('override any existing transform attributes', function() {
         $scope.matrix = [0, 1, 2, 3];
         // Add additional transform attribute that should be ignored
         var faModifier = compileFaModifier('fa-transform="matrix" fa-rotate="[0.5, 0.25, 0]"');
@@ -293,6 +342,13 @@ describe('$faModifier', function() {
 
   });
 
+
+  /********************************************************************
+  
+    General modifier properties
+  
+  ********************************************************************/
+
   describe('should accept main Modifier attributes', function() {
   
     it('fa-opacity - to set the opacity of the modifier', function() {
@@ -321,18 +377,6 @@ describe('$faModifier', function() {
 
   });
 
-
-  it("should listen to 'registerChild' events from nested fa- directives, and add their data to fa-modifier's renderNode", function() {
-    var RenderNode = $famous['famous/core/RenderNode'];
-    var isolate;
-    var modifierContent;
-    $scope.$on('registerChild', function(event, data) {
-      isolate = data;
-    });
-    var faModifier = $compile('<fa-modifier><fa-surface></fa-surface></fa-modifier>')($scope);
-    //var children = faModifier[0].firstChild;
-    expect(isolate.renderNode instanceof RenderNode).toBe(true);
-  });
 
 });
 
