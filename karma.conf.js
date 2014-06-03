@@ -23,7 +23,6 @@ module.exports = function(config) {
       'dist/famous-angular.js',
       'test/bootstrap/common.js',
       'test/**/*Spec.js',
-      //'test/directives/faModifierSpec.js',
       // Delay the starting of karma until $famous provider is declared
       'karma-start.js'
 
