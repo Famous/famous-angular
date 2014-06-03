@@ -132,7 +132,7 @@ require(requirements, function(/*args*/) {
      */
 
     _modules.find = function(selector){
-      var elems = angular.element(window.document.querySelector(selector));
+      var elems = angular.element(window.document.querySelectorAll(selector));
       var scopes = function(elems) {
         var _s = [];
         angular.forEach(elems, function(elem, i) {
