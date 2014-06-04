@@ -33,16 +33,35 @@ describe('$famous', function() {
     expect(typeof EventHandler).toBe('function');
   });
 
-  it('should have a method for finding famo.us objects in the DOM', function() {
-    var scrollView = $compile('<fa-scroll-view id="myScrollView"></fa-scroll-view>')($scope);
-    // Add the $compile'd element to body
-    document.body.appendChild(scrollView[0]);
-    // Search the body for the isolate scope of the selector
-    var scrollViewIsolateScope = $famous.find('#myScrollView');
-    expect(scrollViewIsolateScope[0].id).toBeDefined();
+  describe('find', function(){
+    it('should find a famo.us isolate based on a selector', function() {
+      var scrollView = $compile('<fa-scroll-view id="myScrollView"></fa-scroll-view>')($scope);
+      // Add the $compile'd element to body
+      document.body.appendChild(scrollView[0]);
+      // Search the body for the isolate scope of the selector
+      var scrollViewIsolateScope = $famous.find('#myScrollView');
+      expect(scrollViewIsolateScope[0].id).toBeDefined();
 
-    // Searching for a non-existant element should return an empty array
-    var searchResults = $famous.find('#doesNotExist');
-    expect(searchResults).toEqual([]);
+    });
+
+    it('should find multiple famo.us isolates based on a selector', function() {
+      var scrollView0 = $compile('<fa-scroll-view class="myScrollView"></fa-scroll-view>')($scope);
+      var scrollView1 = $compile('<fa-scroll-view class="myScrollView"></fa-scroll-view>')($scope);
+      // Add the $compile'd element to body
+      document.body.appendChild(scrollView0[0]);
+      document.body.appendChild(scrollView1[0]);
+      // Search the body for the isolate scope of the selector
+      var scrollViewIsolateScope = $famous.find('.myScrollView');
+      expect(scrollViewIsolateScope.length).toEqual(2);
+
+    });
+
+    it('should return an empty array for selectors pointing to non-existent elements', function(){
+      // Searching for a non-existent element should return an empty array
+      var searchResults = $famous.find('#doesNotExist');
+      expect(searchResults).toEqual([]);
+    });
   });
+
+  
 });
