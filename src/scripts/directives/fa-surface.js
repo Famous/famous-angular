@@ -44,7 +44,10 @@ $scope.list = [{content: "famous"}, {content: "angular"}, {content: "rocks!"}];
 
 *Common Problems
 *---------------
-You may expect to animate properties such as size or originProperties related to layout and visibility belong on the modifier, while surfaces are roughly equivalent to "divs".
+
+Properties on surfaces vs modifiers
+-----------------------------------
+You may expect to animate properties such as size or origin.  However, with Famous, properties related to layout and visibility belong on the modifier, and the surface should be nested below the modifier.
 While you can specify fa-size as well as some other layout/visibility properties on surfaces themselves, it is not recommended.
 
 This is not best practice:

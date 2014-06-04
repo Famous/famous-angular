@@ -73,7 +73,8 @@ ngIncludes or custom (vanilla Angular) directives.
   &lt;/fa-modifier&gt;</code></pre>
 <pre><code class="lang-javascript">$scope.list = [{content: &quot;famous&quot;}, {content: &quot;angular&quot;}, {content: &quot;rocks!&quot;}];</code></pre>
 <h2 id="common-problems">Common Problems</h2>
-<p>You may expect to animate properties such as size or originProperties related to layout and visibility belong on the modifier, while surfaces are roughly equivalent to &quot;divs&quot;.
+<h2 id="properties-on-surfaces-vs-modifiers">Properties on surfaces vs modifiers</h2>
+<p>You may expect to animate properties such as size or origin.  However, with Famous, properties related to layout and visibility belong on the modifier, and the surface should be nested below the modifier.
 While you can specify fa-size as well as some other layout/visibility properties on surfaces themselves, it is not recommended.</p>
 <p>This is not best practice:</p>
 <pre><code class="lang-html">&lt;fa-surface fa-size=&quot;[100, 100]&quot;&gt;&lt;/fa-surface&gt;</code></pre>
