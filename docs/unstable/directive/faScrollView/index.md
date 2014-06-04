@@ -95,7 +95,7 @@ $scope.options = {
 };</code></pre>
 <h2 id="scroll-view-with-explicitly-created-views">Scroll View with explicitly created views</h2>
 <p>In this example below, a scrollview is created with two nested fa-view&#39;s, both of which have an fa-index of 0 and 1, respectively.
-Fa-index determines the order of which the surfaces appear in the sequential view (scrollView in this case).
+Fa-index determines the order of which the surfaces appear in the sequential view (scroll View in this case).
 If fa-index is declared explicitly, it will override any default order of elements declared in html.
 As in the example below, the fa-view with the blue background color appears after the one with the red background because its fa-index is set to 1.
 If fa-views are created with an ng-repeat, they are automatically assigned the $index property, unless explicitly set.</p>
@@ -127,7 +127,7 @@ $scope.options = {
 <p>Combining both approaches above (a scroll view with ng-repeated views, and one with two explicitly created views), one can can nest a Scroll View within another Scroll View.
 A Scroll View is a widget that displays a collection of views sequentially - it is agnostic about the views that are inside of it; it only requires that events are piped from surfaces to the Scroll View.</p>
 <p>In the example below, the outer scroll view contains two explictly created views.  One of those views contains a scroll view with sub-views created through an ngRepeat directive.
-The outer Scroll View is passed an option for its direction to be horizontal (0), and the inner SCroll View is passed an option for a vertical direction (1).</p>
+The outer Scroll View is passed an option for its direction to be horizontal (0), and the inner Scroll View is passed an option for a vertical direction (1).</p>
 <pre><code class="lang-html">&lt;fa-scroll-view fa-pipe-from=&quot;eventHandler&quot; fa-options=&quot;options.scrollViewOuter&quot;&gt;
 
   &lt;fa-view fa-index=&quot;0&quot; id=&quot;sideBar&quot;&gt;

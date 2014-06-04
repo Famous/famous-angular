@@ -103,36 +103,6 @@ Functions
 * };
   * ```
 
-Transitionable objects & .get()
--------------------------------
-  @example
-  For some modifier properties, (faOpacity, faSize, faOrigin, faAlign) you can bind them to a Transitionable object directly.
-  In the example below, we instantiate transitionable objects to change translate and opacity values inside $scope.box.
-  The value of fa-opacity is bound to box.opacity on the scope, a transitionable object.
-
-  For other properties that do not accept transitionable objects directly, they may be found to a function reference.
-  You can create a transitionable object, and then bind the transitionable's .get() method to the modifier.
-  All transitionables have a .get() method that returns the interpolated state of the transition at a current time, returning either a number or an object.
-  In the view, we bind fa-translate to box.translate.get(), a function that will return a value.
-  A click on the surface invokes the animateBox function on the controller, which will trigger the transition between the initial state to the state specified with the transitionable's .set() method.
-  
-* ```html
-* <fa-modifier fa-translate="box.translate.get()" fa-size="[100, 100]" fa-opacity="box.opacity">
-*     <fa-surface fa-click="animateBox()" fa-background-color="'red'"></fa-surface>
-*   </fa-modifier>
-* ```
-* ```javascript
-* var Transitionable = $famous['famous/transitions/Transitionable'];
-* $scope.box = {
-*     translate: new Transitionable([200,200,0]),
-*     opacity: new Transitionable(.3)
-*   };
-*    $scope.animateBox = function() {
-*     $scope.box.translate.set([0, 100, 0], {duration: 500, curve: 'easeInOut'});
-*     $scope.box.opacity.set(1, {duration: 500, curve: 'easeInOut'});
-*   };
-* ```
-
 Animating properties
 --------------------
 * @example

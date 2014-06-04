@@ -70,7 +70,7 @@ A full list of configurable options for Scroll View may be found at https://famo
 Scroll View with explicitly created views
 -----------------------------------------
 In this example below, a scrollview is created with two nested fa-view's, both of which have an fa-index of 0 and 1, respectively.
-Fa-index determines the order of which the surfaces appear in the sequential view (scrollView in this case).
+Fa-index determines the order of which the surfaces appear in the sequential view (scroll View in this case).
 If fa-index is declared explicitly, it will override any default order of elements declared in html.
 As in the example below, the fa-view with the blue background color appears after the one with the red background because its fa-index is set to 1.
 If fa-views are created with an ng-repeat, they are automatically assigned the $index property, unless explicitly set.

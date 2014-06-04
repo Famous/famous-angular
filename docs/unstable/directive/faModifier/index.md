@@ -355,27 +355,6 @@ $scope.getY = function() {
 $scope.genBoxOrigin = function() {
   return [$scope.getX(), $scope.getY()];
 };</code></pre>
-<h2 id="transitionable-objects-get-">Transitionable objects &amp; .get()</h2>
-<p>For some modifier properties, (faOpacity, faSize, faOrigin, faAlign) you can bind them to a Transitionable object directly.
-  In the example below, we instantiate transitionable objects to change translate and opacity values inside $scope.box.
-  The value of fa-opacity is bound to box.opacity on the scope, a transitionable object.</p>
-<p>  For other properties that do not accept transitionable objects directly, they may be found to a function reference.
-  You can create a transitionable object, and then bind the transitionable&#39;s .get() method to the modifier.
-  All transitionables have a .get() method that returns the interpolated state of the transition at a current time, returning either a number or an object.
-  In the view, we bind fa-translate to box.translate.get(), a function that will return a value.
-  A click on the surface invokes the animateBox function on the controller, which will trigger the transition between the initial state to the state specified with the transitionable&#39;s .set() method.</p>
-<pre><code class="lang-html">&lt;fa-modifier fa-translate=&quot;box.translate.get()&quot; fa-size=&quot;[100, 100]&quot; fa-opacity=&quot;box.opacity&quot;&gt;
-    &lt;fa-surface fa-click=&quot;animateBox()&quot; fa-background-color=&quot;&#39;red&#39;&quot;&gt;&lt;/fa-surface&gt;
-  &lt;/fa-modifier&gt;</code></pre>
-<pre><code class="lang-javascript">var Transitionable = $famous[&#39;famous/transitions/Transitionable&#39;];
-$scope.box = {
-    translate: new Transitionable([200,200,0]),
-    opacity: new Transitionable(.3)
-  };
-   $scope.animateBox = function() {
-    $scope.box.translate.set([0, 100, 0], {duration: 500, curve: &#39;easeInOut&#39;});
-    $scope.box.opacity.set(1, {duration: 500, curve: &#39;easeInOut&#39;});
-  };</code></pre>
 <h2 id="animating-properties">Animating properties</h2>
 <p>Remember that Famous surfaces are styled with position:absolute, and their positions are defined by matrix3d webkit transforms.  Modifiers are to be used to hold onto size, transform, origin, and opacity states, and also to be animated.
 As per vanilla Famous, you should animate properties of modifiers, such as transform, align, opacity, etc, rather than on the surface itself, as modifiers are responsible for layout and visibility.  </p>
