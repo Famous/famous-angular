@@ -11,10 +11,23 @@ window.famousAngularCommon = function($scope, $compile) {
       var surface = scope.isolate[scope.$id].renderNode;
       return surface;
     },
-    getIsolateFromElement: function(elem){
-      var scope = elem.scope();
-      var isolate = scope.isolate[scope.$id];
-      return isolate;
+    createApp: function(markup, height, scope) {
+      height = height || 100;
+
+      var app = $compile(
+        '<fa-app style="height: ' + height + 'px">' +
+          markup +
+        '</fa-app>'
+      )(scope || $scope)[0];
+
+      document.body.appendChild(app);
+      return app;
+    },
+    destroyApp: function(app) {
+      document.body.removeChild(app);
+    },
+    mockEvent: function(eventData) {
+      return new CustomEvent('mock', eventData || {});
     }
   }
 };
