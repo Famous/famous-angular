@@ -359,14 +359,18 @@ angular.module('famous.angular')
 
 @example
 Animating with Transitionables
-----------------
+------------------------------
 The most flexible way to animate modifier properties is by creating a Transitionable object on the scope and binding the property in the html.
-Any changes to the Transitionable object will be reflected in the view.
+Any changes to the Transitionable object on the scope will be reflected in the view immediately via Angular's double bindings.
+
 ```javascript
+var Transitionable = $famous['famous/transitions/Transitionable'];
+var Easing = require('famous/transitions/Easing');
+
 $scope.boxTransitionable = new Transitionable([0, 0, 0]);
 
 $scope.animate = function() {
-  $scope.boxTransitionable.set([200, 300, 0], {duration: 2000, curve: 'easeInOut'});
+  $scope.boxTransitionable.set([200, 300, 0], {duration: 2000, curve: Easing.inOutBack});
 };
 ```
 ```html
@@ -381,16 +385,36 @@ This means that during this transition, calls to .get() provide the interpolated
 When the user clicks the fa-surface, it will trigger the animate() function defined on the scope.  In turn, this executes the .set() method on the boxTransitionable,
 which is passed the end state and a transition.
 
+Passing Transitionables & values
+---------------------------------
 
-Transitionable objects & .get()
+One may also choose to pass an array, with one or more of its values a function, or a number.
+```html
+<fa-modifier fa-size="[100, 100]" fa-translate="[yTrans.get(), 0, 0]" fa-touchstart="animate()">
+      <fa-surface fa-background-color="'red'" fa-click="animateY()">
+      </fa-surface>
+    </fa-modifier>
+```
+```javascript
+$scope.yTrans = new Transitionable(0);
+
+$scope.animateY = function() {
+  $scope.yTrans.set(200, {duration: 2000, curve: 'easeInOut'})
+};
+```
+In this example, fa-translate is passed an array, with the x value as a function that will return 0, and y & z values as 0's.
+When animateY() is called, yTrans begins its transition, and its values are interpolated, updated on the view through Angular's double bindings.
+
+
+Transitionables & .get()
 -------------------------------
   @example
   A point of possible confusion is the fact that some modifier properties (faOpacity, faSize, faOrigin, faAlign) can be bound to a Transitionable object directly, without needing to be passed a .get() function, unlike the example above.
   In the example below, we create transitionable objects that will perform transitions on translate and opacity. 
   
   The value of fa-opacity is bound to a Transitionable directly, box.opacity.
-  Whereas fa-opacity is bound to a method of a Transitionable, box.translate.get(), that returns an interpolated value.
-  Clicking the fa-surface invokes animateBox() on the scope, in turn, executing the .set() methods of each prospective Transitionable from initial state to end state defined by their .set() methods.
+  Whereas fa-translate is bound to a method of a Transitionable, box.translate.get(), that returns an interpolated value.
+  Clicking the fa-surface invokes animateBox() on the scope, in turn, executing the .set() methods of each prospective Transitionable from initial state to end state defined by their respective .set() methods.
   
 * ```html
 * <fa-modifier fa-translate="box.translate.get()" fa-size="[100, 100]" fa-opacity="box.opacity">
@@ -412,9 +436,69 @@ Transitionable objects & .get()
 Why the difference?  
 
 Fa-translate (along with rotate, translate, scale, skew, etc) passes through a Famous Transform function (Transform.translate()), while faOpacity, faSize, faOrigin, and faAlign are passed through a Famous Modifier.
-Transform.translate() does not accept a Transitionable object, but only an array, which myTransitionable.get() can return.
-Whereas a myModifier.opacityFrom() method of a Modifier can accept a Transitionable object directly.  
+Famous' Transform.translate() does not accept a Transitionable object, but only an array, which myTransitionable.get() can return.
+Whereas a Famous myModifier.opacityFrom() method of a Modifier can accept a Transitionable object directly.  
 
+As a design principle, Famous-Angular attempts to pass values directly to Famous as much as possible, and these differences are due to the core Famous library.
+
+Callbacks
+---------
+The .set() method of a Transitionable accepts an endState, a transition, and also an optional callback to be called upon observed completion of the transition.
+In the example below, when the first transition completes, with the element translated to [200, 300, 0], the callback function is called, and the element begins the transition to [100, 100, 0]. 
+```javascript
+var Transitionable = $famous['famous/transitions/Transitionable'];
+
+$scope.boxTrans = new Transitionable([0, 0, 0]);
+
+$scope.animateWithCallback = function() {
+  $scope.boxTrans.set([200, 300, 0], {duration: 1000, curve: 'easeInOut'}, 
+    function() {
+      $scope.boxTrans.set([100, 100, 0], {duration: 1000, curve: 'easeInOut'});
+    }
+  );
+};
+```
+
+```html
+<fa-modifier fa-size="[100, 100]" fa-translate="boxTrans.get()">
+  <fa-surface fa-background-color="'red'" fa-click="animateWithCallback()">
+  </fa-surface>
+</fa-modifier>
+```
+
+Nesting modifiers & animations
+------------------------------
+Famous Modifiers affect all renderable child nodes (Modifiers & Surfaces) below them on the Render Tree.
+In this example, Two properties will be animated: the outermost Modifier's scale property and innermost Modifier's rotateZ property.
+Because Famous Modifiers affect all child nodes nested within them, when the outermost Modifier's scale property changes, it affects the scale of every modifier and surface below it.
+Whereas the innermost Modifier with the fa-rotate-Z property affects the innermost surface only.  
+
+```html
+<fa-modifier fa-scale="boxes.outer.scale.get()" fa-size="[100, 100]">
+  <fa-surface fa-background-color="'red'">
+    <fa-modifier fa-size="[50, 50]" fa-origin="[.5, .5]" fa-rotate-z="boxes.inner.rotateZ.get()">
+      <fa-surface fa-background-color="'blue'" fa-click="animateBoxes()"></fa-surface>
+    </fa-modifier>
+  </fa-surface>
+</fa-modifier>
+```
+
+```javascript
+var Transitionable = $famous['famous/transitions/Transitionable'];
+$scope.boxes = {
+  outer: {
+    scale: new Transitionable([2, 2])
+  },
+  inner: {
+    rotateZ: new Transitionable(0)
+  }
+};
+
+$scope.animateBoxes = function() {
+  $scope.boxes.outer.scale.set([1, 1], {duration: 2000, curve: 'easeInOut'});
+  $scope.boxes.inner.rotateZ.set(.8, {duration: 1000, curve: 'easeInOut'});
+};
+```
 
  */
 
