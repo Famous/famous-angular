@@ -28,6 +28,11 @@ window.famousAngularCommon = function($scope, $compile) {
     },
     mockEvent: function(eventData) {
       return new CustomEvent('mock', eventData || {});
+    },
+    getIsolateFromElement: function(elem){
+      var scope = elem.scope();
+      var isolate = scope.isolate[scope.$id];
+      return isolate;
     }
   }
 };
