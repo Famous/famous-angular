@@ -50,7 +50,7 @@
 
 Values for fa-modifier attributes
 ---------------------------------
-Fa-modifier properties, (such as faRotate, faScale, etc) can be bound to number/arrays, object properties defined on the scope, function references, and sometimes a transitionable object.
+Fa-modifier properties, (such as faRotate, faScale, etc) can be bound to number/arrays, object properties defined on the scope, or function references.
 
 Number/Array values
 -------------------

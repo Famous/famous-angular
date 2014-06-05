@@ -17,7 +17,7 @@
 Animating with Transitionables
 ------------------------------
 The most flexible way to animate modifier properties is by creating a Transitionable object on the scope and binding the property in the html.
-Any changes to the Transitionable object on the scope will be reflected in the view immediately via Angular's double bindings.
+Any changes to the Transitionable object on the scope will be reflected in the view immediately via Angular's two-way data binding.
 
 ```javascript
 var Transitionable = $famous['famous/transitions/Transitionable'];
@@ -59,7 +59,7 @@ $scope.animateY = function() {
 };
 ```
 In this example, fa-translate is passed an array, with the x value as a function that will return 0, and y & z values as 0's.
-When animateY() is called, yTrans begins its transition, and its values are interpolated, updated on the view through Angular's double bindings.
+When animateY() is called, yTrans begins its transition, and its values are interpolated, updated on the view through Angular's two-way data binding.
 
 
 Transitionables & .get()
@@ -128,7 +128,7 @@ Nesting modifiers & animations
 Famous Modifiers affect all renderable child nodes (Modifiers & Surfaces) below them on the Render Tree.
 In this example, two properties will be animated: the outermost Modifier's scale property and innermost Modifier's rotateZ property.
 Because Famous Modifiers affect all child nodes nested within them, when the outermost Modifier's scale property changes, it affects the scale of every modifier and surface below it.
-Whereas the innermost Modifier with the fa-rotate-Z property affects the innermost surface only.  
+The innermost Modifier with the fa-rotate-Z property affects the innermost surface only.  
 
 ```html
 <fa-modifier fa-scale="boxes.outer.scale.get()" fa-size="[100, 100]">
@@ -159,10 +159,10 @@ $scope.animateBoxes = function() {
 
 $famous.find()
 --------------
-$famous.find() is a method that can be used to perform a DOM look and it retrieves a Famous isolate (node) on the DOM.
-It accepts one argument, a string css selector of an #id or a .class, and returns an array of element/s matching the query.
-It is useful for DOM manipulation of Famous objects after they have been declared in the DOM.
-With Angular, it is best to do DOM manipulation in a directive.
+$famous.find() is a method that can be used to perform a DOM look-up to retrieves the Famous isolate (node) of the appropriate object.
+It accepts one argument, a string css selector (e.g. an #id or a .class,) and returns an array of elements matching the query.
+It is useful for manipulation of Famous objects after they have been declared in the DOM.
+With Angular, it is best to do DOM manipulation (including look-ups) in a directive's post-link function; famous-angular is no exception.
 
 ```html
 <fa-modifier id="myBox">
@@ -171,11 +171,12 @@ With Angular, it is best to do DOM manipulation in a directive.
 ```
 ```javascript
 var myBox = $famous.find('#myBox'); // [Object]
-                                    // myBox[0] is the Modifier with the id of myBox on the DOM
+                                    // myBox[0] is the isolate object belonging to the modifier of id 'myBox' in the DOM.
+                                    // myBox[0].modifier is a reference to the Famo.us modifier corresponding to that element.
 ```
 If this is done outside of a directive's post-link function, there is no guarantee that $famous.find() will return anything, because the element may not have compiled yet.
 
-In the exaple below, there is a custom directive called fadeIn that accepts an id property, and does DOM manipulation to change the opacity of an element.
+In the example below, there is a custom directive called fadeIn that accepts an id property, and does DOM manipulation to change the opacity of an element.
 
 ```html
   <fa-modifier id="myModifier" fa-size="[100, 100]">
@@ -213,7 +214,7 @@ In the exaple below, there is a custom directive called fadeIn that accepts an i
 }]);
 ``` 
 
-In the post-link function, $famous.find() is passed the id attribute from the html view.  A Transitionable is instantiated with the value of 0.
+In the post-link function, pass $famous.find() the id attribute from the html view.  A Transitionable is instantiated with the value of 0.
 Then, using DOM manipulation, access the modifier property of the element.  Famous modifiers have a .setOpacity() method that can accept a function.
 Pass opacityTransitionable.get(), which returns 0, thereby setting the opacity of myElement to 0.
 
@@ -295,7 +296,7 @@ angular.module('famous.angular')
 	             * @module famous.angular
 	             * @restrict E
 	             * @description
-	             * This directive is used to specify the animation of an element in a {@link api/directive/faAnimation faAnimation} directive
+	             * This element is used to specify the animation of an element in a {@link api/directive/faAnimation faAnimation} directive
 	             *
 	             * @usage
 	             * ```html

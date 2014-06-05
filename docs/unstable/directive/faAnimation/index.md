@@ -56,7 +56,7 @@ This directive is used to animate an element in conjunction with an <a href="api
 
 <h2 id="example">Example</h2><h2 id="animating-with-transitionables">Animating with Transitionables</h2>
 <p>The most flexible way to animate modifier properties is by creating a Transitionable object on the scope and binding the property in the html.
-Any changes to the Transitionable object on the scope will be reflected in the view immediately via Angular&#39;s double bindings.</p>
+Any changes to the Transitionable object on the scope will be reflected in the view immediately via Angular&#39;s two-way data binding.</p>
 <pre><code class="lang-javascript">var Transitionable = $famous[&#39;famous/transitions/Transitionable&#39;];
 var Easing = require(&#39;famous/transitions/Easing&#39;);
 
@@ -86,7 +86,7 @@ $scope.animateY = function() {
   $scope.yTrans.set(200, {duration: 2000, curve: &#39;easeInOut&#39;})
 };</code></pre>
 <p>In this example, fa-translate is passed an array, with the x value as a function that will return 0, and y &amp; z values as 0&#39;s.
-When animateY() is called, yTrans begins its transition, and its values are interpolated, updated on the view through Angular&#39;s double bindings.</p>
+When animateY() is called, yTrans begins its transition, and its values are interpolated, updated on the view through Angular&#39;s two-way data binding.</p>
 <h2 id="transitionables-get-">Transitionables &amp; .get()</h2>
 <p>A point of possible confusion is the fact that some modifier properties (faOpacity, faSize, faOrigin, faAlign) can be bound to a Transitionable object directly, without needing to be passed a .get() function, unlike the example above.
   In the example below, we create transitionable objects that will perform transitions on translate and opacity. </p>
@@ -133,7 +133,7 @@ $scope.animateWithCallback = function() {
 <p>Famous Modifiers affect all renderable child nodes (Modifiers &amp; Surfaces) below them on the Render Tree.
 In this example, two properties will be animated: the outermost Modifier&#39;s scale property and innermost Modifier&#39;s rotateZ property.
 Because Famous Modifiers affect all child nodes nested within them, when the outermost Modifier&#39;s scale property changes, it affects the scale of every modifier and surface below it.
-Whereas the innermost Modifier with the fa-rotate-Z property affects the innermost surface only.  </p>
+The innermost Modifier with the fa-rotate-Z property affects the innermost surface only.  </p>
 <pre><code class="lang-html">&lt;fa-modifier fa-scale=&quot;boxes.outer.scale.get()&quot; fa-size=&quot;[100, 100]&quot;&gt;
   &lt;fa-surface fa-background-color=&quot;&#39;red&#39;&quot;&gt;
     &lt;fa-modifier fa-size=&quot;[50, 50]&quot; fa-origin=&quot;[.5, .5]&quot; fa-rotate-z=&quot;boxes.inner.rotateZ.get()&quot;&gt;
@@ -156,17 +156,18 @@ $scope.animateBoxes = function() {
   $scope.boxes.inner.rotateZ.set(.8, {duration: 1000, curve: &#39;easeInOut&#39;});
 };</code></pre>
 <h2 id="-famous-find-">$famous.find()</h2>
-<p>$famous.find() is a method that can be used to perform a DOM look and it retrieves a Famous isolate (node) on the DOM.
-It accepts one argument, a string css selector of an #id or a .class, and returns an array of element/s matching the query.
-It is useful for DOM manipulation of Famous objects after they have been declared in the DOM.
-With Angular, it is best to do DOM manipulation in a directive.</p>
+<p>$famous.find() is a method that can be used to perform a DOM look-up to retrieves the Famous isolate (node) of the appropriate object.
+It accepts one argument, a string css selector (e.g. an #id or a .class,) and returns an array of elements matching the query.
+It is useful for manipulation of Famous objects after they have been declared in the DOM.
+With Angular, it is best to do DOM manipulation (including look-ups) in a directive&#39;s post-link function; famous-angular is no exception.</p>
 <pre><code class="lang-html">&lt;fa-modifier id=&quot;myBox&quot;&gt;
   &lt;fa-surface&gt;&lt;/fa-surface&gt;
 &lt;/fa-modifier&gt;</code></pre>
 <pre><code class="lang-javascript">var myBox = $famous.find(&#39;#myBox&#39;); // [Object]
-                                    // myBox[0] is the Modifier with the id of myBox on the DOM</code></pre>
+                                    // myBox[0] is the isolate object belonging to the modifier of id &#39;myBox&#39; in the DOM.
+                                    // myBox[0].modifier is a reference to the Famo.us modifier corresponding to that element.</code></pre>
 <p>If this is done outside of a directive&#39;s post-link function, there is no guarantee that $famous.find() will return anything, because the element may not have compiled yet.</p>
-<p>In the exaple below, there is a custom directive called fadeIn that accepts an id property, and does DOM manipulation to change the opacity of an element.</p>
+<p>In the example below, there is a custom directive called fadeIn that accepts an id property, and does DOM manipulation to change the opacity of an element.</p>
 <pre><code class="lang-html">  &lt;fa-modifier id=&quot;myModifier&quot; fa-size=&quot;[100, 100]&quot;&gt;
     &lt;fa-surface fa-background-color=&quot;&#39;red&#39;&quot;&gt;&lt;/fa-surface&gt;
     &lt;fade-in id=&quot;myModifier&quot;&gt;&lt;/fade-in&gt;
@@ -197,7 +198,7 @@ With Angular, it is best to do DOM manipulation in a directive.</p>
     }
   }
 }]);</code></pre>
-<p>In the post-link function, $famous.find() is passed the id attribute from the html view.  A Transitionable is instantiated with the value of 0.
+<p>In the post-link function, pass $famous.find() the id attribute from the html view.  A Transitionable is instantiated with the value of 0.
 Then, using DOM manipulation, access the modifier property of the element.  Famous modifiers have a .setOpacity() method that can accept a function.
 Pass opacityTransitionable.get(), which returns 0, thereby setting the opacity of myElement to 0.</p>
 <p>Then, using the .set() method, pass in the value of 1 as the end state as the first argument, and a transition object as the second argument.</p>

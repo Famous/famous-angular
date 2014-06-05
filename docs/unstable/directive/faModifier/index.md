@@ -324,7 +324,7 @@ to values (e.g. `fa-translate="[15, 20, 1]"`, Famo.us Transitionable objects, or
    &lt;/fa-modifier&gt;
  &lt;/fa-modifier&gt;</code></pre>
 <h2 id="values-for-fa-modifier-attributes">Values for fa-modifier attributes</h2>
-<p>Fa-modifier properties, (such as faRotate, faScale, etc) can be bound to number/arrays, object properties defined on the scope, function references, and sometimes a transitionable object.</p>
+<p>Fa-modifier properties, (such as faRotate, faScale, etc) can be bound to number/arrays, object properties defined on the scope, or function references.</p>
 <h2 id="number-array-values">Number/Array values</h2>
 <p>fa-modifier properties can be bound to number/array values.
 html:</p>

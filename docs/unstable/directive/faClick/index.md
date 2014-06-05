@@ -88,11 +88,11 @@ click. (<a href="<a">TODO:href="https://docs.angularjs.org/guide/expression#-eve
 
 
 
-<h2 id="example">Example</h2><p>Here&#39;s an example of click usage</p>
+<h2 id="example">Example</h2><p>Example:</p>
 <pre><code class="lang-javascript">$scope.myClickHandler = function(){
   console.log(&#39;clicked&#39;) // clicked
 }</code></pre>
-<pre><code class="lang-html">&lt;fa-surface fa-click=&quot;myClickHandler&quot;&gt;Click me&lt;/fa-surface&gt;</code></pre>
+<pre><code class="lang-html">&lt;fa-surface fa-click=&quot;myClickHandler()&quot;&gt;Click me&lt;/fa-surface&gt;</code></pre>
 
 
 

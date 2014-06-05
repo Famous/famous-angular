@@ -362,7 +362,7 @@ angular.module('famous.angular')
 Animating with Transitionables
 ------------------------------
 The most flexible way to animate modifier properties is by creating a Transitionable object on the scope and binding the property in the html.
-Any changes to the Transitionable object on the scope will be reflected in the view immediately via Angular's double bindings.
+Any changes to the Transitionable object on the scope will be reflected in the view immediately via Angular's two-way data binding.
 
 ```javascript
 var Transitionable = $famous['famous/transitions/Transitionable'];
@@ -404,7 +404,7 @@ $scope.animateY = function() {
 };
 ```
 In this example, fa-translate is passed an array, with the x value as a function that will return 0, and y & z values as 0's.
-When animateY() is called, yTrans begins its transition, and its values are interpolated, updated on the view through Angular's double bindings.
+When animateY() is called, yTrans begins its transition, and its values are interpolated, updated on the view through Angular's two-way data binding.
 
 
 Transitionables & .get()
@@ -473,7 +473,7 @@ Nesting modifiers & animations
 Famous Modifiers affect all renderable child nodes (Modifiers & Surfaces) below them on the Render Tree.
 In this example, two properties will be animated: the outermost Modifier's scale property and innermost Modifier's rotateZ property.
 Because Famous Modifiers affect all child nodes nested within them, when the outermost Modifier's scale property changes, it affects the scale of every modifier and surface below it.
-Whereas the innermost Modifier with the fa-rotate-Z property affects the innermost surface only.  
+The innermost Modifier with the fa-rotate-Z property affects the innermost surface only.  
 
 ```html
 <fa-modifier fa-scale="boxes.outer.scale.get()" fa-size="[100, 100]">
@@ -504,10 +504,10 @@ $scope.animateBoxes = function() {
 
 $famous.find()
 --------------
-$famous.find() is a method that can be used to perform a DOM look and it retrieves a Famous isolate (node) on the DOM.
-It accepts one argument, a string css selector of an #id or a .class, and returns an array of element/s matching the query.
-It is useful for DOM manipulation of Famous objects after they have been declared in the DOM.
-With Angular, it is best to do DOM manipulation in a directive.
+$famous.find() is a method that can be used to perform a DOM look-up to retrieves the Famous isolate (node) of the appropriate object.
+It accepts one argument, a string css selector (e.g. an #id or a .class,) and returns an array of elements matching the query.
+It is useful for manipulation of Famous objects after they have been declared in the DOM.
+With Angular, it is best to do DOM manipulation (including look-ups) in a directive's post-link function; famous-angular is no exception.
 
 ```html
 <fa-modifier id="myBox">
@@ -516,11 +516,12 @@ With Angular, it is best to do DOM manipulation in a directive.
 ```
 ```javascript
 var myBox = $famous.find('#myBox'); // [Object]
-                                    // myBox[0] is the Modifier with the id of myBox on the DOM
+                                    // myBox[0] is the isolate object belonging to the modifier of id 'myBox' in the DOM.
+                                    // myBox[0].modifier is a reference to the Famo.us modifier corresponding to that element.
 ```
 If this is done outside of a directive's post-link function, there is no guarantee that $famous.find() will return anything, because the element may not have compiled yet.
 
-In the exaple below, there is a custom directive called fadeIn that accepts an id property, and does DOM manipulation to change the opacity of an element.
+In the example below, there is a custom directive called fadeIn that accepts an id property, and does DOM manipulation to change the opacity of an element.
 
 ```html
   <fa-modifier id="myModifier" fa-size="[100, 100]">
@@ -558,7 +559,7 @@ In the exaple below, there is a custom directive called fadeIn that accepts an i
 }]);
 ``` 
 
-In the post-link function, $famous.find() is passed the id attribute from the html view.  A Transitionable is instantiated with the value of 0.
+In the post-link function, pass $famous.find() the id attribute from the html view.  A Transitionable is instantiated with the value of 0.
 Then, using DOM manipulation, access the modifier property of the element.  Famous modifiers have a .setOpacity() method that can accept a function.
 Pass opacityTransitionable.get(), which returns 0, thereby setting the opacity of myElement to 0.
 
@@ -640,7 +641,7 @@ angular.module('famous.angular')
 	             * @module famous.angular
 	             * @restrict E
 	             * @description
-	             * This directive is used to specify the animation of an element in a {@link api/directive/faAnimation faAnimation} directive
+	             * This element is used to specify the animation of an element in a {@link api/directive/faAnimation faAnimation} directive
 	             *
 	             * @usage
 	             * ```html
@@ -994,14 +995,14 @@ angular.module('famous.angular')
  * </ANY>
  * ```
  * @example
- * Here's an example of click usage
+ * Example:
  * ```javascript
  * $scope.myClickHandler = function(){
  *   console.log('clicked') // clicked
  * }
  * ```
  * ```html
- * <fa-surface fa-click="myClickHandler">Click me</fa-surface>
+ * <fa-surface fa-click="myClickHandler()">Click me</fa-surface>
  * ```
 
  */
@@ -1383,7 +1384,7 @@ angular.module('famous.angular')
 
 Values for fa-modifier attributes
 ---------------------------------
-Fa-modifier properties, (such as faRotate, faScale, etc) can be bound to number/arrays, object properties defined on the scope, function references, and sometimes a transitionable object.
+Fa-modifier properties, (such as faRotate, faScale, etc) can be bound to number/arrays, object properties defined on the scope, or function references.
 
 Number/Array values
 -------------------
@@ -1832,14 +1833,14 @@ angular.module('famous.angular')
 
  @example
 
- Scroll View + Events + ng-repeat
+ ScrollView + Events + ng-repeat
  ---------------------------------
  In the example below, fa-scrollview displays a collection of nested fa-views generated by an ng-repeat directive. 
- In Famous, events are used to move information between widgets (such as Scroll View) and nested views.
+ In Famous, events are used to move information between widgets (such as ScrollView) and nested views.
  When a nested view needs to trigger higher-order app behavior within another view (such as a widget), the best practice is to pass data via events.
 
  Input events are captured on surfaces, and it is up the developer to specify where the events will broadcast and receive events by piping.
- To use a scroll view, create a Famous EventHandler on the scope, pipe the surface events to the event handler using fa-pipe-to, and then pipe that event handler to the Scroll View using fa-pipe-from.
+ To use a scroll view, create a Famous EventHandler on the scope, pipe the surface events to the event handler using fa-pipe-to, and then pipe that event handler to the ScrollView using fa-pipe-from.
  This will enable scrolling by connecting input events from the surfaces to the Scroll View.
 
 * ```javascript
@@ -1880,10 +1881,10 @@ A full list of configurable options for Scroll View may be found at https://famo
 * };
 * ```
 
-Scroll View with explicitly created views
+ScrollView with explicitly created views
 -----------------------------------------
 In this example below, a scrollview is created with two nested fa-view's, both of which have an fa-index of 0 and 1, respectively.
-Fa-index determines the order of which the surfaces appear in the sequential view (scroll View in this case).
+Fa-index determines the order of which the surfaces appear in the sequential view.
 If fa-index is declared explicitly, it will override any default order of elements declared in html.
 As in the example below, the fa-view with the blue background color appears after the one with the red background because its fa-index is set to 1.
 If fa-views are created with an ng-repeat, they are automatically assigned the $index property, unless explicitly set.
@@ -1921,11 +1922,11 @@ $scope.options = {
 
 Multiple scroll views
 ---------------------
-Combining both approaches above (a scroll view with ng-repeated views, and one with two explicitly created views), one can can nest a Scroll View within another Scroll View.
-A Scroll View is a widget that displays a collection of views sequentially - it is agnostic about the views that are inside of it; it only requires that events are piped from surfaces to the Scroll View.
+Combining both approaches above (a scrollview with ng-repeated views, and one with two explicitly created views), one can can nest a ScrollView within another ScrollView.
+A Scroll View is a widget that displays a collection of views sequentially - it is agnostic about the views that are inside of it; it only requires that events are piped from surfaces to the ScrollView.
 
-In the example below, the outer scroll view contains two explictly created views.  One of those views contains a scroll view with sub-views created through an ngRepeat directive.
-The outer Scroll View is passed an option for its direction to be horizontal (0), and the inner Scroll View is passed an option for a vertical direction (1).
+In the example below, the outer scrollview contains two explictly created views.  One of those views contains a scrollview with sub-views created through an ngRepeat directive.
+The outer ScrollView is passed an option for its direction to be horizontal (0), and the inner ScrollView is passed an option for a vertical direction (1).
 
 * ```html
 <fa-scroll-view fa-pipe-from="eventHandler" fa-options="options.scrollViewOuter">
