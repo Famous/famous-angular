@@ -90,6 +90,26 @@ describe('faSurface', function() {
         expect(surface.classList).toEqual([]);
       });
 
+      it("supports adding and removing multiple classes", function() {
+        var faSurface = common.compileFaSurface('ng-class="{class1: class1, class2: class2, class3: class3}"');
+        var surface   = common.getSurface(faSurface);
+
+        $scope.class1 = true;
+        $scope.class2 = true;
+        $scope.class3 = true;
+        $scope.$apply();
+
+        expect(surface.classList).toEqual(['class1', 'class2', 'class3']);
+
+        $scope.class1 = true;
+        $scope.class2 = false;
+        $scope.class3 = false;
+        $scope.$apply();
+
+        expect(surface.classList).toEqual(['class1']);
+
+      });
+
       it("adds and removes classes in a single step", function() {
         var faSurface = common.compileFaSurface('ng-class="{class1: val1, class2: val2}"');
         var surface   = common.getSurface(faSurface);
