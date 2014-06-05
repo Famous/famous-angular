@@ -91,15 +91,16 @@ Transitionables & .get()
 
 Why the difference?  
 
-Fa-translate (along with rotate, translate, scale, skew, etc) passes through a Famous Transform function (Transform.translate()), while faOpacity, faSize, faOrigin, and faAlign are passed through a Famous Modifier.
-Famous' Transform.translate() does not accept a Transitionable object, but only an array, which myTransitionable.get() can return.
-Whereas a Famous myModifier.opacityFrom() method of a Modifier can accept a Transitionable object directly.  
+FaTranslate (along with faRotate, faTranslate, faScale, faSkew, & more) pass through a Famous Transform function (Transform.translate()), whereas faOpacity, faSize, faOrigin, and faAlign are passed through a Famous Modifier.
+A Famous Transform.translate() function does not accept a Transitionable object, but only an array.
+A .get() function of a Transitionable returns an interpolated value of a current transition, therefore in the case of a faTranslate, it can return an array that a Transform.translate() can accept.
+Whereas faOpacity is passes through a Famous Modifier, which has an .opacityFrom() method that can accept a Transitionable object directly.  
 
 As a design principle, Famous-Angular attempts to pass values directly to Famous as much as possible, and these differences are due to the core Famous library.
 
 Callbacks
 ---------
-The .set() method of a Transitionable accepts an endState, a transition, and also an optional callback to be called upon observed completion of the transition.
+The .set() method of a Transitionable can accept 3 arguments: an endState, a transition, and an optional callback to be called upon observed completion of the transition.
 In the example below, when the first transition completes, with the element translated to [200, 300, 0], the callback function is called, and the element begins the transition to [100, 100, 0]. 
 ```javascript
 var Transitionable = $famous['famous/transitions/Transitionable'];
@@ -125,7 +126,7 @@ $scope.animateWithCallback = function() {
 Nesting modifiers & animations
 ------------------------------
 Famous Modifiers affect all renderable child nodes (Modifiers & Surfaces) below them on the Render Tree.
-In this example, Two properties will be animated: the outermost Modifier's scale property and innermost Modifier's rotateZ property.
+In this example, two properties will be animated: the outermost Modifier's scale property and innermost Modifier's rotateZ property.
 Because Famous Modifiers affect all child nodes nested within them, when the outermost Modifier's scale property changes, it affects the scale of every modifier and surface below it.
 Whereas the innermost Modifier with the fa-rotate-Z property affects the innermost surface only.  
 
@@ -155,6 +156,69 @@ $scope.animateBoxes = function() {
   $scope.boxes.inner.rotateZ.set(.8, {duration: 1000, curve: 'easeInOut'});
 };
 ```
+
+$famous.find()
+--------------
+$famous.find() is a method that can be used to perform a DOM look and it retrieves a Famous isolate (node) on the DOM.
+It accepts one argument, a string css selector of an #id or a .class, and returns an array of element/s matching the query.
+It is useful for DOM manipulation of Famous objects after they have been declared in the DOM.
+With Angular, it is best to do DOM manipulation in a directive.
+
+```html
+<fa-modifier id="myBox">
+  <fa-surface></fa-surface>
+</fa-modifier>
+```
+```javascript
+var myBox = $famous.find('#myBox'); // [Object]
+                                    // myBox[0] is the Modifier with the id of myBox on the DOM
+```
+If this is done outside of a directive's post-link function, there is no guarantee that $famous.find() will return anything, because the element may not have compiled yet.
+
+In the exaple below, there is a custom directive called fadeIn that accepts an id property, and does DOM manipulation to change the opacity of an element.
+
+```html
+  <fa-modifier id="myModifier" fa-size="[100, 100]">
+    <fa-surface fa-background-color="'red'"></fa-surface>
+    <fade-in id="myModifier"></fade-in>
+  </fa-modifier>
+```
+
+```javascript
+.directive('fadeIn', ['$famous', '$famousDecorator', function ($famous, $famousDecorator) {
+  return {
+    restrict: 'EA',
+    scope: {
+      id: '@'
+    },
+    compile: function(tElement, tAttrs, transclude) {
+      var Transitionable = $famous['famous/transitions/Transitionable'];
+      return {
+        pre: function(scope, element, attrs) {
+        },
+        post: function(scope, element, attrs) {
+          var myElement = $famous.find('#' + scope.id)[0];
+
+          var opacityTransitionable = new Transitionable(0);
+
+          myElement.modifier.setOpacity(function() {
+            return opacityTransitionable.get();
+          });
+
+          opacityTransitionable.set(1, {duration: 1500, curve: 'easeInOut'});
+        }
+      }
+    }
+  }
+}]);
+``` 
+
+In the post-link function, $famous.find() is passed the id attribute from the html view.  A Transitionable is instantiated with the value of 0.
+Then, using DOM manipulation, access the modifier property of the element.  Famous modifiers have a .setOpacity() method that can accept a function.
+Pass opacityTransitionable.get(), which returns 0, thereby setting the opacity of myElement to 0.
+
+Then, using the .set() method, pass in the value of 1 as the end state as the first argument, and a transition object as the second argument.
+
 
  */
 

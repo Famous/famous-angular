@@ -106,12 +106,13 @@ $scope.box = {
     $scope.box.opacity.set(1, {duration: 500, curve: &#39;easeInOut&#39;});
   };</code></pre>
 <p>Why the difference?  </p>
-<p>Fa-translate (along with rotate, translate, scale, skew, etc) passes through a Famous Transform function (Transform.translate()), while faOpacity, faSize, faOrigin, and faAlign are passed through a Famous Modifier.
-Famous&#39; Transform.translate() does not accept a Transitionable object, but only an array, which myTransitionable.get() can return.
-Whereas a Famous myModifier.opacityFrom() method of a Modifier can accept a Transitionable object directly.  </p>
+<p>FaTranslate (along with faRotate, faTranslate, faScale, faSkew, &amp; more) pass through a Famous Transform function (Transform.translate()), whereas faOpacity, faSize, faOrigin, and faAlign are passed through a Famous Modifier.
+A Famous Transform.translate() function does not accept a Transitionable object, but only an array.
+A .get() function of a Transitionable returns an interpolated value of a current transition, therefore in the case of a faTranslate, it can return an array that a Transform.translate() can accept.
+Whereas faOpacity is passes through a Famous Modifier, which has an .opacityFrom() method that can accept a Transitionable object directly.  </p>
 <p>As a design principle, Famous-Angular attempts to pass values directly to Famous as much as possible, and these differences are due to the core Famous library.</p>
 <h2 id="callbacks">Callbacks</h2>
-<p>The .set() method of a Transitionable accepts an endState, a transition, and also an optional callback to be called upon observed completion of the transition.
+<p>The .set() method of a Transitionable can accept 3 arguments: an endState, a transition, and an optional callback to be called upon observed completion of the transition.
 In the example below, when the first transition completes, with the element translated to [200, 300, 0], the callback function is called, and the element begins the transition to [100, 100, 0]. </p>
 <pre><code class="lang-javascript">var Transitionable = $famous[&#39;famous/transitions/Transitionable&#39;];
 
@@ -130,7 +131,7 @@ $scope.animateWithCallback = function() {
 &lt;/fa-modifier&gt;</code></pre>
 <h2 id="nesting-modifiers-animations">Nesting modifiers &amp; animations</h2>
 <p>Famous Modifiers affect all renderable child nodes (Modifiers &amp; Surfaces) below them on the Render Tree.
-In this example, Two properties will be animated: the outermost Modifier&#39;s scale property and innermost Modifier&#39;s rotateZ property.
+In this example, two properties will be animated: the outermost Modifier&#39;s scale property and innermost Modifier&#39;s rotateZ property.
 Because Famous Modifiers affect all child nodes nested within them, when the outermost Modifier&#39;s scale property changes, it affects the scale of every modifier and surface below it.
 Whereas the innermost Modifier with the fa-rotate-Z property affects the innermost surface only.  </p>
 <pre><code class="lang-html">&lt;fa-modifier fa-scale=&quot;boxes.outer.scale.get()&quot; fa-size=&quot;[100, 100]&quot;&gt;
@@ -154,6 +155,52 @@ $scope.animateBoxes = function() {
   $scope.boxes.outer.scale.set([1, 1], {duration: 2000, curve: &#39;easeInOut&#39;});
   $scope.boxes.inner.rotateZ.set(.8, {duration: 1000, curve: &#39;easeInOut&#39;});
 };</code></pre>
+<h2 id="-famous-find-">$famous.find()</h2>
+<p>$famous.find() is a method that can be used to perform a DOM look and it retrieves a Famous isolate (node) on the DOM.
+It accepts one argument, a string css selector of an #id or a .class, and returns an array of element/s matching the query.
+It is useful for DOM manipulation of Famous objects after they have been declared in the DOM.
+With Angular, it is best to do DOM manipulation in a directive.</p>
+<pre><code class="lang-html">&lt;fa-modifier id=&quot;myBox&quot;&gt;
+  &lt;fa-surface&gt;&lt;/fa-surface&gt;
+&lt;/fa-modifier&gt;</code></pre>
+<pre><code class="lang-javascript">var myBox = $famous.find(&#39;#myBox&#39;); // [Object]
+                                    // myBox[0] is the Modifier with the id of myBox on the DOM</code></pre>
+<p>If this is done outside of a directive&#39;s post-link function, there is no guarantee that $famous.find() will return anything, because the element may not have compiled yet.</p>
+<p>In the exaple below, there is a custom directive called fadeIn that accepts an id property, and does DOM manipulation to change the opacity of an element.</p>
+<pre><code class="lang-html">  &lt;fa-modifier id=&quot;myModifier&quot; fa-size=&quot;[100, 100]&quot;&gt;
+    &lt;fa-surface fa-background-color=&quot;&#39;red&#39;&quot;&gt;&lt;/fa-surface&gt;
+    &lt;fade-in id=&quot;myModifier&quot;&gt;&lt;/fade-in&gt;
+  &lt;/fa-modifier&gt;</code></pre>
+<pre><code class="lang-javascript">.directive(&#39;fadeIn&#39;, [&#39;$famous&#39;, &#39;$famousDecorator&#39;, function ($famous, $famousDecorator) {
+  return {
+    restrict: &#39;EA&#39;,
+    scope: {
+      id: &#39;@&#39;
+    },
+    compile: function(tElement, tAttrs, transclude) {
+      var Transitionable = $famous[&#39;famous/transitions/Transitionable&#39;];
+      return {
+        pre: function(scope, element, attrs) {
+        },
+        post: function(scope, element, attrs) {
+          var myElement = $famous.find(&#39;#&#39; + scope.id)[0];
+
+          var opacityTransitionable = new Transitionable(0);
+
+          myElement.modifier.setOpacity(function() {
+            return opacityTransitionable.get();
+          });
+
+          opacityTransitionable.set(1, {duration: 1500, curve: &#39;easeInOut&#39;});
+        }
+      }
+    }
+  }
+}]);</code></pre>
+<p>In the post-link function, $famous.find() is passed the id attribute from the html view.  A Transitionable is instantiated with the value of 0.
+Then, using DOM manipulation, access the modifier property of the element.  Famous modifiers have a .setOpacity() method that can accept a function.
+Pass opacityTransitionable.get(), which returns 0, thereby setting the opacity of myElement to 0.</p>
+<p>Then, using the .set() method, pass in the value of 1 as the end state as the first argument, and a transition object as the second argument.</p>
 
 
 
