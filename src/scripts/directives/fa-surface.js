@@ -15,10 +15,82 @@
  * @usage
  * ```html
  * <fa-surface>
- *   Here's some data-bound content {{myScopeVariable}}
+ *   Here's some data-bound content '{{myScopeVariable}}'
  * </fa-surface>
  * ```
+
+*@example
+* ```html
+*<fa-modifier fa-size="[960, undefined]">
+*   <fa-surface fa-size="[undefined, undefined]">
+*     <div ng-include src=" 'views/animations.html' "></div>
+*   </fa-surface>
+* </fa-modifier>
+* ```
+
+A simple ng-repeat of surfaces may look like this:
+*@example
+* ```html
+<fa-modifier ng-repeat="item in list" fa-size="[100, 100]" fa-translate="[0, $index * 75, 0]">
+    <fa-surface fa-size="[undefined, undefined]">
+      {{item.content}}
+    </fa-surface>
+  </fa-modifier>
+* ```
+
+* ```javascript
+$scope.list = [{content: "famous"}, {content: "angular"}, {content: "rocks!"}];
+* ```
+
+*Common Problems
+*---------------
+
+Properties on surfaces vs modifiers
+-----------------------------------
+You may expect to animate properties such as size or origin.  However, with Famous, properties related to layout and visibility belong on the modifier, and the surface should be nested below the modifier.
+While you can specify fa-size as well as some other layout/visibility properties on surfaces themselves, it is not recommended.
+
+This is not best practice:
+
+*@example
+ * ```html
+<fa-surface fa-size="[100, 100]"></fa-surface>
+ * ```
+
+Whereas this is the preferred approach: 
+*@example
+ * ```html
+<fa-modifier fa-size="[100, 100]">
+  <fa-surface fa-size="[undefined, undefined]">
+  </fa-surface>
+</fa-modifier>
+ * ```
+
+You may also omit fa-size="[undefined, undefined]" on the surface and the surface will still fill the size of the modifier, in this case, [100, 100].
+
+In Famous' Render Tree, modifiers modify all the nodes below them.  By setting the fa-surface's fa-size to [undefined, undefined], it will inherit from the fa-modifier's fa-size of [100, 100]. 
+
+Fa-surfaces also cannot have an fa-size/fa-rotate/etc, assigned to a function, as is in the case of modifiers, which can take number/array or a function, and sometimes a transitionable object.
+For example, this will not work:
+*@example
+* ```html
+<fa-surface fa-size="sizeForBoxFunction"></fa-surface>
+* ```
+* ```javascript
+* $scope.sizeForBoxFunction = function() {
+*      return [75, 75];
+*    }
+* ```
+
+To reiterate, the best practice to set any layout/visibilty properties of a surface is to do so on a modifier that affects the surface.  Whereas a surface is for containing HTML content, whether rendered from a template, or data-bound with {{}}'s.
+*<fa-modifier fa-size="[100, 100]">
+*    <fa-surface fa-background-color="'red'"></fa-surface>
+*  </fa-modifier>
+
+
  */
+
+
 
 angular.module('famous.angular')
   .config(['$provide', '$animateProvider', function($provide, $animateProvider) {

@@ -357,7 +357,216 @@ angular.module('famous.angular')
  *  <animate targetModSelector="#topMod" field="rotateX" startValue="3.1415" endValue="0" curve="inQuad" timelineLowerBound="0" timelineUpperBound=".25" />
  * </fa-animation>
  * ```
+
+@example
+Animating with Transitionables
+------------------------------
+The most flexible way to animate modifier properties is by creating a Transitionable object on the scope and binding the property in the html.
+Any changes to the Transitionable object on the scope will be reflected in the view immediately via Angular's double bindings.
+
+```javascript
+var Transitionable = $famous['famous/transitions/Transitionable'];
+var Easing = require('famous/transitions/Easing');
+
+$scope.boxTransitionable = new Transitionable([0, 0, 0]);
+
+$scope.animate = function() {
+  $scope.boxTransitionable.set([200, 300, 0], {duration: 2000, curve: Easing.inOutBack});
+};
+```
+```html
+<fa-modifier fa-size="[100, 100]" fa-translate="boxTransitionable.get()">
+  <fa-surface fa-background-color="'red'" fa-click="animate()">
+  </fa-surface>
+</fa-modifier>
+```
+In the html, fa-translate is passed boxTransitionable.get(), a function that will return a value of [0,0,0] initially.
+All transitionables have a .get() method that returns the interpolated state of the transition at the current time of invocation, returning either a number/array or an object.
+This means that during this transition, calls to .get() provide the interpolated state along the way, perhaps [100, 150], [150, 185], and so on, until it reaches [200, 300].
+When the user clicks the fa-surface, it will trigger the animate() function defined on the scope.  In turn, this executes the .set() method on the boxTransitionable,
+which is passed the end state and a transition.
+
+Passing Transitionables & values
+---------------------------------
+
+One may also choose to pass an array, with one or more of its values a function, or a number.
+```html
+<fa-modifier fa-size="[100, 100]" fa-translate="[yTrans.get(), 0, 0]" fa-touchstart="animate()">
+      <fa-surface fa-background-color="'red'" fa-click="animateY()">
+      </fa-surface>
+    </fa-modifier>
+```
+```javascript
+$scope.yTrans = new Transitionable(0);
+
+$scope.animateY = function() {
+  $scope.yTrans.set(200, {duration: 2000, curve: 'easeInOut'})
+};
+```
+In this example, fa-translate is passed an array, with the x value as a function that will return 0, and y & z values as 0's.
+When animateY() is called, yTrans begins its transition, and its values are interpolated, updated on the view through Angular's double bindings.
+
+
+Transitionables & .get()
+-------------------------------
+  @example
+  A point of possible confusion is the fact that some modifier properties (faOpacity, faSize, faOrigin, faAlign) can be bound to a Transitionable object directly, without needing to be passed a .get() function, unlike the example above.
+  In the example below, we create transitionable objects that will perform transitions on translate and opacity. 
+  
+  The value of fa-opacity is bound to a Transitionable directly, box.opacity.
+  Whereas fa-translate is bound to a method of a Transitionable, box.translate.get(), that returns an interpolated value.
+  Clicking the fa-surface invokes animateBox() on the scope, in turn, executing the .set() methods of each prospective Transitionable from initial state to end state defined by their respective .set() methods.
+  
+* ```html
+* <fa-modifier fa-translate="box.translate.get()" fa-size="[100, 100]" fa-opacity="box.opacity">
+*     <fa-surface fa-click="animateBox()" fa-background-color="'red'"></fa-surface>
+*   </fa-modifier>
+* ```
+* ```javascript
+* var Transitionable = $famous['famous/transitions/Transitionable'];
+* $scope.box = {
+*     translate: new Transitionable([200,200,0]),
+*     opacity: new Transitionable(.3)
+*   };
+*    $scope.animateBox = function() {
+*     $scope.box.translate.set([0, 100, 0], {duration: 500, curve: 'easeInOut'});
+*     $scope.box.opacity.set(1, {duration: 500, curve: 'easeInOut'});
+*   };
+* ```
+
+Why the difference?  
+
+FaTranslate (along with faRotate, faTranslate, faScale, faSkew, & more) pass through a Famous Transform function (Transform.translate()), whereas faOpacity, faSize, faOrigin, and faAlign are passed through a Famous Modifier.
+A Famous Transform.translate() function does not accept a Transitionable object, but only an array.
+A .get() function of a Transitionable returns an interpolated value of a current transition, therefore in the case of a faTranslate, it can return an array that a Transform.translate() can accept.
+Whereas faOpacity is passes through a Famous Modifier, which has an .opacityFrom() method that can accept a Transitionable object directly.  
+
+As a design principle, Famous-Angular attempts to pass values directly to Famous as much as possible, and these differences are due to the core Famous library.
+
+Callbacks
+---------
+The .set() method of a Transitionable can accept 3 arguments: an endState, a transition, and an optional callback to be called upon observed completion of the transition.
+In the example below, when the first transition completes, with the element translated to [200, 300, 0], the callback function is called, and the element begins the transition to [100, 100, 0]. 
+```javascript
+var Transitionable = $famous['famous/transitions/Transitionable'];
+
+$scope.boxTrans = new Transitionable([0, 0, 0]);
+
+$scope.animateWithCallback = function() {
+  $scope.boxTrans.set([200, 300, 0], {duration: 1000, curve: 'easeInOut'}, 
+    function() {
+      $scope.boxTrans.set([100, 100, 0], {duration: 1000, curve: 'easeInOut'});
+    }
+  );
+};
+```
+
+```html
+<fa-modifier fa-size="[100, 100]" fa-translate="boxTrans.get()">
+  <fa-surface fa-background-color="'red'" fa-click="animateWithCallback()">
+  </fa-surface>
+</fa-modifier>
+```
+
+Nesting modifiers & animations
+------------------------------
+Famous Modifiers affect all renderable child nodes (Modifiers & Surfaces) below them on the Render Tree.
+In this example, two properties will be animated: the outermost Modifier's scale property and innermost Modifier's rotateZ property.
+Because Famous Modifiers affect all child nodes nested within them, when the outermost Modifier's scale property changes, it affects the scale of every modifier and surface below it.
+Whereas the innermost Modifier with the fa-rotate-Z property affects the innermost surface only.  
+
+```html
+<fa-modifier fa-scale="boxes.outer.scale.get()" fa-size="[100, 100]">
+  <fa-surface fa-background-color="'red'">
+    <fa-modifier fa-size="[50, 50]" fa-origin="[.5, .5]" fa-rotate-z="boxes.inner.rotateZ.get()">
+      <fa-surface fa-background-color="'blue'" fa-click="animateBoxes()"></fa-surface>
+    </fa-modifier>
+  </fa-surface>
+</fa-modifier>
+```
+
+```javascript
+var Transitionable = $famous['famous/transitions/Transitionable'];
+$scope.boxes = {
+  outer: {
+    scale: new Transitionable([2, 2])
+  },
+  inner: {
+    rotateZ: new Transitionable(0)
+  }
+};
+
+$scope.animateBoxes = function() {
+  $scope.boxes.outer.scale.set([1, 1], {duration: 2000, curve: 'easeInOut'});
+  $scope.boxes.inner.rotateZ.set(.8, {duration: 1000, curve: 'easeInOut'});
+};
+```
+
+$famous.find()
+--------------
+$famous.find() is a method that can be used to perform a DOM look and it retrieves a Famous isolate (node) on the DOM.
+It accepts one argument, a string css selector of an #id or a .class, and returns an array of element/s matching the query.
+It is useful for DOM manipulation of Famous objects after they have been declared in the DOM.
+With Angular, it is best to do DOM manipulation in a directive.
+
+```html
+<fa-modifier id="myBox">
+  <fa-surface></fa-surface>
+</fa-modifier>
+```
+```javascript
+var myBox = $famous.find('#myBox'); // [Object]
+                                    // myBox[0] is the Modifier with the id of myBox on the DOM
+```
+If this is done outside of a directive's post-link function, there is no guarantee that $famous.find() will return anything, because the element may not have compiled yet.
+
+In the exaple below, there is a custom directive called fadeIn that accepts an id property, and does DOM manipulation to change the opacity of an element.
+
+```html
+  <fa-modifier id="myModifier" fa-size="[100, 100]">
+    <fa-surface fa-background-color="'red'"></fa-surface>
+    <fade-in id="myModifier"></fade-in>
+  </fa-modifier>
+```
+
+```javascript
+.directive('fadeIn', ['$famous', '$famousDecorator', function ($famous, $famousDecorator) {
+  return {
+    restrict: 'EA',
+    scope: {
+      id: '@'
+    },
+    compile: function(tElement, tAttrs, transclude) {
+      var Transitionable = $famous['famous/transitions/Transitionable'];
+      return {
+        pre: function(scope, element, attrs) {
+        },
+        post: function(scope, element, attrs) {
+          var myElement = $famous.find('#' + scope.id)[0];
+
+          var opacityTransitionable = new Transitionable(0);
+
+          myElement.modifier.setOpacity(function() {
+            return opacityTransitionable.get();
+          });
+
+          opacityTransitionable.set(1, {duration: 1500, curve: 'easeInOut'});
+        }
+      }
+    }
+  }
+}]);
+``` 
+
+In the post-link function, $famous.find() is passed the id attribute from the html view.  A Transitionable is instantiated with the value of 0.
+Then, using DOM manipulation, access the modifier property of the element.  Famous modifiers have a .setOpacity() method that can accept a function.
+Pass opacityTransitionable.get(), which returns 0, thereby setting the opacity of myElement to 0.
+
+Then, using the .set() method, pass in the value of 1 as the end state as the first argument, and a transition object as the second argument.
+
+
  */
+
 
 angular.module('famous.angular')
   .directive('faAnimation', ['$famous', '$famousDecorator', function ($famous, famousDecorator) {
@@ -784,6 +993,17 @@ angular.module('famous.angular')
  *
  * </ANY>
  * ```
+ * @example
+ * Here's an example of click usage
+ * ```javascript
+ * $scope.myClickHandler = function(){
+ *   console.log('clicked') // clicked
+ * }
+ * ```
+ * ```html
+ * <fa-surface fa-click="myClickHandler">Click me</fa-surface>
+ * ```
+
  */
 
 angular.module('famous.angular')
@@ -1140,7 +1360,97 @@ angular.module('famous.angular')
  *   <fa-surface>I'm translucent, skewed, rotated, and translated</fa-surface>
  * </fa-modifier>
  * ```
- */
+
+ * @example
+
+ The order of transforms matter
+ ------------------------------
+ * You can specify the order of transforms by nesting modifiers.  For instance, if you translate an element and then rotate it, the result will be different than if you had rotated it and then translated it. 
+
+ * ```html
+ * <fa-modifier fa-translate="[100, 100]">
+ *    <fa-modifier fa-rotate-z=".6" fa-size="[100, 100]">
+ *      <fa-surface fa-background-color="red">translate --> rotate</fa-surface>
+ *    </fa-modifier>
+ * </fa-modifier>
+ *
+ *  <fa-modifier fa-rotate-z=".6">
+ *    <fa-modifier fa-translate="[100, 100]" fa-size="[100, 100]">
+ *      <fa-surface class="red"></fa-surface>
+ *    </fa-modifier>
+ *  </fa-modifier>
+ * ```
+
+Values for fa-modifier attributes
+---------------------------------
+Fa-modifier properties, (such as faRotate, faScale, etc) can be bound to number/arrays, object properties defined on the scope, function references, and sometimes a transitionable object.
+
+Number/Array values
+-------------------
+* @example
+* fa-modifier properties can be bound to number/array values.
+* html:
+* ```html
+*  <fa-modifier fa-origin="[.5,.5]" fa-size="[100, 100]" fa-rotate=".3">
+*    <fa-surface fa-background-color="'red'"></fa-surface>
+*  </fa-modifier>
+ * ```
+
+Object properties on the scope
+------------------------------
+ * @example
+ *fa-modifier properties can be bound to object properties defined on the scope.
+ * html:
+  * ```html
+*<fa-modifier fa-origin="boxObject.origin" fa-size="boxObject.size">
+*    <fa-surface fa-background-color="'red'"></fa-surface>
+*  </fa-modifier>
+ * ```
+ * ```javascript
+ $scope.boxObject = {
+ *    origin: [.4, .4],
+ *    size: [50, 50]
+ *  }
+  * ```
+
+Functions
+---------
+* @example
+* Fa-modifier properties can be bound to a function on the scope that returns a value.
+
+* ```html
+ * <fa-modifier fa-origin="genBoxOrigin">
+ *   <fa-surface fa-background-color="'red'"></fa-surface>
+ * </fa-modifier>
+* ```
+
+* ```javascript
+* $scope.getX = function() {
+*   return .2;
+* };
+* $scope.getY = function() {
+*   return .3;
+* }
+* $scope.genBoxOrigin = function() {
+*   return [$scope.getX(), $scope.getY()];
+* };
+  * ```
+
+Animating properties
+--------------------
+* @example
+* Remember that Famous surfaces are styled with position:absolute, and their positions are defined by matrix3d webkit transforms.  Modifiers are to be used to hold onto size, transform, origin, and opacity states, and also to be animated.
+* As per vanilla Famous, you should animate properties of modifiers, such as transform, align, opacity, etc, rather than on the surface itself, as modifiers are responsible for layout and visibility.  
+* ```html
+*   <fa-modifier fa-rotate-z="boxA.rotate.get()">
+*     <fa-surface fa-click="animateBoxA()" fa-background-color="'red'"></fa-surface>
+*   </fa-modifier>
+* ```
+
+* @TODO You can also specify the order of transforms using faTransformOrder.
+* @TODO fa-transform
+* @TODO show that modifiers can modify modifiers below them, and all of this multiplies.  
+*/
 
 angular.module('famous.angular')
   .directive('faModifier', ["$famous", "$famousDecorator", "$parse", function ($famous, $famousDecorator, $parse) {
@@ -1519,6 +1829,144 @@ angular.module('famous.angular')
  *   </fa-view>
  * </fa-scroll-view>
  * ```
+
+ @example
+
+ Scroll View + Events + ng-repeat
+ ---------------------------------
+ In the example below, fa-scrollview displays a collection of nested fa-views generated by an ng-repeat directive. 
+ In Famous, events are used to move information between widgets (such as Scroll View) and nested views.
+ When a nested view needs to trigger higher-order app behavior within another view (such as a widget), the best practice is to pass data via events.
+
+ Input events are captured on surfaces, and it is up the developer to specify where the events will broadcast and receive events by piping.
+ To use a scroll view, create a Famous EventHandler on the scope, pipe the surface events to the event handler using fa-pipe-to, and then pipe that event handler to the Scroll View using fa-pipe-from.
+ This will enable scrolling by connecting input events from the surfaces to the Scroll View.
+
+* ```javascript
+* var EventHandler = $famous['famous/core/EventHandler'];
+* $scope.eventHandler = new EventHandler();
+*
+* $scope.list = [{content: "famous"}, {content: "angular"}, {content: "rocks!"}];
+* ```
+
+* ```html
+* <fa-scroll-view fa-pipe-from="eventHandler" fa-options="options.myScrollView">
+*     <fa-view ng-repeat="item in list">
+*        <fa-modifier id="{{'listItem' + $index}}" fa-translate="[0, 0, 0]" fa-size="[300, 300]">
+*          <fa-surface fa-pipe-to="eventHandler" fa-size="[undefined, undefined]" fa-background-color="'red'">
+*            <div>{{item.content}}</div>
+*          </fa-surface>
+*        </fa-modifier>
+*     </fa-view> 
+*  </fa-scroll-view>  
+* ```
+
+To specify (optional) configurable options for the Scroll View, pass in an object on the scope.
+Notable options include clipSize, which specifies the size of the area in pixels that the ScrollView will display content in, and direction, which specifies whether the nested views will scroll horizontally or vertically (1 is vertical, 0 is horizontal).
+A full list of configurable options for Scroll View may be found at https://famo.us/docs/0.2.0/views/Scrollview/.
+
+* ```javascript
+* var EventHandler = $famous['famous/core/EventHandler'];
+* $scope.eventHandler = new EventHandler();
+* $scope.list = [{content: "famous"}, {content: "angular"}, {content: "rocks!"}];
+*
+* $scope.options = {
+*   myScrollView: {
+*     clipSize: 568,
+*     paginated: true,
+*     speedLimit: 5,
+*     direction: 1,
+*   }
+* };
+* ```
+
+Scroll View with explicitly created views
+-----------------------------------------
+In this example below, a scrollview is created with two nested fa-view's, both of which have an fa-index of 0 and 1, respectively.
+Fa-index determines the order of which the surfaces appear in the sequential view (scroll View in this case).
+If fa-index is declared explicitly, it will override any default order of elements declared in html.
+As in the example below, the fa-view with the blue background color appears after the one with the red background because its fa-index is set to 1.
+If fa-views are created with an ng-repeat, they are automatically assigned the $index property, unless explicitly set.
+
+The scrollView directive accepts another directive called fa-start-index as an attribute, and this determines which view the scrollView displays by default.
+Fa-start-index will not affect the sequential order of the layout; the view with the red background will be layed out first, followed by the view with the blue background.
+With this attribute set to 1, the scroll view will display the view with the index of 1, which is the view with the blue background color. 
+
+* ```html
+  <fa-scroll-view fa-pipe-from="eventHandler" fa-options="options.scrollViewTwo" fa-start-index="1">
+    <fa-view fa-index="1">
+      <fa-modifier fa-size="[320, 320]">
+          <fa-surface fa-background-color="'blue'" fa-pipe-to="eventHandler"></fa-surface>
+        </fa-modifier>
+    </fa-view>
+    <fa-view fa-index="0">
+      <fa-modifier fa-size="[320, 320]">
+          <fa-surface fa-background-color="'red'" fa-pipe-to="eventHandler"></fa-surface>
+        </fa-modifier>
+    </fa-view>
+   </fa-scroll-view>    
+* ```
+
+* ```javascript
+* var EventHandler = $famous['famous/core/EventHandler'];
+* $scope.eventHandler = new EventHandler();
+* $scope.list = [{content: "famous"}, {content: "angular"}, {content: "rocks!"}];
+*
+$scope.options = {
+  scrollViewTwo: {
+    direction: 0
+  }
+};
+* ```
+
+Multiple scroll views
+---------------------
+Combining both approaches above (a scroll view with ng-repeated views, and one with two explicitly created views), one can can nest a Scroll View within another Scroll View.
+A Scroll View is a widget that displays a collection of views sequentially - it is agnostic about the views that are inside of it; it only requires that events are piped from surfaces to the Scroll View.
+
+In the example below, the outer scroll view contains two explictly created views.  One of those views contains a scroll view with sub-views created through an ngRepeat directive.
+The outer Scroll View is passed an option for its direction to be horizontal (0), and the inner Scroll View is passed an option for a vertical direction (1).
+
+* ```html
+<fa-scroll-view fa-pipe-from="eventHandler" fa-options="options.scrollViewOuter">
+
+  <fa-view fa-index="0" id="sideBar">
+    <fa-modifier fa-size="[320, 320]" id="sideBarMod">
+        <fa-surface fa-background-color="'blue'" fa-pipe-to="eventHandler" fa-size="[undefined, undefined]"></fa-surface>
+      </fa-modifier>
+  </fa-view>
+
+  <fa-view fa-index="1" id="main">
+    <fa-scroll-view fa-pipe-from="eventHandler" fa-options="options.scrollViewInner">
+      <fa-view ng-repeat="item in list">
+         <fa-modifier fa-size="[300, 300]" id="{{'item' + $index + 'Mod'}}">
+           <fa-surface fa-pipe-to="eventHandler" fa-size="[undefined, undefined]" fa-background-color="'red'">
+             <div>{{item.content}}</div>
+           </fa-surface>
+         </fa-modifier>
+      </fa-view> 
+    </fa-scroll-view>  
+  </fa-view>
+   
+ </fa-scroll-view>   
+* ```
+
+* ```javascript
+* var EventHandler = $famous['famous/core/EventHandler'];
+* $scope.eventHandler = new EventHandler();
+* $scope.list = [{content: "famous"}, {content: "angular"}, {content: "rocks!"}];
+*
+  $scope.options = {
+    scrollViewOuter: {
+      direction: 0,
+      paginated: true
+    },
+    scrollViewInner :{
+      direction: 1
+    }
+  };
+* ```
+
  */
 
 angular.module('famous.angular')
@@ -1633,10 +2081,82 @@ angular.module('famous.angular')
  * @usage
  * ```html
  * <fa-surface>
- *   Here's some data-bound content {{myScopeVariable}}
+ *   Here's some data-bound content '{{myScopeVariable}}'
  * </fa-surface>
  * ```
+
+*@example
+* ```html
+*<fa-modifier fa-size="[960, undefined]">
+*   <fa-surface fa-size="[undefined, undefined]">
+*     <div ng-include src=" 'views/animations.html' "></div>
+*   </fa-surface>
+* </fa-modifier>
+* ```
+
+A simple ng-repeat of surfaces may look like this:
+*@example
+* ```html
+<fa-modifier ng-repeat="item in list" fa-size="[100, 100]" fa-translate="[0, $index * 75, 0]">
+    <fa-surface fa-size="[undefined, undefined]">
+      {{item.content}}
+    </fa-surface>
+  </fa-modifier>
+* ```
+
+* ```javascript
+$scope.list = [{content: "famous"}, {content: "angular"}, {content: "rocks!"}];
+* ```
+
+*Common Problems
+*---------------
+
+Properties on surfaces vs modifiers
+-----------------------------------
+You may expect to animate properties such as size or origin.  However, with Famous, properties related to layout and visibility belong on the modifier, and the surface should be nested below the modifier.
+While you can specify fa-size as well as some other layout/visibility properties on surfaces themselves, it is not recommended.
+
+This is not best practice:
+
+*@example
+ * ```html
+<fa-surface fa-size="[100, 100]"></fa-surface>
+ * ```
+
+Whereas this is the preferred approach: 
+*@example
+ * ```html
+<fa-modifier fa-size="[100, 100]">
+  <fa-surface fa-size="[undefined, undefined]">
+  </fa-surface>
+</fa-modifier>
+ * ```
+
+You may also omit fa-size="[undefined, undefined]" on the surface and the surface will still fill the size of the modifier, in this case, [100, 100].
+
+In Famous' Render Tree, modifiers modify all the nodes below them.  By setting the fa-surface's fa-size to [undefined, undefined], it will inherit from the fa-modifier's fa-size of [100, 100]. 
+
+Fa-surfaces also cannot have an fa-size/fa-rotate/etc, assigned to a function, as is in the case of modifiers, which can take number/array or a function, and sometimes a transitionable object.
+For example, this will not work:
+*@example
+* ```html
+<fa-surface fa-size="sizeForBoxFunction"></fa-surface>
+* ```
+* ```javascript
+* $scope.sizeForBoxFunction = function() {
+*      return [75, 75];
+*    }
+* ```
+
+To reiterate, the best practice to set any layout/visibilty properties of a surface is to do so on a modifier that affects the surface.  Whereas a surface is for containing HTML content, whether rendered from a template, or data-bound with {{}}'s.
+*<fa-modifier fa-size="[100, 100]">
+*    <fa-surface fa-background-color="'red'"></fa-surface>
+*  </fa-modifier>
+
+
  */
+
+
 
 angular.module('famous.angular')
   .config(['$provide', '$animateProvider', function($provide, $animateProvider) {

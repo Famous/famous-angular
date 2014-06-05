@@ -14,6 +14,17 @@
  *
  * </ANY>
  * ```
+ * @example
+ * Here's an example of click usage
+ * ```javascript
+ * $scope.myClickHandler = function(){
+ *   console.log('clicked') // clicked
+ * }
+ * ```
+ * ```html
+ * <fa-surface fa-click="myClickHandler">Click me</fa-surface>
+ * ```
+
  */
 
 angular.module('famous.angular')

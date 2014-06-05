@@ -27,7 +27,97 @@
  *   <fa-surface>I'm translucent, skewed, rotated, and translated</fa-surface>
  * </fa-modifier>
  * ```
- */
+
+ * @example
+
+ The order of transforms matter
+ ------------------------------
+ * You can specify the order of transforms by nesting modifiers.  For instance, if you translate an element and then rotate it, the result will be different than if you had rotated it and then translated it. 
+
+ * ```html
+ * <fa-modifier fa-translate="[100, 100]">
+ *    <fa-modifier fa-rotate-z=".6" fa-size="[100, 100]">
+ *      <fa-surface fa-background-color="red">translate --> rotate</fa-surface>
+ *    </fa-modifier>
+ * </fa-modifier>
+ *
+ *  <fa-modifier fa-rotate-z=".6">
+ *    <fa-modifier fa-translate="[100, 100]" fa-size="[100, 100]">
+ *      <fa-surface class="red"></fa-surface>
+ *    </fa-modifier>
+ *  </fa-modifier>
+ * ```
+
+Values for fa-modifier attributes
+---------------------------------
+Fa-modifier properties, (such as faRotate, faScale, etc) can be bound to number/arrays, object properties defined on the scope, function references, and sometimes a transitionable object.
+
+Number/Array values
+-------------------
+* @example
+* fa-modifier properties can be bound to number/array values.
+* html:
+* ```html
+*  <fa-modifier fa-origin="[.5,.5]" fa-size="[100, 100]" fa-rotate=".3">
+*    <fa-surface fa-background-color="'red'"></fa-surface>
+*  </fa-modifier>
+ * ```
+
+Object properties on the scope
+------------------------------
+ * @example
+ *fa-modifier properties can be bound to object properties defined on the scope.
+ * html:
+  * ```html
+*<fa-modifier fa-origin="boxObject.origin" fa-size="boxObject.size">
+*    <fa-surface fa-background-color="'red'"></fa-surface>
+*  </fa-modifier>
+ * ```
+ * ```javascript
+ $scope.boxObject = {
+ *    origin: [.4, .4],
+ *    size: [50, 50]
+ *  }
+  * ```
+
+Functions
+---------
+* @example
+* Fa-modifier properties can be bound to a function on the scope that returns a value.
+
+* ```html
+ * <fa-modifier fa-origin="genBoxOrigin">
+ *   <fa-surface fa-background-color="'red'"></fa-surface>
+ * </fa-modifier>
+* ```
+
+* ```javascript
+* $scope.getX = function() {
+*   return .2;
+* };
+* $scope.getY = function() {
+*   return .3;
+* }
+* $scope.genBoxOrigin = function() {
+*   return [$scope.getX(), $scope.getY()];
+* };
+  * ```
+
+Animating properties
+--------------------
+* @example
+* Remember that Famous surfaces are styled with position:absolute, and their positions are defined by matrix3d webkit transforms.  Modifiers are to be used to hold onto size, transform, origin, and opacity states, and also to be animated.
+* As per vanilla Famous, you should animate properties of modifiers, such as transform, align, opacity, etc, rather than on the surface itself, as modifiers are responsible for layout and visibility.  
+* ```html
+*   <fa-modifier fa-rotate-z="boxA.rotate.get()">
+*     <fa-surface fa-click="animateBoxA()" fa-background-color="'red'"></fa-surface>
+*   </fa-modifier>
+* ```
+
+* @TODO You can also specify the order of transforms using faTransformOrder.
+* @TODO fa-transform
+* @TODO show that modifiers can modify modifiers below them, and all of this multiplies.  
+*/
 
 angular.module('famous.angular')
   .directive('faModifier', ["$famous", "$famousDecorator", "$parse", function ($famous, $famousDecorator, $parse) {

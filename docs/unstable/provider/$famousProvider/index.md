@@ -126,6 +126,56 @@ Register the modules that will be available in the $famous service
 
 
 
+<div id="getIsolate"></div>
+<h2>
+  <code>getIsolate(scope)</code>
+
+</h2>
+
+Given an scope, retrieves the corresponding isolate.
+
+
+
+<table class="table" style="margin:0;">
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Type</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td>
+        scope
+        
+        
+      </td>
+      <td>
+        
+  <code>Object</code>
+      </td>
+      <td>
+        
+        
+      </td>
+    </tr>
+    
+  </tbody>
+</table>
+
+
+
+
+
+
+* Returns: 
+  <code>Object</code> The requested isolate
+
+
+
+
 <div id="find"></div>
 <h2>
   <code>find(selector)</code>
