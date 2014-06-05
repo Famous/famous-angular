@@ -1669,14 +1669,18 @@ angular.module('famous.angular')
           $delegate.addClass(element, className, done);
 
           if (isClassable(element)) {
-            $famous.getIsolate(element.scope()).renderNode.addClass(className);
+            angular.forEach(className.split(' '), function(splitClassName) {
+              $famous.getIsolate(element.scope()).renderNode.addClass(splitClassName);
+            });
           }
         },
         removeClass: function(element, className, done) {
           $delegate.removeClass(element, className, done);
 
           if (isClassable(element)) {
-            $famous.getIsolate(element.scope()).renderNode.removeClass(className);
+            angular.forEach(className.split(' '), function(splitClassName) {
+              $famous.getIsolate(element.scope()).renderNode.removeClass(splitClassName);
+            });
           }
         },
         setClass: function(element, add, remove, done) {
@@ -1736,7 +1740,6 @@ angular.module('famous.angular')
 
             isolate.renderNode = new Surface({
               size: scope.$eval(attrs.faSize),
-              class: scope.$eval(attrs.class),
               properties: isolate.getProperties()
             });
 
