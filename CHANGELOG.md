@@ -1,3 +1,30 @@
+<a name="0.0.15"></a>
+# 0.0.15 (2014-06-04)
+
+
+## Bug Fixes
+
+- handle multiple classes in fa-surface, both in class attribute and in ng-class
+ ([e48c187a](https://github.com/Famous/famous-angular/commit/e48c187abfba93732f907fe83b1eb70979758617))
+- allow $famous.find to return multiple elements
+ ([1a880727](https://github.com/Famous/famous-angular/commit/1a880727e0e4711a1ba48cd54b83b68d5734c0f4),
+ [#80](https://github.com/Famous/famous-angular/issues/80))
+
+
+## Features
+
+- implement faFlipper directive
+ ([64c98b65](https://github.com/Famous/famous-angular/commit/64c98b655e790ce48b96531585ab4eb84eeba673))
+
+
+## Documentation
+
+- add scrollview examples + add headings modifier surface
+ ([4ea11ad7](https://github.com/Famous/famous-angular/commit/4ea11ad73e6ca20ca4f3080013811113f99c2627))
+- modifier surface scrollview progress examples
+ ([e5746674](https://github.com/Famous/famous-angular/commit/e5746674daf5920e15c7a95d9a1bb2caee75b495))
+
+
 <a name="0.0.14"></a>
 # 0.0.14 (2014-05-31)
 
