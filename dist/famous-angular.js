@@ -2369,11 +2369,11 @@ angular.module('famous.angular')
           post: function(scope, element, attrs) {
             var isolate = $famousDecorator.ensureIsolate(scope);
 
-            if (attrs.faTouchEnd) {
+            if (attrs.faTouchend) {
               var renderNode = (isolate.renderNode._eventInput || isolate.renderNode)
 
               renderNode.on("touchend", function(data) {
-                var fn = $parse(attrs.faTouchMove);
+                var fn = $parse(attrs.faTouchend);
                 fn(scope, {$event:data});
                 if(!scope.$$phase)
                   scope.$apply();
@@ -2413,11 +2413,11 @@ angular.module('famous.angular')
           post: function(scope, element, attrs) {
             var isolate = $famousDecorator.ensureIsolate(scope);
 
-            if (attrs.faTouchMove) {
+            if (attrs.faTouchmove) {
               var renderNode = (isolate.renderNode._eventInput || isolate.renderNode)
 
               renderNode.on("touchmove", function(data) {
-                var fn = $parse(attrs.faTouchMove);
+                var fn = $parse(attrs.faTouchmove);
                 fn(scope, {$event:data});
                 if(!scope.$$phase)
                   scope.$apply();
@@ -2456,11 +2456,11 @@ angular.module('famous.angular')
           post: function(scope, element, attrs) {
             var isolate = $famousDecorator.ensureIsolate(scope);
 
-            if (attrs.faTouchStart) {
+            if (attrs.faTouchstart) {
               var renderNode = (isolate.renderNode._eventInput || isolate.renderNode)
 
               renderNode.on("touchstart", function(data) {
-                var fn = $parse(attrs.faTouchStart);
+                var fn = $parse(attrs.faTouchstart);
                 fn(scope, {$event:data});
                 if(!scope.$$phase)
                   scope.$apply();
