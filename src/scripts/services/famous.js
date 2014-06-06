@@ -37,7 +37,8 @@ var requirements = [
   "famous/views/GridLayout",
   "famous/views/RenderController",
   "famous/views/Scroller",
-  "famous/views/Scrollview"
+  "famous/views/Scrollview",
+  "famous/views/SequentialLayout"
 ]
 
 //declare the module before the async callback so that
