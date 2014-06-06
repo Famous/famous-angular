@@ -24,7 +24,6 @@
  * ```html
  * <fa-surface fa-click="myClickHandler()">Click me</fa-surface>
  * ```
-
  */
 
 angular.module('famous.angular')
