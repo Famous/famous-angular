@@ -43,7 +43,8 @@ var requirements = [
   "famous/views/GridLayout",
   "famous/views/RenderController",
   "famous/views/Scroller",
-  "famous/views/Scrollview"
+  "famous/views/Scrollview",
+  "famous/views/SequentialLayout"
 ]
 
 //declare the module before the async callback so that
@@ -2250,6 +2251,99 @@ angular.module('famous.angular')
 
 /**
  * @ngdoc directive
+ * @name faSequentialLayout
+ * @module famous.angular
+ * @restrict EA
+ * @description
+ * This directive will create a Famo.us SequentialLayout containing the 
+ * specified child elements. The provided `options` object
+ * will pass directly through to the Famo.us faSequentialLayout's
+ * constructor.  See [https://famo.us/docs/0.2.0/views/SequentialLayout/]
+ *
+ * @usage
+ * ```html
+ * <fa-sequential-layout fa-options="scopeOptionsObject">
+ *   <!-- zero or more render nodes -->
+ * </fa-sequential-layout>
+ * ```
+ */
+
+
+angular.module('famous.angular')
+  .directive('faSequentialLayout', ["$famous", "$famousDecorator", function ($famous, $famousDecorator) {
+    return {
+      template: '<div></div>',
+      restrict: 'E',
+      transclude: true,
+      scope: true,
+      compile: function (tElem, tAttrs, transclude) {
+        window.$f = $famous;
+        return {
+          pre: function (scope, element, attrs) {
+            var isolate = $famousDecorator.ensureIsolate(scope);
+
+            var SequentialLayout = $famous["famous/views/SequentialLayout"];
+
+            var _children = [];
+
+            var options = scope.$eval(attrs.faOptions) || {};
+
+            isolate.renderNode = new SequentialLayout(options);
+
+            var _updateSequentialLayout = function() {
+              _children.sort(function(a, b) {
+                return a.index - b.index;
+              });
+              isolate.renderNode.sequenceFrom(function(_children) {
+                var _ch = [];
+                angular.forEach(_children, function(c, i) {
+                  _ch[i] = c.renderNode;
+                });
+                return _ch;
+              }(_children));
+            };
+
+            scope.$on('registerChild', function (evt, data) {
+              if (evt.targetScope.$id != scope.$id) {
+                _children.push(data);
+                _updateSequentialLayout();
+                evt.stopPropagation();
+              };
+            });
+
+            scope.$on('unregisterChild', function (evt, data) {
+              if (evt.targetScope.$id != scope.$id) {
+                _children = function (_children) {
+                  var _ch = [];
+                  angular.forEach(_children, function (c) {
+                    if (c.id !== data.id) {
+                      _ch.push(c);
+                    }
+                  });
+                  return _ch;
+                }(_children);
+                _updateSequentialLayout();
+                evt.stopPropagation();
+              }
+            });
+
+          },
+          post: function (scope, element, attrs) {
+            var isolate = $famousDecorator.ensureIsolate(scope);
+
+            transclude(scope, function (clone) {
+              element.find('div').append(clone);
+            });
+
+            scope.$emit('registerChild', isolate);
+          }
+        };
+      }
+    };
+  }]);
+
+/**
+ * @ngdoc directive
  * @name faSurface
  * @module famous.angular
  * @restrict EA
@@ -2552,11 +2646,11 @@ angular.module('famous.angular')
           post: function(scope, element, attrs) {
             var isolate = $famousDecorator.ensureIsolate(scope);
 
-            if (attrs.faTouchEnd) {
+            if (attrs.faTouchend) {
               var renderNode = (isolate.renderNode._eventInput || isolate.renderNode)
 
               renderNode.on("touchend", function(data) {
-                var fn = $parse(attrs.faTouchMove);
+                var fn = $parse(attrs.faTouchend);
                 fn(scope, {$event:data});
                 if(!scope.$$phase)
                   scope.$apply();
@@ -2596,11 +2690,11 @@ angular.module('famous.angular')
           post: function(scope, element, attrs) {
             var isolate = $famousDecorator.ensureIsolate(scope);
 
-            if (attrs.faTouchMove) {
+            if (attrs.faTouchmove) {
               var renderNode = (isolate.renderNode._eventInput || isolate.renderNode)
 
               renderNode.on("touchmove", function(data) {
-                var fn = $parse(attrs.faTouchMove);
+                var fn = $parse(attrs.faTouchmove);
                 fn(scope, {$event:data});
                 if(!scope.$$phase)
                   scope.$apply();
@@ -2639,11 +2733,11 @@ angular.module('famous.angular')
           post: function(scope, element, attrs) {
             var isolate = $famousDecorator.ensureIsolate(scope);
 
-            if (attrs.faTouchStart) {
+            if (attrs.faTouchstart) {
               var renderNode = (isolate.renderNode._eventInput || isolate.renderNode)
 
               renderNode.on("touchstart", function(data) {
-                var fn = $parse(attrs.faTouchStart);
+                var fn = $parse(attrs.faTouchstart);
                 fn(scope, {$event:data});
                 if(!scope.$$phase)
                   scope.$apply();

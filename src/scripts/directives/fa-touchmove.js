@@ -25,11 +25,11 @@ angular.module('famous.angular')
           post: function(scope, element, attrs) {
             var isolate = $famousDecorator.ensureIsolate(scope);
 
-            if (attrs.faTouchMove) {
+            if (attrs.faTouchmove) {
               var renderNode = (isolate.renderNode._eventInput || isolate.renderNode)
 
               renderNode.on("touchmove", function(data) {
-                var fn = $parse(attrs.faTouchMove);
+                var fn = $parse(attrs.faTouchmove);
                 fn(scope, {$event:data});
                 if(!scope.$$phase)
                   scope.$apply();
