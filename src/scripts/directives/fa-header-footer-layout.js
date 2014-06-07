@@ -42,7 +42,6 @@ angular.module('famous.angular')
 
             var _numberOfChildren = 0;
             scope.$on('registerChild', function (evt, data) {
-              console.log('data', data)
               if (evt.targetScope.$id != scope.$id) {
                 _numberOfChildren++;
                 if(_numberOfChildren === 1){
@@ -51,7 +50,6 @@ angular.module('famous.angular')
                   isolate.renderNode.content.add(data.renderNode);
                 }else if(_numberOfChildren === 3){
                   isolate.renderNode.footer.add(data.renderNode);
-                  console.log(isolate.renderNode);
                 }else{
                   throw "fa-header-footer-layout can accept no more than 3 children"
                 }
