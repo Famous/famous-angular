@@ -11,7 +11,9 @@
  * @usage
  * ```html
  * <fa-header-footer-layout>
- *   <!-- zero or more render nodes -->
+ *   <!-- header rendernode -->
+ *   <!-- content rendernode -->
+ *   <!-- footer rendernode -->
  * </fa-header-footer-layout>
  * ```
  */
@@ -38,33 +40,28 @@ angular.module('famous.angular')
             var options = scope.$eval(attrs.faOptions) || {};
             isolate.renderNode = new HeaderFooterLayout(options);
 
-            var _updateHeaderFooterLayout = function() {
-              isolate.renderNode.header = _header;
-              isolate.renderNode.content = _content;
-              isolate.renderNode.footer = _footer;
-            };
-
             var _numberOfChildren = 0;
             scope.$on('registerChild', function (evt, data) {
+              console.log('data', data)
               if (evt.targetScope.$id != scope.$id) {
-                if(_numberOfChildren < 3){
-                  _numberOfChildren++;
-                  if(_numberOfChildren == 1){
-                    isolate.renderNode.header = data;
-                  }else if(_numberOfChildren == 2){
-                    isolate.renderNode.content = data;
-                  }else if(_numberOfChildren == 3){
-                    isolate.renderNode.footer = data;
-                  }else{
-                    throw "fa-header-footer-layout can accept no more than 3 children"
-                  }
+                _numberOfChildren++;
+                if(_numberOfChildren === 1){
+                  isolate.renderNode.header.add(data.renderNode);
+                }else if(_numberOfChildren === 2){
+                  isolate.renderNode.content.add(data.renderNode);
+                }else if(_numberOfChildren === 3){
+                  isolate.renderNode.footer.add(data.renderNode);
+                  console.log(isolate.renderNode);
+                }else{
+                  throw "fa-header-footer-layout can accept no more than 3 children"
                 }
+                evt.stopPropagation();
               };
             });
 
             scope.$on('unregisterChild', function (evt, data) {
               //TODO:  support removing children
-              throw "unsupported: fa-header-footer-layout does not support removing children"
+              throw "unimplemented: fa-header-footer-layout does not support removing children"
             });
 
           },
