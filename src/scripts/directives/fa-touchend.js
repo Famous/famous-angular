@@ -13,6 +13,29 @@
  *
  * </ANY>
  * ```
+
+Note:  For testing purposes during development, enable mobile emulation: https://developer.chrome.com/devtools/docs/mobile-emulation
+
+##Example
+Upon a touchend event firing, fa-touchend will evaluate the expression bound to it.
+
+Touchstart fires once upon first touch; touchmove fires as the touch point is moved along a touch surface; touchend fires upon release of the touch point.
+
+```html
+<fa-modifier fa-size="[100, 100]">
+  <fa-surface fa-background-color="'red'" fa-touchend="touchEnd($event)"></fa-surface>
+</fa-modifier>
+```
+
+```javascript
+var touchEndCounter = 0;
+$scope.touchEnd = function($event) {
+  touchEndCounter++;
+  console.log($event);
+  console.log("touchEnd: " + touchEndCounter);
+};
+qqq
+
  */
 
 angular.module('famous.angular')

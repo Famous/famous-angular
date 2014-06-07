@@ -13,6 +13,31 @@
  *
  * </ANY>
  * ```
+
+Note:  For testing purposes during development, enable mobile emulation: https://developer.chrome.com/devtools/docs/mobile-emulation
+
+##Example
+Upon a touchmove event firing, fa-touchmove will evaluate the expression bound to it.
+
+Touchstart fires once upon first touch; touchmove fires as the touch point is moved along a touch surface, until release of the touch point.
+The rate of which touchmove events fire is implementation-defined by browser and hardware.
+Upon each firing, fa-touchmove evaluates the expression bound to it.
+
+```html
+<fa-modifier fa-size="[100, 100]">
+  <fa-surface fa-background-color="'red'" fa-touchmove="touchMove($event)"></fa-surface>
+</fa-modifier>
+```
+
+```javascript
+var touchMoveCounter = 0;
+$scope.touchMove = function($event) {
+  touchMoveCounter++;
+  console.log($event);
+  console.log("touchMove: " + touchMoveCounter);
+};
+```
+
  */
 
 angular.module('famous.angular')
