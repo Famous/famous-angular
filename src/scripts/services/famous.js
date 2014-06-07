@@ -25,6 +25,7 @@ var requirements = [
   "famous/inputs/PinchSync",
   "famous/inputs/RotateSync",
   "famous/inputs/TouchSync",
+  "famous/surfaces/ContainerSurface",
   "famous/surfaces/ImageSurface",
   "famous/surfaces/InputSurface",
   "famous/transitions/Easing",
