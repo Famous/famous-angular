@@ -1362,16 +1362,32 @@ angular.module('famous.angular')
  * </fa-modifier>
  * ```
 
- * @example
+* @example
+## The order of transforms matter 
+### Fa-Transform-order
 
- The order of transforms matter
- ------------------------------
- * You can specify the order of transforms by nesting modifiers.  For instance, if you translate an element and then rotate it, the result will be different than if you had rotated it and then translated it. 
+* Fa-transform-order can be used to specify the order of transforms on a modifier.  In the first example below, the translate is applied first, translating the box over to the right, and then it is rotated around its origin.
+
+* In the second example, the rotation happens first, and then the translation is calculated in relation to the origin that has been rotated.
+
+* If fa-transform-order is not specified and there are multiple transforms on a modifier, they will be be transformed in alphabetical order of their properties (e.g. "r" in rotate comes before "t" in translate).
+
+```html
+<fa-modifier fa-transform-order="['translate', 'rotateZ']" fa-rotate-z="0.3" fa-translate="[100, 0, 0]" fa-size="[100, 100]">
+  <fa-surface fa-background-color="'red'"></fa-surface>
+</fa-modifier>
+
+<fa-modifier fa-transform-order="['rotateZ', 'translate']" fa-rotate-z="0.3" fa-translate="[100, 0, 0]" fa-size="[100, 100]">
+  <fa-surface fa-background-color="'blue'"></fa-surface>
+</fa-modifier>
+```
+
+ * You can also specify the order of transforms by nesting modifiers.  For instance, if you translate an element and then rotate it, the result will be different than if you had rotated it and then translated it. 
 
  * ```html
  * <fa-modifier fa-translate="[100, 100]">
  *    <fa-modifier fa-rotate-z=".6" fa-size="[100, 100]">
- *      <fa-surface fa-background-color="red">translate --> rotate</fa-surface>
+ *      <fa-surface fa-background-color="red"></fa-surface>
  *    </fa-modifier>
  * </fa-modifier>
  *
@@ -1382,47 +1398,41 @@ angular.module('famous.angular')
  *  </fa-modifier>
  * ```
 
-Values for fa-modifier attributes
----------------------------------
+## Values for fa-modifier attributes
+
 Fa-modifier properties, (such as faRotate, faScale, etc) can be bound to number/arrays, object properties defined on the scope, or function references.
 
-Number/Array values
--------------------
-* @example
-* fa-modifier properties can be bound to number/array values.
-* html:
+### Number/Array values
+* Fa-modifier properties can be bound to number/array values.
+
 * ```html
 *  <fa-modifier fa-origin="[.5,.5]" fa-size="[100, 100]" fa-rotate=".3">
 *    <fa-surface fa-background-color="'red'"></fa-surface>
 *  </fa-modifier>
- * ```
+* ```
 
-Object properties on the scope
-------------------------------
- * @example
- *fa-modifier properties can be bound to object properties defined on the scope.
- * html:
-  * ```html
+### Object properties on the scope
+*Fa-modifier properties can be bound to object properties defined on the scope.
+
+* ```html
 *<fa-modifier fa-origin="boxObject.origin" fa-size="boxObject.size">
 *    <fa-surface fa-background-color="'red'"></fa-surface>
 *  </fa-modifier>
- * ```
- * ```javascript
- $scope.boxObject = {
- *    origin: [.4, .4],
- *    size: [50, 50]
- *  }
-  * ```
+* ```
+* ```javascript
+$scope.boxObject = {
+*    origin: [.4, .4],
+*    size: [50, 50]
+*  }
+* ```
 
-Functions
----------
-* @example
+### Functions
 * Fa-modifier properties can be bound to a function on the scope that returns a value.
 
 * ```html
- * <fa-modifier fa-origin="genBoxOrigin">
- *   <fa-surface fa-background-color="'red'"></fa-surface>
- * </fa-modifier>
+* <fa-modifier fa-origin="genBoxOrigin">
+*   <fa-surface fa-background-color="'red'"></fa-surface>
+* </fa-modifier>
 * ```
 
 * ```javascript
@@ -1435,11 +1445,45 @@ Functions
 * $scope.genBoxOrigin = function() {
 *   return [$scope.getX(), $scope.getY()];
 * };
-  * ```
+* ```
 
-Animating properties
---------------------
-* @example
+### Fa-transform
+* Fa-transform can be used to directly pass a 16-element transform matrix to a fa-modifier:
+* 
+* Passed as an array:
+
+* ```html
+* <fa-modifier 
+*     fa-transform="[1, .3, 0, 0, -.3, 1, 0, 0, 0, 0, 1, 0, 20, 110, 0, 1]"
+*     fa-size="[100, 100]">
+*   <fa-surface fa-background-color="'red'"></fa-surface>
+* </fa-modifier>
+* ```
+
+Passed as an object on the scope:
+
+* ```javascript
+* $scope.matrix = [1, .3, 0, 0, -.3, 1, 0, 0, 0, 0, 1, 0, 20, 110, 0, 1];
+* ```
+* ```html
+* <fa-modifier fa-transform="matrix" fa-size="[50, 50]">
+*   <fa-surface fa-background-color="'green'"></fa-surface>
+* </fa-modifier>
+* ```
+
+Fa-transform will also accept a transitionable object that returns a 16-element matrix array:
+
+* ```javascript
+* $scope.matrixTrans = new Transitionable([1, .3, 0, 0, -.3, 1, 0, 0, 0, 0, 1, 0, 20, 110, 0, 1]);
+* ```
+
+* ```html
+* <fa-modifier fa-transform="matrixTrans.get()" fa-size="[30, 30]">
+*   <fa-surface fa-background-color="'blue'"></fa-surface>
+* </fa-modifier>
+* ```
+
+### Animating properties
 * Remember that Famous surfaces are styled with position:absolute, and their positions are defined by matrix3d webkit transforms.  Modifiers are to be used to hold onto size, transform, origin, and opacity states, and also to be animated.
 * As per vanilla Famous, you should animate properties of modifiers, such as transform, align, opacity, etc, rather than on the surface itself, as modifiers are responsible for layout and visibility.  
 * ```html
@@ -1447,10 +1491,6 @@ Animating properties
 *     <fa-surface fa-click="animateBoxA()" fa-background-color="'red'"></fa-surface>
 *   </fa-modifier>
 * ```
-
-* @TODO You can also specify the order of transforms using faTransformOrder.
-* @TODO fa-transform
-* @TODO show that modifiers can modify modifiers below them, and all of this multiplies.  
 */
 
 angular.module('famous.angular')
@@ -2634,6 +2674,29 @@ angular.module('famous.angular')
  *
  * </ANY>
  * ```
+
+Note:  For testing purposes during development, enable mobile emulation: https://developer.chrome.com/devtools/docs/mobile-emulation
+
+##Example
+Upon a touchend event firing, fa-touchend will evaluate the expression bound to it.
+
+Touchstart fires once upon first touch; touchmove fires as the touch point is moved along a touch surface; touchend fires upon release of the touch point.
+
+```html
+<fa-modifier fa-size="[100, 100]">
+  <fa-surface fa-background-color="'red'" fa-touchend="touchEnd($event)"></fa-surface>
+</fa-modifier>
+```
+
+```javascript
+var touchEndCounter = 0;
+$scope.touchEnd = function($event) {
+  touchEndCounter++;
+  console.log($event);
+  console.log("touchEnd: " + touchEndCounter);
+};
+qqq
+
  */
 
 angular.module('famous.angular')
@@ -2678,6 +2741,31 @@ angular.module('famous.angular')
  *
  * </ANY>
  * ```
+
+Note:  For testing purposes during development, enable mobile emulation: https://developer.chrome.com/devtools/docs/mobile-emulation
+
+##Example
+Upon a touchmove event firing, fa-touchmove will evaluate the expression bound to it.
+
+Touchstart fires once upon first touch; touchmove fires as the touch point is moved along a touch surface, until release of the touch point.
+The rate of which touchmove events fire is implementation-defined by browser and hardware.
+Upon each firing, fa-touchmove evaluates the expression bound to it.
+
+```html
+<fa-modifier fa-size="[100, 100]">
+  <fa-surface fa-background-color="'red'" fa-touchmove="touchMove($event)"></fa-surface>
+</fa-modifier>
+```
+
+```javascript
+var touchMoveCounter = 0;
+$scope.touchMove = function($event) {
+  touchMoveCounter++;
+  console.log($event);
+  console.log("touchMove: " + touchMoveCounter);
+};
+```
+
  */
 
 angular.module('famous.angular')
@@ -2721,7 +2809,30 @@ angular.module('famous.angular')
  *
  * </ANY>
  * ```
- */
+
+Note:  For testing purposes during development, enable mobile emulation: https://developer.chrome.com/devtools/docs/mobile-emulation
+
+##Example
+Upon a touchstart event firing, fa-touchstart will evaluate the expression bound to it.
+
+Touchstart fires once when a touch point (finger) is first placed upon the touch surface.
+If the touch point moves or releases touch, it will not fire a touchstart.
+If the touch point is placed upon the touch surface again, it will fire another touchstart event.
+
+```html
+ <fa-modifier fa-size="[100, 100]">
+  <fa-surface fa-background-color="'red'" fa-touchstart="touchStart($event)"></fa-surface>
+</fa-modifier>
+```
+```javascript
+  var touchStartCounter = 0;
+  $scope.touchStart = function($event) {
+    touchStartCounter++;
+    console.log($event);
+    console.log("touchStart: " + touchStartCounter);
+  };
+```
+*/
 
 angular.module('famous.angular')
   .directive('faTouchstart', ['$parse', '$famousDecorator', function ($parse, $famousDecorator) {

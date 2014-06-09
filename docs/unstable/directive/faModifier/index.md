@@ -311,10 +311,21 @@ to values (e.g. `fa-translate="[15, 20, 1]"`, Famo.us Transitionable objects, or
 
 
 <h2 id="example">Example</h2><h2 id="the-order-of-transforms-matter">The order of transforms matter</h2>
-<p>You can specify the order of transforms by nesting modifiers.  For instance, if you translate an element and then rotate it, the result will be different than if you had rotated it and then translated it. </p>
+<h3 id="fa-transform-order">Fa-Transform-order</h3>
+<p>Fa-transform-order can be used to specify the order of transforms on a modifier.  In the first example below, the translate is applied first, translating the box over to the right, and then it is rotated around its origin.</p>
+<p>In the second example, the rotation happens first, and then the translation is calculated in relation to the origin that has been rotated.</p>
+<p>If fa-transform-order is not specified and there are multiple transforms on a modifier, they will be be transformed in alphabetical order of their properties (e.g. &quot;r&quot; in rotate comes before &quot;t&quot; in translate).</p>
+<pre><code class="lang-html">&lt;fa-modifier fa-transform-order=&quot;[&#39;translate&#39;, &#39;rotateZ&#39;]&quot; fa-rotate-z=&quot;0.3&quot; fa-translate=&quot;[100, 0, 0]&quot; fa-size=&quot;[100, 100]&quot;&gt;
+  &lt;fa-surface fa-background-color=&quot;&#39;red&#39;&quot;&gt;&lt;/fa-surface&gt;
+&lt;/fa-modifier&gt;
+
+&lt;fa-modifier fa-transform-order=&quot;[&#39;rotateZ&#39;, &#39;translate&#39;]&quot; fa-rotate-z=&quot;0.3&quot; fa-translate=&quot;[100, 0, 0]&quot; fa-size=&quot;[100, 100]&quot;&gt;
+  &lt;fa-surface fa-background-color=&quot;&#39;blue&#39;&quot;&gt;&lt;/fa-surface&gt;
+&lt;/fa-modifier&gt;</code></pre>
+<p>You can also specify the order of transforms by nesting modifiers.  For instance, if you translate an element and then rotate it, the result will be different than if you had rotated it and then translated it. </p>
 <pre><code class="lang-html">&lt;fa-modifier fa-translate=&quot;[100, 100]&quot;&gt;
    &lt;fa-modifier fa-rotate-z=&quot;.6&quot; fa-size=&quot;[100, 100]&quot;&gt;
-     &lt;fa-surface fa-background-color=&quot;red&quot;&gt;translate --&gt; rotate&lt;/fa-surface&gt;
+     &lt;fa-surface fa-background-color=&quot;red&quot;&gt;&lt;/fa-surface&gt;
    &lt;/fa-modifier&gt;
 &lt;/fa-modifier&gt;
 
@@ -325,23 +336,21 @@ to values (e.g. `fa-translate="[15, 20, 1]"`, Famo.us Transitionable objects, or
  &lt;/fa-modifier&gt;</code></pre>
 <h2 id="values-for-fa-modifier-attributes">Values for fa-modifier attributes</h2>
 <p>Fa-modifier properties, (such as faRotate, faScale, etc) can be bound to number/arrays, object properties defined on the scope, or function references.</p>
-<h2 id="number-array-values">Number/Array values</h2>
-<p>fa-modifier properties can be bound to number/array values.
-html:</p>
+<h3 id="number-array-values">Number/Array values</h3>
+<p>Fa-modifier properties can be bound to number/array values.</p>
 <pre><code class="lang-html"> &lt;fa-modifier fa-origin=&quot;[.5,.5]&quot; fa-size=&quot;[100, 100]&quot; fa-rotate=&quot;.3&quot;&gt;
    &lt;fa-surface fa-background-color=&quot;&#39;red&#39;&quot;&gt;&lt;/fa-surface&gt;
  &lt;/fa-modifier&gt;</code></pre>
-<h2 id="object-properties-on-the-scope">Object properties on the scope</h2>
-<p>fa-modifier properties can be bound to object properties defined on the scope.
-html:</p>
+<h3 id="object-properties-on-the-scope">Object properties on the scope</h3>
+<p>Fa-modifier properties can be bound to object properties defined on the scope.</p>
 <pre><code class="lang-html">&lt;fa-modifier fa-origin=&quot;boxObject.origin&quot; fa-size=&quot;boxObject.size&quot;&gt;
    &lt;fa-surface fa-background-color=&quot;&#39;red&#39;&quot;&gt;&lt;/fa-surface&gt;
  &lt;/fa-modifier&gt;</code></pre>
-<pre><code class="lang-javascript"> $scope.boxObject = {
+<pre><code class="lang-javascript">$scope.boxObject = {
    origin: [.4, .4],
    size: [50, 50]
  }</code></pre>
-<h2 id="functions">Functions</h2>
+<h3 id="functions">Functions</h3>
 <p>Fa-modifier properties can be bound to a function on the scope that returns a value.</p>
 <pre><code class="lang-html">&lt;fa-modifier fa-origin=&quot;genBoxOrigin&quot;&gt;
   &lt;fa-surface fa-background-color=&quot;&#39;red&#39;&quot;&gt;&lt;/fa-surface&gt;
@@ -355,7 +364,25 @@ $scope.getY = function() {
 $scope.genBoxOrigin = function() {
   return [$scope.getX(), $scope.getY()];
 };</code></pre>
-<h2 id="animating-properties">Animating properties</h2>
+<h3 id="fa-transform">Fa-transform</h3>
+<p>Fa-transform can be used to directly pass a 16-element transform matrix to a fa-modifier:</p>
+<p>Passed as an array:</p>
+<pre><code class="lang-html">&lt;fa-modifier 
+    fa-transform=&quot;[1, .3, 0, 0, -.3, 1, 0, 0, 0, 0, 1, 0, 20, 110, 0, 1]&quot;
+    fa-size=&quot;[100, 100]&quot;&gt;
+  &lt;fa-surface fa-background-color=&quot;&#39;red&#39;&quot;&gt;&lt;/fa-surface&gt;
+&lt;/fa-modifier&gt;</code></pre>
+<p>Passed as an object on the scope:</p>
+<pre><code class="lang-javascript">$scope.matrix = [1, .3, 0, 0, -.3, 1, 0, 0, 0, 0, 1, 0, 20, 110, 0, 1];</code></pre>
+<pre><code class="lang-html">&lt;fa-modifier fa-transform=&quot;matrix&quot; fa-size=&quot;[50, 50]&quot;&gt;
+  &lt;fa-surface fa-background-color=&quot;&#39;green&#39;&quot;&gt;&lt;/fa-surface&gt;
+&lt;/fa-modifier&gt;</code></pre>
+<p>Fa-transform will also accept a transitionable object that returns a 16-element matrix array:</p>
+<pre><code class="lang-javascript">$scope.matrixTrans = new Transitionable([1, .3, 0, 0, -.3, 1, 0, 0, 0, 0, 1, 0, 20, 110, 0, 1]);</code></pre>
+<pre><code class="lang-html">&lt;fa-modifier fa-transform=&quot;matrixTrans.get()&quot; fa-size=&quot;[30, 30]&quot;&gt;
+  &lt;fa-surface fa-background-color=&quot;&#39;blue&#39;&quot;&gt;&lt;/fa-surface&gt;
+&lt;/fa-modifier&gt;</code></pre>
+<h3 id="animating-properties">Animating properties</h3>
 <p>Remember that Famous surfaces are styled with position:absolute, and their positions are defined by matrix3d webkit transforms.  Modifiers are to be used to hold onto size, transform, origin, and opacity states, and also to be animated.
 As per vanilla Famous, you should animate properties of modifiers, such as transform, align, opacity, etc, rather than on the surface itself, as modifiers are responsible for layout and visibility.  </p>
 <pre><code class="lang-html">  &lt;fa-modifier fa-rotate-z=&quot;boxA.rotate.get()&quot;&gt;
