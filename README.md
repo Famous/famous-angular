@@ -1,6 +1,5 @@
 # Famo.us/Angular
 
-
 Famo.us/Angular is an MVC for building Famo.us apps, powered by AngularJS.
 
 Using F/A, you can:
@@ -40,7 +39,7 @@ This library is under active development and is currently in alpha.  The library
 **Note: currently, the element that the `<fa-app>` is on must be display: block (like a `<div fa-app>` or a `<p fa-app>`, or just `<fa-app>`) and must have a set height (like `style="height: 200px"` in this example.)  Future versions will not have these requirements.**
 
 ####Try the starter app
-To get started even faster, try our [starter app](https://github.com/thomasstreet/famous-angular-starter) with everything already in place !
+To get started even faster, try our [starter app](https://github.com/thomasstreet/famous-angular-starter) with everything already in place!  The starter app has a powerful gulp-based workflow, which includes live reloading and Jade/HAML support.
 
 
 
