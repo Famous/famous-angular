@@ -51,6 +51,11 @@ it is inside of a <a href="api/directive/faSurface">fa-surface</a> directive.
   <!-- other fa- scene graph components -->
 </fa-app>
 ```
+
+Declaring fa-app creates a Famous context, the root of a Render Tree.  In the html, it appears as a div with the css class "famous-container".  
+Every element (e.g. fa-modifier's, fa-surface's) nested within an <fa-app> is added to the context.  
+ and everything nested within it is added to the context.
+ This creates a div with the css class famous-container.
   
   
 

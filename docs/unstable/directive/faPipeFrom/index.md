@@ -56,6 +56,7 @@ To pass information between two unrelated views, or even between a nested View t
 
 In the example below, even though a fa-view, fa-modifier, and fa-surface are all nested within a Scroll View, the events (such as touch or scroll) from its children do not propagate upwards.
 Note:  This example will not work.
+
 ```html
 <fa-scroll-view>
     <fa-view ng-repeat="view in views">
@@ -148,6 +149,7 @@ The Scroll View of the directional pad uses fa-pipe-from to pipe events from mai
 The surface within the directional pad uses fa-pipe-to to pipe fa-surface events to mainPipe.
 
 In the second view containing 3 Scroll Views, each Scroll View pipes from $scope.emptyPipe by default, another instantiated EventHandler that has no events piped to it.  
+
 
 ```html
 <fa-view>
