@@ -52,10 +52,22 @@ it is inside of a <a href="api/directive/faSurface">fa-surface</a> directive.
 </fa-app>
 ```
 
-Declaring fa-app creates a Famous context, the root of a Render Tree.  In the html, it appears as a div with the css class "famous-container".  
-Every element (e.g. fa-modifier's, fa-surface's) nested within an <fa-app> is added to the context.  
- and everything nested within it is added to the context.
- This creates a div with the css class famous-container.
+Fa-app creates a Famous context, the root of the Render Tree.  In the html, it appears as a div with the css class "famous-container". 
+Elements (such as fa-modifier's & fa-surface's) nested within an <fa-app> are added to this root context. 
+  
+Declaring fa-app appends a div with the class of "famous-angular-container" to the DOM.  It then instantiates a Context via Famous' Engine createContext method, passing in the famous-angular-container div, resulting in a Famous context that renderables can be added to.
+
+Nesting an fa-app within another fa-app is possible, and the use case of this approach would be for content overflow.
+Declaring multiple fa-app's within a page is permitted, but each extra results in a penalty to performance, and fa-app's should definitely not be declared within an ng-repeat.
+
+Fa-app can be declared on its own or within another element.  
+
+Note:  Right now, the element fa-app is declared within must have a height and width styling, declared inline or as a css declaration in an external stylesheet.
+
+```html
+<fa-app style="width: 320px; height: 568px;">
+</fa-app>
+```
   
   
 
