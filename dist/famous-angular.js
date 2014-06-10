@@ -383,16 +383,18 @@ $scope.animate = function() {
   </fa-surface>
 </fa-modifier>
 ```
-In the html, fa-translate is passed boxTransitionable.get(), a function that will return a value of [0,0,0] initially.
-All transitionables have a .get() method that returns the interpolated state of the transition at the current time of invocation, returning either a number/array or an object.
-This means that during this transition, calls to .get() provide the interpolated state along the way, perhaps [100, 150], [150, 185], and so on, until it reaches [200, 300].
-When the user clicks the fa-surface, it will trigger the animate() function defined on the scope.  In turn, this executes the .set() method on the boxTransitionable,
+In the html, `fa-translate` is passed `boxTransitionable.get()`, a function expression that will return a value of [0,0,0] initially.
+All transitionables have a `.get()` method that returns the interpolated state of the transition at the current time of invocation, returning either a number/array or an object.
+
+This means that during this transition, calls to `.get()` provide the interpolated state along the way, perhaps [100, 150], [150, 185], and so on, until it reaches [200, 300].
+
+When the user clicks the `fa-surface`, it will trigger the `animate()` function defined on the scope.  In turn, this executes the `.set()` method on the `boxTransitionable`,
 which is passed the end state and a transition.
 
 Passing Transitionables & values
 ---------------------------------
 
-One may also choose to pass an array, with one or more of its values a function, or a number.
+One may also choose to pass an array, with one or more of its values a function expression or a number.
 ```html
 <fa-modifier fa-size="[100, 100]" fa-translate="[yTrans.get(), 0, 0]" fa-touchstart="animate()">
       <fa-surface fa-background-color="'red'" fa-click="animateY()">
@@ -406,22 +408,22 @@ $scope.animateY = function() {
   $scope.yTrans.set(200, {duration: 2000, curve: 'easeInOut'})
 };
 ```
-In this example, fa-translate is passed an array, with the x value as a function that will return 0, and y & z values as 0's.
-When animateY() is called, yTrans begins its transition, and its values are interpolated, updated on the view through Angular's two-way data binding.
+In this example, `fa-translate` is passed an array, with the x value as a function expression that will return 0, and y & z values as 0's.
+When `animateY()` is called, `yTrans` begins its transition, and its values are interpolated, updated on the view through Angular's two-way data binding.
 
 
 Transitionables & .get()
 -------------------------------
   @example
-  A point of possible confusion is the fact that some modifier properties (faOpacity, faSize, faOrigin, faAlign) can be bound to a Transitionable object directly, without needing to be passed a .get() function, unlike the example above.
-  In the example below, we create transitionable objects that will perform transitions on translate and opacity. 
+  A point of possible confusion is the fact that some modifier properties (`faOpacity`, `faSize`, `faOrigin`, `faAlign`) can be bound to a Transitionable object directly, without needing to be passed a `.get()` function, unlike the example above.
+  In the example below, we create transitionable objects that will perform transitions on opacity (which accepts a Transitionable object directly) and translate (which does not accept a transitionable object directly). 
   
-  The value of fa-opacity is bound to a Transitionable directly, box.opacity.
-  Whereas fa-translate is bound to a method of a Transitionable, box.translate.get(), that returns an interpolated value.
-  Clicking the fa-surface invokes animateBox() on the scope, in turn, executing the .set() methods of each prospective Transitionable from initial state to end state defined by their respective .set() methods.
+  The value of `fa-opacity` is bound to a Transitionable directly, `box.opacity`.
+  Whereas `fa-translate` is bound to a method of a Transitionable, `box.translate.get()`, that returns an interpolated value.
+  Clicking the fa-surface invokes `animateBox()` on the scope, in turn, executing the `.set()` methods of each prospective Transitionable from initial state to end state defined by their respective .set() methods.
   
 * ```html
-* <fa-modifier fa-translate="box.translate.get()" fa-size="[100, 100]" fa-opacity="box.opacity">
+* <fa-modifier fa-translate="box.translate.get()" fa-opacity="box.opacity" fa-size="[100, 100]">
 *     <fa-surface fa-click="animateBox()" fa-background-color="'red'"></fa-surface>
 *   </fa-modifier>
 * ```
@@ -439,16 +441,16 @@ Transitionables & .get()
 
 Why the difference?  
 
-FaTranslate (along with faRotate, faTranslate, faScale, faSkew, & more) pass through a Famous Transform function (Transform.translate()), whereas faOpacity, faSize, faOrigin, and faAlign are passed through a Famous Modifier.
-A Famous Transform.translate() function does not accept a Transitionable object, but only an array.
-A .get() function of a Transitionable returns an interpolated value of a current transition, therefore in the case of a faTranslate, it can return an array that a Transform.translate() can accept.
-Whereas faOpacity is passes through a Famous Modifier, which has an .opacityFrom() method that can accept a Transitionable object directly.  
+`FaTranslate` (along with `faRotate`, `faTranslate`, `faScale`, `faSkew`, & more) pass through a Famous Transform function (`Transform.translate()`), whereas `faOpacity`, `faSize`, `faOrigin`, and `faAlign` are passed through a Famous Modifier.
+A Famous `Transform.translate()` function does not accept a Transitionable object, but only an array.
+A `.get()` function of a Transitionable returns an interpolated value of a current transition, therefore in the case of a `faTranslate`, it can return an array that a `Transform.translate()` can accept.
+`faOpacity` passes through a Famous Modifier, which has an `.opacityFrom()` method that can accept a Transitionable object directly.  
 
 As a design principle, Famous-Angular attempts to pass values directly to Famous as much as possible, and these differences are due to the core Famous library.
 
 Callbacks
 ---------
-The .set() method of a Transitionable can accept 3 arguments: an endState, a transition, and an optional callback to be called upon observed completion of the transition.
+The `.set()` method of a Transitionable can accept 3 arguments: an endState, a transition, and an optional callback to be called upon observed completion of the transition.
 In the example below, when the first transition completes, with the element translated to [200, 300, 0], the callback function is called, and the element begins the transition to [100, 100, 0]. 
 ```javascript
 var Transitionable = $famous['famous/transitions/Transitionable'];
@@ -474,9 +476,9 @@ $scope.animateWithCallback = function() {
 Nesting modifiers & animations
 ------------------------------
 Famous Modifiers affect all renderable child nodes (Modifiers & Surfaces) below them on the Render Tree.
-In this example, two properties will be animated: the outermost Modifier's scale property and innermost Modifier's rotateZ property.
+In this example, two properties will be animated: the outermost Modifier's scale property and innermost Modifier's `rotateZ` property.
 Because Famous Modifiers affect all child nodes nested within them, when the outermost Modifier's scale property changes, it affects the scale of every modifier and surface below it.
-The innermost Modifier with the fa-rotate-Z property affects the innermost surface only.  
+The innermost Modifier with the `fa-rotate-Z` property affects the innermost surface only.  
 
 ```html
 <fa-modifier fa-scale="boxes.outer.scale.get()" fa-size="[100, 100]">
@@ -507,10 +509,10 @@ $scope.animateBoxes = function() {
 
 $famous.find()
 --------------
-$famous.find() is a method that can be used to perform a DOM look-up to retrieves the Famous isolate (node) of the appropriate object.
+`$famous.find()` is a method that can be used to perform a DOM look-up to retrieves the Famous isolate (node) of the appropriate object.
 It accepts one argument, a string css selector (e.g. an #id or a .class,) and returns an array of elements matching the query.
 It is useful for manipulation of Famous objects after they have been declared in the DOM.
-With Angular, it is best to do DOM manipulation (including look-ups) in a directive's post-link function; famous-angular is no exception.
+With Angular, it is best to do DOM manipulation (including look-ups) in a directive's post-link function; Famous-Angular is no exception.
 
 ```html
 <fa-modifier id="myBox">
@@ -519,10 +521,10 @@ With Angular, it is best to do DOM manipulation (including look-ups) in a direct
 ```
 ```javascript
 var myBox = $famous.find('#myBox'); // [Object]
-                                    // myBox[0] is the isolate object belonging to the modifier of id 'myBox' in the DOM.
-                                    // myBox[0].modifier is a reference to the Famo.us modifier corresponding to that element.
+// myBox[0] is the isolate object belonging to the modifier of id 'myBox' in the DOM.
+// myBox[0].modifier is a reference to the Famo.us modifier corresponding to that element.
 ```
-If this is done outside of a directive's post-link function, there is no guarantee that $famous.find() will return anything, because the element may not have compiled yet.
+If this is done outside of a directive's post-link function, there is no guarantee that `$famous.find()` will return anything, because the element may not have compiled yet.
 
 In the example below, there is a custom directive called fadeIn that accepts an id property, and does DOM manipulation to change the opacity of an element.
 
