@@ -88,11 +88,16 @@ click. (<a href="<a">TODO:href="https://docs.angularjs.org/guide/expression#-eve
 
 
 
-<h2 id="example">Example</h2><p>Example:</p>
-<pre><code class="lang-javascript">$scope.myClickHandler = function(){
-  console.log(&#39;clicked&#39;) // clicked
-}</code></pre>
-<pre><code class="lang-html">&lt;fa-surface fa-click=&quot;myClickHandler()&quot;&gt;Click me&lt;/fa-surface&gt;</code></pre>
+<h2 id="example">Example</h2><p>Fa-click should be used on fa-surface&#39;s.
+A Famous Surface has a &quot;.on()&quot; method that binds a callback function to an event type handled by that Surface.
+The function expression bound to fa-click is bound to that fa-surface&#39;s eventHandler listener&#39;s click event, and when the fa-surface is clicked, the function will be called. </p>
+<pre><code class="lang-html">&lt;fa-modifier fa-size=&quot;[100, 100]&quot;&gt;
+  &lt;fa-surface fa-click=&quot;clickHandler($event)&quot; fa-background-color=&quot;&#39;red&#39;&quot;&gt;&lt;/fa-surface&gt;
+&lt;/fa-modifier&gt;</code></pre>
+<pre><code class="lang-javascript">$scope.clickHandler = function($event) {
+  console.log(&quot;click&quot;);
+  console.log($event);
+};</code></pre>
 
 
 

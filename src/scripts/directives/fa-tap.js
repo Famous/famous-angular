@@ -13,6 +13,23 @@
  *
  * </ANY>
  * ```
+ * @example
+ * Note: For testing purposes during development, enable mobile emulation: https://developer.chrome.com/devtools/docs/mobile-emulation
+ * 
+ * Fa-tap checks if a touchmove event fires between a touchstart and touchend event.  If the touchmove event fired, (the user "dragged" their finger), a fa-tap event will not fire.  If the user did not "drag" their finger on touch, when releasing their finger, a touchend event will fire, and fa-tap will fire.
+ * 
+ * ```html
+ * <fa-modifier fa-size="[100, 100]">
+ * <fa-surface fa-tap="tapHandler($event)" fa-background-color="'red'"></fa-surface>
+ * </fa-modifier>
+ * ```
+ * 
+ * ```javascript
+ * $scope.tapHandler = function($event) {
+ *   console.log($event);
+ *   console.log("tap");
+ * };
+ * ```
  */
 
 angular.module('famous.angular')
