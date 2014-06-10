@@ -1,6 +1,6 @@
 /**
- * famous-angular - An MVC for Famo.us apps, powered by AngularJS. Integrates seamlessly with existing Angular and Famo.us apps.
- * @version v0.0.15
+ * famous-angular - Bring structure to your Famo.us apps with the power of AngularJS. Famo.us/Angular integrates seamlessly with existing Angular and Famo.us apps.
+ * @version v0.0.16
  * @link https://github.com/Famous/famous-angular
  * @license MPL v2.0
  */

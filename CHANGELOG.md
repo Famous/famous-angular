@@ -1,3 +1,21 @@
+<a name="0.0.16"></a>
+# 0.0.16 (2014-06-07)
+
+
+## Bug Fixes
+
+- fix bugs in fa-touchmove, fa-touchstart, fa-touchend
+ ([5babd640](https://github.com/Famous/famous-angular/commit/5babd6403cde559cae85736e7196bbfb95521029))
+
+
+## Features
+
+- implement fa-header-footer-layout
+ ([6b6338f7](https://github.com/Famous/famous-angular/commit/6b6338f76ebcacd000fb0300f85c281da7efe119))
+- implement fa-sequential-layout directive
+ ([23429a66](https://github.com/Famous/famous-angular/commit/23429a6692bc2c9f56e3f66cee28346c6ab7a843))
+
+
 <a name="0.0.15"></a>
 # 0.0.15 (2014-06-04)
 

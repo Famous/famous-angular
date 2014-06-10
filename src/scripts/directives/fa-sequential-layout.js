@@ -17,7 +17,6 @@
  * ```
  */
 
-
 angular.module('famous.angular')
   .directive('faSequentialLayout', ["$famous", "$famousDecorator", function ($famous, $famousDecorator) {
     return {
