@@ -18,79 +18,99 @@
  *   Here's some data-bound content '{{myScopeVariable}}'
  * </fa-surface>
  * ```
-
-*@example
-* ```html
-*<fa-modifier fa-size="[960, undefined]">
-*   <fa-surface fa-size="[undefined, undefined]">
-*     <div ng-include src=" 'views/animations.html' "></div>
-*   </fa-surface>
-* </fa-modifier>
-* ```
-
-A simple ng-repeat of surfaces may look like this:
-*@example
-* ```html
-<fa-modifier ng-repeat="item in list" fa-size="[100, 100]" fa-translate="[0, $index * 75, 0]">
-    <fa-surface fa-size="[undefined, undefined]">
-      {{item.content}}
-    </fa-surface>
-  </fa-modifier>
-* ```
-
-* ```javascript
-$scope.list = [{content: "famous"}, {content: "angular"}, {content: "rocks!"}];
-* ```
-
-*Common Problems
-*---------------
-
-Properties on surfaces vs modifiers
------------------------------------
-You may expect to animate properties such as size or origin.  However, with Famous, properties related to layout and visibility belong on the modifier, and the surface should be nested below the modifier.
-While you can specify fa-size as well as some other layout/visibility properties on surfaces themselves, it is not recommended.
-
-This is not best practice:
-
-*@example
+ *
+ * @example
+ * An `fa-surface` can use an ng-include to compile an external HTML fragment:
+ *  ```html
+ * <fa-modifier fa-size="[960, undefined]">
+ *    <fa-surface fa-size="[undefined, undefined]">
+ *      <div ng-include src=" 'views/animations.html' "></div>
+ *    </fa-surface>
+ *  </fa-modifier>
+ *  ```
+ * 
+ * A simple ng-repeat of surfaces can be implemented like this:
  * ```html
-<fa-surface fa-size="[100, 100]"></fa-surface>
+ * <fa-modifier ng-repeat="item in list" fa-size="[100, 100]" fa-translate="[0, $index * 75, 0]">
+ *     <fa-surface fa-size="[undefined, undefined]">
+ *       {{item.content}}
+ *     </fa-surface>
+ * </fa-modifier>
  * ```
-
-Whereas this is the preferred approach: 
-*@example
+ * 
+ * ```javascript
+ * $scope.list = [{content: "famous"}, {content: "angular"}, {content: "rocks!"}];
+ * ```
+ * 
+ * ##Common Confusions
+ * ### Properties on surfaces vs modifiers
+ * With Famous, properties related to layout and visibility belong on a Modifier.  A Surface should be added below a Modifier on the Render Tree, as Modifiers affect everything below them.
+ *
+ * You may be tempted to set the `fa-origin` or another layout property on an fa-surface, and discover that it does not work:
  * ```html
-<fa-modifier fa-size="[100, 100]">
-  <fa-surface fa-size="[undefined, undefined]">
-  </fa-surface>
-</fa-modifier>
+ * <fa-surface fa-origin="[.5, 0]">This will not change the origin.</fa-surface>
  * ```
-
-You may also omit fa-size="[undefined, undefined]" on the surface and the surface will still fill the size of the modifier, in this case, [100, 100].
-
-In Famous' Render Tree, modifiers modify all the nodes below them.  By setting the fa-surface's fa-size to [undefined, undefined], it will inherit from the fa-modifier's fa-size of [100, 100]. 
-
-Fa-surfaces also cannot have an fa-size/fa-rotate/etc, assigned to a function, as is in the case of modifiers, which can take number/array or a function, and sometimes a transitionable object.
-For example, this will not work:
-*@example
-* ```html
-<fa-surface fa-size="sizeForBoxFunction"></fa-surface>
-* ```
-* ```javascript
-* $scope.sizeForBoxFunction = function() {
-*      return [75, 75];
-*    }
-* ```
-
-To reiterate, the best practice to set any layout/visibilty properties of a surface is to do so on a modifier that affects the surface.  Whereas a surface is for containing HTML content, whether rendered from a template, or data-bound with {{}}'s.
-*<fa-modifier fa-size="[100, 100]">
-*    <fa-surface fa-background-color="'red'"></fa-surface>
-*  </fa-modifier>
-
-
+ *
+ * While you can specify `fa-size` on surfaces themselves, it is not recommended.
+ * This is not best practice:
+ * ```html
+ * <fa-surface fa-size="[100, 100]"></fa-surface>
+ * ```
+ *
+ * Whereas this is the preferred approach: 
+ * ```html
+ * <fa-modifier fa-size="[100, 100]">
+ *   <fa-surface fa-size="[undefined, undefined]">
+ *   </fa-surface>
+ * </fa-modifier>
+ * ```
+ * 
+ * You may also omit `fa-size="[undefined, undefined]"` on the surface and the surface will fill to the size of the modifier, in this case, `[100, 100]`.
+ * 
+ * In Famous' Render Tree, Modifiers modify all the nodes (other Modifiers and Surfaces) below them.  By setting the `fa-surface`'s `fa-size` to `[undefined, undefined]`, it will inherit from the `fa-modifier`'s `fa-size` of `[100, 100]`. 
+ * 
+ * `Fa-surfaces` also cannot have an `fa-size`, assigned to a function, as is in the case of modifiers, which can take number/array or a function.
+ * For example, this will not work:
+ * ```html
+ * <fa-surface fa-size="sizeForBoxFunction"></fa-surface>
+ * ```
+ * ```javascript
+ * $scope.sizeForBoxFunction = function() {
+ *    return [75, 75];
+ * };
+ * ```
+ * To reiterate, the best practice to animate or set any layout/visibilty properties of a surface is to do so on a modifier that affects the Surface.  The purpose of a Surface is to contain HTML content, whether rendered from a template, or data-bound with {{}}'s.
+ * <fa-modifier fa-size="[100, 100]">
+ *   <fa-surface fa-background-color="'red'"></fa-surface>
+ * </fa-modifier>
+ *
+ * ### fa-color & fa-background-color
+ * The exceptions are `fa-color` and `fa-background-color`: these two properties are passed through the `.setProperties()` method available on Famous Surfaces.
+ * Take note that they accept a string in the html view.  If you do not enclose them in quotation marks, Angular will evaluate it as an object on the scope, but surrounding it with quotation marks will specify it as a string expression.
+ * ```html
+ * <fa-modifier fa-size="[200, 50]">
+ *   <fa-surface fa-background-color="'orange'" fa-color="'#fff'">
+ *       This text should be white.
+ *   </fa-surface>
+ * </fa-modifier>
+ * ```
+ *
+ * ### ng-class
+ * Ng-Class works on `fa-surface`s:
+ * ```html
+ * <fa-modifier fa-size="[150, 50]">
+ *   <fa-surface fa-background-color="'blue'" ng-class="{strike: applyStrike}">
+ *     Strikethrough!
+ *     <input type="checkbox" ng-model="applyStrike"></input>
+ *   </fa-surface>
+ * </fa-modifier>
+ * ```
+ * ```css
+ * .strike {
+ *   text-decoration: line-through;
+ * }
+ * ```
  */
-
-
 
 angular.module('famous.angular')
   .config(['$provide', '$animateProvider', function($provide, $animateProvider) {
