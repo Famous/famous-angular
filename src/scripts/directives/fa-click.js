@@ -15,17 +15,16 @@
  * </ANY>
  * ```
  * @example
- * Fa-click should be used on fa-surface's.
- * A Famous Surface has a ".on()" method that binds a callback function to an event type handled by that Surface.
- * The function expression bound to fa-click is bound to that fa-surface's eventHandler listener's click event, and when the fa-surface is clicked, the function will be called. 
+ * `Fa-click` is most commonly used on a `fa-surface`'.  Internally, a Famous Surface has a `".on()"` method that binds a callback function to an event type handled by that Surface.
+ *  The function expression bound to `fa-click` is bound to that `fa-surface`'s click eventHandler, and when the `fa-surface` is clicked, the function expression will be called. 
  *
  * ```html
  * <fa-modifier fa-size="[100, 100]">
- *   <fa-surface fa-click="clickHandler($event)" fa-background-color="'red'"></fa-surface>
+ *   <fa-surface fa-click="myClickHandler($event)" fa-background-color="'red'"></fa-surface>
  * </fa-modifier>
  * ```
  * ```javascript
- * $scope.clickHandler = function($event) {
+ * $scope.myClickHandler = function($event) {
  *   console.log("click");
  *   console.log($event);
  * };

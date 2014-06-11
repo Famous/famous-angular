@@ -20,15 +20,15 @@
  * ```
  *
  * @example
- * In this example below, a scrollview is created with two nested fa-view's, both of which have an fa-index of 0 and 1, respectively.
- * Fa-index determines the order of which the surfaces appear in the sequential view.
- * If fa-index is declared explicitly, it will override any default order of elements declared in html.
- * As in the example below, the fa-view with the blue background color appears after the one with the red background because its fa-index is set to 1.
- * If fa-views are created with an ng-repeat, they are automatically assigned the $index property, unless explicitly set.
- * 
- * The scrollView directive accepts another directive called fa-start-index as an attribute, and this determines which view the scrollView displays by default.
- * Fa-start-index will not affect the sequential order of the layout; the view with the red background will be layed out first, followed by the view with the blue background.
- * With this attribute set to 1, the scroll view will display the view with the index of 1, which is the view with the blue background color. 
+ * `Fa-index` determines the order of which the surfaces appear in the sequential view.
+ * In this example below, a Scroll View is created with two nested `fa-view`'s, both of which have an `fa-index` of 0 and 1, respectively.
+ *
+ * If `fa-index` is declared explicitly, it will override any default order of `fa-view`'s declared in html.
+ * The `fa-view` with the blue background color appears after the one with the red background because its `fa-index` is set to 1.
+ *
+ * `fa-scroll-view` accepts another directive called `fa-start-index` as an attribute, which determines which `fa-view` the Scroll View displays by default.
+ * `Fa-start-index` will not affect the sequential order of the layout; the `fa-view` with the red background will be layed out first, followed by the one with the blue background.
+ *  By setting `fa-start-index` to 1, the Scroll View will display the View with the index of 1, which is the View with the blue background color. 
  *
  * ```html
  *  <fa-scroll-view fa-pipe-from="eventHandler" fa-options="options.scrollViewTwo" fa-start-index="1">
@@ -52,9 +52,10 @@
  *
  * $scope.options = {
  *   scrollViewTwo: {
- *     direction: 0
+ *     direction: 0 // displays the fa-views horizontally
  *   }
  * };
+ *```
  */
 
 angular.module('famous.angular')

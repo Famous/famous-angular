@@ -8,14 +8,14 @@
  * leaf nodes of the scene graph.  The content inside
  * surfaces is what gets rendered to the screen.
  * This is where you can create form elements, attach
- * images, or output raw text content with one-way databinding {{}}.
+ * images, or output raw text content with one-way databinding {{lb}}{{rb}}.
  * You can include entire complex HTML snippets inside a faSurface, including
  * ngIncludes or custom (vanilla Angular) directives.
  *
  * @usage
  * ```html
  * <fa-surface>
- *   Here's some data-bound content '{{myScopeVariable}}'
+ *   Here's some data-bound content {{lb}}myScopeVariable{{rb}}
  * </fa-surface>
  * ```
  *

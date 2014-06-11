@@ -49,16 +49,15 @@ It allows you to pass a reference to an arbitrary render node from your controll
     <!-- content -->
 </fa-render-node>
 ```
-  
-Fa-render-node can wrap a custom-made widget or any renderable component from Famous and allow it to be inserted in the Render Tree.  
+`Fa-render-node` can wrap a custom-made widget or any renderable component from Famous and allow it to be inserted in the Render Tree.  
 
-In the example below, we instantiate a Famous View, add a Modifier to it, and add a surface to it - more in line with a "vanilla Famous" approach than the declarative approach with Famous-Angular.  
+All Famous widgets, such as a Scroll View, a Sequential Layout, or a Header-footer-layout, are extended Famous Views.
+`Fa-render-node` allows a developer to create & extend their own Famous View, and use it within their own Famous-Angular app. 
 
-In the html view, we declare an fa-render-node with the name of our View on the scope, and it will appear on the page.
+In the example below, a Famous View is instantiated on the scope; a Modifier is added to it, and then a Surface is added below.
+This approach of creating a View and adding renderables to it with the `.add()` method is more in line with a "vanilla Famous" approach than a declarative approach with Famous-Angular.  
 
-```html
-<fa-render-node fa-node="masterView" id="render"></fa-render-node>
-```
+In the html view, an `fa-render-node` is declared, with an `fa-node` attribute of the name of the View created on the scope, resulting in this custom, newly-created View appearing on the page.
 
 ```javascript
 var View = $famous['famous/core/View'];
@@ -81,6 +80,10 @@ _mod.transformFrom(function(){
 
 $scope.masterView.add(_mod).add(_surf);
 ```javascript
+
+```html
+<fa-render-node fa-node="masterView" id="render"></fa-render-node>
+```
   
   
 

@@ -895,25 +895,32 @@ angular.module('famous.angular')
  *   <!-- other fa- scene graph components -->
  * </fa-app>
  * ```
-
- * Fa-app creates a Famous context, the root of the Render Tree.  In the html, it appears as a div with the css class "famous-container". 
- * Elements (such as fa-modifier's & fa-surface's) nested within an <fa-app> are added to this root context. 
- *   
- * Declaring fa-app appends a div with the class of "famous-angular-container" to the DOM.  It then instantiates a Context via Famous' Engine createContext method, passing in the famous-angular-container div, resulting in a Famous context that renderables can be added to.
+ * @example
+ * `Fa-app` creates a Famous Context, the root of the Render Tree.  Renderables (such as `fa-modifier`'s & `fa-surface`'s) nested within an `fa-app` are added to this root context.  
+ *
+ * Declaring `fa-app` appends a div with the class of `"famous-angular-container"` to the DOM.  It then instantiates a Context via Famous' Engine `.createContext()` method, passing in a reference to the `famous-angular-container` div, resulting in a Famous context that renderables can be added to connected to Angular.  `Fa-app` can be declared as an element or as an attribute within another element.  
+ *
+ * ```html
+ * <fa-app style="width: 320px; height: 568px;">
+ *   <fa-modifier>
+ *     <fa-surface>This will be shown on screen.</fa-surface>
+ *   </fa-modifier>
+ *   <div>This will not appear on screen because it is not inside an fa-surface.</div>
+ * </fa-app>
+ * ```
+ * ## Common Qustions
+ * ### Multiple fa-app's
+ * Nesting an `fa-app` within another `fa-app` is possible, and the use case of this approach would be for css content overflow.
+ * Declaring multiple fa-app's within a page is permitted, but each new one incurs a penalty to performance, and `fa-app`'s should definitely not be declared within an ng-repeat.
  * 
- * Nesting an fa-app within another fa-app is possible, and the use case of this approach would be for content overflow.
- * Declaring multiple fa-app's within a page is permitted, but each extra results in a penalty to performance, and fa-app's should definitely not be declared within an ng-repeat.
-
-Fa-app can be declared on its own or within another element.  
-
-Note:  Right now, the element fa-app is declared within must have a height and width styling, declared inline or as a css declaration in an external stylesheet.
-
-```html
-<fa-app style="width: 320px; height: 568px;">
-</fa-app>
-```
-
-*/
+ * ### Fa-app must be declared with a height & width
+ * The element fa-app is declared within must have a height and width styling, declared inline or as a css declaration in an external stylesheet.
+ * ```html
+ * <fa-app style="width: 320px; height: 568px;">
+ *    <!-- other fa- scene graph components -->
+ * </fa-app>
+ * ```
+ */
 
 angular.module('famous.angular')
   .directive('faApp', ["$famous", "$famousDecorator", function ($famous, $famousDecorator) {
@@ -1016,17 +1023,16 @@ angular.module('famous.angular')
  * </ANY>
  * ```
  * @example
- * Fa-click should be used on fa-surface's.
- * A Famous Surface has a ".on()" method that binds a callback function to an event type handled by that Surface.
- * The function expression bound to fa-click is bound to that fa-surface's eventHandler listener's click event, and when the fa-surface is clicked, the function will be called. 
+ * `Fa-click` is most commonly used on a `fa-surface`'.  Internally, a Famous Surface has a `".on()"` method that binds a callback function to an event type handled by that Surface.
+ *  The function expression bound to `fa-click` is bound to that `fa-surface`'s click eventHandler, and when the `fa-surface` is clicked, the function expression will be called. 
  *
  * ```html
  * <fa-modifier fa-size="[100, 100]">
- *   <fa-surface fa-click="clickHandler($event)" fa-background-color="'red'"></fa-surface>
+ *   <fa-surface fa-click="myClickHandler($event)" fa-background-color="'red'"></fa-surface>
  * </fa-modifier>
  * ```
  * ```javascript
- * $scope.clickHandler = function($event) {
+ * $scope.myClickHandler = function($event) {
  *   console.log("click");
  *   console.log($event);
  * };
@@ -1415,15 +1421,15 @@ angular.module('famous.angular')
  * ```
  *
  * @example
- * In this example below, a scrollview is created with two nested fa-view's, both of which have an fa-index of 0 and 1, respectively.
- * Fa-index determines the order of which the surfaces appear in the sequential view.
- * If fa-index is declared explicitly, it will override any default order of elements declared in html.
- * As in the example below, the fa-view with the blue background color appears after the one with the red background because its fa-index is set to 1.
- * If fa-views are created with an ng-repeat, they are automatically assigned the $index property, unless explicitly set.
- * 
- * The scrollView directive accepts another directive called fa-start-index as an attribute, and this determines which view the scrollView displays by default.
- * Fa-start-index will not affect the sequential order of the layout; the view with the red background will be layed out first, followed by the view with the blue background.
- * With this attribute set to 1, the scroll view will display the view with the index of 1, which is the view with the blue background color. 
+ * `Fa-index` determines the order of which the surfaces appear in the sequential view.
+ * In this example below, a Scroll View is created with two nested `fa-view`'s, both of which have an `fa-index` of 0 and 1, respectively.
+ *
+ * If `fa-index` is declared explicitly, it will override any default order of `fa-view`'s declared in html.
+ * The `fa-view` with the blue background color appears after the one with the red background because its `fa-index` is set to 1.
+ *
+ * `fa-scroll-view` accepts another directive called `fa-start-index` as an attribute, which determines which `fa-view` the Scroll View displays by default.
+ * `Fa-start-index` will not affect the sequential order of the layout; the `fa-view` with the red background will be layed out first, followed by the one with the blue background.
+ *  By setting `fa-start-index` to 1, the Scroll View will display the View with the index of 1, which is the View with the blue background color. 
  *
  * ```html
  *  <fa-scroll-view fa-pipe-from="eventHandler" fa-options="options.scrollViewTwo" fa-start-index="1">
@@ -1447,9 +1453,10 @@ angular.module('famous.angular')
  *
  * $scope.options = {
  *   scrollViewTwo: {
- *     direction: 0
+ *     direction: 0 // displays the fa-views horizontally
  *   }
  * };
+ *```
  */
 
 angular.module('famous.angular')
@@ -2152,39 +2159,41 @@ angular.module('famous.angular')
  *     <!-- content -->
  * </fa-render-node>
  * ```
-  
-Fa-render-node can wrap a custom-made widget or any renderable component from Famous and allow it to be inserted in the Render Tree.  
-
-In the example below, we instantiate a Famous View, add a Modifier to it, and add a surface to it - more in line with a "vanilla Famous" approach than the declarative approach with Famous-Angular.  
-
-In the html view, we declare an fa-render-node with the name of our View on the scope, and it will appear on the page.
-
-```html
-<fa-render-node fa-node="masterView" id="render"></fa-render-node>
-```
-
-```javascript
-var View = $famous['famous/core/View'];
-var Modifier = $famous['famous/core/Modifier'];
-var Surface = $famous['famous/core/Surface'];
-var Transform = $famous['famous/core/Transform'];
-
-$scope.masterView = new View();
-
-var _surf = new Surface({properties: {backgroundColor: 'red'}});
-_surf.setContent("I'm a surface");
-
-var _mod = new Modifier();
-
-var _width = 320;
-var _height = 568;
-_mod.transformFrom(function(){
-  return Transform.translate(Math.random() * _width, 0, 1);
-});
-
-$scope.masterView.add(_mod).add(_surf);
-```javascript
-
+ * `Fa-render-node` can wrap a custom-made widget or any renderable component from Famous and allow it to be inserted in the Render Tree.  
+ * 
+ * All Famous widgets, such as a Scroll View, a Sequential Layout, or a Header-footer-layout, are extended Famous Views.
+ * `Fa-render-node` allows a developer to create & extend their own Famous View, and use it within their own Famous-Angular app. 
+ * 
+ * In the example below, a Famous View is instantiated on the scope; a Modifier is added to it, and then a Surface is added below.
+ * This approach of creating a View and adding renderables to it with the `.add()` method is more in line with a "vanilla Famous" approach than a declarative approach with Famous-Angular.  
+ * 
+ * In the html view, an `fa-render-node` is declared, with an `fa-node` attribute of the name of the View created on the scope, resulting in this custom, newly-created View appearing on the page.
+ * 
+ * ```javascript
+ * var View = $famous['famous/core/View'];
+ * var Modifier = $famous['famous/core/Modifier'];
+ * var Surface = $famous['famous/core/Surface'];
+ * var Transform = $famous['famous/core/Transform'];
+ * 
+ * $scope.masterView = new View();
+ * 
+ * var _surf = new Surface({properties: {backgroundColor: 'red'}});
+ * _surf.setContent("I'm a surface");
+ * 
+ * var _mod = new Modifier();
+ * 
+ * var _width = 320;
+ * var _height = 568;
+ * _mod.transformFrom(function(){
+ *   return Transform.translate(Math.random() * _width, 0, 1);
+ * });
+ * 
+ * $scope.masterView.add(_mod).add(_surf);
+ * ```javascript
+ * 
+ * ```html
+ * <fa-render-node fa-node="masterView" id="render"></fa-render-node>
+ * ```
  */
 
 angular.module('famous.angular')
@@ -2597,14 +2606,14 @@ angular.module('famous.angular')
  * leaf nodes of the scene graph.  The content inside
  * surfaces is what gets rendered to the screen.
  * This is where you can create form elements, attach
- * images, or output raw text content with one-way databinding {{}}.
+ * images, or output raw text content with one-way databinding {{lb}}{{rb}}.
  * You can include entire complex HTML snippets inside a faSurface, including
  * ngIncludes or custom (vanilla Angular) directives.
  *
  * @usage
  * ```html
  * <fa-surface>
- *   Here's some data-bound content '{{myScopeVariable}}'
+ *   Here's some data-bound content {{lb}}myScopeVariable{{rb}}
  * </fa-surface>
  * ```
  *
