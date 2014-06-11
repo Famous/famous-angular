@@ -10,7 +10,7 @@ docType: "directive"
 ---
 
 <div class="improve-docs">
-  <a href='https://github.com/Famous/famous-angular/edit/master/src/scripts/directives/fa-animation.js#L295'>
+  <a href='https://github.com/Famous/famous-angular/edit/master/src/scripts/directives/fa-animation.js#L293'>
     Improve this doc
   </a>
 </div>
