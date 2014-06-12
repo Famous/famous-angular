@@ -32,7 +32,7 @@
  *  By setting `fa-start-index` to 1, the Scroll View will display the View with the index of 1, which is the View with the blue background color. 
  *
  * ```html
- *  <fa-scroll-view fa-pipe-from="eventHandler" fa-options="options.scrollViewTwo" fa-start-index="1">
+ *  <fa-scroll-view fa-pipe-from="eventHandler" fa-options="options.scrollView" fa-start-index="1">
  *    <fa-view fa-index="1">
  *      <fa-modifier fa-size="[320, 320]">
  *          <fa-surface fa-background-color="'blue'" fa-pipe-to="eventHandler"></fa-surface>
@@ -52,7 +52,7 @@
  * $scope.list = [{content: "famous"}, {content: "angular"}, {content: "rocks!"}];
  *
  * $scope.options = {
- *   scrollViewTwo: {
+ *   scrollView: {
  *     direction: 0 // displays the fa-views horizontally
  *   }
  * };

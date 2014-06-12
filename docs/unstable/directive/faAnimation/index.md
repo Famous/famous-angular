@@ -168,42 +168,6 @@ With Angular, it is best to do DOM manipulation (including look-ups) in a direct
 // myBox[0] is the isolate object belonging to the modifier of id &#39;myBox&#39; in the DOM.
 // myBox[0].modifier is a reference to the Famo.us modifier corresponding to that element.</code></pre>
 <p>If this is done outside of a directive&#39;s post-link function, there is no guarantee that <code>$famous.find()</code> will return anything, because the element may not have compiled yet.</p>
-<h3 id="animating-with-a-directive">Animating with a directive</h3>
-<p>In the example below, there is a custom directive called fadeIn that accepts an id property, and does DOM manipulation to change the opacity of an element.</p>
-<pre><code class="lang-html">  &lt;fa-modifier id=&quot;myModifier&quot; fa-size=&quot;[100, 100]&quot;&gt;
-    &lt;fa-surface fa-background-color=&quot;&#39;red&#39;&quot;&gt;&lt;/fa-surface&gt;
-    &lt;fade-in id=&quot;myModifier&quot;&gt;&lt;/fade-in&gt;
-  &lt;/fa-modifier&gt;</code></pre>
-<pre><code class="lang-javascript">.directive(&#39;fadeIn&#39;, [&#39;$famous&#39;, &#39;$famousDecorator&#39;, function ($famous, $famousDecorator) {
-  return {
-    restrict: &#39;EA&#39;,
-    scope: {
-      id: &#39;@&#39;
-    },
-    compile: function(tElement, tAttrs, transclude) {
-      var Transitionable = $famous[&#39;famous/transitions/Transitionable&#39;];
-      return {
-        pre: function(scope, element, attrs) {
-        },
-        post: function(scope, element, attrs) {
-          var myElement = $famous.find(&#39;#&#39; + scope.id)[0];
-
-          var opacityTransitionable = new Transitionable(0);
-
-          myElement.modifier.setOpacity(function() {
-            return opacityTransitionable.get();
-          });
-
-          opacityTransitionable.set(1, {duration: 1500, curve: &#39;easeInOut&#39;});
-        }
-      }
-    }
-  }
-}]);</code></pre>
-<p>In the post-link function, pass $famous.find() the id attribute from the html view.  A Transitionable is instantiated with the value of 0.
-Then, using DOM manipulation, access the modifier property of the element.  Famous modifiers have a .setOpacity() method that can accept a function.
-Pass opacityTransitionable.get(), which returns 0, thereby setting the opacity of myElement to 0.</p>
-<p>Then, using the .set() method, pass in the value of 1 as the end state as the first argument, and a transition object as the second argument.</p>
 
 
 

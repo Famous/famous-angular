@@ -316,7 +316,7 @@ $scope.myScopeFunctionThatReturnsAnArray = function() {
 
 
 
-<h2 id="example">Example</h2><h2 id="values-for-fa-modifier-attributes">Values for fa-modifier attributes</h2>
+<h2 id="example">Example</h2><h2 id="values-that-fa-modifier-attributes-accept">Values that fa-modifier attributes accept</h2>
 <p><code>Fa-modifier</code> properties, (such as <code>faRotate</code>, <code>faScale</code>, etc) can be bound to number/arrays, object properties defined on the scope, function references, or function expressions.
 Some properties (<code>faOpacity</code>, <code>faSize</code>, <code>faOrigin</code>, <code>faAlign</code>) can be bound to a Transitionable object directly.  </p>
 <h3 id="number-array-values">Number/Array values</h3>
@@ -371,6 +371,7 @@ A <code>.get()</code> function of a Transitionable returns an interpolated value
 <h2 id="fa-transform">Fa-transform</h2>
 <p>Whenever a &quot;transform&quot; <a href="https://famo.us/docs/0.2.0/core/Transform">https://famo.us/docs/0.2.0/core/Transform</a> property is used on a <code>fa-modifier</code>, such as <code>fa-translate</code>, <code>fa-scale</code>, <code>fa-origin</code>, etc, their values are passed through a <code>Transform function</code> which returns a 16 element transform array.
 <code>Fa-transform</code> can be used to directly pass a 16-element transform matrix to a <code>fa-modifier</code>.</p>
+<h3 id="values-that-fa-transform-accepts">Values that fa-transform accepts</h3>
 <p>Passed as an array:</p>
 <pre><code class="lang-html">&lt;fa-modifier 
     fa-transform=&quot;[1, .3, 0, 0, -.3, 1, 0, 0, 0, 0, 1, 0, 20, 110, 0, 1]&quot;
@@ -382,11 +383,26 @@ A <code>.get()</code> function of a Transitionable returns an interpolated value
 <pre><code class="lang-html">&lt;fa-modifier fa-transform=&quot;matrix&quot; fa-size=&quot;[50, 50]&quot;&gt;
   &lt;fa-surface fa-background-color=&quot;&#39;green&#39;&quot;&gt;&lt;/fa-surface&gt;
 &lt;/fa-modifier&gt;</code></pre>
-<p><code>Fa-transform</code> will also accept a transitionable object&#39;s <code>.get()</code> method that returns a 16-element matrix array:</p>
-<pre><code class="lang-javascript">$scope.matrixTrans = new Transitionable([1, .3, 0, 0, -.3, 1, 0, 0, 0, 0, 1, 0, 20, 110, 0, 1]);</code></pre>
-<pre><code class="lang-html">&lt;fa-modifier fa-transform=&quot;matrixTrans.get()&quot; fa-size=&quot;[30, 30]&quot;&gt;
-  &lt;fa-surface fa-background-color=&quot;&#39;blue&#39;&quot;&gt;&lt;/fa-surface&gt;
+<p>Passed as a function reference that returns a 16-element matrix3d webkit array:</p>
+<pre><code class="lang-html">&lt;fa-modifier fa-transform=&quot;variousTransforms&quot; fa-size=&quot;[100, 100]&quot;&gt;
+  &lt;fa-surface fa-background-color=&quot;&#39;red&#39;&quot;&gt;&lt;/fa-surface&gt;
 &lt;/fa-modifier&gt;</code></pre>
+<pre><code class="lang-javascript">var Transform = $famous[&#39;famous/core/Transform&#39;];
+$scope.variousTransforms = function() {
+  var translate = Transform.translate(100, 100, 0);
+  var skew = Transform.skew(0, 0, 0.3);
+  return Transform.multiply(translate, skew);
+};</code></pre>
+<p><code>Transform</code> is a Famous math object used to calculate transforms.  It has various methods, such as <code>translate</code>, <code>rotate</code>, and <code>skew</code> that returns a 16-element matrix array.  <code>Transform.multiply</code> multiplies two or more Transform matrix types to return a final Transform matrix, a 16-element matrix array, and this is what is passed into <code>fa-transform</code>.</p>
+<h3 id="fa-transform-overrides-other-transform-attributes">Fa-transform overrides other transform attributes</h3>
+<p><code>Fa-transform</code> will override all other transform attributes on the fa-modifier it is used on:</p>
+<pre><code class="lang-html">&lt;fa-modifier fa-transform=&quot;skewFunc&quot; fa-translate=&quot;[100, 100, 0]&quot; fa-size=&quot;[100, 100]&quot;&gt;
+  &lt;fa-surface fa-background-color=&quot;&#39;red&#39;&quot;&gt;&lt;/fa-surface&gt;
+&lt;/fa-modifier&gt;</code></pre>
+<pre><code class="lang-javascript">$scope.skewFunc = function() {
+  return Transform.skew(0, 0, 0.3);
+};</code></pre>
+<p>The fa-surface will only be skewed; fa-translate will be overriden, and not translated 100 pixels right and down.</p>
 <h2 id="animate-modifier-properties-and-not-surfaces">Animate modifier properties and not surfaces</h2>
 <p>Famous surfaces are styled with position:absolute, and their positions are defined by matrix3d webkit transforms.
 The role of Modifiers is to to hold onto size, transform, origin, and opacity states, and applying those layout and styling properties to its child nodes.

@@ -32,7 +32,7 @@ docType: "directive"
 
 This directive will create a Famo.us HeaderFooterLayout containing
 a Header, Content, and Footer based on the order of its child elements.
- See [https://famo.us/docs/0.2.0/views/HeaderFooterLayout/]
+ See [https://famo.us/docs/views/HeaderFooterLayout]
 
 
 

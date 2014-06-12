@@ -177,50 +177,6 @@
  * ```
  * If this is done outside of a directive's post-link function, there is no guarantee that `$famous.find()` will return anything, because the element may not have compiled yet.
  * 
- * ### Animating with a directive
- * 
- * In the example below, there is a custom directive called fadeIn that accepts an id property, and does DOM manipulation to change the opacity of an element.
- * 
- * ```html
- *   <fa-modifier id="myModifier" fa-size="[100, 100]">
- *     <fa-surface fa-background-color="'red'"></fa-surface>
- *     <fade-in id="myModifier"></fade-in>
- *   </fa-modifier>
- * ```
- * ```javascript
- * .directive('fadeIn', ['$famous', '$famousDecorator', function ($famous, $famousDecorator) {
- *   return {
- *     restrict: 'EA',
- *     scope: {
- *       id: '@'
- *     },
- *     compile: function(tElement, tAttrs, transclude) {
- *       var Transitionable = $famous['famous/transitions/Transitionable'];
- *       return {
- *         pre: function(scope, element, attrs) {
- *         },
- *         post: function(scope, element, attrs) {
- *           var myElement = $famous.find('#' + scope.id)[0];
- * 
- *           var opacityTransitionable = new Transitionable(0);
- * 
- *           myElement.modifier.setOpacity(function() {
- *             return opacityTransitionable.get();
- *           });
- * 
- *           opacityTransitionable.set(1, {duration: 1500, curve: 'easeInOut'});
- *         }
- *       }
- *     }
- *   }
- * }]);
- * ``` 
- * 
- * In the post-link function, pass $famous.find() the id attribute from the html view.  A Transitionable is instantiated with the value of 0.
- * Then, using DOM manipulation, access the modifier property of the element.  Famous modifiers have a .setOpacity() method that can accept a function.
- * Pass opacityTransitionable.get(), which returns 0, thereby setting the opacity of myElement to 0.
- * 
- * Then, using the .set() method, pass in the value of 1 as the end state as the first argument, and a transition object as the second argument.
  */
 
 
