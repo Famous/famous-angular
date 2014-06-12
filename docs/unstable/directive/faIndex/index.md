@@ -64,6 +64,7 @@ order is desired, then the index value must be assigned/overridden using the faI
 <h2 id="example">Example</h2><p><code>Fa-index</code> determines the order of which the surfaces appear in the sequential view.
 In this example below, a Scroll View is created with two nested <code>fa-view</code>&#39;s, both of which have an <code>fa-index</code> of 0 and 1, respectively.</p>
 <p>If <code>fa-index</code> is declared explicitly, it will override any default order of <code>fa-view</code>&#39;s declared in html.
+If <code>fa-views</code> are created with an ng-repeat, they are automatically assigned the $index property, unless explicitly set.
 The <code>fa-view</code> with the blue background color appears after the one with the red background because its <code>fa-index</code> is set to 1.</p>
 <p><code>fa-scroll-view</code> accepts another directive called <code>fa-start-index</code> as an attribute, which determines which <code>fa-view</code> the Scroll View displays by default.
 <code>Fa-start-index</code> will not affect the sequential order of the layout; the <code>fa-view</code> with the red background will be layed out first, followed by the one with the blue background.

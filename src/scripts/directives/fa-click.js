@@ -15,7 +15,8 @@
  * </ANY>
  * ```
  * @example
- * `Fa-click` is most commonly used on a `fa-surface`'.  Internally, a Famous Surface has a `".on()"` method that binds a callback function to an event type handled by that Surface.
+ * ### Fa-click on an fa-surface
+ * `Fa-click` can be used on an `fa-surface`.  Internally, a Famous Surface has a `.on()` method that binds a callback function to an event type handled by that Surface.
  *  The function expression bound to `fa-click` is bound to that `fa-surface`'s click eventHandler, and when the `fa-surface` is clicked, the function expression will be called. 
  *
  * ```html
@@ -27,6 +28,32 @@
  * $scope.myClickHandler = function($event) {
  *   console.log("click");
  *   console.log($event);
+ * };
+ * ```
+ * ### Fa-click on an fa-view
+ * `Fa-click` may be used on an `fa-view`.  The function expression bound to `fa-click` will be bound to the `fa-view`'s internal `_eventInput`, the aggregation point of all events received by the `fa-view`.  When it receives a `click` event, it will call the function expression bound to `fa-click`.
+ *  
+ * In the example below, the `fa-surface` pipes its Surface events to an instantied Famous Event Handler called `myEvents`.
+ * `Fa-view` pipes from `myEvents`, receiving all events piped by the `fa-surface`.
+ * 
+ * When a click event occurs on the `fa-surface`, it is piped to the `fa-view`.  
+ * `fa-click` defines a callback function in which to handle click events, and when it receives a click event, it calls `myClickHandler()`. 
+ * ```html
+ * <fa-view fa-click="myClickHandler($event)" fa-pipe-from="myEvents">
+ *   <fa-modifier fa-size="[100, 100]">
+ *     <fa-surface fa-pipe-to="myEvents"
+ *                 fa-background-color="'orange'">
+ *     </fa-surface>
+ *   </fa-modifier>
+ * </fa-view>
+ * ```
+ * ```javascript
+ * var EventHandler = $famous['famous/core/EventHandler'];
+ * $scope.myEvents = new EventHandler();
+ * 
+ * $scope.myClickHandler = function($event) {
+ *   console.log($event);
+ *   console.log("fa-view receives the click event from the fa-surface, and calls myClickHandler defined on fa-click");
  * };
  * ```
  */

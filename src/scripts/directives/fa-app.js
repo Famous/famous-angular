@@ -35,11 +35,17 @@
  * Declaring multiple fa-app's within a page is permitted, but each new one incurs a penalty to performance, and `fa-app`'s should definitely not be declared within an ng-repeat.
  * 
  * ### Fa-app must be declared with a height & width
- * The element fa-app is declared within must have a height and width styling, declared inline or as a css declaration in an external stylesheet.
+ * The element `fa-app` is declared within must have a set height and width styling, declared inline or as a css declaration in an external stylesheet.
  * ```html
  * <fa-app style="width: 320px; height: 568px;">
  *    <!-- other fa- scene graph components -->
  * </fa-app>
+ * ```
+ * If `fa-app` is declared as an attribute of another element, that element must be a `display:block` element, such as a `div` or `p`.
+ * ```html
+ * <div fa-app style="width: 320px; height: 568px;">
+ *   <!-- other fa- scene graph components -->
+ * </div>
  * ```
  */
 

@@ -49,26 +49,28 @@ It allows you to pass a reference to an arbitrary render node from your controll
     <!-- content -->
 </fa-render-node>
 ```
-`Fa-render-node` can wrap a custom-made widget or any renderable component from Famous and allow it to be inserted in the Render Tree.  
+  
+  
 
-All Famous widgets, such as a Scroll View, a Sequential Layout, or a Header-footer-layout, are extended Famous Views.
-`Fa-render-node` allows a developer to create & extend their own Famous View, and use it within their own Famous-Angular app. 
+  
 
-In the example below, a Famous View is instantiated on the scope; a Modifier is added to it, and then a Surface is added below.
-This approach of creating a View and adding renderables to it with the `.add()` method is more in line with a "vanilla Famous" approach than a declarative approach with Famous-Angular.  
 
-In the html view, an `fa-render-node` is declared, with an `fa-node` attribute of the name of the View created on the scope, resulting in this custom, newly-created View appearing on the page.
 
-```javascript
-var View = $famous['famous/core/View'];
-var Modifier = $famous['famous/core/Modifier'];
-var Surface = $famous['famous/core/Surface'];
-var Transform = $famous['famous/core/Transform'];
+<h2 id="example">Example</h2><p><code>Fa-render-node</code> can wrap a custom-made widget or any renderable component from Famous and allow it to be inserted in the Render Tree.  </p>
+<p>All Famous widgets, such as a Scroll View, a Sequential Layout, or a Header-footer-layout, are extended Famous Views.
+<code>Fa-render-node</code> allows a developer to create &amp; extend their own Famous View, and use it within their own Famous-Angular app. </p>
+<p>In the example below, a Famous View is instantiated on the scope; a Modifier is added to it, and then a Surface is added below.
+This approach of creating a View and adding renderables to it with the <code>.add()</code> method is more in line with a &quot;vanilla Famous&quot; approach than a declarative approach with Famous-Angular.  </p>
+<p>In the html view, an <code>fa-render-node</code> is declared, with an <code>fa-node</code> attribute of the name of the View created on the scope, resulting in this custom, newly-created View appearing on the page.</p>
+<pre><code class="lang-javascript">var View = $famous[&#39;famous/core/View&#39;];
+var Modifier = $famous[&#39;famous/core/Modifier&#39;];
+var Surface = $famous[&#39;famous/core/Surface&#39;];
+var Transform = $famous[&#39;famous/core/Transform&#39;];
 
 $scope.masterView = new View();
 
-var _surf = new Surface({properties: {backgroundColor: 'red'}});
-_surf.setContent("I'm a surface");
+var _surf = new Surface({properties: {backgroundColor: &#39;red&#39;}});
+_surf.setContent(&quot;I&#39;m a surface&quot;);
 
 var _mod = new Modifier();
 
@@ -82,14 +84,7 @@ $scope.masterView.add(_mod).add(_surf);
 ```javascript
 
 ```html
-<fa-render-node fa-node="masterView" id="render"></fa-render-node>
-```
-  
-  
-
-  
-
-
+&lt;fa-render-node fa-node=&quot;masterView&quot; id=&quot;render&quot;&gt;&lt;/fa-render-node&gt;</code></pre>
 
 
 

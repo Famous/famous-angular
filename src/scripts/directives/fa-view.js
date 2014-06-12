@@ -13,25 +13,35 @@
  *   <!-- content -->
  * </fa-view>
  * ```
- * A Famous View is a Render Node that has its own input EventHandler and output EventHandler.
- * It may consist of many Modifier & Surfaces a complex set of event handlers.
- * A View's input eventHandler is the aggregation point of all events coming into the View, and then the View can handle all of those events in ways specified.
+ * @example
+ * A Famous View is used for encapsulating many Modifiers and Surfaces together.  Internally, it is a Render Node that has its own input EventHandler (`_eventInput`) and output EventHandler (`_eventOutput`). 
+ * It does not map to DOM elements, but rather, it is an empty Render Node that can be extended by a developer.
+ * A View's input eventHandler is the aggregation point of all events coming into the View, and from there, the View can listen for specific events and handle them.
  * 
- * For example, a Scroll View is a Famous View that has been extended with certain sets of behavior.
- * When a surface within a Scroll View receives an event (such as mouse scroll), and these events are piped to the Scroll View, these events go through the Scroll View's input EventHandler and are handled by the Scroll View.
+ * A more concrete example is a Scroll View: it is a Famous View that has been extended with certain sets of behavior to handle events such as a mouse scroll.
+ * In the example below, when an `fa-surface` within an `fa-scroll-view` propagates an event (such as mouse scroll), these events are piped to the Scroll View (through `fa-pipe-to`). These events go through the Scroll View's `_eventInput` (using `fa-pipe-from`).  From there, the Scroll View has pre-defined event handlers to handle these events.  
+ *
+ * Famous Views are a way to encapsulate large event systems with renderables (Surfaces & Modifiers).
  *
  *```html
- * <fa-scroll-view fa-pipe-from="eventHandler">
+ * <fa-scroll-view fa-pipe-from="myEventHandler">
  *   <fa-view>
  *     <fa-modifier fa-size="[320, 320]">
- *         <fa-surface fa-pipe-to="eventHandler"></fa-surface>
+ *         <fa-surface fa-pipe-to="myEventHandler"></fa-surface>
  *       </fa-modifier>
  *   </fa-view>
- *  </fa-scroll-view> 
+ * </fa-scroll-view> 
  *```
+ * ```javascript
+ * var EventHandler = $famous['famous/core/EventHandler'];
+ * $scope.myEventHandler = new EventHandler();
+ * ```
+ * 
+ * ### Event propagation within & between Views
+ * In the Famous event model, an `fa-view` nested within another `fa-view` does not automatically propagate its events to its parent.
+ * Not even an `fa-surface` nested inside an `fa-view` propagates its events to the `fa-view`.  All events to an `fa-view` must be piped explicitly.  
  *
- *This brings up another important note: in the Famous event model, an fa-view nested within another fa-view does not automatically propagate its events to its parent.
- *For a longer discussion on Famous-Angular events, go to fa-pipe-from/fa-pipe-to in the docs.  
+ * For a more thorough discussion on Famous-Angular events, go to fa-pipe-from/fa-pipe-to in the docs.  
  */
 
 angular.module('famous.angular')

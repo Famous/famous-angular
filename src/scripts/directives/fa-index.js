@@ -24,6 +24,7 @@
  * In this example below, a Scroll View is created with two nested `fa-view`'s, both of which have an `fa-index` of 0 and 1, respectively.
  *
  * If `fa-index` is declared explicitly, it will override any default order of `fa-view`'s declared in html.
+ * If `fa-views` are created with an ng-repeat, they are automatically assigned the $index property, unless explicitly set.
  * The `fa-view` with the blue background color appears after the one with the red background because its `fa-index` is set to 1.
  *
  * `fa-scroll-view` accepts another directive called `fa-start-index` as an attribute, which determines which `fa-view` the Scroll View displays by default.

@@ -13,6 +13,7 @@
  *     <!-- content -->
  * </fa-render-node>
  * ```
+ * @example
  * `Fa-render-node` can wrap a custom-made widget or any renderable component from Famous and allow it to be inserted in the Render Tree.  
  * 
  * All Famous widgets, such as a Scroll View, a Sequential Layout, or a Header-footer-layout, are extended Famous Views.

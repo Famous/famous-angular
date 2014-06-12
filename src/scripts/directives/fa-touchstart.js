@@ -13,30 +13,61 @@
  *
  * </ANY>
  * ```
-
-Note:  For testing purposes during development, enable mobile emulation: https://developer.chrome.com/devtools/docs/mobile-emulation
-
-##Example
-Upon a touchstart event firing, fa-touchstart will evaluate the expression bound to it.
-
-Touchstart fires once when a touch point (finger) is first placed upon the touch surface.
-If the touch point moves or releases touch, it will not fire a touchstart.
-If the touch point is placed upon the touch surface again, it will fire another touchstart event.
-
-```html
- <fa-modifier fa-size="[100, 100]">
-  <fa-surface fa-background-color="'red'" fa-touchstart="touchStart($event)"></fa-surface>
-</fa-modifier>
-```
-```javascript
-  var touchStartCounter = 0;
-  $scope.touchStart = function($event) {
-    touchStartCounter++;
-    console.log($event);
-    console.log("touchStart: " + touchStartCounter);
-  };
-```
-*/
+ * 
+ * Note:  For development purposes, enable mobile emulation: https://developer.chrome.com/devtools/docs/mobile-emulation
+ * 
+ * @example
+ * Upon a `touchstart` event firing, `fa-touchstart` will evaluate the expression bound to it.
+ * 
+ * Touchstart fires once when a touch point (finger) is first placed upon the touch surface.
+ * If the touch point moves or releases touch, it will not fire another touchstart; touchstart fires once upon the first touch.
+ * If the touch point is placed upon the touch surface again, it will fire another touchstart event.
+ *
+ * ### Fa-touchstart on an fa-surface
+ * `Fa-touchstart` can be used on an `fa-surface`.  Internally, a Famous Surface has a `.on()` method that binds a callback function to an event type handled by that Surface.
+ *  The function expression bound to `fa-touchstart` is bound to that `fa-surface`'s touchstart eventHandler, and when touchstart fires, the function expression will be called. 
+ * 
+ * ```html
+ * <fa-modifier fa-size="[100, 100]">
+ *   <fa-surface fa-touchstart="touchStart($event)" fa-background-color="'red'"></fa-surface>
+ * </fa-modifier>
+ * ```
+ * ```javascript
+ *   var touchStartCounter = 0;
+ *   $scope.touchStart = function($event) {
+ *     touchStartCounter++;
+ *     console.log($event);
+ *     console.log("touchStart: " + touchStartCounter);
+ *   };
+ * ```
+ *
+ * ### Fa-touchstart on an fa-view
+ * `Fa-touchstart` may be used on an `fa-view`.  The function expression bound to `fa-touchstart` will be bound to the `fa-view`'s internal `_eventInput`, the aggregation point of all events received by the `fa-view`.  When it receives a `touchstart` event, it will call the function expression bound to `fa-touchstart`.
+ *  
+ * In the example below, the `fa-surface` pipes its Surface events to an instantied Famous Event Handler called `myEvents`.
+ * `Fa-view` pipes from `myEvents`, receiving all events piped by the `fa-surface`.
+ * 
+ * When a touchstart event occurs on the `fa-surface`, it is piped to the `fa-view`.  
+ * `fa-touchstart` defines a callback function in which to handle touchstart events, and when it receives a touchstart event, it calls `touchStart()`. 
+ * ```html
+ * <fa-view fa-touchstart="touchStart($event)" fa-pipe-from="myEvents">
+ *   <fa-modifier fa-size="[100, 100]">
+ *     <fa-surface fa-pipe-to="myEvents"
+ *                 fa-background-color="'orange'">
+ *     </fa-surface>
+ *   </fa-modifier>
+ * </fa-view>
+ * ```
+ * ```javascript
+ * var EventHandler = $famous['famous/core/EventHandler'];
+ * $scope.myEvents = new EventHandler();
+ * 
+ * $scope.touchStart = function($event) {
+ *   console.log($event);
+ *   console.log("fa-view receives the touchstart event from the fa-surface, and calls $scope.touchStart bound to fa-touchstart");
+ * };
+ * ```
+ */
 
 angular.module('famous.angular')
   .directive('faTouchstart', ['$parse', '$famousDecorator', function ($parse, $famousDecorator) {

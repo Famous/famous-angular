@@ -71,10 +71,14 @@ it is inside of a <a href="api/directive/faSurface">fa-surface</a> directive.
 <p>Nesting an <code>fa-app</code> within another <code>fa-app</code> is possible, and the use case of this approach would be for css content overflow.
 Declaring multiple fa-app&#39;s within a page is permitted, but each new one incurs a penalty to performance, and <code>fa-app</code>&#39;s should definitely not be declared within an ng-repeat.</p>
 <h3 id="fa-app-must-be-declared-with-a-height-width">Fa-app must be declared with a height &amp; width</h3>
-<p>The element fa-app is declared within must have a height and width styling, declared inline or as a css declaration in an external stylesheet.</p>
+<p>The element <code>fa-app</code> is declared within must have a set height and width styling, declared inline or as a css declaration in an external stylesheet.</p>
 <pre><code class="lang-html">&lt;fa-app style=&quot;width: 320px; height: 568px;&quot;&gt;
    &lt;!-- other fa- scene graph components --&gt;
 &lt;/fa-app&gt;</code></pre>
+<p>If <code>fa-app</code> is declared as an attribute of another element, that element must be a <code>display:block</code> element, such as a <code>div</code> or <code>p</code>.</p>
+<pre><code class="lang-html">&lt;div fa-app style=&quot;width: 320px; height: 568px;&quot;&gt;
+  &lt;!-- other fa- scene graph components --&gt;
+&lt;/div&gt;</code></pre>
 
 
 
