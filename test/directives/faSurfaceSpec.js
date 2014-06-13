@@ -58,6 +58,22 @@ describe('faSurface', function() {
       expect(properties.color).toEqual("red");
     });
 
+    it("fa-properties - to accept a hash of css properties", function() {
+      var faSurface = common.compileFaSurface('fa-properties="{color: \'red\', backgroundColor: \'blanchedalmond\'}"');
+      var surface = common.getSurface(faSurface);
+      var properties = surface.getProperties();
+      expect(properties.color).toEqual("red");
+      expect(properties.backgroundColor).toEqual("blanchedalmond");
+    });
+
+    it("fa-properties plus explicit properties, handling overrides correctly", function() {
+      var faSurface = common.compileFaSurface('fa-color="\'orange\'" fa-properties="{color: \'red\', backgroundColor: \'blanchedalmond\'}"');
+      var surface = common.getSurface(faSurface);
+      var properties = surface.getProperties();
+      expect(properties.color).toEqual("orange");
+      expect(properties.backgroundColor).toEqual("blanchedalmond");
+    });
+
     it("class - to pass classes to the surface div", function() {
       var faSurface = common.compileFaSurface('class="test-class"');
       var surface = common.getSurface(faSurface);

@@ -3207,6 +3207,13 @@ angular.module('famous.angular')
 
             isolate.getProperties = function(){
               var baseProperties = scope.$eval(attrs.faProperties) || {};
+              //TODO:  instead of a 'whitelist' like this, consider looping
+              //       through all of the members of attrs that aren't 'fa-size'
+              //       or 'fa-properties' ('blacklist') and considering each of
+              //       them to be CSS properties.
+              //       Alternatively, don't support fa-css-properties on 
+              //       the directive, in favor of requiring them to be passed in
+              //       by fa-properties
               var properties = [
                 "backgroundColor",
                 "margin",
