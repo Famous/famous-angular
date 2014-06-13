@@ -3200,11 +3200,25 @@ angular.module('famous.angular')
               true
             )
 
+
+            var _propToFaProp = function(prop){
+              return "fa" + prop.charAt(0).toUpperCase() + prop.slice(1);
+            };
+
             isolate.getProperties = function(){
-              return {
-                backgroundColor: scope.$eval(attrs.faBackgroundColor),
-                color: scope.$eval(attrs.faColor)
-              };
+              var baseProperties = scope.$eval(attrs.faProperties) || {};
+              var properties = [
+                "backgroundColor",
+                "margin",
+                "padding",
+                "color"
+              ];
+              for(var i = 0; i < properties.length; i++){
+                var prop = properties[i];
+                var faProp = _propToFaProp(prop);
+                if(attrs[faProp]) baseProperties[prop] = scope.$eval(attrs[faProp]);
+              }
+              return baseProperties;
             };
 
             isolate.renderNode = new Surface({

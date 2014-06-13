@@ -205,13 +205,32 @@ angular.module('famous.angular')
               true
             )
 
+
+            var _propToFaProp = function(prop){
+              return "fa" + prop.charAt(0).toUpperCase() + prop.slice(1);
+            };
+
             isolate.getProperties = function(){
-              return {
-                backgroundColor: scope.$eval(attrs.faBackgroundColor),
-                color: scope.$eval(attrs.faColor),
-                margin: scope.$eval(attrs.faMargin),
-                padding: scope.$eval(attrs.faPadding)
-              };
+              var baseProperties = scope.$eval(attrs.faProperties) || {};
+              //TODO:  instead of a 'whitelist' like this, consider looping
+              //       through all of the members of attrs that aren't 'fa-size'
+              //       or 'fa-properties' ('blacklist') and considering each of
+              //       them to be CSS properties.
+              //       Alternatively, don't support fa-css-properties on 
+              //       the directive, in favor of requiring them to be passed in
+              //       by fa-properties
+              var properties = [
+                "backgroundColor",
+                "margin",
+                "padding",
+                "color"
+              ];
+              for(var i = 0; i < properties.length; i++){
+                var prop = properties[i];
+                var faProp = _propToFaProp(prop);
+                if(attrs[faProp]) baseProperties[prop] = scope.$eval(attrs[faProp]);
+              }
+              return baseProperties;
             };
 
             isolate.renderNode = new Surface({
