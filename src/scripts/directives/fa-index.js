@@ -18,6 +18,45 @@
  *  <fa-surface fa-index="1">Surface 2</fa-surface>
  * </fa-scroll-view>
  * ```
+ *
+ * @example
+ * `Fa-index` determines the order of which the surfaces appear in the sequential view.
+ * In this example below, a Scroll View is created with two nested `fa-view`'s, both of which have an `fa-index` of 0 and 1, respectively.
+ *
+ * If `fa-index` is declared explicitly, it will override any default order of `fa-view`'s declared in html.
+ * If `fa-views` are created with an ng-repeat, they are automatically assigned the $index property, unless explicitly set.
+ * The `fa-view` with the blue background color appears after the one with the red background because its `fa-index` is set to 1.
+ *
+ * `fa-scroll-view` accepts another directive called `fa-start-index` as an attribute, which determines which `fa-view` the Scroll View displays by default.
+ * `Fa-start-index` will not affect the sequential order of the layout; the `fa-view` with the red background will be layed out first, followed by the one with the blue background.
+ *  By setting `fa-start-index` to 1, the Scroll View will display the View with the index of 1, which is the View with the blue background color. 
+ *
+ * ```html
+ *  <fa-scroll-view fa-pipe-from="eventHandler" fa-options="options.scrollView" fa-start-index="1">
+ *    <fa-view fa-index="1">
+ *      <fa-modifier fa-size="[320, 320]">
+ *          <fa-surface fa-background-color="'blue'" fa-pipe-to="eventHandler"></fa-surface>
+ *        </fa-modifier>
+ *    </fa-view>
+ *    <fa-view fa-index="0">
+ *      <fa-modifier fa-size="[320, 320]">
+ *          <fa-surface fa-background-color="'red'" fa-pipe-to="eventHandler"></fa-surface>
+ *        </fa-modifier>
+ *    </fa-view>
+ *   </fa-scroll-view>    
+ * ```
+ *
+ * ```javascript
+ * var EventHandler = $famous['famous/core/EventHandler'];
+ * $scope.eventHandler = new EventHandler();
+ * $scope.list = [{content: "famous"}, {content: "angular"}, {content: "rocks!"}];
+ *
+ * $scope.options = {
+ *   scrollView: {
+ *     direction: 0 // displays the fa-views horizontally
+ *   }
+ * };
+ *```
  */
 
 angular.module('famous.angular')

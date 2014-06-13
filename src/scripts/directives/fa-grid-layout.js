@@ -15,6 +15,38 @@
  *   <!-- zero or more render nodes -->
  * </fa-grid-layout>
  * ```
+ * @example
+ * A Famous Grid Layout divides a context into evenly-sized grid cells.  Pass options such as `dimension` and `cellSize` by binding an object with those properties to `fa-options`.
+ *
+ * In the example below, `fa-options` references `myGridLayoutOptions` on the scope. 
+ * 
+ * ```javascript
+ * $scope.myGridLayoutOptions = {
+ *    dimensions: [2,2], // specifies number of columns and rows
+ *    cellSize: [100, 100] // specifies width and height of each cell
+ * };
+ * ```
+ * 
+ * In the example below, `fa-size` is specified as `[100, 100]`, so each `fa-surface` will have these dimensions.
+ * ```html
+ * <fa-grid-layout fa-options="myGridLayoutOptions">
+ *    <fa-modifier ng-repeat="grid in grids" 
+ *                 fa-size="[100, 100]">
+ *      <fa-surface fa-background-color="grid.bgColor"></fa-surface>
+ *    </fa-modifier>
+ * </fa-grid-layout>
+ * ```
+ * ```javascript
+ * $scope.grids = [{bgColor: "orange"}, {bgColor: "red"}, {bgColor: "green"}, {bgColor: "yellow"}];
+ * ```
+ * 
+ * If `fa-size` is not specified, as in this example below, the fa-surface's will collectively fill the height and width of its parent modifier/context.
+ * 
+ * ```html
+ * <fa-grid-layout fa-options="myGridLayoutOptions">
+ *    <fa-surface ng-repeat="grid in grids" fa-background-color="grid.bgColor"></fa-surface>
+ * </fa-grid-layout>
+ * ```
  */
 
 angular.module('famous.angular')

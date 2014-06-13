@@ -16,6 +16,37 @@
  *   <!-- other fa- scene graph components -->
  * </fa-app>
  * ```
+ * @example
+ * `Fa-app` creates a Famous Context, the root of the Render Tree.  Renderables (such as `fa-modifier`'s & `fa-surface`'s) nested within an `fa-app` are added to this root context.  
+ *
+ * Declaring `fa-app` appends a div with the class of `"famous-angular-container"` to the DOM.  It then instantiates a Context via Famous' Engine `.createContext()` method, passing in a reference to the `famous-angular-container` div, resulting in a Famous context that renderables can be added to connected to Angular.  `Fa-app` can be declared as an element or as an attribute within another element.  
+ *
+ * ```html
+ * <fa-app style="width: 320px; height: 568px;">
+ *   <fa-modifier>
+ *     <fa-surface>This will be shown on screen.</fa-surface>
+ *   </fa-modifier>
+ *   <div>This will not appear on screen because it is not inside an fa-surface.</div>
+ * </fa-app>
+ * ```
+ * ## Common Qustions
+ * ### Multiple fa-app's
+ * Nesting an `fa-app` within another `fa-app` is possible, and the use case of this approach would be for css content overflow.
+ * Declaring multiple fa-app's within a page is permitted, but each new one incurs a penalty to performance, and `fa-app`'s should definitely not be declared within an ng-repeat.
+ * 
+ * ### Fa-app must be declared with a height & width
+ * The element `fa-app` is declared within must have a set height and width styling, declared inline or as a css declaration in an external stylesheet.
+ * ```html
+ * <fa-app style="width: 320px; height: 568px;">
+ *    <!-- other fa- scene graph components -->
+ * </fa-app>
+ * ```
+ * If `fa-app` is declared as an attribute of another element, that element must be a `display:block` element, such as a `div` or `p`.
+ * ```html
+ * <div fa-app style="width: 320px; height: 568px;">
+ *   <!-- other fa- scene graph components -->
+ * </div>
+ * ```
  */
 
 angular.module('famous.angular')

@@ -87,5 +87,15 @@ This directive allows you to specify custom behavior when an element is tapped.
 
 
 
+<h2 id="example">Example</h2><p>Note: For testing purposes during development, enable mobile emulation: <a href="https://developer.chrome.com/devtools/docs/mobile-emulation">https://developer.chrome.com/devtools/docs/mobile-emulation</a></p>
+<p><code>Fa-tap</code> checks if a touchmove event fires between a touchstart and touchend event.  If the touchmove event fired, (the user &quot;dragged&quot; their finger), a <code>fa-tap</code> event will not fire.  If the user did not &quot;drag&quot; their finger on touch, when releasing their finger, a touchend event will fire, and fa-tap will fire.</p>
+<pre><code class="lang-html">&lt;fa-modifier fa-size=&quot;[100, 100]&quot;&gt;
+&lt;fa-surface fa-tap=&quot;tapHandler($event)&quot; fa-background-color=&quot;&#39;red&#39;&quot;&gt;&lt;/fa-surface&gt;
+&lt;/fa-modifier&gt;</code></pre>
+<pre><code class="lang-javascript">$scope.tapHandler = function($event) {
+  console.log($event);
+  console.log(&quot;tap&quot;);
+};</code></pre>
+
 
 

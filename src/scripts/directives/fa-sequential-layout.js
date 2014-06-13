@@ -15,6 +15,28 @@
  *   <!-- zero or more render nodes -->
  * </fa-sequential-layout>
  * ```
+ * @example
+ * `Fa-sequential-layout` is a Famous View that arranges a collection of renderables sequentially in a specified direction.  Pass options (such as `direction`) by binding an object with the property to `fa-options`.
+ *
+ * In the example below, an ng-repeat is used on an `fa-view`.  The size of each `fa-surface` is `[undefined, 100]`, specifying that the width will fill the parent container, and the height will be 100 pixels.
+ *
+ * There are no positioning properties (such as `fa-translate`) used on the `fa-modifier`, but these `fa-surface`s will translate automatically in the specified direction as not to overlap each other.
+ *
+ * ```html
+ * <fa-sequential-layout fa-options="seqOptions">
+ *  <fa-view ng-repeat="view in seq">
+ *    <fa-modifier fa-size="[undefined, 100]">
+ *      <fa-surface fa-background-color="view.bgColor"></fa-surface>
+ *    </fa-modifier>
+ *  </fa-view>
+ * </fa-sequential-layout>
+ * ```
+ * ```javascript
+ * $scope.seqOptions = {
+ *   direction: 1, // vertical = 1 (default), horizontal = 0
+ * };
+ * $scope.seq = [{bgColor: "orange"}, {bgColor: "red"}, {bgColor: "green"}, {bgColor: "yellow"}];
+ * ```
  */
 
 angular.module('famous.angular')
