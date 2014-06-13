@@ -128,15 +128,16 @@ Because <code>evenHandlerA</code> pipes to <code>eventHandlerB</code>, <code>eve
       &lt;fa-surface fa-background-color=&quot;&#39;red&#39;&quot;&gt;&lt;/fa-surface&gt;
   &lt;/fa-modifier&gt;
 &lt;/fa-view&gt;</code></pre>
-<pre><code class="lang-javascript">var eventHandlerA = new EventHandler();
-var eventHandlerB = new EventHandler();
-eventHandlerA.pipe(eventHandlerB);
+<pre><code class="lang-javascript">var EventHandler = $famous[&#39;famous/core/EventHandler&#39;];
+$scope.eventHandlerA = new EventHandler();
+$scope.eventHandlerB = new EventHandler();
+$scope.eventHandlerA.pipe($scope.eventHandlerB);
 
 $scope.surfaceClick = function() {
-  eventHandlerA.emit(&#39;myEvent&#39;);
+  $scope.eventHandlerA.emit(&#39;myEvent&#39;);
 };
 
-eventHandlerB.on(&#39;myEvent&#39;, function() {
+$scope.eventHandlerB.on(&#39;myEvent&#39;, function() {
   $scope.redTrans.set([0, 200, 0], {duration: 2000, curve: &#39;easeInOut&#39;})
 });</code></pre>
 <h2 id="switching-pipes">Switching Pipes</h2>

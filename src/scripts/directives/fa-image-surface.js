@@ -23,16 +23,9 @@
  *            fa-size="[200, 300]">
  * </fa-image-surface>
  * ```
- * `Fa-image-surface` accepts two properties: `color` and `background color`, which may be assigned values by the `fa-color` and `fa-background-color` attributes respectively.
+ * `Fa-image-surface` accepts two css-style properties: `color` and `background color`, which may be assigned values by the `fa-color` and `fa-background-color` attributes respectively.
  *
- * `Fa-size` may also be declared as an attribute on the `fa-image-surface`.  If void, the `fa-image-surface` will inherit the size of its parent node.  
- *
- * In the example below, the `fa-image-size` element will inherit `[300, 300]` from the Modifier node above it on the Render Tree.
- * ```html
- * <fa-modifier fa-size="[300, 300]">
- *  <fa-image-size></fa-image-size>
- * </fa-modifier>
- * ```
+ * `Fa-size` may also be declared as an attribute.  If void, the `fa-image-surface` will inherit the size of its parent node.  
  */
 
 angular.module('famous.angular')

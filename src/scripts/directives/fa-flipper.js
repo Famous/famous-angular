@@ -15,6 +15,23 @@
  *   <!-- two render nodes -->
  * </fa-flipper>
  * ```
+ *@example
+ * A Famous Flipper has a `.flip()` method that toggles a rotation between front and back sides.
+ * In the example below, when an `fa-surface` is clicked, it calls the function `flipIt`.
+ * 
+ * This function attempts a DOM lookup for an isolate of an `fa-flipper` element, and calls the `.flip()` function of `fa-flipper`. 
+ * 
+ *```html
+ * <fa-flipper>
+ *    <fa-surface fa-background-color="'yellow'" fa-click="flipIt()"></fa-surface>
+ *    <fa-surface fa-background-color="'red'" fa-click="flipIt()"></fa-surface>
+ * </fa-flipper>
+ *```
+ *```javascript
+ * $scope.flipHandler.on('flip', function() {
+ *   $famous.find('fa-flipper')[0].flip();
+ * });
+ *```
  */
 
 angular.module('famous.angular')

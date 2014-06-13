@@ -95,12 +95,8 @@ the specified ImageUrl.
            fa-background-color=&quot;&#39;#fff&#39;&quot;
            fa-size=&quot;[200, 300]&quot;&gt;
 &lt;/fa-image-surface&gt;</code></pre>
-<p><code>Fa-image-surface</code> accepts two properties: <code>color</code> and <code>background color</code>, which may be assigned values by the <code>fa-color</code> and <code>fa-background-color</code> attributes respectively.</p>
-<p><code>Fa-size</code> may also be declared as an attribute on the <code>fa-image-surface</code>.  If void, the <code>fa-image-surface</code> will inherit the size of its parent node.  </p>
-<p>In the example below, the <code>fa-image-size</code> element will inherit <code>[300, 300]</code> from the Modifier node above it on the Render Tree.</p>
-<pre><code class="lang-html">&lt;fa-modifier fa-size=&quot;[300, 300]&quot;&gt;
- &lt;fa-image-size&gt;&lt;/fa-image-size&gt;
-&lt;/fa-modifier&gt;</code></pre>
+<p><code>Fa-image-surface</code> accepts two css-style properties: <code>color</code> and <code>background color</code>, which may be assigned values by the <code>fa-color</code> and <code>fa-background-color</code> attributes respectively.</p>
+<p><code>Fa-size</code> may also be declared as an attribute.  If void, the <code>fa-image-surface</code> will inherit the size of its parent node.</p>
 
 
 

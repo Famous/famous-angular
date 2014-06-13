@@ -79,15 +79,16 @@
  * ```
  * 
  * ```javascript
- * var eventHandlerA = new EventHandler();
- * var eventHandlerB = new EventHandler();
- * eventHandlerA.pipe(eventHandlerB);
+ * var EventHandler = $famous['famous/core/EventHandler'];
+ * $scope.eventHandlerA = new EventHandler();
+ * $scope.eventHandlerB = new EventHandler();
+ * $scope.eventHandlerA.pipe($scope.eventHandlerB);
  * 
  * $scope.surfaceClick = function() {
- *   eventHandlerA.emit('myEvent');
+ *   $scope.eventHandlerA.emit('myEvent');
  * };
  * 
- * eventHandlerB.on('myEvent', function() {
+ * $scope.eventHandlerB.on('myEvent', function() {
  *   $scope.redTrans.set([0, 200, 0], {duration: 2000, curve: 'easeInOut'})
  * });
  * ```
