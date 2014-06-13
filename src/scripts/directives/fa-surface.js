@@ -208,7 +208,9 @@ angular.module('famous.angular')
             isolate.getProperties = function(){
               return {
                 backgroundColor: scope.$eval(attrs.faBackgroundColor),
-                color: scope.$eval(attrs.faColor)
+                color: scope.$eval(attrs.faColor),
+                margin: scope.$eval(attrs.faMargin),
+                padding: scope.$eval(attrs.faPadding)
               };
             };
 
