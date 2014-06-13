@@ -113,8 +113,8 @@ angular.module('famous.angular')
               return {
                 backgroundColor: scope.$eval(attrs.faBackgroundColor),
                 color: scope.$eval(attrs.faColor),
-                margin: scope.$eval(attrs.faPadding),
-                padding: scope.$eval(attrs.faMargin)
+                margin: scope.$eval(attrs.faMargin),
+                padding: scope.$eval(attrs.faPadding)
               };
             };
 
