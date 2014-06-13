@@ -2695,7 +2695,7 @@ angular.module('famous.angular')
  * If `fa-views` are created with an ng-repeat, they are automatically assigned the $index property, unless explicitly set.
  * The `fa-view` with the blue background color appears after the one with the red background because its `fa-index` is set to 1.
  *
- * `fa-scroll-view` accepts another directive called `fa-start-index` as an attribute, which determines which `fa-view` the Scroll View displays by default.
+ * `fa-scroll-view` accepts another attribute called `fa-start-index`, which determines which `fa-view` the Scroll View displays by default.
  * `Fa-start-index` will not affect the sequential order of the layout; the `fa-view` with the red background will be layed out first, followed by the one with the blue background.
  * By setting `fa-start-index` to 1, the Scroll View will display the View with the index of 1 by default, "starting" at the index of 1, which is the View with the blue background color. 
  *
