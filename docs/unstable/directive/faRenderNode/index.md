@@ -61,7 +61,7 @@ It allows you to pass a reference to an arbitrary render node from your controll
 <code>Fa-render-node</code> allows a developer to create &amp; extend their own Famous View, and use it within their own Famous-Angular app. </p>
 <p>In the example below, a Famous View is instantiated on the scope; a Modifier is added to it, and then a Surface is added below.
 This approach of creating a View and adding renderables to it with the <code>.add()</code> method is more in line with a &quot;vanilla Famous&quot; approach than a declarative approach with Famous-Angular.  </p>
-<p>In the html view, an <code>fa-render-node</code> is declared, with an <code>fa-node</code> attribute of the name of the View created on the scope, resulting in this custom, newly-created View appearing on the page.</p>
+<p>In the html view, an <code>fa-render-node</code> is declared, with an <code>fa-node</code> attribute bound to the newly-created View on the scope, resulting in our custom View appearing on the page.</p>
 <pre><code class="lang-javascript">var View = $famous[&#39;famous/core/View&#39;];
 var Modifier = $famous[&#39;famous/core/Modifier&#39;];
 var Surface = $famous[&#39;famous/core/Surface&#39;];
@@ -80,11 +80,8 @@ _mod.transformFrom(function(){
   return Transform.translate(Math.random() * _width, 0, 1);
 });
 
-$scope.masterView.add(_mod).add(_surf);
-```javascript
-
-```html
-&lt;fa-render-node fa-node=&quot;masterView&quot; id=&quot;render&quot;&gt;&lt;/fa-render-node&gt;</code></pre>
+$scope.masterView.add(_mod).add(_surf);</code></pre>
+<pre><code class="lang-html">&lt;fa-render-node fa-node=&quot;masterView&quot; id=&quot;render&quot;&gt;&lt;/fa-render-node&gt;</code></pre>
 
 
 

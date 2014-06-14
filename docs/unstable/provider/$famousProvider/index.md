@@ -187,6 +187,7 @@ the isolate on a template-declared scene graph element.  This is useful
 for manipulating Famo.us objects directly after they've been declared in the DOM.
 As in normal Angular, this DOM look-up should be performed in the postLink function
 of a directive.
+hello world
 
 
 

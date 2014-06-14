@@ -32,7 +32,27 @@
  * ## Common Qustions
  * ### Multiple fa-app's
  * Nesting an `fa-app` within another `fa-app` is possible, and the use case of this approach would be for css content overflow.
- * Declaring multiple fa-app's within a page is permitted, but each new one incurs a penalty to performance, and `fa-app`'s should definitely not be declared within an ng-repeat.
+ *
+ * In the example below, there is an `fa-surface` with an `fa-app` nested inside.  Normally, an `fa-surface` should not nest another Famous element within it because it is a leaf node that has the purpose of being a container for html content.  The exception is nesting an `fa-app` within an `fa-surface`, which creates another Famous context, in which Famous elements can be nested inside.   
+ * 
+ * ```html
+ * <fa-app style="width: 500px; height: 500px;">
+ *   <fa-surface>
+ *     <fa-app style="width: 200px; height: 200px;">
+ *       <fa-image-surface 
+ *          fa-image-url="https://famo.us/assets/images/famous_logo_white.svg" 
+ *          fa-size="[400, 400]">
+ *       </fa-image-surface>
+ *     </fa-app>
+ *   </fa-surface>
+ * </fa-app>
+ * ```
+ * 
+ * The outer `fa-app` is sized 500x500, and it contains all of the content.  The use case of this `fa-app` within another `fa-app` is to clip content using the css overflow:hidden property.  The `fa-image-surface` links to a 400x400 sized image of the Famous logo.  Its parent is the nested `fa-app`, whose size is only 200x200.  
+ * 
+ * The larger image content (400x400) will overflow the boundaries of its parent, the the nested `fa-app` (200x200).  Because `fa-app` has a css overflow:hidden property, it will clip the content of any of its children that is outside the 200x200 region.  Any part of the 400x400 image that reaches outside of these boundaries are ignored.  This may be useful for complex animations.  
+ *  
+ * Take note: declaring multiple `fa-app`s within a page is permitted, but each new one incurs a penalty to performance, and `fa-app`s should definitely not be declared within an ng-repeat.
  * 
  * ### Fa-app must be declared with a height & width
  * The element `fa-app` is declared within must have a set height and width styling, declared inline or as a css declaration in an external stylesheet.

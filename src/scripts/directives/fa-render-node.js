@@ -22,7 +22,7 @@
  * In the example below, a Famous View is instantiated on the scope; a Modifier is added to it, and then a Surface is added below.
  * This approach of creating a View and adding renderables to it with the `.add()` method is more in line with a "vanilla Famous" approach than a declarative approach with Famous-Angular.  
  * 
- * In the html view, an `fa-render-node` is declared, with an `fa-node` attribute of the name of the View created on the scope, resulting in this custom, newly-created View appearing on the page.
+ * In the html view, an `fa-render-node` is declared, with an `fa-node` attribute bound to the newly-created View on the scope, resulting in our custom View appearing on the page.
  * 
  * ```javascript
  * var View = $famous['famous/core/View'];
@@ -44,7 +44,7 @@
  * });
  * 
  * $scope.masterView.add(_mod).add(_surf);
- * ```javascript
+ * ```
  * 
  * ```html
  * <fa-render-node fa-node="masterView" id="render"></fa-render-node>

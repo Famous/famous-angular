@@ -57,11 +57,10 @@ constructor.  See [https://famo.us/docs/0.1.1/views/GridLayout/]
 
 
 
-<h2 id="example">Example</h2><p>A Famous Grid Layout divides a context into evenly-sized grid cells.  Pass options such as <code>dimension</code> and <code>cellSize</code> by binding an object with those properties to <code>fa-options</code>.</p>
+<h2 id="example">Example</h2><p>A Famous Grid Layout divides a context into evenly-sized grid cells.  Pass an option such as <code>dimension</code> by binding an object with the property to <code>fa-options</code>.</p>
 <p>In the example below, <code>fa-options</code> references <code>myGridLayoutOptions</code> on the scope. </p>
 <pre><code class="lang-javascript">$scope.myGridLayoutOptions = {
    dimensions: [2,2], // specifies number of columns and rows
-   cellSize: [100, 100] // specifies width and height of each cell
 };</code></pre>
 <p>In the example below, <code>fa-size</code> is specified as <code>[100, 100]</code>, so each <code>fa-surface</code> will have these dimensions.</p>
 <pre><code class="lang-html">&lt;fa-grid-layout fa-options=&quot;myGridLayoutOptions&quot;&gt;

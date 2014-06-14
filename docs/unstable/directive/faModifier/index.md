@@ -348,9 +348,9 @@ $scope.genBoxOrigin = function() {
   return [$scope.getX(), $scope.getY()];
 };</code></pre>
 <h3 id="function-expressions">Function expressions</h3>
-<p><code>Fa-modifier</code> properties can be bound to a function expression.  <code>boxTransitionable</code> is an instantiated <code>Transitionable</code> object with the value of [0,0,0].
+<p><code>Fa-modifier</code> properties can be bound to a function expression.  <code>boxTransitionable</code> is an instantiated <code>Transitionable</code> object with the value of <code>[0,0,0]</code>.
 The <code>.get()</code> method is available to all <code>Transitionable</code> objects, and it returns an interpolated value of a transition at calltime.
-When <code>fa-translate</code> calls <code>boxTransitionable.get()</code>, it returns [0,0,0].</p>
+When <code>fa-translate</code> calls <code>boxTransitionable.get()</code>, it returns <code>[0,0,0]</code>.</p>
 <pre><code class="lang-html">&lt;fa-modifier fa-size=&quot;[100, 100]&quot; fa-translate=&quot;boxTransitionable.get()&quot;&gt;
   &lt;fa-surface fa-background-color=&quot;&#39;red&#39;&quot; fa-click=&quot;animate()&quot;&gt;&lt;/fa-surface&gt;
 &lt;/fa-modifier&gt;</code></pre>
@@ -361,12 +361,12 @@ $scope.boxTransitionable = new Transitionable([0, 0, 0]);</code></pre>
 <pre><code class="lang-html">&lt;fa-modifier fa-size=&quot;[100, 100]&quot; fa-opacity=&quot;opacityTrans&quot;&gt;
   &lt;fa-surface fa-background-color=&quot;&#39;orange&#39;&quot;&gt;&lt;/fa-surface&gt;
 &lt;/fa-modifier&gt;</code></pre>
-<pre><code class="lang-javascript">$scope.opacityTrans = new Transitionable([.25]);</code></pre>
+<pre><code class="lang-javascript">$scope.opacityTrans = new Transitionable(.25);</code></pre>
 <h3 id="transitionable-get-vs-transitionable">Transitionable.get() vs Transitionable</h3>
 <p><code>FaTranslate</code> (along with <code>faRotate</code>, <code>faTranslate</code>, <code>faScale</code>, <code>faSkew</code>, &amp; more) pass through a Famous Transform function (<code>Transform.translate()</code>), whereas <code>faOpacity</code>, <code>faSize</code>, <code>faOrigin</code>, and <code>faAlign</code> are passed through a Famous Modifier.</p>
 <p>A Famous <code>Transform.translate()</code> function does not accept a Transitionable object, but only an array.
 A <code>.get()</code> function of a Transitionable returns an interpolated value of a current transition, therefore in the case of a <code>faTranslate</code>, it can return an array that a <code>Transform.translate()</code> can accept.</p>
-<p><code>faOpacity</code> passes through a Famous Modifier, which has an <code>.opacityFrom()</code> method that can accept a Transitionable object directly.  </p>
+<p><code>faOpacity</code> passes through a Famous Modifier, which has an <code>.opacityFrom()</code> method that can accept a Transitionable object directly, therefore a <code>.get()</code> method is not required.  </p>
 <p>As a design principle, Famous-Angular attempts to pass values directly to Famous as much as possible, and these differences are due to the core Famous library.</p>
 <h2 id="fa-transform">Fa-transform</h2>
 <p>Whenever a &quot;transform&quot; <a href="https://famo.us/docs/0.2.0/core/Transform">https://famo.us/docs/0.2.0/core/Transform</a> property is used on a <code>fa-modifier</code>, such as <code>fa-translate</code>, <code>fa-scale</code>, <code>fa-origin</code>, etc, their values are passed through a <code>Transform function</code> which returns a 16 element transform array.
@@ -393,9 +393,9 @@ $scope.variousTransforms = function() {
   var skew = Transform.skew(0, 0, 0.3);
   return Transform.multiply(translate, skew);
 };</code></pre>
-<p><code>Transform</code> is a Famous math object used to calculate transforms.  It has various methods, such as <code>translate</code>, <code>rotate</code>, and <code>skew</code> that returns a 16-element matrix array.  <code>Transform.multiply</code> multiplies two or more Transform matrix types to return a final Transform matrix, a 16-element matrix array, and this is what is passed into <code>fa-transform</code>.</p>
+<p><code>Transform</code> is a Famous math object used to calculate transforms.  It has various methods, such as <code>translate</code>, <code>rotate</code>, and <code>skew</code> that returns a 16-element matrix array.  <code>Transform.multiply</code> multiplies two or more Transform matrix types to return a final Transform 16-element matrix array, and this is what is passed into <code>fa-transform</code>.</p>
 <h3 id="fa-transform-overrides-other-transform-attributes">Fa-transform overrides other transform attributes</h3>
-<p><code>Fa-transform</code> will override all other transform attributes on the fa-modifier it is used on:</p>
+<p><code>Fa-transform</code> will override all other transform attributes on the <code>fa-modifier</code> it is used on:</p>
 <pre><code class="lang-html">&lt;fa-modifier fa-transform=&quot;skewFunc&quot; fa-translate=&quot;[100, 100, 0]&quot; fa-size=&quot;[100, 100]&quot;&gt;
   &lt;fa-surface fa-background-color=&quot;&#39;red&#39;&quot;&gt;&lt;/fa-surface&gt;
 &lt;/fa-modifier&gt;</code></pre>
