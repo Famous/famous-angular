@@ -118,7 +118,6 @@ require(requirements, function(/*args*/) {
      * for manipulating Famo.us objects directly after they've been declared in the DOM.
      * As in normal Angular, this DOM look-up should be performed in the postLink function
      * of a directive.
-     * hello world
      * @returns {Array} an array of the isolate objects of the selected elements.
      *
      * @param {String} selector - the selector for the elements to look up

@@ -76,8 +76,9 @@ ngIncludes or custom (vanilla Angular) directives.
 <h2 id="common-confusions">Common Confusions</h2>
 <h3 id="a-surface-is-a-leaf-node">A Surface is a leaf node</h3>
 <p> An fa-surface is a leaf node; this means that there should not be Famous-Angular elements nested within an fa-surface.</p>
-<p> This is NOT best practice:</p>
+<p> This followin will NOT work correctly:</p>
 <pre><code class="lang-html"> &lt;fa-surface&gt;
+    &lt;!-- the contents of a Surface must be standard HTML, so Famo.us components will not get rendered correctly. --&gt;
     &lt;fa-modifier&gt;
       &lt;fa-surface&gt;&lt;/fa-surface&gt;
     &lt;/fa-modifier&gt;

@@ -124,7 +124,6 @@ require(requirements, function(/*args*/) {
      * for manipulating Famo.us objects directly after they've been declared in the DOM.
      * As in normal Angular, this DOM look-up should be performed in the postLink function
      * of a directive.
-     * hello world
      * @returns {Array} an array of the isolate objects of the selected elements.
      *
      * @param {String} selector - the selector for the elements to look up
@@ -953,7 +952,7 @@ angular.module('famous.angular')
  * 
  * The larger image content (400x400) will overflow the boundaries of its parent, the the nested `fa-app` (200x200).  Because `fa-app` has a css overflow:hidden property, it will clip the content of any of its children that is outside the 200x200 region.  Any part of the 400x400 image that reaches outside of these boundaries are ignored.  This may be useful for complex animations.  
  *  
- * Take note: declaring multiple `fa-app`s within a page is permitted, but each new one incurs a penalty to performance, and `fa-app`s should definitely not be declared within an ng-repeat.
+ * Take note: declaring multiple `fa-app`s within a page is permitted, but each new one incurs a penalty for performance.  `fa-app` is similar to a Famo.us ContainerSurface, in that it creates an additional Context that the Famo.us Engine must manage.  
  * 
  * ### Fa-app must be declared with a height & width
  * The element `fa-app` is declared within must have a set height and width styling, declared inline or as a css declaration in an external stylesheet.
@@ -3186,9 +3185,10 @@ angular.module('famous.angular')
  *  ### A Surface is a leaf node
  *  An fa-surface is a leaf node; this means that there should not be Famous-Angular elements nested within an fa-surface.
  * 
- *  This is NOT best practice:
+ *  This followin will NOT work correctly:
  *  ```html
  *  <fa-surface>
+ *     <!-- the contents of a Surface must be standard HTML, so Famo.us components will not get rendered correctly. -->
  *     <fa-modifier>
  *       <fa-surface></fa-surface>
  *     </fa-modifier>

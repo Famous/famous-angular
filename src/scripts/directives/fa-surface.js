@@ -46,9 +46,10 @@
  *  ### A Surface is a leaf node
  *  An fa-surface is a leaf node; this means that there should not be Famous-Angular elements nested within an fa-surface.
  * 
- *  This is NOT best practice:
+ *  This followin will NOT work correctly:
  *  ```html
  *  <fa-surface>
+ *     <!-- the contents of a Surface must be standard HTML, so Famo.us components will not get rendered correctly. -->
  *     <fa-modifier>
  *       <fa-surface></fa-surface>
  *     </fa-modifier>
