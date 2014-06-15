@@ -43,6 +43,27 @@
  * ```
  * 
  * ##Common Confusions
+ *  ### A Surface is a leaf node
+ *  An fa-surface is a leaf node; this means that there should not be Famous-Angular elements nested within an fa-surface.
+ * 
+ *  This is NOT best practice:
+ *  ```html
+ *  <fa-surface>
+ *     <fa-modifier>
+ *       <fa-surface></fa-surface>
+ *     </fa-modifier>
+ *  </fa-surface>
+ * ```
+ * 
+ *  The purpose of an fa-surface is to contain viewable HTML content:
+ * ```html
+ *  <fa-surface>
+ *     <!-- content -->
+ *     <!-- databound content with curly braces -->
+ *     <!-- no other Famous renderable nodes allowed inside a Surface--> 
+ *  </fa-surface>
+ *  ```
+ * 
  * ### Properties on surfaces vs modifiers
  * With Famous, properties related to layout and visibility belong on a Modifier.  A Surface should be added below a Modifier on the Render Tree, as Modifiers affect everything below them.
  *
@@ -79,13 +100,13 @@
  *    return [75, 75];
  * };
  * ```
- * To reiterate, the best practice to animate or set any layout/visibilty properties of a surface is to do so on a modifier that affects the Surface.  The purpose of a Surface is to contain HTML content, whether rendered from a template, or data-bound with {{}}'s.
+ * To reiterate, the best practice to animate or set any layout/visibilty properties of a surface is to do so on a modifier that affects the Surface.  The purpose of a Surface is to contain HTML content, whether rendered from a template, or data-bound.
  * <fa-modifier fa-size="[100, 100]">
  *   <fa-surface fa-background-color="'red'"></fa-surface>
  * </fa-modifier>
  *
  * ### fa-color & fa-background-color
- * The exceptions are `fa-color` and `fa-background-color`: these two properties are passed through the `.setProperties()` method available on Famous Surfaces.
+ * The exceptions of not setting layout/visibility properties on an `fa-surface` are `fa-color` and `fa-background-color`: these two properties are passed through the `.setProperties()` method available on Famous Surfaces.
  * Take note that they accept a string in the html view.  If you do not enclose them in quotation marks, Angular will evaluate it as an object on the scope, but surrounding it with quotation marks will specify it as a string expression.
  * ```html
  * <fa-modifier fa-size="[200, 50]">

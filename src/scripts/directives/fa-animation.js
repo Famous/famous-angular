@@ -177,6 +177,71 @@
  * ```
  * If this is done outside of a directive's post-link function, there is no guarantee that `$famous.find()` will return anything, because the element may not have compiled yet.
  * 
+ * ##Animating with directives
+ * Below is an example of a custom directive called `fade-in` used to animate an element by transitioning its opacity from the values of `fa-opacity` to `opacity-end`, with the duration of `duration`.  Note: `opacity-end` and `duration` are NOT Famous-Angular attributes; they are custom to this particular example.
+ * 
+ * ```html
+ * <fa-modifier fade-in fa-opacity="0.2" opacity-end="1" duration="500">
+ *   <fa-surface fa-background-color="'red'"></fa-surface>
+ * </fa-modifier>
+ * ```
+ * ```javascript
+ * .directive('fadeIn', 
+ *   ['$famous', '$famousDecorator', '$timeout', 
+ *   function ($famous, $famousDecorator, $timeout) {
+ *   return {
+ *     restrict: 'A',
+ *     scope: false,
+ *     priority: 16,
+ *     compile: function(tElement, tAttrs, transclude) {
+ *       var Transitionable = $famous['famous/transitions/Transitionable'];
+ *       return {
+ *         pre: function(scope, element, attrs) {
+ *         },
+ *         post: function(scope, element, attrs) {
+ *           $famousDecorator.ensureIsolate(scope)
+ *       
+ *           $timeout(function() {
+ *             var opacityStartValue = attrs.faOpacity;
+ *             var opacityEndValue = attrs.opacityEnd;
+ *             var duration = attrs.duration;
+ *
+ *             var opacityTransitionable = new Transitionable(opacityStartValue);
+ *
+ *             scope.isolate[scope.$id].modifier.opacityFrom(function() {
+ *               return opacityTransitionable.get();
+ *             });
+ *
+ *             opacityTransitionable.set(opacityEndValue, {duration: duration, curve: 'easeInOut'});
+ *           });
+ *       
+ *         }
+ *       }
+ *     }
+ *   }
+ * }]);
+ * ```
+ *   
+ * In the compile function, load up the AMD module for a Famous Transitionable, which will be used for the animation.  
+ * 
+ * The `fade-in` directive's priority is 16, higher than the priority of an `fa-modifier` (4) to ensure that the `fa-modifier` will be compiled first.  Therefore the post-link function of `fade-in` allows access to the `scope` of `fa-modifier`.  
+ * 
+ * `$famousDecorator.ensureIsolate(scope)` checks the passed in scope for an existing isolate;  if `scope.isolate` does not exist, it creates one.
+ * 
+ * Below, the rest of the directive is wrapped in a $timeout function to ensure that the animation will call on the next Famous engine tick.
+ * 
+ * `opacityStartValue`, `opacityEndValue`, and `duration` are convenience variables that access the `fa-opacity`, `opacity-end`, and `duration` attributes from the html.
+ * 
+ * A transitionable called `OpacityTransitionable` is instantiated with `startOpacity` (value of 0.2 in this example).
+ * 
+ * `scope.isolate` is a reference to the Famous-Angular `isolate` object that stores properties available to each particular Famous-Angular element.  The `isolate` object may look like this: {004: {Context Object} 005: {Modifier Object} 006: {Surface Object}}.
+ * 
+ * A particular element's "isolate" is accessed from the isolate object by key, with the unique $id property of the element, like so: `scope.isolate[scope.$id]`.  (The `fa-modifier`'s unique `$id` property might be 005, for example)  
+ * 
+ * Accessing the reference of the Famous Modifier that corresponds to the element, (`scope.isolate[scope.$id].modifier`), use the `.opacityFrom()` method (available to Famous Modifiers), and pass it a callback function that will return `opacityTransitionable.get()`.  In this particular example, we passed the value of `opacityStartValue (0.2)` into the constructor of opacityTransitionable earlier.  Therefore, at this point, `opacityTransitionable.get()` will return `0.2`.
+ * 
+ * The transition begins when `opacityTransitionable.set()` is called, which passes in the `opacityEndValue` and a transition object.
+ *  
  */
 
 

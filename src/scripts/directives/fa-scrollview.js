@@ -24,9 +24,9 @@
  * 
  * When a nested View needs to trigger higher-order app behavior within another View (such as a Scroll View), the best practice is to pass data via Famous Events.
  * 
- * To use a Scroll View, create an instance of a Famous Event Handler on the scope.  Pipe all Surface events to the event handler using `fa-pipe-to`, and then specify that the Scroll View will receive events from that specific event handler using `fa-pipe-from`.
+ * To use a Scroll View, create an instance of a Famous Event Handler on the scope.  Within each ng-repeated `fa-view` are nested `fa-surface`s.  Pipe all Surface events to the event handler using `fa-pipe-to`, and then specify that the Scroll View will receive events from that specific event handler using `fa-pipe-from`.
  * 
- * Input events (like click) are captured on Surfaces, and piping must be used to specify where the events will broadcast and be received.
+ * Input events (like click or mousewheel) are captured on Surfaces, and piping must be used to specify where the events will broadcast and be received.
  * This will enable scrolling by connecting input events from the `fa-surface`s to the `fa-scroll-view`, otherwise the Scroll View will not receive mousewheel events.
  * 
  * ```javascript
@@ -36,9 +36,11 @@
  * $scope.list = [{content: "famous"}, {content: "angular"}, {content: "rocks!"}];
  * ```
  * ```html
+ * <!-- fa-scroll-view receives all events from $scope.eventHandler, and decides how to handle them -->
  * <fa-scroll-view fa-pipe-from="eventHandler" fa-options="options.myScrollView">
  *     <fa-view ng-repeat="item in list">
  *        <fa-modifier id="{{'listItem' + $index}}" fa-translate="[0, 0, 0]" fa-size="[300, 300]">
+ *          <!-- All events on fa-surfaces (click, mousewheel) are piped to $scope.eventHandler -->
  *          <fa-surface fa-pipe-to="eventHandler"
  *                      fa-size="[undefined, undefined]" 
  *                      fa-background-color="'red'">
@@ -80,23 +82,28 @@
  * By setting `fa-start-index` to 1, the Scroll View will display the View with the index of 1 by default, "starting" at the index of 1, which is the View with the blue background color. 
  *
  * ```html
- * <fa-app style="width: 320px; height: 568px;"> 
+ * fa-app style="width: 320px; height: 568px;"> 
+ * <!-- The scroll View will start at the index of 1 -->
  *  <fa-scroll-view fa-pipe-from="eventHandler" fa-options="options.scrollViewTwo" fa-start-index="1">
- *    <fa-view fa-index="1">
- *      <fa-modifier fa-size="[320, 320]">
- *          <fa-surface fa-pipe-to="eventHandler" 
- *                      fa-background-color="'blue'">
- *          </fa-surface>
+ *    <!-- Even though this view is declared first in html, it will will be layed out 2nd -->
+ *    <!-- On page load, the scroll View will scroll to this view, and display it.  -->
+ *     <fa-view fa-index="1">
+ *        <fa-modifier fa-size="[320, 568]">
+ *           <fa-surface fa-pipe-to="eventHandler" 
+ *                       fa-background-color="'blue'">
+ *           </fa-surface>
  *        </fa-modifier>
- *    </fa-view>
- *    <fa-view fa-index="0">
- *      <fa-modifier fa-size="[320, 320]">
- *          <fa-surface fa-pipe-to="eventHandler" 
- *                      fa-background-color="'red'">
- *          </fa-surface>
+ *     </fa-view>
+
+ *     <fa-view fa-index="0">
+ *        <fa-modifier fa-size="[320, 568]">
+ *           <fa-surface fa-pipe-to="eventHandler" 
+ *                       fa-background-color="'red'">
+ *           </fa-surface>
  *        </fa-modifier>
- *    </fa-view>
- *   </fa-scroll-view>   
+ *     </fa-view>
+
+ *  </fa-scroll-view>   
  * </fa-app> 
  * ```
  * ```javascript
@@ -121,31 +128,35 @@
  * 
  * ```html
  * <fa-app style="width: 320px; height: 568px;"> 
+ *   <!-- outer scroll view that scrolls horizontally between "main" view and "sidebar" view-->
  *   <fa-scroll-view fa-pipe-from="eventHandler" fa-options="options.scrollViewOuter">
- *     <fa-view fa-index="0" id="sideBar">
- *       <fa-modifier fa-size="[320, 320]" id="sideBarMod">
+ *   
+ *     <!-- sidebar view -->
+ *     <fa-view fa-index="0">
+ *       <fa-modifier fa-size="[100, undefined]" id="sideBarMod">
  *           <fa-surface fa-pipe-to="eventHandler" 
  *                       fa-background-color="'blue'"
  *                       fa-size="[undefined, undefined]">
  *           </fa-surface>
  *         </fa-modifier>
  *     </fa-view>
- * 
- *     <fa-view fa-index="1" id="main">
+ *     
+ *     <!-- main view -->
+ *     <fa-view fa-index="1">
+ *     <!-- inner scroll view that scrolls vertically-->
  *       <fa-scroll-view fa-pipe-from="eventHandler" fa-options="options.scrollViewInner">
  *         <fa-view ng-repeat="item in list">
- *            <fa-modifier fa-size="[300, 300]" id="{{'item' + $index + 'Mod'}}">
- *              <fa-surface fa-pipe-to="eventHandler"
- *                          fa-size="[undefined, undefined]"
- *                          fa-background-color="'red'">
- *                <div>{{item.content}}</div>
- *              </fa-surface>
- *            </fa-modifier>
+ *           <fa-surface fa-pipe-to="eventHandler"
+ *                       fa-size="[undefined, undefined]"
+ *                       fa-background-color="'red'">
+ *           </fa-surface>
  *         </fa-view> 
  *       </fa-scroll-view>  
  *     </fa-view>
- *   </fa-scroll-view>   
- * </fa-app> 
+ * 
+ *   </fa-scroll-view> 
+ * </fa-app>  
+ * 
  *  ```
  * ```javascript
  * var EventHandler = $famous['famous/core/EventHandler'];
