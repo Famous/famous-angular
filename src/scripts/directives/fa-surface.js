@@ -147,7 +147,10 @@ angular.module('famous.angular')
        * @return {boolean}
        */
       function isClassable(element) {
-        return $famous.getIsolate(element.scope()).renderNode instanceof Surface;
+        var hasASurface = $famous.getIsolate(element.scope()).renderNode instanceof Surface;
+        //TODO:  support <div fa-surface>?  (rather than just <fa-surface>)
+        var isAnFaSurface = element[0].nodeName === "FA-SURFACE"
+        return hasASurface && isAnFaSurface;
       }
 
       // Fork $animateProvider methods that update class lists with ng-class
