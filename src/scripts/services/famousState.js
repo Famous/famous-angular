@@ -34,7 +34,29 @@ angular.module('famous.angular')
       return this;
     }
 
+    /**
+     * Validates the name and parent of the state object being created.
+     */
+    function defineState(state) {
+      
+      // Static child views may be defined using '@child@parent'
+      var name = state.name;
+      if ( !angular.isDefined(name) || !angular.isString(name) || name.indexOf('@') >= 0  || name.indexOf('.') !== -1 )  {
+        throw new Error('State must have a valid name');
+      }
+      if (states.hasOwnProperty(name)) {
+        throw new Error('State ' + name + ' is already defined');
+      }
 
+      // Parent state may be defined within the name of the child state or as a separate property
+      var parentName = (name.indexOf('.') !== -1) ? name.substring(0, name.lastIndexOf('.'))
+          : ( angular.isString(state.parent) ) ? state.parent
+          : '';
+
+      if ( !!parentName && !states[parentName] ) { return queueState(state); }
+      
+      buildState(state);
+    }
 
 
 
