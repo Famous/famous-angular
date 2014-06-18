@@ -110,9 +110,19 @@ angular.module('famous.angular')
           state.template = {html: template};
         }
 
-      }
+      },
       
-
+      // An anonymous function or a string referring a controller to be defined within the application
+      controller: function(state){
+       
+        var controller = state.controller;
+        if ( (!state.template && !angular.isDefined(state.views)) && !!controller ) { 
+          throw new Error('A template must defined in order to create a controller');
+        } 
+        if ( !!controller && !angular.isString(controller) && !angular.isFunction(controller) ) {
+          throw new Error('Controller must be a function or reference an existing controller');
+        } 
+      },
 
 
  
