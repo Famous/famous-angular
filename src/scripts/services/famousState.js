@@ -81,6 +81,35 @@ angular.module('famous.angular')
         // Extract parent name from composite state name: grandparent.parent.child -> grandparent.parent 
         var compositeName = /^(.+)\.[^.]+$/.exec(state.name);
         state.parent = compositeName ? compositeName[1] : root;
+      },
+ 
+      url: function(state) {
+        
+        var url = state.url;
+
+        if ( !angular.isDefined(url) ) { return; }
+        if ( !angular.isString(url) ) { throw new Error('url for state ' + state.name + ' must be a string'); }
+        
+      },
+      
+      // Template should be a string or a link to an HTML document
+      template: function(state) {
+
+        var template;
+        if ( !!state.templateUrl ) {
+          template = state.templateUrl;
+          if ( !angular.isString(template) || template.substr(-5) !== '.html' ) {
+            throw new Error('templateUrl must be a string pointing to an HTML document (e.g. templates/myTemp.html)');
+          }
+          state.template = {link: template};
+        } else if ( !!state.template ) {
+          template = state.template;
+          if ( typeof template !== 'string' ){
+            throw new Error('template must be a string containing valid HTML');
+          }
+          state.template = {html: template};
+        }
+
       }
       
 
