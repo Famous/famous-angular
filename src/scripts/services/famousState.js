@@ -59,7 +59,39 @@ angular.module('famous.angular')
     }
 
 
+    function buildState (state) {
+      
+      angular.forEach(stateBuilder, function(buildFunction) {
+        buildFunction(state);
+      });
 
+      registerState(state);
+      updateQueue(state);
+    }
+
+    /**
+     * Validates each of the propeties on the state object before the state is registered.
+     */
+    var stateBuilder = {
+      
+      // Extracts the name of the parent if implicitly ('parent.child') defined on the parent property
+      parent: function(state) {
+        if ( angular.isDefined(state.parent) && state.parent ) { return; }
+        
+        // Extract parent name from composite state name: grandparent.parent.child -> grandparent.parent 
+        var compositeName = /^(.+)\.[^.]+$/.exec(state.name);
+        state.parent = compositeName ? compositeName[1] : root;
+      }
+      
+
+
+
+ 
+      
+
+
+
+    };
 
 
 
