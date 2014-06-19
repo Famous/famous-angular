@@ -125,7 +125,29 @@ angular.module('famous.angular')
       },
 
 
+      transitions: function(state) {
+
+        if ( !angular.isDefined(state.inTransitionFrom) && !angular.isDefined(state.outTransitionTo) ) { return; } 
+        
+        var transitions = {}; 
+        transitions.inTransitionFrom = state.inTransitionFrom;
+        transitions.outTransitionTo = state.outTransitionTo;
  
+
+        for ( var direction in transitions ) {
+          if ( angular.isString(transitions[direction]) ) {
+            // '($callback)' must be added to the function to create an invocation that can be properly parsed
+            state[direction] = transitions[direction] + '($callback)'; 
+          } else if ( angular.isObject(transitions) ) {
+            angular.forEach(transitions[direction], function(definition, state) {
+              transitions[direction][state] = definition + '($callback)';
+            })
+            angular.extend(state[direction], transitions[direction]);
+          } else if ( angular.isDefined(state[direction]) ) { 
+            throw new Error('Transitions must be strings which reference function names');
+          }
+        }
+      }
       
 
 
