@@ -167,8 +167,19 @@ angular.module('famous.angular')
         });
 
         state.views = views;
-      }
+      },
 
+      /**
+       * Creates a locals object which contains all data relevant to the child views the states
+       */
+      locals: function(state) {
+
+        state.locals = {};
+        
+        angular.forEach(state.views, function(view, name) {
+          if ( name !== '@' ) { state.locals[name] = view; }
+        });
+      }
 
     };
 
