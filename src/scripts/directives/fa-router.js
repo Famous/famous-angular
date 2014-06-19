@@ -4,44 +4,42 @@ angular.module('famous.angular')
             
     return {
       scope: true,
-      transclude: true,
+      transclude: 'true',
       template: '<div class="fa-router"></div>',
       restrict: 'EA',
       compile: function(element , attrs, transclude ) {
-            console.log("fa-router compile");
-            var initial          = element.html();
-            // var currentScope;
-
+            var parent;
+            var initial = element.html();
 
         return {
           pre : function($scope , element, attrs ) {
             var isolate = $famousDecorator.ensureIsolate($scope);
             var RenderController = $famous['famous/views/RenderController'];
             var renderController = new RenderController();
-            // console.log(isolate);
+           
             
-            if(!isolate.renderNode) { 
-              isolate.renderNode = renderController;
-            }
-
-            if(!isolate.states) { isolate.states = {}; }
-            if( !isolate.currentState) { isolate.currentState = 'root'; }
+             isolate.renderNode = isolate.renderNode || renderController; 
+             isolate.states = isolate.states || {}; 
+             isolate.currentState = isolate.currentState || 'root';
             
             function updateView (evt, data) {
+              console.log(data);
 
               if(evt.targetScope.$id !== $scope.$id){
 
                 var previousView = isolate.states[isolate.fromState];
                 var currentView = isolate.states[isolate.currentState] ;
-                
+                console.log('state ',isolate.currentState,'currentView :',currentView);
                 currentView.renderNode =  data.renderNode;
                 if(previousView && previousView.renderNode){
-                  isolate.renderNode.hide(previousView.renderNode, previousView.outTransition(),function() {
+                  isolate.renderNode.hide(previousView.outTransition(),function() {
                     // 
+                    console.log('hide completed');
                   });
                 }
-                console.log(currentView);
-                isolate.renderNode.show(currentView.renderNode, currentView.inTransition() );
+                isolate.renderNode.show(currentView.renderNode, currentView.inTransition(),function () {
+                  console.log('show completed');
+                });
                 evt.stopPropagation();
               }
                  
@@ -52,34 +50,45 @@ angular.module('famous.angular')
           },
           post : function($scope , element, attrs) {
 
-            var isolate = $famousDecorator.ensureIsolate($scope);
-            var currentScope;
-            // console.log("post = ",isolate);
-            $scope.$on('$stateChangeSuccess', createView);
             
+
+            var isolate = $famousDecorator.ensureIsolate($scope);
+            var currentScope , currentEl , previousEL, locals,flipperScope;
+            console.log("post = ",isolate);
+            $scope.$on('$stateChangeSuccess', createView);
+              
             function createView() {
-              console.log("createView :", $famousState.current,$famousState.$current);
               if( isolate.currentState === $famousState.current) return;
-              var locals =   $famousState.$current;
+              
+              locals =   isolate.states[$famousState.current] || $famousState.$current;
 
-
+              currentEl = "<fa-view>" + $famousState.$template.data +"</fa-view>";
+              element.html(currentEl);
+              if (currentScope) {
+                currentScope.$destroy();
+                currentScope = null;
+              }
+              console.log("local scope :",locals.$scope, $famousState.current);
+             
+              currentScope =  $scope.$new();
               isolate.fromState = isolate.currentState;
-              isolate.states[$famousState.current] = locals;
               isolate.currentState = $famousState.current;
+              console.log(currentScope);
 
-              var currentEl = angular.element("<fa-view>" + $famousState.$template.data +"</fa-view>");
-              // element.append(currentEl);
-
-              currentScope = $scope.$new();
-              $compile(currentEl)(currentScope);
+              var link  = $compile(element.contents());
+              locals.$scope =  currentScope;
+              isolate.states[$famousState.current] = locals;
               if(locals.controller){
-                locals.$scope = currentScope;
                 var controller = $controller(locals.controller, locals);
                 if($famousState.$current.controllerAs){
                   currentScope[$famousState.$current.controllerAs] = controller;
                 }
-                currentEl.children().data('$ngControllerController',controller);                
+                
+                angular.element(currentEl).data('$ngControllerController',controller);   
               }
+
+              link(currentScope);
+
               currentScope.$emit('$viewContentLoaded');
 
             }
