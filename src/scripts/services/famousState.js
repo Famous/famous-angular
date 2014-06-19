@@ -3,7 +3,9 @@ angular.module('famous.angular')
     var states = {};
     var queue = {};
     var $famousState;
+    var root;
 
+    
     this.state = state;
     function state(name, definition) {
       
@@ -31,24 +33,31 @@ angular.module('famous.angular')
           : ( angular.isString(state.parent) ) ? state.parent
           : '';
 
-      if ( !!parentName && !states[parentName] ) { return queueState(state); } 
-
+      if ( !!parentName && !states[parentName] ) { return queueState(state); }
+      
       buildState(state);
 
     }
 
     function buildState (state) {
-
-      angular.forEach(stateBuilder, function(fn) {
-        fn(state);
+      
+      angular.forEach(stateBuilder, function(buildFunction) {
+        buildFunction(state);
       });
 
       registerState(state);
       updateQueue();
-
     }
 
     var stateBuilder = {
+
+      parent: function(state) {
+        if (angular.isDefined(state.parent) && state.parent) { return; }
+        // regex matches any valid composite state name
+        // would match "contact.list" but not "contacts"
+        var compositeName = /^(.+)\.[^.]+$/.exec(state.name);
+        state.parent = compositeName ? compositeName[1] : root;
+      },
 
       template: function(state) {
 
@@ -79,9 +88,9 @@ angular.module('famous.angular')
           throw new Error('A template must defined in order to create a controller');
         } 
 
-        // if ( !angular.isString(controller) && !angular.isFunction(controller) ) {
-        //   throw new Error('Controller must be a function or reference an existing controller');
-        // } 
+        if ( !!controller && !angular.isString(controller) && !angular.isFunction(controller) ) {
+          throw new Error('Controller must be a function or reference an existing controller');
+        } 
       },
 
       transitions: function(state) {
@@ -90,23 +99,43 @@ angular.module('famous.angular')
         var outTransition = state.outTransition;
 
         if ( !!inTransition  ){
-          if ( !angular.isFunction(inTransition)  || !angular.isString(inTransition) ) {
-            throw new Error('inTranstion must a string or a function');
+          if ( !angular.isFunction(inTransition)  && !angular.isString(inTransition) ) {
+            throw new Error('inTranstion must be a string or a function');
           }
         } else {
           state.inTransition = function() { return undefined; };
         } 
 
         if ( !!outTransition  ){
-          if ( !angular.isFunction(outTransition)  || !angular.isString(outTransition) ) {
-            throw new Error('outTranstion must a string or a function');
+          if ( !angular.isFunction(outTransition)  && !angular.isString(outTransition) ) {
+            throw new Error('outTranstion must be a string or a function');
           }
         } else {
           state.outTransition = function() { return undefined; };
         } 
+      },
+      
+      views: function(state) {
+        var views = {};
+
+        angular.forEach(angular.isDefined(state.views) ? state.views : { '': state }, function (view, name) {
+          if (name.indexOf('@') === -1) { name += '@' + state.parent.name; }
+          validateView(view, name);
+          views[name] = view;
+        });
+
+        state.views = views;
       }
 
     };
+
+    // Must be a better way to handle this, but it works for now
+    // Reusing parts of state builder to validate the view params
+    function validateView (view) {
+      stateBuilder.template(view);
+      stateBuilder.controller(view);
+      stateBuilder.transitions(view);
+    }
 
     function registerState(state) {
       var name = state.name;
@@ -125,44 +154,92 @@ angular.module('famous.angular')
         defineState(queue[name]);
       }
     }
+
+    root = {
+      name : '',
+      parent: null,
+      views: null,
+      template: null,
+      contoller: null
+    };
     
     this.$get = $get;
     $get.$inject = ['$rootScope','$http', '$templateCache'];
     function $get($rootScope, $http, $templateCache){
 
       $famousState = {
-        current: '', // Name of the current state
-        $current: {}, // Current state object
+        current: root.name, // Name of the current state
+        $current: root,
+        locals: {},
+        parent: '', // Name of the parent state
         $prior: {}, // Prior state object
         $template: '', // HTML template for the current state
-        inTransitionTo: {},
-        outTransitionFrom: {}
+        inTransitionTo: '',
+        outTransitionFrom: ''
       };
       
       $famousState.includes = function(state) {
         return states[state]? true : false;
       };
 
-      $famousState.go = function(state, params, options){
+      $famousState.go = function(state){
 
-        if ( state === $famousState.current ) { return; }
-
-        if ( states[state] ) {
-          $famousState.$prior = $famousState.$current;
-          $famousState.current = state;
-          $famousState.$current = states[state];
-          fetchTemplate($famousState.$current).then(function(template){
-            $famousState.$template = template;
-            $rootScope.$broadcast('$stateChangeSuccess');
-            console.log('things');
-          });
-        } else {
-          $rootScope.$broadcast('$stateNotFound');
-        }
+        validateTransfer(state);
           
       };
 
+      function validateTransfer(state) {
+
+        if ( state === $famousState.current ) { return; }
+
+        if ( state === '^' && $famousState.$parent !== root ) {
+          state = $famousState.parent;
+          return validateState(state);
+        } else {
+          $rootScope.$broadcast('$stateNotFound');
+        }
+
+        if ( state.indexOf('^') === 0 && state.length > 1 ) {
+          state = $famousState.parent + state;
+          return validateState(state);
+        }
+
+        if ( state.indexOf('.') === 0 ) {
+          state = $famousState.current + state;
+          return validateState(state);
+        }
+
+        validateState(state);
+
+      }
+
+      function validateState (state) {
+
+        if ( states[state] ) {
+          transitionState(state);
+        } else {
+          $rootScope.$broadcast('$stateNotFound');
+        }
+
+      }
+
+      function transitionState(state) {
+
+        $famousState.$prior = $famousState.$current;
+        $famousState.current = state;
+        $famousState.$current = states[state];
+        $famousState.parent = $famousState.$current.parent;
+
+        fetchTemplate($famousState.$current)
+        .then(function(template){
+          $famousState.$template = template;
+          $rootScope.$broadcast('$stateChangeSuccess');
+        });
+
+      }
+
       function fetchTemplate(state) {
+
         if ( state.template.html ) {
           return state.template.html;
         } else {
