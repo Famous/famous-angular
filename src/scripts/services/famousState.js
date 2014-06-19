@@ -227,11 +227,17 @@ angular.module('famous.angular')
         $famousState.$prior = $famousState.$current;
         $famousState.current = state;
         $famousState.$current = states[state];
-
-        $famousState.$current.locals = updateLocals();
         $famousState.parent = $famousState.$current.parent;
 
-        fetchTemplate($famousState.$current)
+        $famousState.$current.locals = updateLocals();
+
+        fetchLocalTemplates($famousState.$current.locals)
+        .then(function(data) {
+          angular.forEach(data, function(template) {
+            $famousState.$current.locals[template.name].$template = template.data;
+          });
+          return fetchTemplate($famousState.$current);
+        })
         .then(function(template){
           $famousState.$template = template.data;
           $rootScope.$broadcast('$stateChangeSuccess');
@@ -239,7 +245,7 @@ angular.module('famous.angular')
 
       }
 
-      function fetchLocalTemplates() {
+      function fetchLocalTemplates(locals) {
 
         var templateRequests = [];
 
@@ -253,25 +259,14 @@ angular.module('famous.angular')
       function updateLocals (){
 
         var locals = {};
-        var templateRequests = [];
 
         angular.forEach($famousState.$current.views, function (view, name) {
           if ( name !== '@' ) {
             locals[name] = view;
-            templateRequests.push(fetchTemplates(view, name));
           }
         });
 
-        $q.all(templateRequests)
-        .then(function(data) {
-          angular.forEach(data, function(template) {
-            console.log('name', template.name);
-            console.log('template', template.data);
-            locals[template.name].$template = template.data;
-          });
-          console.log('locals before returned from updateLocals', locals);
-          return locals;
-        });
+        return locals;
       }
 
       function fetchTemplates(view, name) {
@@ -296,15 +291,12 @@ angular.module('famous.angular')
 
       function fetchTemplate(state) {
 
-
-
         if ( state.template.html ) {
           return state.template.html;
         } else {
           return $http.get(state.template.link, { cache: $templateCache });
         }
       }
-
 
       return $famousState;
 
