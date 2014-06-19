@@ -99,16 +99,16 @@ angular.module('famous.angular')
         var outTransition = state.outTransition;
 
         if ( !!inTransition  ){
-          if ( !angular.isFunction(inTransition)  && !angular.isString(inTransition) ) {
-            throw new Error('inTranstion must be a string or a function');
+          if ( !angular.isFunction(inTransition)  && !angular.isString(inTransition) && !angular.isObject(inTransition) ) {
+            throw new Error('Transitions must be defined with a string, function, or object');
           }
         } else {
           state.inTransition = function() { return undefined; };
         } 
 
         if ( !!outTransition  ){
-          if ( !angular.isFunction(outTransition)  && !angular.isString(outTransition) ) {
-            throw new Error('outTranstion must be a string or a function');
+          if ( !angular.isFunction(outTransition)  && !angular.isString(outTransition) && !angular.isObject(outTransition) ) {
+            throw new Error('Transitions must be defined with a string, function, or object');
           }
         } else {
           state.outTransition = function() { return undefined; };
@@ -119,7 +119,8 @@ angular.module('famous.angular')
         var views = {};
 
         angular.forEach(angular.isDefined(state.views) ? state.views : { '': state }, function (view, name) {
-          if (name.indexOf('@') === -1) { name += '@' + state.parent.name; }
+          if ( !name ) { name = '@'; }
+          if ( name.indexOf('@') === -1) { name += '@' + state.parent.name; }
           validateView(view, name);
           views[name] = view;
         });
@@ -129,8 +130,6 @@ angular.module('famous.angular')
 
     };
 
-    // Must be a better way to handle this, but it works for now
-    // Reusing parts of state builder to validate the view params
     function validateView (view) {
       stateBuilder.template(view);
       stateBuilder.controller(view);
@@ -164,8 +163,8 @@ angular.module('famous.angular')
     };
     
     this.$get = $get;
-    $get.$inject = ['$rootScope','$http', '$templateCache'];
-    function $get($rootScope, $http, $templateCache){
+    $get.$inject = ['$rootScope','$http', '$q', '$templateCache'];
+    function $get($rootScope, $http, $q, $templateCache){
 
       $famousState = {
         current: root.name, // Name of the current state
@@ -228,17 +227,76 @@ angular.module('famous.angular')
         $famousState.$prior = $famousState.$current;
         $famousState.current = state;
         $famousState.$current = states[state];
+
+        $famousState.$current.locals = updateLocals();
         $famousState.parent = $famousState.$current.parent;
 
         fetchTemplate($famousState.$current)
         .then(function(template){
-          $famousState.$template = template;
+          $famousState.$template = template.data;
           $rootScope.$broadcast('$stateChangeSuccess');
         });
 
       }
 
+      function fetchLocalTemplates() {
+
+        var templateRequests = [];
+
+        angular.forEach(locals, function(view, name) {
+          templateRequests.push(fetchTemplates(view,name));
+        });
+
+        return $q.all(templateRequests);
+      }
+
+      function updateLocals (){
+
+        var locals = {};
+        var templateRequests = [];
+
+        angular.forEach($famousState.$current.views, function (view, name) {
+          if ( name !== '@' ) {
+            locals[name] = view;
+            templateRequests.push(fetchTemplates(view, name));
+          }
+        });
+
+        $q.all(templateRequests)
+        .then(function(data) {
+          angular.forEach(data, function(template) {
+            console.log('name', template.name);
+            console.log('template', template.data);
+            locals[template.name].$template = template.data;
+          });
+          console.log('locals before returned from updateLocals', locals);
+          return locals;
+        });
+      }
+
+      function fetchTemplates(view, name) {
+
+        var deferred = $q.defer();
+        var template = {};
+
+        $http.get(view.template.link, {cache: $templateCache})
+        .success(function(data) {
+          template.name = name;
+          template.data = data;
+          deferred.resolve(template);
+        }).error(function(data) {
+          template.name = name;
+          template.data = data;
+          deferred.reject(template);
+        });
+
+        return deferred.promise;
+
+      }
+
       function fetchTemplate(state) {
+
+
 
         if ( state.template.html ) {
           return state.template.html;
@@ -246,6 +304,7 @@ angular.module('famous.angular')
           return $http.get(state.template.link, { cache: $templateCache });
         }
       }
+
 
       return $famousState;
 
