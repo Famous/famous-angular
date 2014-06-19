@@ -147,9 +147,27 @@ angular.module('famous.angular')
             throw new Error('Transitions must be strings which reference function names');
           }
         }
-      }
+      },
       
+      // Static views should be defined using 'staticChild@parent' notation
+      views: function(state) {
 
+        if ( !angular.isDefined(state.views) ) { 
+          state.views = { '@': state };
+          return;
+        }
+
+        var views = {};
+
+        angular.forEach(angular.isDefined(state.views) ? state.views : { '': state }, function (view, name) {
+          if ( !name ) { name = '@'; }
+          if ( name.indexOf('@') === -1 ) { name += '@' + state.parent.name; }
+          validateView(view, name);
+          views[name] = view;
+        });
+
+        state.views = views;
+      }
 
 
     };
