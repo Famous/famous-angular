@@ -3286,9 +3286,10 @@ angular.module('famous.angular')
        * @return {boolean}
        */
       function isClassable(element) {
-        var hasASurface = $famous.getIsolate(element.scope()).renderNode instanceof Surface;
+        var isolate = $famous.getIsolate(element.scope());
+        var hasASurface = isolate && isolate.renderNode instanceof Surface;
         //TODO:  support <div fa-surface>?  (rather than just <fa-surface>)
-        var isAnFaSurface = element[0].nodeName === "FA-SURFACE"
+        var isAnFaSurface = element[0] && element[0].nodeName === "FA-SURFACE"
         return hasASurface && isAnFaSurface;
       }
 
