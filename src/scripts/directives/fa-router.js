@@ -32,12 +32,35 @@ angular.module('famous.angular')
                 console.log('state ',isolate.currentState,'currentView :',currentView);
                 currentView.renderNode =  data.renderNode;
                 if(previousView && previousView.renderNode){
-                  isolate.renderNode.hide(previousView.outTransition(),function() {
-                    // 
+
+                  
+                  if(previousView.outTransitions ){
+                    if(previousView.outTransitionTo.outTransformFrom) {
+                      isolate.renderNode.outTransformFrom(previousView.outTransitions.outTransformFrom);
+                    }
+                    if( previousView.outTransitions.outOpacityFrom) {
+                      isolate.renderNode.outOpacityFrom(previousView.outTransitions.outOpacityFrom);
+                    }
+                    if( previousView.outTransitions.outOriginFrom) {
+                     isolate.renderNode.outOriginFrom(previousView.outTransitions.outOriginFrom);
+                    }
+                  }
+                  isolate.renderNode.hide(previousView.outTransitionFrom.transitions,function() {
                     console.log('hide completed');
                   });
                 }
-                isolate.renderNode.show(currentView.renderNode, currentView.inTransition(),function () {
+                   if(currentView.inTransitions ){
+                    if(currentView.inTransitions.inTransformTo) {
+                      isolate.renderNode.inTransformFrom(currentView.inTransitions.inTransformTo);
+                    }
+                    if( currentView.inTransitions.inOpacityTo) {
+                      isolate.renderNode.inOpacityFrom(currentView.inTransitions.inOpacityTo);
+                    }
+                    if( currentView.inTransitions.inOriginTo) {
+                     isolate.renderNode.inOriginFrom(currentView.inTransitions.inOriginTo);
+                    }
+                  }
+                isolate.renderNode.show(currentView.renderNode, currentView.inTransistionsFrom.transitions,function () {
                   console.log('show completed');
                 });
                 evt.stopPropagation();
