@@ -1,5 +1,5 @@
 angular.module('famous.angular')
-  .provider('$famousState', function ($famousUrlRouterProvider){
+  .provider('$famousState', function (){
     
     var states = {};
     var queue = {};
@@ -126,7 +126,7 @@ angular.module('famous.angular')
             if ( !!property && ( !angular.isString(definition) && !angular.isFunction(definition) ) ) {
               throw new Error('inTransitionFrom property ' + property + ' must be a string or a function' );
             } else {
-              state.inTransitionFrom[property = definition || null;
+              state.inTransitionFrom[property] = definition || null;
             }
           });
         }
@@ -136,7 +136,7 @@ angular.module('famous.angular')
             if ( !!property && (!angular.isString(definition) || !angular.isFunction(definition)) ) {
               throw new Error('outTransitionTo property ' + property + ' must be a string or a function' );
             } else {
-              state.outTransitionTo[property] = defintion || null;
+              state.outTransitionTo[property] = definition || null;
             }
           });
         }
