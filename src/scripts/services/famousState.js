@@ -1,10 +1,10 @@
 angular.module('famous.angular')
-  .provider('$famousState', function (){
+  .provider('$famousState', function ($famousUrlRouterProvider){
+    
     var states = {};
     var queue = {};
     var $famousState;
     var root;
-
     
     this.state = state;
     function state(name, definition) {
@@ -59,6 +59,27 @@ angular.module('famous.angular')
         state.parent = compositeName ? compositeName[1] : root;
       },
 
+      url: function(state) {
+        
+        var url = state.url;
+
+        if ( !angular.isDefined(url) ) { return; }
+
+        $famousUrlRouter.registerUrl(state, url);
+
+        if ( !angular.isString(url) ) { throw new Error('url for state ' + state.name + ' must be a string')}
+        
+      },
+
+      // Keep track of the closest ancestor state that has a URL (i.e. is navigable)
+      // navigable: function(state) {
+      //   return state.url ? state : (state.parent ? state.parent.navigable : null);
+      // },
+
+      // path: function(state) {
+      //   return state.parent ? state.parent.path.concat(state) : []; // exclude root from path
+      // },
+
       template: function(state) {
 
         var template;
@@ -95,24 +116,31 @@ angular.module('famous.angular')
 
       transitions: function(state) {
         //should be a function that returns a transition(I think)
-        var inTransition = state.inTransition;
-        var outTransition = state.outTransition;
+        var inTransitionFrom = state.inTransitionFrom;
+        var outTransitionTo = state.outTransitionTo;
+        
+        if ( !angular.isDefined(inTransitionFrom) && (!angular.isDefined(outTransitionTo)) ) { return;} 
 
-        if ( !!inTransition  ){
-          if ( !angular.isFunction(inTransition)  && !angular.isString(inTransition) && !angular.isObject(inTransition) ) {
-            throw new Error('Transitions must be defined with a string, function, or object');
-          }
-        } else {
-          state.inTransition = function() { return undefined; };
-        } 
+        if ( !!inTransitionFrom ) {
+          angular.forEach(inTransitionFrom, function (definition, property) {
+            if ( !!property && ( !angular.isString(definition) && !angular.isFunction(definition) ) ) {
+              throw new Error('inTransitionFrom property ' + property + ' must be a string or a function' );
+            } else {
+              state.inTransitionFrom[property = definition || null;
+            }
+          });
+        }
 
-        if ( !!outTransition  ){
-          if ( !angular.isFunction(outTransition)  && !angular.isString(outTransition) && !angular.isObject(outTransition) ) {
-            throw new Error('Transitions must be defined with a string, function, or object');
-          }
-        } else {
-          state.outTransition = function() { return undefined; };
-        } 
+        if ( !!outTransitionTo ) {
+          angular.forEach(outTransitionTo, function (definition, property) {
+            if ( !!property && (!angular.isString(definition) || !angular.isFunction(definition)) ) {
+              throw new Error('outTransitionTo property ' + property + ' must be a string or a function' );
+            } else {
+              state.outTransitionTo[property] = defintion || null;
+            }
+          });
+        }
+
       },
       
       views: function(state) {
@@ -143,7 +171,7 @@ angular.module('famous.angular')
     }
 
     function queueState(state) {
-      if ( !!queue[state.name] ) {
+      if ( !queue[state.name] ) {
         queue[state.name] = state;
       }
     }
@@ -157,6 +185,7 @@ angular.module('famous.angular')
     root = {
       name : '',
       parent: null,
+      navigable: false,
       views: null,
       template: null,
       contoller: null
@@ -209,18 +238,18 @@ angular.module('famous.angular')
         }
 
         validateState(state);
-
       }
 
       function validateState (state) {
 
-        if ( states[state] ) {
+        if ( $famousState.includes(state) ) {
           transitionState(state);
         } else {
           $rootScope.$broadcast('$stateNotFound');
-        }
-
+        } 
       }
+
+
 
       function transitionState(state) {
 
@@ -228,8 +257,12 @@ angular.module('famous.angular')
         $famousState.current = state;
         $famousState.$current = states[state];
         $famousState.parent = $famousState.$current.parent;
-
         $famousState.$current.locals = updateLocals();
+
+
+        // fetchAll($famousState.$current); 
+        // fetch templates
+        // .then -> $broadcast
 
         fetchLocalTemplates($famousState.$current.locals)
         .then(function(data) {
@@ -244,6 +277,28 @@ angular.module('famous.angular')
         });
 
       }
+
+      // function fetchAll(state) {
+
+      //   var templates = [{state.name: state.template}];
+
+      //   angular.forEach(state.locals, (view, name) {
+      //     templates.push(view.template);
+      //   })
+
+      //   angular.forEach(templates,  )
+
+      //   if ( state.template.html ) {
+      //     templateRequests.push(angular.identity(state.template.html));
+      //   } else {
+      //     templateRequests.push(fetchTemplate(state.template.link, name));
+      //   }
+
+      //   angular.forEach(state.locals, function(view, viewName) {
+      //     templateRequests.push(fetchTemplates(view, viewName));
+      //   })
+
+      // }
 
       function fetchLocalTemplates(locals) {
 
