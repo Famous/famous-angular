@@ -183,9 +183,46 @@ angular.module('famous.angular')
 
     };
 
+    /**
+     * Static views are similar to states in that they may have their own templates, controllers,
+     * and transitions defined.  Accordingly, all properties must be defined in the same manner. 
+     */
+    function validateView (view) {
+      
+      stateBuilder.template(view);
+      stateBuilder.controller(view);
+      stateBuilder.transitions(view);
+    }
 
+    /**
+     * Adds the state to the states object which stores all valid registered states
+     */
+    function registerState(state) {
 
+      var name = state.name;
+      states[name] = state;
+    }
 
+    /**
+     * Adds an "orphan" child state to the queue if it doesn't already exist within the queue
+     */
+    function queueState(state) {
+      if ( !queue[state.name] ) {
+        queue[state.name] = state;
+      }
+    }
+
+    /**
+     * Removes state from the queue if it is no longer an "orphan."" Iterates through 
+     * the "orphan" queue ito determine is the parent of any of the child states has been registered.  
+     * If so, the child state is registered.
+     */
+    function updateQueue(state){
+      if ( queue[state.name] ) { delete queue[state.name]; }
+      for ( var name in queue ) {
+        defineState(queue[name]);
+      }
+    }
 
     root = {
       name : '',
