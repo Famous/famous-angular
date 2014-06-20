@@ -53,11 +53,13 @@ angular.module('famous.angular')
 
       parent: function(state) {
         if (angular.isDefined(state.parent) && state.parent) { return; }
+        // *** UIR ***
         // regex matches any valid composite state name
         // would match "contact.list" but not "contacts"
         var compositeName = /^(.+)\.[^.]+$/.exec(state.name);
         state.parent = compositeName ? compositeName[1] : root;
       },
+
 
       url: function(state) {
         
@@ -65,20 +67,12 @@ angular.module('famous.angular')
 
         if ( !angular.isDefined(url) ) { return; }
 
-        $famousUrlRouter.registerUrl(state, url);
+        $famousUrlRouterProvider.registerUrl(url, state.name);
 
-        if ( !angular.isString(url) ) { throw new Error('url for state ' + state.name + ' must be a string')}
+        if ( !angular.isString(url) ) { throw new Error('url for state ' + state.name + ' must be a string'); }
         
       },
 
-      // Keep track of the closest ancestor state that has a URL (i.e. is navigable)
-      // navigable: function(state) {
-      //   return state.url ? state : (state.parent ? state.parent.navigable : null);
-      // },
-
-      // path: function(state) {
-      //   return state.parent ? state.parent.path.concat(state) : []; // exclude root from path
-      // },
 
       template: function(state) {
 
