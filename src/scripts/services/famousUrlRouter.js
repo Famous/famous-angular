@@ -9,7 +9,13 @@ angular.module('famous.angular')
 
 
 
-
+    this.otherwise = otherwise;
+    function otherwise(state) {
+      if ( !angular.isString(state) || state.indexOf('@') >= 0)  {
+        throw new Error('Default state must have a valid name');
+      }
+      defaultState = state;
+    }
 
 
 
