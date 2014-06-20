@@ -47,3 +47,9 @@ Fixes #62
 ```
 
 You can fix / close multiple issue with one commit, just add a new line for each.
+
+### CLA
+Famo.us would like contributors to sign their CLA, a simple agreement clarifying copyright matters.  This will be available online as an easy, click-through form shortly.  In the meantime, please:
+1. Go ahead an make a PR
+2. Email fetterman@famo.us and ask for the CLA
+3. Confirm with a comment in the PR that you've signed the CLA
