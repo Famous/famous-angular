@@ -7,7 +7,14 @@ angular.module('famous.angular')
     var defaultState;
 
 
-
+    this.when = when;
+    function when(url, stateName){
+      if ( !angular.isDefined(url) || !angular.isDefined(stateName) ) {
+        throw new Error('URL and state name required to define URL route');
+      }
+      if ( !validUrl(url) ) { throw new Error('When defining routes, must specify a valid url'); }
+      rules[url] = stateName;
+    }
 
     this.otherwise = otherwise;
     function otherwise(state) {
