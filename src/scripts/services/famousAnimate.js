@@ -39,7 +39,7 @@
  * ```javascript
  * var Transitionable = $famous['famous/transitions/Transitionable'];
  * var SnapTransition = $famous['famous/transitions/SnapTransition'];
- * var ANIMATION_DURATION = 500;
+ * var DURATION = 500;
  *
  * $scope.transitionable = new Transitionable[Math.PI / 4];
  *
