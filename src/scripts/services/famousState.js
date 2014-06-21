@@ -1,5 +1,5 @@
 angular.module('famous.angular')
-  .provider('$famousState', function() {
+  .provider('$famousState', function () {
     
     // var injector = angular.injector(['famous.angular.router', 'ng']);
     // var $famousUrlRouter = injector.get('$famousUrlRouter')
@@ -138,31 +138,25 @@ angular.module('famous.angular')
         if ( !angular.isDefined(inTransitionFrom) && !angular.isDefined(outTransitionTo) ) { return;} 
 
         if ( !!inTransitionFrom ) {
-          if ( angular.isString(inTransitionFrom) ) {
-            state.inTransitionFrom = inTransitionFrom;
-          } else if ( angular.isObject(inTransitionFrom) ){
-            angular.forEach(inTransitionFrom, function (definition, fromState) {
-              if ( !angular.isString(definition) ) { //redundant ceck===
-                throw new Error('inTransitionFrom property ' + state + ' must be a string' );
-              } else {
-                state.inTransitionFrom[fromState] = definition || null;
-              }
-            }); 
-          }
+
+          angular.forEach(inTransitionFrom, function (definition, property) {
+            if ( !!property && !angular.isString(definition) ) {
+              throw new Error('inTransitionFrom property ' + property + ' must be a string' );
+            } else {
+              state.inTransitionFrom[property] = definition || null;
+            }
+          });
         }
 
         if ( !!outTransitionTo ) {
-          if ( angular.isString(outTransitionTo) ) {
-            state.outTransitionFrom = outTransitionTo;
-          } else {
-            angular.forEach(outTransitionTo, function (definition, toState) {
-              if ( !angular.isString(definition) ) {
-                throw new Error('outTransitionTo property ' + state + ' must be a string' );
-              } else {
-                state.outTransitionTo[toState] = definition || null;
-              }
-            });
-          }
+          angular.forEach(outTransitionTo, function (definition, property) {
+            if ( !!property && !angular.isString(definition)  ) {
+              throw new Error('outTransitionTo property ' + property + ' must be a string' );
+            } else {
+              
+              state.outTransitionTo[property] = defintion || null;
+            }
+          });
         }
 
       },
