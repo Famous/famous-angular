@@ -1,6 +1,6 @@
 angular.module('famous.angular')
-  .directive('faRouter', ["$famous", "$famousDecorator","$famousState","$compile", "$controller", 
-   function ($famous, $famousDecorator,$famousState ,$compile, $controller) {
+  .directive('faRouter', ["$famous", "$famousDecorator", "$famousState", "$compile", "$controller", "$parse",
+   function ($famous, $famousDecorator, $famousState, $compile, $controller, $parse) {
             
     return {
       scope: true,
@@ -29,39 +29,40 @@ angular.module('famous.angular')
 
                 var previousView = isolate.states[isolate.fromState];
                 var currentView = isolate.states[isolate.currentState] ;
+
                 console.log('state ',isolate.currentState,'currentView :',currentView);
                 currentView.renderNode =  data.renderNode;
                 if(previousView && previousView.renderNode){
-
+                  if(previousView.outTransitionTo) {
+                    var outTransitionToFn = $parse(previousView.outTransitionTo);
+                    outTransitionTo(previousView.$scope, {$callback : function(){
+                      isolate.renderNode.hide( {duration:0} ,function() {
+                        console.log('hide completed');
+                      });
+                    }})
+                  }
+                  else {
+                    isolate.renderNode.hide( null ,function() {
+                      console.log('hide completed without transtions');
+                    });
+                  }
                   
-                  if(previousView.outTransitions ){
-                    if(previousView.outTransitionTo.outTransformFrom) {
-                      isolate.renderNode.outTransformFrom(previousView.outTransitions.outTransformFrom);
-                    }
-                    if( previousView.outTransitions.outOpacityFrom) {
-                      isolate.renderNode.outOpacityFrom(previousView.outTransitions.outOpacityFrom);
-                    }
-                    if( previousView.outTransitions.outOriginFrom) {
-                     isolate.renderNode.outOriginFrom(previousView.outTransitions.outOriginFrom);
-                    }
-                  }
-                  isolate.renderNode.hide(previousView.outTransitionFrom.transitions,function() {
-                    console.log('hide completed');
-                  });
                 }
-                   if(currentView.inTransitions ){
-                    if(currentView.inTransitions.inTransformTo) {
-                      isolate.renderNode.inTransformFrom(currentView.inTransitions.inTransformTo);
-                    }
-                    if( currentView.inTransitions.inOpacityTo) {
-                      isolate.renderNode.inOpacityFrom(currentView.inTransitions.inOpacityTo);
-                    }
-                    if( currentView.inTransitions.inOriginTo) {
-                     isolate.renderNode.inOriginFrom(currentView.inTransitions.inOriginTo);
-                    }
+
+                isolate.renderNode.show(currentView.renderNode, {duration:0},function () {
+
+                  if(currentView.inTransitionFrom){
+                    console.log(currentView.inTransitionFrom);
+                    var inTransitionFrom = $parse(currentView.inTransitionFrom);
+                    inTransitionFrom(currentView.$scope, {$callback : function() {
+                      console.log('show completed');
+                    }});
                   }
-                isolate.renderNode.show(currentView.renderNode, currentView.inTransistionsFrom.transitions,function () {
-                  console.log('show completed');
+                  else {
+                    console.log('show completed without transtions');
+
+                  }
+                 
                 });
                 evt.stopPropagation();
               }
@@ -85,13 +86,13 @@ angular.module('famous.angular')
               
               locals =   isolate.states[$famousState.current] || $famousState.$current;
 
-              currentEl = "<fa-view>" + $famousState.$template.data +"</fa-view>";
+              currentEl = "<fa-view>" + $famousState.$template +"</fa-view>";
               element.html(currentEl);
               if (currentScope) {
                 currentScope.$destroy();
                 currentScope = null;
               }
-              console.log("local scope :",locals.$scope, $famousState.current);
+              console.log("local scope :",locals.$scope, currentEl);
              
               currentScope =  $scope.$new();
               isolate.fromState = isolate.currentState;
