@@ -53,28 +53,28 @@ angular.module('famous.angular')
   
       // returns the current location
       $famousUrlRouter.location = function(){
+        console.log('location state');
         return $location.path();
       };
 
-      function registered() {
+      $famousUrlRouter.registered = function() {
+        console.log('registered urls');
         return registeredUrls;
       };
 
-      function listen() {
-        var listener = $rootScope.$on('$locationChangeSuccess', update);
+      $famousUrlRouter.listen = function() {
+        console.log('listening');
+        var listener = $rootScope.$on('$locationChangeSuccess', $famousUrlRouter.update);
         return listener;
       }
 
-      function getDefaultState() {
+      $famousUrlRouter.getDefaultState = function() {
         return defaultState;
       }
 
-      function update() {   
+      $famousUrlRouter.update = function () {   
         console.log('oh, me me');
         var location = $location.path();
-
-        console.log('location from the provider', location);
-
 
         if ( rules[location] ) { 
           $famousState.go(rules[location]);
@@ -84,27 +84,12 @@ angular.module('famous.angular')
         }  
       }
 
-      listen();
+      $famousUrlRouter.listen();
 
-      return {
-
-        registered: function() {
-          return registered();
-        },
-
-        listen: function(){
-          return listen();
-        },
-
-        update: function() {
-          return update();
-        },
-
-        getDefaultState: function() {
-          return getDefaultState();
-        }
-      }
-
-  }
+      return $famousUrlRouter;
+    }
+});    
     
-});
+
+
+

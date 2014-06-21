@@ -3,8 +3,8 @@ angular.module('famous.angular')
     
    
     
-    var injector = angular.injector(['famous.angular']);
-    var $famousUrlRouter = injector.get('$famousUrlRouterProvider');
+    // var injector = angular.injector(['famous.angular']);
+    // var $famousUrlRouter = injector.get('$famousUrlRouterProvider');
 
 
     var states = {};
@@ -73,7 +73,7 @@ angular.module('famous.angular')
 
         if ( !angular.isDefined(url) ) { return; }
 
-        $famousUrlRouterProvider.registerUrl(url, state.name);
+        // $famousUrlRouterProvider.registerUrl(url, state.name);
 
         if ( !angular.isString(url) ) { throw new Error('url for state ' + state.name + ' must be a string'); }
         
