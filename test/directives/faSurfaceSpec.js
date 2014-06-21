@@ -161,6 +161,19 @@ describe('faSurface', function() {
       faSurface.addClass('added-class');
       expect(surface.classList).toEqual(['added-class']);
     });
+
+    it("delegates core $animate class juggling events to the Surface", function() {
+      var faSurface = common.compileFaSurface('ng-hide="hideIt"');
+      var surface   = common.getSurface(faSurface);
+
+      $scope.hideIt = false;
+      $scope.$apply();
+      expect(surface.classList).toEqual([]);
+
+      $scope.hideIt = true;
+      $scope.$apply();
+      expect(surface.classList).toEqual(['ng-hide']);
+    });
   });
 });
 
