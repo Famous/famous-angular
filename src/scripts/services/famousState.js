@@ -1,6 +1,12 @@
 angular.module('famous.angular')
-  .provider('$famousState', function (){
+  .provider('$famousState', function() {
     
+   
+    
+    var injector = angular.injector(['famous.angular']);
+    var $famousUrlRouter = injector.get('$famousUrlRouterProvider');
+
+
     var states = {};
     var queue = {};
     var $famousState;
@@ -109,30 +115,39 @@ angular.module('famous.angular')
       },
 
       transitions: function(state) {
-        //should be a function that returns a transition(I think)
+
+        //  ******** THIS IS HORRIFIC.  NEED TO REFACTOR  **********
         var inTransitionFrom = state.inTransitionFrom;
         var outTransitionTo = state.outTransitionTo;
         
-        if ( !angular.isDefined(inTransitionFrom) && (!angular.isDefined(outTransitionTo)) ) { return;} 
+        if ( !angular.isDefined(inTransitionFrom) && !angular.isDefined(outTransitionTo) ) { return;} 
 
         if ( !!inTransitionFrom ) {
-          angular.forEach(inTransitionFrom, function (definition, property) {
-            if ( !!property && ( !angular.isString(definition) && !angular.isFunction(definition) ) ) {
-              throw new Error('inTransitionFrom property ' + property + ' must be a string or a function' );
-            } else {
-              state.inTransitionFrom[property] = definition || null;
-            }
-          });
+          if ( angular.isString(inTransitionFrom) ) {
+            state.inTransitionFrom = inTransitionFrom;
+          } else if ( angular.isObject(inTransitionFrom) ){
+            angular.forEach(inTransitionFrom, function (definition, fromState) {
+              if ( !angular.isString(definition) ) { //redundant ceck===
+                throw new Error('inTransitionFrom property ' + state + ' must be a string' );
+              } else {
+                state.inTransitionFrom[fromState] = definition || null;
+              }
+            }); 
+          }
         }
 
         if ( !!outTransitionTo ) {
-          angular.forEach(outTransitionTo, function (definition, property) {
-            if ( !!property && (!angular.isString(definition) || !angular.isFunction(definition)) ) {
-              throw new Error('outTransitionTo property ' + property + ' must be a string or a function' );
-            } else {
-              state.outTransitionTo[property] = definition || null;
-            }
-          });
+          if ( angular.isString(outTransitionTo) ) {
+            state.outTransitionFrom = outTransitionTo;
+          } else {
+            angular.forEach(outTransitionTo, function (definition, toState) {
+              if ( !angular.isString(definition) ) {
+                throw new Error('outTransitionTo property ' + state + ' must be a string' );
+              } else {
+                state.outTransitionTo[toState] = definition || null;
+              }
+            });
+          }
         }
 
       },
@@ -160,7 +175,6 @@ angular.module('famous.angular')
 
     function registerState(state) {
       var name = state.name;
-      delete state.name;
       states[name] = state;
     }
 
@@ -242,8 +256,6 @@ angular.module('famous.angular')
           $rootScope.$broadcast('$stateNotFound');
         } 
       }
-
-
 
       function transitionState(state) {
 

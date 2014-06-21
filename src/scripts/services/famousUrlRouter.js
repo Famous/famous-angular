@@ -46,21 +46,18 @@ angular.module('famous.angular')
       return ( angular.isString(url) && !!regex.exec(url) );
     }
 
-
     this.$get = $get;
-    $get.$inject = ['$rootScope', '$location', '$log'];
-    function $get($rootScope, $location, $log) {
+    $get.$inject = ['$rootScope', '$location', '$famousState'];
+    function $get($rootScope, $location, $famousState) {
 
+  
       // returns the current location
       $famousUrlRouter.location = function(){
         return $location.path();
       };
 
-      $famousUrlRouter.listen = function() {
-
-        $rootScope.$on('$locationChangeSuccess', function(){
-          $log.info('Location changed to ' + $location.path());
-        });
+      function registered() {
+        return registeredUrls;
       };
 
       function listen() {
@@ -68,25 +65,46 @@ angular.module('famous.angular')
         return listener;
       }
 
+      function getDefaultState() {
+        return defaultState;
+      }
+
       function update() {   
+        console.log('oh, me me');
         var location = $location.path();
+
+        console.log('location from the provider', location);
+
+
         if ( rules[location] ) { 
           $famousState.go(rules[location]);
         } else {
+          $location.path(defaultState);
           $famousState.go(defaultState);
         }  
       }
 
+      listen();
+
       return {
+
+        registered: function() {
+          return registered();
+        },
 
         listen: function(){
           return listen();
         },
 
-        update: return update()
+        update: function() {
+          return update();
+        },
+
+        getDefaultState: function() {
+          return getDefaultState();
+        }
       }
 
-      return $famousUrlRouter;
   }
     
 });
