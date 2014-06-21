@@ -151,15 +151,20 @@ angular.module('famous.angular')
        * @return {boolean}
        */
       function isClassable(element) {
-        return $famous.getIsolate(element.scope()).renderNode instanceof Surface;
+        var isolate = $famous.getIsolate(element.scope());
+        return isolate && isolate.renderNode instanceof Surface;
       }
 
       /**
-       * Core Angular animation events will add and remove classes (such as ng-hide)
-       * to affect the display of elements. Because Famo.us Surfaces make use of
-       * classes, we should pass all class-based modifications directively to their
-       * Surfaces whenever possible.
+       * Pass through $animate methods that are strictly class based.
+       * These will work on Surfaces, and will be ignored elsewhere.
+       * ngAnimate has a complex API for determining when an animation should be
+       * considered "enabled" which we do not need.
        */
+      var animationHandlers = {
+        enabled: $delegate.enabled
+      };
+
       angular.forEach(['addClass', 'removeClass'], function(classManipulator) {
         // Stash the original class manipulator so we can apply it later
         var originalManipulator = angular.element.prototype[classManipulator];
@@ -179,19 +184,41 @@ angular.module('famous.angular')
             $famous.getIsolate(this.scope()).renderNode[classManipulator](className);
           }
         };
+
+        /**
+         * Core Angular animation events will add and remove classes (such as ng-hide)
+         * to affect the display of elements using $animate.addClass. Because Famo.us
+         * Surfaces make use of classes, we should pass all class-based modifications
+         * directively to their Surfaces whenever possible.
+         */
+        animationHandlers[classManipulator] = function(element, className, done) {
+          $delegate[classManipulator](element, className, done);
+
+          if (isClassable(element)) {
+            var surface = $famous.getIsolate(element.scope()).renderNode;
+            angular.forEach(className.split(' '), function(splitClassName) {
+              surface[classManipulator](splitClassName);
+            });
+          }
+         };
       });
 
-      /**
-       * Pass through $animate methods that are strictly class based.
-       * These will work on Surfaces, and will be ignored elsewhere.
-       * ngAnimate has a complex API for determining when an animation should be
-       * considered "enabled" which we do not need.
-       */
-      var animationHandlers = {
-        addClass: $delegate.addClass,
-        removeClass: $delegate.removeClass,
-        setClass: $delegate.setClass,
-        enabled: $delegate.enabled
+      // There isn't a good way to delegate down to Surface.setClasses
+      // because Angular has already negotiated the list of items to add
+      // and items to remove. Manually loop through both lists.
+      animationHandlers.setClass = function(element, add, remove, done) {
+        $delegate.setClass(element, add, remove, done);
+
+        if (isClassable(element)) {
+          var surface = $famous.getIsolate(element.scope()).renderNode;
+          angular.forEach(add.split(' '), function(className) {
+            surface.addClass(className);
+          });
+
+          angular.forEach(remove.split(' '), function(className) {
+            surface.removeClass(className);
+          });
+        }
       };
 
       /**
