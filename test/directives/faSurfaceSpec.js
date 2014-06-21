@@ -153,6 +153,14 @@ describe('faSurface', function() {
         expect(surface.classList).toEqual(['existing-class', 'added-class']);
       });
     });
+
+    it("passes direct class addition and removal from the element down to the Surface", function() {
+      var faSurface = common.compileFaSurface();
+      var surface   = common.getSurface(faSurface);
+
+      faSurface.addClass('added-class');
+      expect(surface.classList).toEqual(['added-class']);
+    });
   });
 });
 
