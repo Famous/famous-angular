@@ -28,7 +28,7 @@
  *    </fa-surface>
  *  </fa-modifier>
  *  ```
- * 
+ *
  * A simple ng-repeat of surfaces can be implemented like this:
  * ```html
  * <fa-modifier ng-repeat="item in list" fa-size="[100, 100]" fa-translate="[0, $index * 75, 0]">
@@ -37,15 +37,15 @@
  *     </fa-surface>
  * </fa-modifier>
  * ```
- * 
+ *
  * ```javascript
  * $scope.list = [{content: "famous"}, {content: "angular"}, {content: "rocks!"}];
  * ```
- * 
+ *
  * ##Common Confusions
  *  ### A Surface is a leaf node
  *  An fa-surface is a leaf node; this means that there should not be Famous-Angular elements nested within an fa-surface.
- * 
+ *
  *  This followin will NOT work correctly:
  *  ```html
  *  <fa-surface>
@@ -55,16 +55,16 @@
  *     </fa-modifier>
  *  </fa-surface>
  * ```
- * 
+ *
  *  The purpose of an fa-surface is to contain viewable HTML content:
  * ```html
  *  <fa-surface>
  *     <!-- content -->
  *     <!-- databound content with curly braces -->
- *     <!-- no other Famous renderable nodes allowed inside a Surface--> 
+ *     <!-- no other Famous renderable nodes allowed inside a Surface-->
  *  </fa-surface>
  *  ```
- * 
+ *
  * ### Properties on surfaces vs modifiers
  * With Famous, properties related to layout and visibility belong on a Modifier.  A Surface should be added below a Modifier on the Render Tree, as Modifiers affect everything below them.
  *
@@ -79,18 +79,18 @@
  * <fa-surface fa-size="[100, 100]"></fa-surface>
  * ```
  *
- * Whereas this is the preferred approach: 
+ * Whereas this is the preferred approach:
  * ```html
  * <fa-modifier fa-size="[100, 100]">
  *   <fa-surface fa-size="[undefined, undefined]">
  *   </fa-surface>
  * </fa-modifier>
  * ```
- * 
+ *
  * You may also omit `fa-size="[undefined, undefined]"` on the surface and the surface will fill to the size of the modifier, in this case, `[100, 100]`.
- * 
- * In Famous' Render Tree, Modifiers modify all the nodes (other Modifiers and Surfaces) below them.  By setting the `fa-surface`'s `fa-size` to `[undefined, undefined]`, it will inherit from the `fa-modifier`'s `fa-size` of `[100, 100]`. 
- * 
+ *
+ * In Famous' Render Tree, Modifiers modify all the nodes (other Modifiers and Surfaces) below them.  By setting the `fa-surface`'s `fa-size` to `[undefined, undefined]`, it will inherit from the `fa-modifier`'s `fa-size` of `[100, 100]`.
+ *
  * `Fa-surfaces` also cannot have an `fa-size`, assigned to a function, as is in the case of modifiers, which can take number/array or a function.
  * For example, this will not work:
  * ```html
@@ -137,9 +137,13 @@
 angular.module('famous.angular')
   .config(['$provide', '$animateProvider', function($provide, $animateProvider) {
     // Hook into the animation system to emit ng-class syncers to surfaces
-    $provide.decorator('$animate', ['$delegate', '$$asyncCallback', '$famous', function($delegate, $$asyncCallback, $famous) {
+    $provide.decorator('$animate', ['$delegate', '$rootScope', '$famous', '$parse',
+                            function($delegate,   $rootScope,   $famous,   $parse) {
 
       var Surface = $famous['famous/core/Surface'];
+      var Timer   = $famous['famous/utilities/Timer'];
+
+      var FA_ANIMATION_ACTIVE = '$$faAnimationActive';
 
       /**
        * Check if the element selected has an isolate renderNode that accepts classes.
@@ -147,60 +151,98 @@ angular.module('famous.angular')
        * @return {boolean}
        */
       function isClassable(element) {
-        var isolate = $famous.getIsolate(element.scope());
-        var hasASurface = isolate && isolate.renderNode instanceof Surface;
-        //TODO:  support <div fa-surface>?  (rather than just <fa-surface>)
-        var isAnFaSurface = element[0] && element[0].nodeName === "FA-SURFACE"
-        return hasASurface && isAnFaSurface;
+        return $famous.getIsolate(element.scope()).renderNode instanceof Surface;
       }
 
-      // Fork $animateProvider methods that update class lists with ng-class
-      // in the most efficient way we can. Delegate directly to irrelevant methods
-      // (enter, leave, move). These method forks only get invoked when:
-      // 1. The element has a directive like ng-class that is updating classes
-      // 2. The element is an fa-element with an in-scope isolate
-      // 3. The isolate's renderNode is some kind of Surface
-      return {
-        enabled: $delegate.enabled,
-        enter: $delegate.enter,
-        leave: $delegate.leave,
-        move: $delegate.move,
-        addClass: function(element, className, done) {
-          $delegate.addClass(element, className, done);
+      /**
+       * Core Angular animation events will add and remove classes (such as ng-hide)
+       * to affect the display of elements. Because Famo.us Surfaces make use of
+       * classes, we should pass all class-based modifications directively to their
+       * Surfaces whenever possible.
+       */
+      angular.forEach(['addClass', 'removeClass'], function(classManipulator) {
+        // Stash the original class manipulator so we can apply it later
+        var originalManipulator = angular.element.prototype[classManipulator];
 
-          if (isClassable(element)) {
-            angular.forEach(className.split(' '), function(splitClassName) {
-              $famous.getIsolate(element.scope()).renderNode.addClass(splitClassName);
-            });
+        /**
+         * Fork the angular.element.prototype class manipulator to delegate class changes
+         * down to any transcluded Surfaces created by Famo.us/Angular.
+         * @param  {String} className - the class to be added or removed
+         * @return {void}
+         */
+        angular.element.prototype[classManipulator] = function(className) {
+          originalManipulator.apply(this, arguments);
+
+          // If and only if the current element represents a Famo.us Surface, pass through
+          // the addClass and removeClass methods to the underlying renderNode.
+          if (isClassable(this)) {
+            $famous.getIsolate(this.scope()).renderNode[classManipulator](className);
           }
-        },
-        removeClass: function(element, className, done) {
-          $delegate.removeClass(element, className, done);
+        };
+      });
 
-          if (isClassable(element)) {
-            angular.forEach(className.split(' '), function(splitClassName) {
-              $famous.getIsolate(element.scope()).renderNode.removeClass(splitClassName);
-            });
+      /**
+       * Pass through $animate methods that are strictly class based.
+       * These will work on Surfaces, and will be ignored elsewhere.
+       * ngAnimate has a complex API for determining when an animation should be
+       * considered "enabled" which we do not need.
+       */
+      var animationHandlers = {
+        addClass: $delegate.addClass,
+        removeClass: $delegate.removeClass,
+        setClass: $delegate.setClass,
+        enabled: $delegate.enabled
+      };
+
+      /**
+       * $animate.enter, $animate.leave, and $animate.move events
+       * can trigger Famo.us animations with the `fa-animate-enter`,
+       * `fa-animate-move`, and `fa-animate-leave` attributes.
+       * If defined, each of these properties should evaluate to expressions
+       * that equal the duration of their animations in milliseconds.
+       *
+       * Explicitly declaring the duration of all animations ensures
+       * Famo.us will know how long to wait before considering the animation
+       * complete and allow Angular to continue manipulating elements and classes.
+       */
+      angular.forEach(['enter', 'leave', 'move'], function(operation) {
+        animationHandlers[operation] = function(element) {
+          var self = this;
+          var selfArgs = arguments;
+          var delegateFirst = (operation === 'enter');
+
+          if (delegateFirst === true) {
+            $delegate[operation].apply(this, arguments);
           }
-        },
-        setClass: function(element, add, remove, done) {
-          $delegate.setClass(element, add, remove, done);
 
-          if (isClassable(element)) {
-            var surface = $famous.getIsolate(element.scope()).renderNode;
-            // There isn't a good way to delegate down to Surface.setClasses
-            // because Angular has already negotiated the list of items to add
-            // and items to remove. Manually loop through both lists.
-            angular.forEach(add.split(' '), function(className) {
-              surface.addClass(className);
-            });
-
-            angular.forEach(remove.split(' '), function(className) {
-              surface.removeClass(className);
-            });
+          // Detect if an animation is currently running
+          if (element.data(FA_ANIMATION_ACTIVE) === true) {
+            $parse(element.attr('fa-animate-halt'))(element.scope());
           }
-        }
-      }
+
+          // Indicate an animation is currently running
+          element.data(FA_ANIMATION_ACTIVE, true);
+
+          var callback = function() {
+            // Indicate an animation is no longer running
+            element.data(FA_ANIMATION_ACTIVE, false);
+            if (delegateFirst === false) {
+              $delegate[operation].apply(self, selfArgs);
+            }
+          };
+
+          $rootScope.$$postDigest(function() {
+            var animationDuration = $parse(element.attr('fa-animate-' + operation))(element.scope());
+            if (typeof animationDuration === 'number') {
+              Timer.setTimeout(callback, animationDuration);
+            } else {
+              callback();
+            }
+          });
+        };
+      });
+
+      return animationHandlers;
     }]);
   }])
   .directive('faSurface', ['$famous', '$famousDecorator', '$interpolate', '$controller', '$compile', function ($famous, $famousDecorator, $interpolate, $controller, $compile) {
@@ -217,7 +259,7 @@ angular.module('famous.angular')
             var Surface = $famous['famous/core/Surface'];
             var Transform = $famous['famous/core/Transform']
             var EventHandler = $famous['famous/core/EventHandler'];
-            
+
             //update properties
             //TODO:  is this going to be a bottleneck?
             scope.$watch(
@@ -242,7 +284,7 @@ angular.module('famous.angular')
               //       through all of the members of attrs that aren't 'fa-size'
               //       or 'fa-properties' ('blacklist') and considering each of
               //       them to be CSS properties.
-              //       Alternatively, don't support fa-css-properties on 
+              //       Alternatively, don't support fa-css-properties on
               //       the directive, in favor of requiring them to be passed in
               //       by fa-properties
               var properties = [
