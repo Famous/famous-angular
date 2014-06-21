@@ -25,6 +25,11 @@ angular.module('famous.angular')
     }
 
 
+    function validUrl(url) {
+      // FIX: Currently allows for repeated slashes so long as they do not occur at the beginning of the string.
+      var regex = /^\/(?!\/)[a-zA-Z\d_\-\/(?!\/)]*$/;   
+      return ( angular.isString(url) && !!regex.exec(url) );
+    }
 
 
 
