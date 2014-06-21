@@ -25,7 +25,7 @@ gulp.task('clean', function() {
 });
 
 // Update Famous dependencies
-gulp.task('updateFamous', function() {
+gulp.task('update-dependencies', function() {
   return gulp.src('./src/scripts/services/famous.js')
   .pipe(
   	inject(
