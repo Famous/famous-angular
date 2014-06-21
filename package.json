@@ -60,6 +60,8 @@
     "semver": "^2.3.0",
     "streamqueue": "0.0.7",
     "winston": "^0.7.3",
-    "karma-cli": "0.0.4"
+    "karma-cli": "0.0.4",
+    "gulp-inject": "^0.4.1",
+    "gulp-filter": "^0.4.1"
   }
 }
