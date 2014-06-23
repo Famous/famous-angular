@@ -65,6 +65,7 @@ var requirements = [
 "famous/utilities/Utility",
 "famous/views/Deck",
 "famous/views/EdgeSwapper",
+"famous/views/FlexibleLayout",
 "famous/views/Flipper",
 "famous/views/GridLayout",
 "famous/views/HeaderFooterLayout",
