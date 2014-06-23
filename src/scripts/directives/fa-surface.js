@@ -200,7 +200,7 @@ angular.module('famous.angular')
               isolate.renderNode.setClasses(attrs['class'].split(' '));
             }
 
-            scope.$on('$destroy', function() {
+            element.one('$destroy', function() {
               //TODO:  hook into RenderController and hide this render node
               //       This whole function (scope.$on...) can probably
               //       be handled by the $famousDecorator

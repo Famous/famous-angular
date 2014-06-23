@@ -363,14 +363,11 @@ angular.module('famous.angular')
 
             isolate.renderNode = new RenderNode().add(isolate.modifier)
 
-            scope.$on('$destroy', function() {
-              scope.$emit('unregisterChild', {id: scope.$id});
-            });
-
             // When the actual element is destroyed by Angular,
             // "hide" the Modifier by setting its opacity to 0.
             element.one('$destroy', function() {
               isolate.modifier.setOpacity(0);
+              scope.$emit('unregisterChild', {id: scope.$id});
             });
 
 

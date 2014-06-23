@@ -18,9 +18,9 @@
  *@example
  * A Famous Flipper has a `.flip()` method that toggles a rotation between front and back sides.
  * In the example below, when an `fa-surface` is clicked, it calls the function `flipIt`.
- * 
- * This function attempts a DOM lookup for an isolate of an `fa-flipper` element, and calls the `.flip()` function of `fa-flipper`. 
- * 
+ *
+ * This function attempts a DOM lookup for an isolate of an `fa-flipper` element, and calls the `.flip()` function of `fa-flipper`.
+ *
  *```html
  * <fa-flipper>
  *    <fa-surface fa-background-color="'yellow'" fa-click="flipIt()"></fa-surface>
@@ -50,7 +50,7 @@ angular.module('famous.angular')
 
               //TODO:  $watch and update, or $parse and attr.$observe
               var options = scope.$eval(attrs.faOptions) || {};
-              
+
               isolate.renderNode = new Flipper(options);
               isolate.children = [];
 
@@ -58,10 +58,10 @@ angular.module('famous.angular')
                 isolate.renderNode.flip(overrideOptions || scope.$eval(attrs.faOptions));
               };
 
-              scope.$on('$destroy', function() {
+              element.one('$destroy', function() {
                 scope.$emit('unregisterChild', {id: scope.$id});
               });
-              
+
               scope.$on('registerChild', function (evt, data) {
                 if (evt.targetScope.$id != scope.$id) {
                   var _childCount = isolate.children.length;
