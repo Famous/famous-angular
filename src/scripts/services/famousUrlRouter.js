@@ -38,6 +38,31 @@ angular.module('famous.angular')
     function $get($rootScope, $location, $famousState) {
 
 
+
+      $famousUrlRouter.listen = function() {
+        var listener = $rootScope.$on('$locationChangeSuccess', $famousUrlRouter.update);
+        return listener;
+      };
+
+      $famousUrlRouter.update = function () {   
+        var location = $location.path();
+        var reload = currentPath === location? true : false;
+        if ( rules[location] ) { 
+          $famousState.go(rules[location], reload);
+          currentPath = location;
+        } else {
+          $location.path(defaultState);
+          $famousState.go(defaultState);
+          currentPath = $location.path(); // TODO: Find a better way to accomplish this
+        }  
+      };
+
+
+
+
+  
+      $famousUrlRouter.listen();
+      $famousUrlRouter.update();
       
       return $famousUrlRouter;
     }
