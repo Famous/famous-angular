@@ -240,6 +240,38 @@ angular.module('famous.angular')
 
 
 
+      $famousState = {
+        current: root.name, // Name of the current state
+        $current: root,
+        parent: root.parent,
+        locals: {},
+        $prior: {}, // Prior state object
+        inTransitionTo: '',
+        outTransitionFrom: ''
+      };
+
+
+      $famousState.includes = function(state) {  
+        return stateValid(state);
+      };
+
+
+      $famousState.go = function(state, reload){
+        if ( state === $famousState.current && !reload) { return; }
+        transitionState(state);     
+      };
+
+
+      $famousState.getStates = function() {
+        return states;
+      };
+
+
+
+
+
+
+
 
       return $famousState;
     }   
