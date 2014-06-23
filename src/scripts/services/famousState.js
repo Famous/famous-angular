@@ -266,7 +266,22 @@ angular.module('famous.angular')
         return states;
       };
 
+      // Updates the $famousState object so that the new state view may be rendered by the fa-router directive
+      function transitionState(state) {
+        state = transferValid(state);
+        if ( !state ) { return $rootScope.$broadcast('$stateNotFound'); }
 
+        $famousState.$prior = $famousState.$current;
+        $famousState.current = state;
+        $famousState.$current = states[state];
+        $famousTemplate.resolve($famousState.$current)
+        .then(function(template){
+          $famousState.$current.$template = template;
+          $rootScope.$broadcast('$stateChangeSuccess');
+          if ( !!$famousState.$current.url ) { 
+            $location.path($famousState.$current.url); }
+        });
+      }
 
 
 
