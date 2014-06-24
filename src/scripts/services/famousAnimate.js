@@ -7,13 +7,16 @@
  * The Famo.us/Angular implementation of the `$animate` service provides Famo.us animation support for
  * Angular's core enter, leave, and move structural events.
  *
- * With the attributes `fa-animate-enter`, `fa-animate-leave`, `fa-animate-move`, you can assign scope
- * methods to animation events.
+ * With the attributes `fa-animate-enter`, `fa-animate-leave`, `fa-animate-move`, you can assign an arbitrary
+ * expression to animation events.
  *
- * To notify Famo.us/Angular when your animations are complete, design your enter, leave, and move
- * handlers so they return an integer—the duration of their animation in milliseconds.
+ * <strong>To notify Famo.us/Angular when your animations are complete, you must</strong> do one of two things:
+ * either pass a `$done` callback in your animation expressions, or design your animation expressions to
+ * evaluate as the numeric duration, in milliseconds, of the animation. If an animation expression
+ * both evaluates as a non-number and fails to invoke the `$done` callback, the animation event pipeline
+ * will not resolve correctly and items will fail to enter, leave, and move correctly.
  *
- * To inform Famo.us/Angular how to halt an in-progress animations, use the `fa-animate-halt` attribute.
+ * To inform Famo.us/Angular how to halt any in-progress animation, use the `fa-animate-halt` attribute.
  *
  * The core Angular animation API is fundamentally CSS class-based. Because only Famo.us Surfaces
  * support CSS classes, core directives such as `ngClass`, `ngShow`, `ngIf`, and others should be applied
@@ -36,47 +39,55 @@
  * </ANY>
  * ```
  * @example
- * ```javascript
- * var Transitionable = $famous['famous/transitions/Transitionable'];
- * var SnapTransition = $famous['famous/transitions/SnapTransition'];
- * var DURATION = 500;
- *
- * $scope.transitionable = new Transitionable[Math.PI / 4];
- *
- * // Fold items down to the right when they enter.
- * $scope.enter = function() {
- *   scope.transitionable.set([0], {
- *     method: SnapTransition,
- *     duration: DURATION
- *   });
- *
- *  return DURATION;
- * };
- *
- * // Fold items up to the left when they leave.
- * $scope.leave = function() {
- *   scope.transitionable.set([Math.PI / 2], {
- *     method: SnapTransition,
- *     duration: DURATION
- *   });
- *
- *  return DURATION;
- * };
- *
- * scope.halt = function() {
- *   scope.transitionable.halt();
- * };
- * ```
  * ```html
  * <fa-modifier
  *   ng-repeat="item in items"
  *   fa-rotate-y="transitionable.get()"
  *   fa-animate-enter="enter()"
- *   fa-animate-leave="leave()"
+ *   fa-animate-leave="leave($done)"
  *   fa-animate-halt="halt()"
  * >
  *   ...
  * </fa-modifier>
+ * ```
+ * ```javascript
+ * var Transitionable = $famous['famous/transitions/Transitionable'];
+ * var SnapTransition = $famous['famous/transitions/SnapTransition'];
+ * var DURATION = 500;
+ *
+ * $scope.transitionable = new Transitionable(Math.PI / 4);
+ *
+ * // Fold items down to the right when they enter.
+ * $scope.enter = function() {
+ *   scope.transitionable.set(
+ *     0,
+ *     {
+ *       method: SnapTransition,
+ *       duration: DURATION
+ *     }
+ *   );
+ *
+ *  // Declare the animation duration by returning it as a number
+ *  return DURATION;
+ * };
+ *
+ * // Fold items up to the left when they leave.
+ * $scope.leave = function(done) {
+ *   scope.transitionable.set(
+ *     Math.PI / 2,
+ *     {
+ *       method: SnapTransition,
+ *       duration: DURATION
+ *     },
+ *     // Execute the done callback after the transition is fully applied
+ *     done
+ *   );
+ * };
+ *
+ * scope.halt = function() {
+ *   // Halt any active animations
+ *   scope.transitionable.halt();
+ * };
  * ```
  */
 angular.module('famous.angular')
@@ -195,7 +206,16 @@ angular.module('famous.angular')
           // Indicate an animation is currently running
           element.data(FA_ANIMATION_ACTIVE, true);
 
-          var callback = function() {
+          // Take note of whether the done callback has been invoked
+          var done         = false;
+          var doneCallback = function() {
+            // Abort if the done callback has already been invoked
+            if (done === true) {
+              return;
+            }
+
+            done = true;
+
             // Indicate an animation is no longer running
             element.data(FA_ANIMATION_ACTIVE, false);
             if (delegateFirst === false) {
@@ -204,11 +224,23 @@ angular.module('famous.angular')
           };
 
           $rootScope.$$postDigest(function() {
-            var animationDuration = $parse(element.attr('fa-animate-' + operation))(element.scope());
+            var animationExpression = element.attr('fa-animate-' + operation);
+
+            // If no animation has been specified, delegate the animation event and return
+            if (animationExpression === undefined) {
+              doneCallback();
+              return;
+            }
+
+            var animationDuration = $parse(animationExpression)(
+              element.scope(),
+              {
+                $done: doneCallback
+              }
+            );
+
             if (typeof animationDuration === 'number') {
-              Timer.setTimeout(callback, animationDuration);
-            } else {
-              callback();
+              Timer.setTimeout(doneCallback, animationDuration);
             }
           });
         };
