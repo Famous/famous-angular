@@ -283,7 +283,40 @@ angular.module('famous.angular')
         });
       }
 
+      function transferValid(state) {
 
+        // '^' indicates that the parent state should be activated
+        if ( state === '^' ) { 
+          var parent = /^(.+)\.[^.]+$/.exec($famousState.current)[1];
+          return stateValid(parent) ? parent : false;
+        }
+
+        // '^.name' indicates that a sibling state should be activated
+        if ( state.indexOf('^') === 0 && state.length > 1 ) {
+          state = $famousState.$current.parent + state.slice(1);
+          return stateValid(state) ? state : false;
+        }
+        
+        // '.name' indicates that a child state should be activated
+        if ( state.indexOf('.') === 0 ) {
+          state = $famousState.current + state;
+          return stateValid(state) ? state : false;
+        }
+        
+
+        if ( state.indexOf('.') > 0 ) {
+          if ( $famousState.current === '' ) { $location.path('^'); }
+          var parentName = /^(.+)\.[^.]+$/.exec(state)[1];
+          if ( $famousState.current === parentName ) {
+            return stateValid(state) ? state : false;
+          } else {
+            var relativeState  = findCommonAncestor(parentName);
+            return stateValid(relativeState) ? relativeState : false;
+          }
+        }
+
+        return stateValid(state) ? state: false;
+      }
 
 
 
