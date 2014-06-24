@@ -33,7 +33,7 @@ angular.module('famous.angular')
                 currentView.renderNode = data.renderNode;
                 if(previousView && previousView.renderNode) {
                   if(previousView.outTransitionTo) {
-                    var outTransitionToFn = $parse(previousView.outTransitionTo);
+                    var outTransitionTo = $parse(previousView.outTransitionTo);
                     outTransitionTo(previousView.$scope, { $callback: function() {
                       isolate.renderNode.hide( { duration: 0 }, function() {
                         console.log('hide completed');
