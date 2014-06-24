@@ -154,7 +154,7 @@ angular.module('famous.angular')
               throw new Error('outTransitionTo property ' + property + ' must be a string' );
             } else {
               
-              state.outTransitionTo[property] = defintion || null;
+              state.outTransitionTo[property] = definition || null;
             }
           });
         }
