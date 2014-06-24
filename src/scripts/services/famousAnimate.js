@@ -206,15 +206,11 @@ angular.module('famous.angular')
           // Indicate an animation is currently running
           element.data(FA_ANIMATION_ACTIVE, true);
 
-          // Take note of whether the done callback has been invoked
-          var done         = false;
           var doneCallback = function() {
             // Abort if the done callback has already been invoked
-            if (done === true) {
+            if (element.data(FA_ANIMATION_ACTIVE) === false) {
               return;
             }
-
-            done = true;
 
             // Indicate an animation is no longer running
             element.data(FA_ANIMATION_ACTIVE, false);
