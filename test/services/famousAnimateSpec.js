@@ -13,19 +13,27 @@ describe('$animate', function() {
 
     transition = new $famous['famous/transitions/Transitionable']([0]);
 
-    $scope.enter = function() {
+    function doneOrDuration(done) {
+      if (typeof done === 'function') {
+        done();
+      } else {
+        return duration;
+      }
+    }
+
+    $scope.enter = function(done) {
       transition.set([10], {duration: duration});
-      return duration;
+      return doneOrDuration(done);
     };
 
-    $scope.leave = function() {
+    $scope.leave = function(done) {
       transition.set([0], {duration: duration});
-      return duration;
+      return doneOrDuration(done);
     };
 
-    $scope.move = function() {
+    $scope.move = function(done) {
       transition.set([5], {duration: duration});
-      return duration;
+      return doneOrDuration(done);
     };
 
     $scope.halt = function() {
@@ -52,7 +60,7 @@ describe('$animate', function() {
 
     it('uses fa-animate-leave to specify leave events', function(done) {
       var app = common.createApp(
-        '<fa-modifier ng-repeat="item in items" fa-animate-leave="leave()"></fa-modifier>'
+        '<fa-surface ng-repeat="item in items" fa-animate-leave="leave($done)"></fa-surface>'
       );
 
       $scope.items = [1];
@@ -60,12 +68,14 @@ describe('$animate', function() {
       transition.set([10]);
 
       expect(transition.get()[0]).toBe(10);
+      expect(angular.element(app).find('fa-surface').length).toBe(1);
 
       $scope.items = [];
       $scope.$apply();
 
       setTimeout(function() {
         expect(transition.get()[0]).toBe(0);
+        expect(angular.element(app).find('fa-surface').length).toBe(0);
         done();
       }, duration);
     });
