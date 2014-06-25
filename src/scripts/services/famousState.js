@@ -318,7 +318,27 @@ angular.module('famous.angular')
         return stateValid(state) ? state: false;
       }
 
+      function findCommonAncestor (parentName) {
+        
+        var currentParent = $famousState.$current.parent;
+        var newParent = parentName;
+        var newChild;
+        
+        while (currentParent && newParent) {
 
+          if ( currentParent.indexOf('.') !== -1 && currentParent.length >= newParent.length ) {
+            currentParent = /^(.+)\.[^.]+$/.exec(currentParent)[1];
+          }
+          if ( newParent.indexOf('.') !== -1 && newParent.length > currentParent.length ) {
+            newChild = newParent.slice(newParent.lastIndexOf('.'));
+            newParent = /^(.+)\.[^.]+$/.exec(newParent)[1];
+          }
+          if ( currentParent === newParent || currentParent.indexOf('.') === -1 && newParent.indexOf('.') === -1  ) { break; }
+
+        }
+
+        return newParent + newChild;
+      }
 
 
       return $famousState;
