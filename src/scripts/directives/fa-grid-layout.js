@@ -16,14 +16,13 @@
  * </fa-grid-layout>
  * ```
  * @example
- * A Famous Grid Layout divides a context into evenly-sized grid cells.  Pass options such as `dimension` and `cellSize` by binding an object with those properties to `fa-options`.
+ * A Famous Grid Layout divides a context into evenly-sized grid cells.  Pass an option such as `dimension` by binding an object with the property to `fa-options`.
  *
  * In the example below, `fa-options` references `myGridLayoutOptions` on the scope. 
  * 
  * ```javascript
  * $scope.myGridLayoutOptions = {
  *    dimensions: [2,2], // specifies number of columns and rows
- *    cellSize: [100, 100] // specifies width and height of each cell
  * };
  * ```
  * 

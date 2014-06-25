@@ -78,9 +78,9 @@
  * };
  * ```
  * ### Function expressions
- * `Fa-modifier` properties can be bound to a function expression.  `boxTransitionable` is an instantiated `Transitionable` object with the value of [0,0,0].
+ * `Fa-modifier` properties can be bound to a function expression.  `boxTransitionable` is an instantiated `Transitionable` object with the value of `[0,0,0]`.
  * The `.get()` method is available to all `Transitionable` objects, and it returns an interpolated value of a transition at calltime.
- * When `fa-translate` calls `boxTransitionable.get()`, it returns [0,0,0].
+ * When `fa-translate` calls `boxTransitionable.get()`, it returns `[0,0,0]`.
  * ```html
  * <fa-modifier fa-size="[100, 100]" fa-translate="boxTransitionable.get()">
  *   <fa-surface fa-background-color="'red'" fa-click="animate()"></fa-surface>
@@ -99,7 +99,7 @@
  * </fa-modifier>
  * ```
  * ```javascript
- * $scope.opacityTrans = new Transitionable([.25]);
+ * $scope.opacityTrans = new Transitionable(.25);
  * ```
  * 
  * ### Transitionable.get() vs Transitionable
@@ -108,7 +108,7 @@
  * A Famous `Transform.translate()` function does not accept a Transitionable object, but only an array.
  * A `.get()` function of a Transitionable returns an interpolated value of a current transition, therefore in the case of a `faTranslate`, it can return an array that a `Transform.translate()` can accept.
  * 
- * `faOpacity` passes through a Famous Modifier, which has an `.opacityFrom()` method that can accept a Transitionable object directly.  
+ * `faOpacity` passes through a Famous Modifier, which has an `.opacityFrom()` method that can accept a Transitionable object directly, therefore a `.get()` method is not required.  
  * 
  * As a design principle, Famous-Angular attempts to pass values directly to Famous as much as possible, and these differences are due to the core Famous library.
  * 
@@ -151,10 +151,10 @@
  *   return Transform.multiply(translate, skew);
  * };
  * ```
- * `Transform` is a Famous math object used to calculate transforms.  It has various methods, such as `translate`, `rotate`, and `skew` that returns a 16-element matrix array.  `Transform.multiply` multiplies two or more Transform matrix types to return a final Transform matrix, a 16-element matrix array, and this is what is passed into `fa-transform`.
+ * `Transform` is a Famous math object used to calculate transforms.  It has various methods, such as `translate`, `rotate`, and `skew` that returns a 16-element matrix array.  `Transform.multiply` multiplies two or more Transform matrix types to return a final Transform 16-element matrix array, and this is what is passed into `fa-transform`.
  *
  * ###Fa-transform overrides other transform attributes
- * `Fa-transform` will override all other transform attributes on the fa-modifier it is used on:
+ * `Fa-transform` will override all other transform attributes on the `fa-modifier` it is used on:
  * ```html
  * <fa-modifier fa-transform="skewFunc" fa-translate="[100, 100, 0]" fa-size="[100, 100]">
  *   <fa-surface fa-background-color="'red'"></fa-surface>

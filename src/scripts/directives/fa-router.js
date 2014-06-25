@@ -122,4 +122,3 @@ angular.module('famous.angular')
     
     };
 }]);
-

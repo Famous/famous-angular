@@ -32,18 +32,29 @@
  *  By setting `fa-start-index` to 1, the Scroll View will display the View with the index of 1, which is the View with the blue background color. 
  *
  * ```html
- *  <fa-scroll-view fa-pipe-from="eventHandler" fa-options="options.scrollView" fa-start-index="1">
- *    <fa-view fa-index="1">
- *      <fa-modifier fa-size="[320, 320]">
- *          <fa-surface fa-background-color="'blue'" fa-pipe-to="eventHandler"></fa-surface>
- *        </fa-modifier>
- *    </fa-view>
- *    <fa-view fa-index="0">
- *      <fa-modifier fa-size="[320, 320]">
- *          <fa-surface fa-background-color="'red'" fa-pipe-to="eventHandler"></fa-surface>
- *        </fa-modifier>
- *    </fa-view>
- *   </fa-scroll-view>    
+ *   <fa-app style="width: 320px; height: 568px;"> 
+ *    <!-- The scroll View will start at the index of 1 -->
+ *     <fa-scroll-view fa-pipe-from="eventHandler" fa-options="options.scrollView" fa-start-index="1">
+ *       <!-- Even though this view is declared first in html, it will will be layed out 2nd -->
+ *       <!-- On page load, the scroll View will scroll to this view, and display it.  -->
+ *        <fa-view fa-index="1">
+ *           <fa-modifier fa-size="[320, 568]">
+ *              <fa-surface fa-pipe-to="eventHandler" 
+ *                          fa-background-color="'blue'">
+ *              </fa-surface>
+ *           </fa-modifier>
+ *        </fa-view>
+ * 
+ *        <fa-view fa-index="0">
+ *           <fa-modifier fa-size="[320, 568]">
+ *              <fa-surface fa-pipe-to="eventHandler" 
+ *                          fa-background-color="'red'">
+ *              </fa-surface>
+ *           </fa-modifier>
+ *        </fa-view>
+ * 
+ *     </fa-scroll-view>   
+ *   </fa-app>   
  * ```
  *
  * ```javascript
