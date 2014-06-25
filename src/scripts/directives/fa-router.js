@@ -70,7 +70,6 @@ angular.module('famous.angular')
             if( isolate.currentState === $famousState.current) return;
             
             locals =   isolate.states[$famousState.current] || $famousState.$current;
-            locals.$template = $famousState.$template;
             currentEl = "<fa-view>" + locals.$template +"</fa-view>";
             element.html(currentEl);
             isolate.fromState = isolate.currentState;
