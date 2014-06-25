@@ -57,10 +57,17 @@ angular.module('famous.angular')
         }  
       };
 
+      function registerExternalUrls() {
+        var states = $famousState.getStates();
+        angular.forEach(states, function(state, name) {
+          if ( !!state.url && !rules[state.url] ) { when(state.url, name); }
+        });
+      }
 
 
 
-  
+      registerExternalUrls();
+      setInitialLocation();
       $famousUrlRouter.listen();
       $famousUrlRouter.update();
       
