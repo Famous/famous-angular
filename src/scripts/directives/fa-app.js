@@ -88,7 +88,7 @@ angular.module('famous.angular')
             var Transform = $famous['famous/core/Transform']
 
             
-            element.append('<div class="famous-angualar-container"></div>');
+            element.append('<div class="famous-angular-container"></div>');
             isolate.context = Engine.createContext(element[0].querySelector('.famous-angular-container'));
 
             function AppView(){
