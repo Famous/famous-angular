@@ -74,7 +74,7 @@ As configured, you should be able to access the application at localhost:4000.
 
 ####To run tests
 
-`karma start`
+`gulp jasmine`
 
 
 
