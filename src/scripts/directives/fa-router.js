@@ -23,45 +23,63 @@ angular.module('famous.angular')
           anchorNode.add(previousNode);
           anchorNode.add(currentNode);
 
-          var currentScope , currentEl , previousEL, locals,flipperScope;
+          var currentScope , currentEl, locals;
 
           isolate.renderNode = isolate.renderNode || anchorNode; 
           isolate.states = isolate.states || {}; 
           isolate.currentState = isolate.currentState || 'root';
           
              
-          function updateView (evt, data) {
+          function updateView(evt, data) {
 
-            if(evt.targetScope.$id !== $scope.$id){
-
+            if(evt.targetScope.$id !== $scope.$id) {
+              var inTransitionFromFn, outTransitionToFn, inTransitionFromFnStr, outTransitionToFnStr;
               var previousView = isolate.states[isolate.fromState];
               var currentView = isolate.states[isolate.currentState] ;
               currentView.isolate = data;
 
-              if(previousView && previousView.isolate.renderNode ) {
-
-                currentNode.set(currentView.isolate.renderNode);
-                var inTransitionFromFn = $parse(currentView.inTransitionFrom);
-                inTransitionFromFn(currentView.$scope, {$callback : function() {
-                  console.log('show completed');
-                }});
-                
-
-                previousNode.set(previousView.isolate.renderNode);
-                var outTransitionToFn = $parse(previousView.outTransitionTo);
-                outTransitionToFn(previousView.$scope, { $callback : function() {
-                  previousNode.set(new RenderNode());
-                  console.log('hide completed');
-                }});
-               
-              }else {
-                currentNode.set(currentView.isolate.renderNode);
-
-                var inTransitionFromFn = $parse(currentView.inTransitionFrom);
-                inTransitionFromFn(currentView.$scope, {$callback : function() {
-                  console.log('show completed');
-                }});
+              currentNode.set(currentView.isolate.renderNode);
+              if(currentView.inTransitionFrom) {
+                if(angular.isString(currentView.inTransitionFrom)) {
+                  inTransitionFromFnStr = currentView.inTransitionFrom;
+                }
+                else if(angular.isObject(currentView.inTransitionFrom)) {
+                  inTransitionFromFnStr = currentView.inTransitionFrom[isolate.fromState]?
+                                             currentView.inTransitionFrom[isolate.fromState] :
+                                             currentView.inTransitionFrom['default']? 
+                                             currentView.inTransitionFrom['default'] :
+                                             "";
+                                             
+                }
+                if(!!inTransitionFromFnStr) {
+                  inTransitionFromFn = $parse(inTransitionFromFnStr);
+                  inTransitionFromFn(currentView.$scope, {$callback : function() {
+                    console.log('show completed');
+                  }});
+                }
               }
+              
+              if(previousView && previousView.isolate.renderNode && previousView.outTransitionTo) {
+                previousNode.set(previousView.isolate.renderNode);
+                if(angular.isString(currentView.outTransitionTo)) {
+                   outTransitionToFnStr = currentView.outTransitionTo;
+                }else if(angular.isObject(currentView.outTransitionTo)) {
+                  outTransitionToFnStr = currentView.outTransitionTo[isolate.currentState]?
+                                             currentView.outTransitionTo[isolate.currentState] :
+                                             currentView.outTransitionTo['default']? 
+                                             currentView.outTransitionTo['default'] :
+                                             "";
+                }
+                if(!!outTransitionToFnStr) {
+                  outTransitionToFn = $parse(outTransitionToFnStr);
+                  outTransitionToFn(previousView.$scope, { $callback : function() {
+                    previousNode.set(new RenderNode());
+                    console.log('hide completed');
+                  }});
+                }
+
+              }
+
               evt.stopPropagation();
             }
                
@@ -70,7 +88,7 @@ angular.module('famous.angular')
             if( isolate.currentState === $famousState.current) return;
             
             locals =   isolate.states[$famousState.current] || $famousState.$current;
-            currentEl = "<fa-view>" + locals.$template +"</fa-view>";
+            currentEl = locals.$template;
             element.html(currentEl);
             isolate.fromState = isolate.currentState;
             isolate.currentState = $famousState.current;
