@@ -59,8 +59,8 @@ a Header, Content, and Footer based on the order of its child elements.
 
 
 <h2 id="example">Example</h2><p><code>Fa-header-footer</code> is a View that arranges three renderables into a header and footer area with defined sizes, and a content area that fills up the remaining space.</p>
-<p>To use it, declare it in the html and nest 3 renderables inside.  In the example below, there are three direct children elements: a Modifier (with an <code>fa-surface</code> nested inside), a Surface, and another Modifier (with an <code>fa-surface</code> nested inside).</p>
-<p>Since the header and footer Modifiers have fixed heights, the content will fill the remaining height of the parent modifier or context.</p>
+<p>To use it, declare it in the html and nest 3 renderables inside.  In the example below, there are three direct children elements: a Modifier (with an <code>fa-surface</code> nested inside), a Surface, and another Modifier (with an <code>fa-surface</code> nested inside).  The order that they are declared in the html determines whether each corresponds to a header, content, and footer.  </p>
+<p>Since the header and footer Modifiers have fixed heights of <code>[undefined, 75]</code> (fill the parent container horizontally, 75 pixels vertically), the content will fill the remaining height of the parent modifier or context.</p>
 <pre><code class="lang-html">&lt;fa-header-footer-layout&gt;
   &lt;!-- header --&gt;
   &lt;fa-modifier fa-size=&quot;[undefined, 75]&quot;&gt;
@@ -71,7 +71,7 @@ a Header, Content, and Footer based on the order of its child elements.
   &lt;fa-surface fa-background-color=&quot;&#39;blue&#39;&quot;&gt;Content&lt;/fa-surface&gt;
 
   &lt;!-- footer --&gt;
-  &lt;fa-modifier fa-size=&quot;[undefined, 50]&quot;&gt;
+  &lt;fa-modifier fa-size=&quot;[undefined, 75]&quot;&gt;
     &lt;fa-surface fa-background-color=&quot;&#39;green&#39;&quot;&gt;Footer&lt;/fa-surface&gt;
   &lt;/fa-modifier&gt;
 &lt;/fa-header-footer-layout&gt;</code></pre>

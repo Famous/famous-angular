@@ -26,12 +26,14 @@
  * Note:  This example will not work.
  *
  * ```html
+ * <!-- fa-scroll-view is not receiving any events from its children -->
  * <fa-scroll-view>
- *     <fa-view ng-repeat="view in views">
+ *    <fa-view ng-repeat="view in views">
  *       <fa-modifier fa-size="[320, 320]">
+ *        <!-- Events on fa-surface are not propagated upwards to its parents automatically -->
  *           <fa-surface fa-background-color="'blue'"></fa-surface>
  *         </fa-modifier>
- *     </fa-view>
+ *    </fa-view>
  * </fa-scroll-view>
  *  ```
  * 
@@ -39,12 +41,14 @@
  * `myEventHandler` refers to an instantiated Famous EventHandler declared on the scope.  Using pipes allows events to propagate between `fa-surface`s and the `fa-scroll-view`.
  *
  * ```html
+ * <!-- fa-scroll-view receives all events from $scope.myEventHandler, and decides how to handle them -->
  * <fa-scroll-view fa-pipe-from="myEventHandler">
  *     <fa-view ng-repeat="view in views">
  *       <fa-modifier fa-size="[320, 320]">
- *           <fa-surface fa-background-color="'blue'"
- *                       fa-pipe-to="eventHandler">
- *           </fa-surface>
+ *       <!-- All events on fa-surfaces (click, mousewheel) are piped to $scope.myEventHandler -->
+ *          <fa-surface fa-background-color="'blue'"
+ *                       fa-pipe-to="myEventHandler">
+ *          </fa-surface>
  *         </fa-modifier>
  *     </fa-view>
  * </fa-scroll-view>
@@ -82,12 +86,19 @@
  * var EventHandler = $famous['famous/core/EventHandler'];
  * $scope.eventHandlerA = new EventHandler();
  * $scope.eventHandlerB = new EventHandler();
- * $scope.eventHandlerA.pipe($scope.eventHandlerB);
- * 
+ * $scope.eventHandlerA.pipe($scope.eventHandlerB); 
+ * // all events received by eventHandlerA wil be piped to eventHandlerB
+ *
+ * var Transitionable = $famous['famous/transitions/Transitionable'];
+ * $scope.redTrans = new Transitionable([0, 0, 0]);
+ *
+ * // eventHandlerA emits 'myEvent' on click
  * $scope.surfaceClick = function() {
  *   $scope.eventHandlerA.emit('myEvent');
  * };
- * 
+ *
+ * // eventHandlerA pipes all events it receives to eventHandlerB
+ * // This is an event handler defined on eventHandlerB for handling 'myEvent'
  * $scope.eventHandlerB.on('myEvent', function() {
  *   $scope.redTrans.set([0, 200, 0], {duration: 2000, curve: 'easeInOut'})
  * });
@@ -115,15 +126,19 @@
  * In the second view containing 3 Scroll Views, each Scroll View pipes from `emptyPipe` by default, another instantiated EventHandler that has no events piped to it.  
  *  
  * ```html
+ * <!-- directional pad view -->
  * <fa-view>
+ *   <!-- scroll view used as a directional pad input, receives events from mainPipe-->
  *   <fa-scroll-view fa-pipe-from="mainPipe">
  *     <fa-modifier fa-translate="[0, 0, 15]" fa-size="[320, 50]">
  *       <fa-view>
  *         <fa-modifier>
+ *           <!-- mousewheel events will be piped to mainPipe -->
  *           <fa-surface fa-background-color="'orange'" fa-pipe-to="mainPipe">
  *             <div>Directional pad</div>
  *               <span ng-repeat="input in inputList">
  *                 <label>{{input.letter}}</label>
+ *                 <!-- checkboxes -->
  *                 <input type="checkbox"
  *                        ng-model="input.model" 
  *                        name="scrollPipeTo" 
@@ -137,10 +152,14 @@
  *     </fa-modifier>
  *   </fa-scroll-view>
  * </fa-view>
+ * 
+ * <!-- view with 3 Scroll Views -->
  * <fa-view>
+ *   <!-- ng-repeat creating 3 different scroll Views -->
  *   <fa-modifier ng-repeat="view in scrollViews"
  *                fa-translate="[100 * $index, 50, 0]">
  *     <fa-view>
+ *       <!-- each Scroll View conditionally receives events from mainPipe or emptyPipe, default is emptyPipe -->
  *       <fa-scroll-view fa-pipe-from="{{view.pipe}}" fa-options="options.scrollViewTwo">
  *         <fa-view ng-repeat="items in list">
  *           <fa-modifier fa-size="[100, 100]">

@@ -1,3 +1,65 @@
+<a name="0.0.17"></a>
+# 0.0.17 (2014-06-24)
+
+
+## Bug Fixes
+
+- fix edge cases where fa-surface#isClassable hits an undefined reference
+ ([d4b352d5](https://github.com/Famous/famous-angular/commit/d4b352d5babe82e825c26b3f96b2844897913c8e))
+- make multiple ng-shows inside of an fa-surface behave as expected
+ ([5478f03b](https://github.com/Famous/famous-angular/commit/5478f03b5b6179317b851917b3db9c42e2a99287))
+- correctly remove ng-repeated fa-surfaces from fa-scroll-view and fa-sequential-layout
+ ([55328faf](https://github.com/Famous/famous-angular/commit/55328faf40f327f5eb6801ae1dc9162aa33ecf66))
+
+
+## Features
+
+- implement fa-flexible-layout
+ ([7b3ffd76](https://github.com/Famous/famous-angular/commit/7b3ffd76d3b575b9452a6fae6971c97c6c9dbd28))
+- implement fa-properties on fa-image-surface, the same as on fa-surface
+ ([cee67e0c](https://github.com/Famous/famous-angular/commit/cee67e0c9dbbd9ecd50d75510bf9692bdf446c15))
+- implement fa-properties on fa-surface; make ad hoc property declaration more generic
+ ([7c101d06](https://github.com/Famous/famous-angular/commit/7c101d0662dd9c43087c90bf2f685481e139c69e))
+-  add margin and padding properties to fa-surface
+ ([16842b23](https://github.com/Famous/famous-angular/commit/16842b2356302de8f82e149d6c8e5c547dfbe1d3))
+- implement fa-container-surface
+ ([94998b7c](https://github.com/Famous/famous-angular/commit/94998b7c94c475635c5227af2ca366f015e891d9))
+
+
+## Documentation
+
+- add CLA instructions to CONTRIBUTING.md
+ ([2954e26c](https://github.com/Famous/famous-angular/commit/2954e26c8cf367ba986c0467412d389ec5863113))
+- add animation directive - edit: surf, grid, app, mod, pipe n more
+ ([bbb02889](https://github.com/Famous/famous-angular/commit/bbb02889bff9a5fd67985d9c6f75a6c32aa5ca99))
+- fix fa-pipe - add imagesurf, header, seq, flipper
+ ([70283d0c](https://github.com/Famous/famous-angular/commit/70283d0cc3f2993ae4c6fe16064e745f4e3d4bd4))
+- edit animation, modifier, tap -  add imagesurface
+ ([7654d276](https://github.com/Famous/famous-angular/commit/7654d276b32b746ba3cbd09458eaa63424078bb3))
+- edit scrollview touchend move start view
+ ([610191b5](https://github.com/Famous/famous-angular/commit/610191b5444152e78aa129ea0c12d9ae5aea7629))
+- edit app, click, index, rendernode
+ ([f605521a](https://github.com/Famous/famous-angular/commit/f605521ac16a02fad6dcc89f67c4748cc52b7840))
+- edit faSurface
+ ([540b39b0](https://github.com/Famous/famous-angular/commit/540b39b03e295b3fd96fb3307816fc677360f2d1))
+- edit fa-modifier
+ ([4ceb4464](https://github.com/Famous/famous-angular/commit/4ceb44641ee7f97e2d5b936cd19ca21395b6d6c2))
+- edit faAnimation + faScrollView
+ ([65a31257](https://github.com/Famous/famous-angular/commit/65a31257a42b5535f971c40b719ba28288c5307e))
+- add click, tap, index
+ ([45c0d072](https://github.com/Famous/famous-angular/commit/45c0d072213169725de3db89600948079faec449))
+- add fa-app
+ ([2e21d736](https://github.com/Famous/famous-angular/commit/2e21d736f83f3a8232b8598fb6ba245dd8eafb5c))
+- add rendernode
+ ([f651daa6](https://github.com/Famous/famous-angular/commit/f651daa6c8c3d27833ec425508be349ac76a7735))
+- add fa-transform + fa-transform-order
+ ([66d2923d](https://github.com/Famous/famous-angular/commit/66d2923d7bf86b6eaa60b67a84b6b239d2632d5c))
+- add touchstart touchmove touchend
+ ([448efdcd](https://github.com/Famous/famous-angular/commit/448efdcd3dfe901e2fedc4f7d76eda73f6d61623))
+- add fa-pipe-from examples
+ ([b3a1f36c](https://github.com/Famous/famous-angular/commit/b3a1f36c14ac6137e428e882c76d7b7ae987f08f))
+
+
 <a name="0.0.16"></a>
 # 0.0.16 (2014-06-07)
 

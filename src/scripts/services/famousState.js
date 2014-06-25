@@ -3,7 +3,7 @@ angular.module('famous.angular')
     
     // var injector = angular.injector(['famous.angular.router', 'ng']);
     // var $famousUrlRouter = injector.get('$famousUrlRouter')
-    
+
     var states = {};
     var queue = {};
     var $famousState;

@@ -28,9 +28,9 @@
  * </fa-flipper>
  *```
  *```javascript
- * $scope.flipHandler.on('flip', function() {
- *   $famous.find('fa-flipper')[0].flip();
- * });
+ * $scope.flipHandler = function() {
+ *    $famous.find('fa-flipper')[0].flip();
+ * };
  *```
  */
 
