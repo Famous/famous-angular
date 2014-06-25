@@ -1,24 +1,85 @@
-angular.module('famous.angular')
-  .provider('$famousState', function () {
-    
-    // var injector = angular.injector(['famous.angular.router', 'ng']);
-    // var $famousUrlRouter = injector.get('$famousUrlRouter')
+/**
+ * @ngdoc provider
+ * @name $famousStateProvider
+ * @module famous.angular
+ * @description
+ * This provider allows for state-based routing similar to that of the Angular UI Router.  The 
+ * difference being that $famousStateProvider allows Famo.us animations and transforms to be defined on
+ * state transitions.
+ *
+ * @usage
+ * States may defined in the following manner:
+ *
+ * ```js
+ * angular.module('mySuperApp', ['famous.angular']).config(
+ *   function($famousStateProvider) {
+ *    $famousStateProvider
+ *      .state('home', {
+ *        url: '/',
+ *        templateURL: 'views/home.html',
+ *        conroller: 'homeCtrl',
+ *        inTransitionFrom: {
+ *          contact: 'fromContact'
+ *          portfolio: 'fromPortfolio'  
+ *        },
+ *        outTransitionTo: {
+ *          contact: 'toContact'
+ *          portfolio: 'toPortfolio'
+ *        }
+ *      })
+ *      .state('portfolio', {
+ *        url: '/portfolio',
+ *        controller: function($scope) { $scope.name = 'My Portfolio'; },
+ *        inTransitionFrom: {
+ *          home: 'fromHome',
+ *          contact: 'fromContact'  
+ *        },
+ *        outTransitionTo: {
+ *          home: 'toHome',
+ *          contact: 'toContact'
+ *        },
+ *        views: {
+ *          '': {templateUrl: 'views/portfolioMain.html},
+ *          'project1@portfolio': {templateUrl: 'views/portfolioProject1.html},
+ *          'project2@portfolio': {templateUrl: 'views/portfolioProject2.html}
+ *        }
+ *      });
+ *      .state('contact', {
+ *        url: '/contact',
+ *        template: '<p>Contact us at contact@examples.com</p>',
+ *        controller: 'contactCtrl'
+ *      });
+ *   }
+ * });
+ * ```
+ *
+ */
 
+angular.module('famous.angular')
+
+  .provider('$famousState', function() {
+    
     var states = {};
     var queue = {};
     var $famousState;
     var root;
 
     /**
-     * Defines the routes during the configuration stage of the provider
-     * @param {String} name The name of the state.  The name can be a simple string
-     * such as 'home', or a compund string wuch as 'home.list' which indicates that 
-     * the state being defined ('list') is a child of the parent state 'home.' 
+     * @ngdoc method
+     * @name $famousProvider#state
+     * @module famous.angular
+     * @description
+     * Defines the states of the application
+     * @param {String} definition Defines the name of the state
      * @param {Object} definition Defines the parameters of the state
      */
+
     this.state = state;
     function state(name, definition) {
-      
+      /** 
+       * If only a single state definition object is passed as a parameter, will
+       * attempt to extract the state name from the parameter object 
+       */
       if ( angular.isObject(name) ) {
         definition = name;
       } else {
@@ -34,8 +95,9 @@ angular.module('famous.angular')
      */
     function defineState(state) {
       
+      // Static child views may be defined using '@child@parent'
       var name = state.name;
-      if ( !angular.isString(name) || name.indexOf('@') >= 0)  {
+      if ( !angular.isDefined(name) || !angular.isString(name) || name.indexOf('@') >= 0)  {
         throw new Error('State must have a valid name');
       }
       if (states.hasOwnProperty(name)) {
@@ -79,14 +141,12 @@ angular.module('famous.angular')
       // Extracts the name of the parent if implicitly ('parent.child') defined on the parent property
       parent: function(state) {
         if ( angular.isDefined(state.parent) && state.parent ) { return; }
-        // *** UIR ***
-        // regex matches any valid composite state name
-        // would match "contact.list" but not "contacts"
+        
+        // Extract parent name from composite state name: grandparent.parent.child -> grandparent.parent 
         var compositeName = /^(.+)\.[^.]+$/.exec(state.name);
         state.parent = compositeName ? compositeName[1] : root;
       },
-
-      // TODO: Resolve dependency injection issue so that URLs can be registered with the 
+ 
       url: function(state) {
         
         var url = state.url;
@@ -128,41 +188,46 @@ angular.module('famous.angular')
         } 
       },
 
-      // Transition properties are strings which reference callback function within their respective controllers
+      /**
+       * Transitions are objects that define how one state should transfer to and from all other states
+       * in the application.  The keys in a transition object should be the name of the states being
+       * transitioned to/from and the value should be a string which references the name of a function
+       * in the controller that defines the transition.  A single transition function may also be passed,
+       * thereby assigning a single transition to/from that state.  If no transitions are definec, default
+       * transitions will be assigned.
+       * @param {Object} state State object containing all properties related to the state
+       */
       transitions: function(state) {
 
-        //  ******** THIS IS HORRIFIC.  NEED TO REFACTOR  **********
-        var inTransitionFrom = state.inTransitionFrom;
-        var outTransitionTo = state.outTransitionTo;
+        if ( !angular.isDefined(state.inTransitionFrom) && !angular.isDefined(state.outTransitionTo) ) { return; } 
         
-        if ( !angular.isDefined(inTransitionFrom) && !angular.isDefined(outTransitionTo) ) { return;} 
+        var transitions = {}; 
+        transitions.inTransitionFrom = state.inTransitionFrom;
+        transitions.outTransitionTo = state.outTransitionTo;
+ 
 
-        if ( !!inTransitionFrom ) {
-
-          angular.forEach(inTransitionFrom, function (definition, property) {
-            if ( !!property && !angular.isString(definition) ) {
-              throw new Error('inTransitionFrom property ' + property + ' must be a string' );
-            } else {
-              state.inTransitionFrom[property] = definition || null;
-            }
-          });
+        for ( var direction in transitions ) {
+          if ( angular.isString(transitions[direction]) ) {
+            state[direction] = transitions[direction] + '($done)'; 
+          } else if ( angular.isObject(transitions) ) {
+            angular.forEach(transitions[direction], function(definition, state) {
+              transitions[direction][state] = definition + '($done)';
+            })
+            angular.extend(state[direction], transitions[direction]);
+          } else if ( angular.isDefined(state[direction]) ) { 
+            throw new Error('Transitions must be strings which reference function names');
+          }
         }
-
-        if ( !!outTransitionTo ) {
-          angular.forEach(outTransitionTo, function (definition, property) {
-            if ( !!property && !angular.isString(definition)  ) {
-              throw new Error('outTransitionTo property ' + property + ' must be a string' );
-            } else {
-              
-              state.outTransitionTo[property] = definition || null;
-            }
-          });
-        }
-
       },
       
-      // Static views which are defined using 'staticChild@parent' notation
+      // Static views should be defined using 'staticChild@parent' notation
       views: function(state) {
+
+        if ( !angular.isDefined(state.views) ) { 
+          state.views = { '@': state };
+          return;
+        }
+
         var views = {};
 
         angular.forEach(angular.isDefined(state.views) ? state.views : { '': state }, function (view, name) {
@@ -178,11 +243,12 @@ angular.module('famous.angular')
     };
 
     /**
-     * Static views similar states in that they may have their own templates, controllers,
-     * and transitions defined.  Accordingly, all of the properties must be validated. 
+     * Static views are similar to states in that they may have their own templates, controllers,
+     * and transitions defined.  Accordingly, all properties must be defined in the same manner. 
      * @param {Object} view view object containing all properties related to the view
      */
     function validateView (view) {
+      
       stateBuilder.template(view);
       stateBuilder.controller(view);
       stateBuilder.transitions(view);
@@ -193,6 +259,7 @@ angular.module('famous.angular')
      * @param {Object} state State object contains all properties related to the state
      */
     function registerState(state) {
+
       var name = state.name;
       states[name] = state;
     }
@@ -223,15 +290,46 @@ angular.module('famous.angular')
     root = {
       name : '',
       parent: null,
-      navigable: false,
       views: null,
       template: null,
       contoller: null
     };
     
     this.$get = $get;
-    $get.$inject = ['$rootScope','$http', '$q', '$templateCache'];
-    function $get($rootScope, $http, $q, $templateCache) {
+    $get.$inject = ['$rootScope','$http', '$location', '$q', '$famousTemplate', '$templateCache'];
+    function $get($rootScope, $http, $location, $q, $famousTemplate, $templateCache) {
+
+      /**
+       * @ngdoc service
+       * @name $famousState
+       * @module famous.angular
+       * @description
+       * This service gives you access to $famousState object.
+       *
+       * @usage
+       * Use this service to transition states and access information related to the current state.
+       *
+       * ```js
+       * angular.module('mySuperApp', ['famous.angular']).controller(
+       *   function($scope, $famousState) {
+       *
+       *     // Transition states
+       *     $scope.goHome = function() {
+       *       $famousState.go('home');
+       *     };
+       *     // Access information related to current state
+       *     $famousState.current = 'The name of the current state';
+       *     $famousState.$current = 'The current state object';
+       *     $famousState.locals = 'The properties of any static child views defined on the state';
+       *     $famousState.parent = 'The parent of the current state';
+       *     $famousState.$prior = 'The previous state of the application;
+       *     $famousState.inTransitionTo = 'The in transitions assigned to the current state';
+       *     $famousState.outTransitionFrom = 'The out transitions assigned to the current state';
+       *   }  
+       * });
+       * ```
+       *
+       */
 
       $famousState = {
         current: root.name, // Name of the current state
@@ -239,40 +337,54 @@ angular.module('famous.angular')
         locals: {},
         parent: '', // Name of the parent state
         $prior: {}, // Prior state object
-        $template: '', // HTML template for the current state
         inTransitionTo: '',
         outTransitionFrom: ''
       };
 
-
       /**
+       * @ngdoc method
+       * @name $famousState#includes
+       * @module famous.angular
+       * @description
        * Allows the $famousState object to be queried to determine whether or not a state is registered.
        * @param {String} state The name of a state
+       * @returns {Boolean} A boolean indicating whether or not the state is registered
        */
       $famousState.includes = function(state) {  
         return stateValid(state);
       };
 
       /**
+       * @ngdoc method
+       * @name $famousState#go
+       * @module famous.angular
+       * @description
        * Initiates the state transition process.  Return if state is the current state and reload is not true.
        * @param {String} state The name of a state
+       * @returns {Object} The $famousState object
        */
       $famousState.go = function(state, reload){
         if ( state === $famousState.current && !reload) { return; }
         transitionState(state);     
       };
 
-       /**
+      /**
+       * @ngdoc method
+       * @name $famousState#getStates
+       * @module famous.angular
+       * @description
        * Returns all currently registered states.  This function exists solely for the purpose of 
        * allowing the famousUrlRouter to update URL routes upon initiation.  As soon as the dependency
        * injection issue is resolved, this function may be deleted.
        * @param {String} state The name of a state
+       * @returns {Object} The states object
        */
+
       $famousState.getStates = function() {
         return states;
       };
 
-      // Updates the $famousState object to that the proper view may be rendered within the directive
+      // Updates the $famousState object so that the new state view may be rendered by the fa-router directive
       function transitionState(state) {
 
         if ( !transferValid ) { return $rootScope.$broadcast('$stateNotFound'); }
@@ -283,27 +395,19 @@ angular.module('famous.angular')
         $famousState.parent = $famousState.$current.parent;
         $famousState.$current.locals = updateLocals();
 
-
-        // fetchAll($famousState.$current); 
-        // fetch templates
-        // .then -> $broadcast
-
-        fetchLocalTemplates($famousState.$current.locals)
-        .then(function(data) {
-          angular.forEach(data, function(template) {
-            $famousState.$current.locals[template.name].$template = template.data;
-          });
-          return fetchTemplate($famousState.$current);
-        })
+        $famousTemplate.resolve($famousState.$current)
         .then(function(template){
-          $famousState.$template = template.data;
+          $famousState.$current.$template = template;
           $rootScope.$broadcast('$stateChangeSuccess');
+          if ( !!$famousState.$current.url ) { 
+            $location.path($famousState.$current.url); }
         });
       }
 
       /**
-       * Validates the name (or relative name) of the parameter passed to 'go'
+       * Validates the name (or relative name) of the state parameter passed to '$famousState.go'
        * @param {String} state The name (or relative name) of a state
+       * @returns {Boolean} Returns a value indicating whether or not the state is valid 
        */
       function transferValid(state) {
 
@@ -328,62 +432,25 @@ angular.module('famous.angular')
       }
 
       /**
-       * Ensures that the state being requested exists within the states object
        * @param {String} state The name (or relative name) of a state
+       * @returns {Boolean} Return value indicates whether or not the given state has been registatered.
        */
       function stateValid (state) {
         return states[state]? true : false;
       }
 
-      function fetchLocalTemplates(locals) {
-
-        var templateRequests = [];
-
-        angular.forEach(locals, function(view, name) {
-          templateRequests.push(fetchTemplates(view,name));
-        });
-
-        return $q.all(templateRequests);
-      }
-
+      /**
+       * Creates a locals object which contains all data relevant to the child views the states
+       * @param {String} state The name (or relative name) of a state
+       */
       function updateLocals (){
-
+        
         var locals = {};
 
         angular.forEach($famousState.$current.views, function (view, name) {
           if ( name !== '@' ) { locals[name] = view; }
         });
-
         return locals;
-      }
-
-      function fetchTemplates(view, name) {
-
-        var deferred = $q.defer();
-        var template = {};
-
-        $http.get(view.template.link, {cache: $templateCache})
-        .success(function(data) {
-          template.name = name;
-          template.data = data;
-          deferred.resolve(template);
-        }).error(function(data) {
-          template.name = name;
-          template.data = data;
-          deferred.reject(template);
-        });
-
-        return deferred.promise;
-
-      }
-
-      function fetchTemplate(state) {
-
-        if ( state.template.html ) {
-          return state.template.html;
-        } else {
-          return $http.get(state.template.link, { cache: $templateCache });
-        }
       }
 
       return $famousState;
