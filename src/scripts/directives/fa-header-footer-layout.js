@@ -19,9 +19,9 @@
  * @example
  * `Fa-header-footer` is a View that arranges three renderables into a header and footer area with defined sizes, and a content area that fills up the remaining space.
  * 
- * To use it, declare it in the html and nest 3 renderables inside.  In the example below, there are three direct children elements: a Modifier (with an `fa-surface` nested inside), a Surface, and another Modifier (with an `fa-surface` nested inside).
+ * To use it, declare it in the html and nest 3 renderables inside.  In the example below, there are three direct children elements: a Modifier (with an `fa-surface` nested inside), a Surface, and another Modifier (with an `fa-surface` nested inside).  The order that they are declared in the html determines whether each corresponds to a header, content, and footer.  
  * 
- * Since the header and footer Modifiers have fixed heights, the content will fill the remaining height of the parent modifier or context.
+ * Since the header and footer Modifiers have fixed heights of `[undefined, 75]` (fill the parent container horizontally, 75 pixels vertically), the content will fill the remaining height of the parent modifier or context.
  * 
  *```html
  * <fa-header-footer-layout>
@@ -34,7 +34,7 @@
  *   <fa-surface fa-background-color="'blue'">Content</fa-surface>
  *   
  *   <!-- footer -->
- *   <fa-modifier fa-size="[undefined, 50]">
+ *   <fa-modifier fa-size="[undefined, 75]">
  *     <fa-surface fa-background-color="'green'">Footer</fa-surface>
  *   </fa-modifier>
  * </fa-header-footer-layout>

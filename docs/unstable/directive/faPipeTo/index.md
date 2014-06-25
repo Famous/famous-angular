@@ -92,21 +92,25 @@ This directive pipes an element's event handler to a source event handler.
 To pass information between two unrelated views, or even between a nested View to its parent, use <code>fa-pipe-to</code> and <code>fa-pipe-from</code> to pipe and receive events.</p>
 <p>In the example below, even though <code>fa-view</code>, <code>fa-modifier</code>, and <code>fa-surface</code> are all nested within an <code>fa-scroll-view</code>, all of these elements&#39; events (such as touch or scroll) do not propagate upwards towards their parent.</p>
 <p>Note:  This example will not work.</p>
-<pre><code class="lang-html">&lt;fa-scroll-view&gt;
-    &lt;fa-view ng-repeat=&quot;view in views&quot;&gt;
+<pre><code class="lang-html">&lt;!-- fa-scroll-view is not receiving any events from its children --&gt;
+&lt;fa-scroll-view&gt;
+   &lt;fa-view ng-repeat=&quot;view in views&quot;&gt;
       &lt;fa-modifier fa-size=&quot;[320, 320]&quot;&gt;
+       &lt;!-- Events on fa-surface are not propagated upwards to its parents automatically --&gt;
           &lt;fa-surface fa-background-color=&quot;&#39;blue&#39;&quot;&gt;&lt;/fa-surface&gt;
         &lt;/fa-modifier&gt;
-    &lt;/fa-view&gt;
+   &lt;/fa-view&gt;
 &lt;/fa-scroll-view&gt;</code></pre>
 <p>In the example below, events from the <code>fa-surface</code> are piped to <code>myEventHandler</code>, a source event handler, via <code>fa-pipe-to</code>. <code>Fa-scroll-view</code> receives events from <code>myEventHandler</code>, its target event handler, via <code>fa-pipe-from</code>. 
 <code>myEventHandler</code> refers to an instantiated Famous EventHandler declared on the scope.  Using pipes allows events to propagate between <code>fa-surface</code>s and the <code>fa-scroll-view</code>.</p>
-<pre><code class="lang-html">&lt;fa-scroll-view fa-pipe-from=&quot;myEventHandler&quot;&gt;
+<pre><code class="lang-html">&lt;!-- fa-scroll-view receives all events from $scope.myEventHandler, and decides how to handle them --&gt;
+&lt;fa-scroll-view fa-pipe-from=&quot;myEventHandler&quot;&gt;
     &lt;fa-view ng-repeat=&quot;view in views&quot;&gt;
       &lt;fa-modifier fa-size=&quot;[320, 320]&quot;&gt;
-          &lt;fa-surface fa-background-color=&quot;&#39;blue&#39;&quot;
-                      fa-pipe-to=&quot;eventHandler&quot;&gt;
-          &lt;/fa-surface&gt;
+      &lt;!-- All events on fa-surfaces (click, mousewheel) are piped to $scope.myEventHandler --&gt;
+         &lt;fa-surface fa-background-color=&quot;&#39;blue&#39;&quot;
+                      fa-pipe-to=&quot;myEventHandler&quot;&gt;
+         &lt;/fa-surface&gt;
         &lt;/fa-modifier&gt;
     &lt;/fa-view&gt;
 &lt;/fa-scroll-view&gt;</code></pre>
@@ -131,12 +135,19 @@ Because <code>evenHandlerA</code> pipes to <code>eventHandlerB</code>, <code>eve
 <pre><code class="lang-javascript">var EventHandler = $famous[&#39;famous/core/EventHandler&#39;];
 $scope.eventHandlerA = new EventHandler();
 $scope.eventHandlerB = new EventHandler();
-$scope.eventHandlerA.pipe($scope.eventHandlerB);
+$scope.eventHandlerA.pipe($scope.eventHandlerB); 
+// all events received by eventHandlerA wil be piped to eventHandlerB
 
+var Transitionable = $famous[&#39;famous/transitions/Transitionable&#39;];
+$scope.redTrans = new Transitionable([0, 0, 0]);
+
+// eventHandlerA emits &#39;myEvent&#39; on click
 $scope.surfaceClick = function() {
   $scope.eventHandlerA.emit(&#39;myEvent&#39;);
 };
 
+// eventHandlerA pipes all events it receives to eventHandlerB
+// This is an event handler defined on eventHandlerB for handling &#39;myEvent&#39;
 $scope.eventHandlerB.on(&#39;myEvent&#39;, function() {
   $scope.redTrans.set([0, 200, 0], {duration: 2000, curve: &#39;easeInOut&#39;})
 });</code></pre>
@@ -153,15 +164,19 @@ The pipes are databound using <code>fa-pipe-to</code> and <code>fa-pipe-from</co
 The Scroll View of the directional pad uses <code>fa-pipe-from</code> to pipe events from <code>mainPipe</code> to its Scroll View&#39;s event handler.
 The surface within the directional pad uses <code>fa-pipe-to</code> to pipe <code>fa-surface</code> events to <code>mainPipe</code>.</p>
 <p>In the second view containing 3 Scroll Views, each Scroll View pipes from <code>emptyPipe</code> by default, another instantiated EventHandler that has no events piped to it.  </p>
-<pre><code class="lang-html">&lt;fa-view&gt;
+<pre><code class="lang-html">&lt;!-- directional pad view --&gt;
+&lt;fa-view&gt;
+  &lt;!-- scroll view used as a directional pad input, receives events from mainPipe--&gt;
   &lt;fa-scroll-view fa-pipe-from=&quot;mainPipe&quot;&gt;
     &lt;fa-modifier fa-translate=&quot;[0, 0, 15]&quot; fa-size=&quot;[320, 50]&quot;&gt;
       &lt;fa-view&gt;
         &lt;fa-modifier&gt;
+          &lt;!-- mousewheel events will be piped to mainPipe --&gt;
           &lt;fa-surface fa-background-color=&quot;&#39;orange&#39;&quot; fa-pipe-to=&quot;mainPipe&quot;&gt;
             &lt;div&gt;Directional pad&lt;/div&gt;
               &lt;span ng-repeat=&quot;input in inputList&quot;&gt;
                 &lt;label&gt;{{input.letter}}&lt;/label&gt;
+                &lt;!-- checkboxes --&gt;
                 &lt;input type=&quot;checkbox&quot;
                        ng-model=&quot;input.model&quot; 
                        name=&quot;scrollPipeTo&quot; 
@@ -175,10 +190,14 @@ The surface within the directional pad uses <code>fa-pipe-to</code> to pipe <cod
     &lt;/fa-modifier&gt;
   &lt;/fa-scroll-view&gt;
 &lt;/fa-view&gt;
+
+&lt;!-- view with 3 Scroll Views --&gt;
 &lt;fa-view&gt;
+  &lt;!-- ng-repeat creating 3 different scroll Views --&gt;
   &lt;fa-modifier ng-repeat=&quot;view in scrollViews&quot;
                fa-translate=&quot;[100 * $index, 50, 0]&quot;&gt;
     &lt;fa-view&gt;
+      &lt;!-- each Scroll View conditionally receives events from mainPipe or emptyPipe, default is emptyPipe --&gt;
       &lt;fa-scroll-view fa-pipe-from=&quot;{{view.pipe}}&quot; fa-options=&quot;options.scrollViewTwo&quot;&gt;
         &lt;fa-view ng-repeat=&quot;items in list&quot;&gt;
           &lt;fa-modifier fa-size=&quot;[100, 100]&quot;&gt;

@@ -104,4 +104,3 @@ angular.module('famous.angular')
     
     };
 }]);
-

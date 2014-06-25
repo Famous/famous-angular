@@ -14,12 +14,33 @@ var gulp = require('gulp'),
   cache = require('gulp-cache'),
   gutil = require('gulp-util'),
   exec = require('gulp-exec'),
+  jade = require('gulp-jade'),
+  inject = require('gulp-inject'),
+  filter = require('gulp-filter'),
   pkg = require('./package.json');
 
 // Clean
 gulp.task('clean', function() {
   return gulp.src(['dist/'], {read: false})
   .pipe(clean());
+});
+
+// Update Famous dependencies
+gulp.task('update-dependencies', function() {
+  return gulp.src('./src/scripts/services/famous.js')
+  .pipe(
+  	inject(
+  	  gulp.src(['src/scripts/famous/**/*.js'], {read: false}).pipe(filter('!**/Gruntfile.js')), {
+        starttag: 'var requirements = [',
+        endtag: '];',
+        transform: function (filepath, file, i, length) {
+          return '"' + filepath.substr(13, (filepath.length - 16)) + '"' +
+      	    		(i + 1 < length ? ',' : '');
+        }
+      }
+    )
+  )
+  .pipe(gulp.dest('./src/scripts/services/'));
 });
 
 // Build for dist
@@ -91,6 +112,9 @@ gulp.task('docs', ['build'], function(done) {
  * Watch task for developing with the famous-angular-examples submodule
  ***********************************************************************/
 gulp.task('build-to-examples', ['clean'], function(event) {
+	gulp.src('famous-angular-examples/app/views/jade/*.jade')
+	      .pipe(jade())
+	      .pipe(gulp.dest("famous-angular-examples/app/views"));
 	return gulp.src([
 		'src/scripts/services/**/*.js',
 		'src/scripts/directives/**/*.js'
@@ -107,6 +131,7 @@ gulp.task('watch-examples', function(event) {
 	// Watch .js files
 	gulp.watch([
 			'src/scripts/*/**/*.js',
+			'famous-angular-examples/app/views/jade/*.jade',
 			EXAMPLES_DIR + 'app/*'
 		],
 		['build-to-examples', 'build']
