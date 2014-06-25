@@ -340,6 +340,12 @@ angular.module('famous.angular')
         return newParent + newChild;
       }
 
+      /**
+       * Returns a boolean indicating whether or not the state is registered
+       */
+      function stateValid (state) {
+        return ( !!states[state] );
+      }
 
       return $famousState;
     }   
