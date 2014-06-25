@@ -58,8 +58,8 @@ constructor.  See [https://famo.us/docs/0.2.0/views/SequentialLayout/]
 
 
 <h2 id="example">Example</h2><p><code>Fa-sequential-layout</code> is a Famous View that arranges a collection of renderables sequentially in a specified direction.  Pass options (such as <code>direction</code>) by binding an object with the property to <code>fa-options</code>.</p>
-<p>In the example below, an ng-repeat is used on an <code>fa-view</code>.  The size of each <code>fa-surface</code> is <code>[undefined, 100]</code>, specifying that the width will fill the parent container, and the height will be 100 pixels.</p>
-<p>There are no positioning properties (such as <code>fa-translate</code>) used on the <code>fa-modifier</code>, but these <code>fa-surface</code>s will translate automatically in the specified direction as not to overlap each other.</p>
+<p>In the example below, an ng-repeat is used on an <code>fa-view</code> and the elements nested below it.  The size of each <code>fa-surface</code> is <code>[undefined, 100]</code>, specifying that the width will fill the parent container, and the height will be 100 pixels.</p>
+<p>There are no positioning properties (such as <code>fa-translate</code>) specified on the <code>fa-modifier</code>, but these <code>fa-surface</code>s will translate automatically in the specified direction as not to overlap each other.</p>
 <pre><code class="lang-html">&lt;fa-sequential-layout fa-options=&quot;seqOptions&quot;&gt;
  &lt;fa-view ng-repeat=&quot;view in seq&quot;&gt;
    &lt;fa-modifier fa-size=&quot;[undefined, 100]&quot;&gt;

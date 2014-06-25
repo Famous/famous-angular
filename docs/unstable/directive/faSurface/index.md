@@ -74,6 +74,21 @@ ngIncludes or custom (vanilla Angular) directives.
 &lt;/fa-modifier&gt;</code></pre>
 <pre><code class="lang-javascript">$scope.list = [{content: &quot;famous&quot;}, {content: &quot;angular&quot;}, {content: &quot;rocks!&quot;}];</code></pre>
 <h2 id="common-confusions">Common Confusions</h2>
+<h3 id="a-surface-is-a-leaf-node">A Surface is a leaf node</h3>
+<p> An fa-surface is a leaf node; this means that there should not be Famous-Angular elements nested within an fa-surface.</p>
+<p> This followin will NOT work correctly:</p>
+<pre><code class="lang-html"> &lt;fa-surface&gt;
+    &lt;!-- the contents of a Surface must be standard HTML, so Famo.us components will not get rendered correctly. --&gt;
+    &lt;fa-modifier&gt;
+      &lt;fa-surface&gt;&lt;/fa-surface&gt;
+    &lt;/fa-modifier&gt;
+ &lt;/fa-surface&gt;</code></pre>
+<p> The purpose of an fa-surface is to contain viewable HTML content:</p>
+<pre><code class="lang-html"> &lt;fa-surface&gt;
+    &lt;!-- content --&gt;
+    &lt;!-- databound content with curly braces --&gt;
+    &lt;!-- no other Famous renderable nodes allowed inside a Surface--&gt; 
+ &lt;/fa-surface&gt;</code></pre>
 <h3 id="properties-on-surfaces-vs-modifiers">Properties on surfaces vs modifiers</h3>
 <p>With Famous, properties related to layout and visibility belong on a Modifier.  A Surface should be added below a Modifier on the Render Tree, as Modifiers affect everything below them.</p>
 <p>You may be tempted to set the <code>fa-origin</code> or another layout property on an fa-surface, and discover that it does not work:</p>
@@ -94,12 +109,12 @@ For example, this will not work:</p>
 <pre><code class="lang-javascript">$scope.sizeForBoxFunction = function() {
    return [75, 75];
 };</code></pre>
-<p>To reiterate, the best practice to animate or set any layout/visibilty properties of a surface is to do so on a modifier that affects the Surface.  The purpose of a Surface is to contain HTML content, whether rendered from a template, or data-bound with {{}}&#39;s.</p>
+<p>To reiterate, the best practice to animate or set any layout/visibilty properties of a surface is to do so on a modifier that affects the Surface.  The purpose of a Surface is to contain HTML content, whether rendered from a template, or data-bound.</p>
 <p><fa-modifier fa-size="[100, 100]">
   <fa-surface fa-background-color="'red'"></fa-surface>
 </fa-modifier></p>
 <h3 id="fa-color-fa-background-color">fa-color &amp; fa-background-color</h3>
-<p>The exceptions are <code>fa-color</code> and <code>fa-background-color</code>: these two properties are passed through the <code>.setProperties()</code> method available on Famous Surfaces.
+<p>The exceptions of not setting layout/visibility properties on an <code>fa-surface</code> are <code>fa-color</code> and <code>fa-background-color</code>: these two properties are passed through the <code>.setProperties()</code> method available on Famous Surfaces.
 Take note that they accept a string in the html view.  If you do not enclose them in quotation marks, Angular will evaluate it as an object on the scope, but surrounding it with quotation marks will specify it as a string expression.</p>
 <pre><code class="lang-html">&lt;fa-modifier fa-size=&quot;[200, 50]&quot;&gt;
   &lt;fa-surface fa-background-color=&quot;&#39;orange&#39;&quot; fa-color=&quot;&#39;#fff&#39;&quot;&gt;

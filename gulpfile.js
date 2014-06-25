@@ -15,12 +15,32 @@ var gulp = require('gulp'),
   gutil = require('gulp-util'),
   exec = require('gulp-exec'),
   jade = require('gulp-jade'),
+  inject = require('gulp-inject'),
+  filter = require('gulp-filter'),
   pkg = require('./package.json');
 
 // Clean
 gulp.task('clean', function() {
   return gulp.src(['dist/'], {read: false})
   .pipe(clean());
+});
+
+// Update Famous dependencies
+gulp.task('update-dependencies', function() {
+  return gulp.src('./src/scripts/services/famous.js')
+  .pipe(
+  	inject(
+  	  gulp.src(['src/scripts/famous/**/*.js'], {read: false}).pipe(filter('!**/Gruntfile.js')), {
+        starttag: 'var requirements = [',
+        endtag: '];',
+        transform: function (filepath, file, i, length) {
+          return '"' + filepath.substr(13, (filepath.length - 16)) + '"' +
+      	    		(i + 1 < length ? ',' : '');
+        }
+      }
+    )
+  )
+  .pipe(gulp.dest('./src/scripts/services/'));
 });
 
 // Build for dist
