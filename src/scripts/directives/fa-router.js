@@ -61,13 +61,13 @@ angular.module('famous.angular')
               
               if(previousView && previousView.isolate.renderNode && previousView.outTransitionTo) {
                 previousNode.set(previousView.isolate.renderNode);
-                if(angular.isString(currentView.outTransitionTo)) {
-                   outTransitionToFnStr = currentView.outTransitionTo;
-                }else if(angular.isObject(currentView.outTransitionTo)) {
-                  outTransitionToFnStr = currentView.outTransitionTo[isolate.currentState]?
-                                             currentView.outTransitionTo[isolate.currentState] :
-                                             currentView.outTransitionTo['default']? 
-                                             currentView.outTransitionTo['default'] :
+                if(angular.isString(previousView.outTransitionTo)) {
+                   outTransitionToFnStr = previousView.outTransitionTo;
+                }else if(angular.isObject(previousView.outTransitionTo)) {
+                  outTransitionToFnStr = previousView.outTransitionTo[isolate.currentState]?
+                                             previousView.outTransitionTo[isolate.currentState] :
+                                             previousView.outTransitionTo['default']? 
+                                             previousView.outTransitionTo['default'] :
                                              "";
                 }
                 if(!!outTransitionToFnStr) {
