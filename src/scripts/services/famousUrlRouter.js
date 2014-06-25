@@ -38,6 +38,8 @@ angular.module('famous.angular')
     function $get($rootScope, $location, $famousState) {
 
 
+      // Keeps a record of most recent location
+      var currentPath = '';
 
       $famousUrlRouter.listen = function() {
         var listener = $rootScope.$on('$locationChangeSuccess', $famousUrlRouter.update);
@@ -64,7 +66,10 @@ angular.module('famous.angular')
         });
       }
 
-
+      // Sets the currentPath to the initial url path on application load
+      function setInitialLocation() {
+        currentPath = $location.path();
+      }
 
       registerExternalUrls();
       setInitialLocation();
