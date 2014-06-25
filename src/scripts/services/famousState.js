@@ -180,7 +180,7 @@ angular.module('famous.angular')
       controller: function(state){
        
         var controller = state.controller;
-        if ( !state.template && !!controller ) { 
+        if ( (!state.template && !angular.isDefined(state.views)) && !!controller ) { 
           throw new Error('A template must defined in order to create a controller');
         } 
         if ( !!controller && !angular.isString(controller) && !angular.isFunction(controller) ) {
@@ -336,7 +336,6 @@ angular.module('famous.angular')
         current: root.name, // Name of the current state
         $current: root,
         locals: {},
-        parent: '', // Name of the parent state
         $prior: {}, // Prior state object
         inTransitionTo: '',
         outTransitionFrom: ''
@@ -393,7 +392,6 @@ angular.module('famous.angular')
         $famousState.$prior = $famousState.$current;
         $famousState.current = state;
         $famousState.$current = states[state];
-        $famousState.parent = $famousState.$current.parent || root.name;
         $famousState.$current.locals = updateLocals();
 
         $famousTemplate.resolve($famousState.$current)
