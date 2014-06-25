@@ -208,10 +208,11 @@ angular.module('famous.angular')
 
         for ( var direction in transitions ) {
           if ( angular.isString(transitions[direction]) ) {
-            state[direction] = transitions[direction] + '($done)'; 
+            // '($callback)' must be added to the function to create an invocation that can properly parsed
+            state[direction] = transitions[direction] + '($callback)'; 
           } else if ( angular.isObject(transitions) ) {
             angular.forEach(transitions[direction], function(definition, state) {
-              transitions[direction][state] = definition + '($done)';
+              transitions[direction][state] = definition + '($callback)';
             })
             angular.extend(state[direction], transitions[direction]);
           } else if ( angular.isDefined(state[direction]) ) { 
@@ -392,7 +393,7 @@ angular.module('famous.angular')
         $famousState.$prior = $famousState.$current;
         $famousState.current = state;
         $famousState.$current = states[state];
-        $famousState.parent = $famousState.$current.parent;
+        $famousState.parent = $famousState.$current.parent || root.name;
         $famousState.$current.locals = updateLocals();
 
         $famousTemplate.resolve($famousState.$current)
