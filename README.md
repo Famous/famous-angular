@@ -57,7 +57,17 @@ To get started even faster, try the [famous-angular-starter](https://github.com/
 
 `npm install -g gulp`
 
+
+
 ####Thereafter:
+Install the frontend dependencies inside of your example folder.
+
+`cd famous-angular-examples`
+
+`bower install`
+
+`cd ..`
+
 `npm start`
 
 Npm start will use gulp to concatenate files into famous-angular.js, which is built into the app folder. It will also watch for changes inside app and livereload as necessary.
