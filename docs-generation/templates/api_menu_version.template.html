@@ -9,7 +9,7 @@
     <ul>
         <@ for doc in docs @><@ if doc.docType == "directive" @>
         <li>
-            <a href="{{relative}}{{ page.versionHref | replace_first: '/', '' }}/<$ doc.path $>">
+            <a href="{{relative}}{{ page.versionHref | replace_first: '/', '' }}/<$ doc.path $>index.html">
                 <$ doc.name | dashCase $>
             </a>
         </li>
@@ -26,7 +26,7 @@
     <ul>
         <@ for doc in docs @><@ if doc.docType == "service" @>
         <li>
-            <a href="{{relative}}{{ page.versionHref | replace_first: '/', '' }}/<$ doc.path $>">
+            <a href="{{relative}}{{ page.versionHref | replace_first: '/', '' }}/<$ doc.path $>index.html">
                 <$ doc.name $>
             </a>
         </li>
@@ -43,7 +43,7 @@
     <ul>
         <@ for doc in docs @><@ if doc.docType == "provider" @>
         <li>
-            <a href="{{relative}}{{ page.versionHref | replace_first: '/', '' }}/<$ doc.path $>">
+            <a href="{{relative}}{{ page.versionHref | replace_first: '/', '' }}/<$ doc.path $>index.html">
                 <$ doc.name $>
             </a>
         </li>
