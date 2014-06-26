@@ -24,6 +24,14 @@ angular.module('famous.angular')
         }
       });
 
+      $q.all(templateRequests).then(function(templates) {
+        angular.forEach(templates, function(template) {
+          mainTemplate = mainTemplate.replace(statics[template.name], template.data);
+        });
+        deferred.resolve(mainTemplate);
+      });
+
+      return deferred.promise;
     }
 
 
