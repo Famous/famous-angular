@@ -89,15 +89,19 @@ angular.module('famous.angular')
             
             locals =   isolate.states[$famousState.current] || $famousState.$current;
             currentEl = locals.$template;
-            element.html(currentEl);
             isolate.fromState = isolate.currentState;
             isolate.currentState = $famousState.current;
+            if(element[0].children[0]){
+              element[0].children[0].remove();
+            }
 
             if(isolate.states[isolate.currentState] && isolate.states[isolate.currentState].isolate) {
               currentScope = isolate.states[isolate.currentState].$scope;
+              element.append(isolate.states[isolate.currentState].element);
               currentScope.$emit('registerChild',isolate.states[isolate.currentState].isolate);
             }else {
 
+              element.html(currentEl);
               currentScope =  $scope.$new();
               var link  = $compile(element.contents());
               locals.$scope =  currentScope;
@@ -112,6 +116,7 @@ angular.module('famous.angular')
               }
 
               link(currentScope);
+               isolate.states[$famousState.current].element = angular.element(element[0].children[0]);
             }
 
             currentScope.$emit('$viewContentLoaded');
