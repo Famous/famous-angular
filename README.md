@@ -73,9 +73,10 @@ As configured, you should be able to access the application at localhost:4000.
 `gulp docs`
 
 ####To run tests
+Ensure that you have the [karma](http://karma-runner.github.io/0.12/intro/installation.html) command line interface installed.
+'npm install -g karma-cli'
 
-`karma start`
-
+`karma start'
 
 
 ##Support
