@@ -89,24 +89,24 @@ angular.module('famous.angular')
 
             var _numberOfChildren = 0;
             scope.$on('registerChild', function (evt, data) {
-              if (evt.targetScope.$id != scope.$id) {
+              if (evt.targetScope.$id !== scope.$id) {
                 _numberOfChildren++;
-                if(_numberOfChildren === 1){
+                if (_numberOfChildren === 1) {
                   isolate.renderNode.header.add(data.renderNode);
-                }else if(_numberOfChildren === 2){
+                } else if (_numberOfChildren === 2) {
                   isolate.renderNode.content.add(data.renderNode);
-                }else if(_numberOfChildren === 3){
+                } else if (_numberOfChildren === 3) {
                   isolate.renderNode.footer.add(data.renderNode);
-                }else{
-                  throw "fa-header-footer-layout can accept no more than 3 children"
+                } else {
+                  throw "fa-header-footer-layout can accept no more than 3 children";
                 }
                 evt.stopPropagation();
-              };
+              }
             });
 
             scope.$on('unregisterChild', function (evt, data) {
               //TODO:  support removing children
-              throw "unimplemented: fa-header-footer-layout does not support removing children"
+              throw "unimplemented: fa-header-footer-layout does not support removing children";
             });
 
           },
