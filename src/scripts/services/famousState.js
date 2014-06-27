@@ -1,4 +1,59 @@
-
+/**
+ * @ngdoc provider
+ * @name $famousStateProvider
+ * @module famous.angular
+ * @description
+ * This provider allows for state-based routing similar to that of the Angular UI Router.  The 
+ * difference being that $famousStateProvider allows Famo.us animations and transforms to be defined on
+ * state transitions.
+ *
+ * @usage
+ * States may defined in the following manner:
+ *
+ * ```js
+ * angular.module('mySuperApp', ['famous.angular']).config(
+ *   function($famousStateProvider) {
+ *    $famousStateProvider
+ *      .state('home', {
+ *        url: '/',
+ *        templateURL: 'views/home.html',
+ *        conroller: 'homeCtrl',
+ *        inTransitionFrom: {
+ *          contact: 'fromContact'
+ *          portfolio: 'fromPortfolio'  
+ *        },
+ *        outTransitionTo: {
+ *          contact: 'toContact'
+ *          portfolio: 'toPortfolio'
+ *        }
+ *      })
+ *      .state('portfolio', {
+ *        url: '/portfolio',
+ *        controller: function($scope) { $scope.name = 'My Portfolio'; },
+ *        inTransitionFrom: {
+ *          home: 'fromHome',
+ *          contact: 'fromContact'  
+ *        },
+ *        outTransitionTo: {
+ *          home: 'toHome',
+ *          contact: 'toContact'
+ *        },
+ *        views: {
+ *          '': {templateUrl: 'views/portfolioMain.html},
+ *          'project1@portfolio': {templateUrl: 'views/portfolioProject1.html},
+ *          'project2@portfolio': {templateUrl: 'views/portfolioProject2.html}
+ *        }
+ *      });
+ *      .state('contact', {
+ *        url: '/contact',
+ *        template: '<p>Contact us at contact@examples.com</p>',
+ *        controller: 'contactCtrl'
+ *      });
+ *   }
+ * });
+ * ```
+ *
+ */
 
 angular.module('famous.angular')
 
@@ -58,7 +113,13 @@ angular.module('famous.angular')
       buildState(state);
     }
 
-
+    /**
+     * Passes the state object into the state builder which validates each of the properties defined
+     * on the state.  If the object "passes" the state builder, it will be registered (added to the 
+     * states object).  Finally, updateQueue is invoked to determine whether or not the state being 
+     * added is the parent of one of the "orhpan" states in the queue.  If so, the child state will be 
+     * registered.
+     */
     function buildState (state) {
       
       angular.forEach(stateBuilder, function(buildFunction) {
@@ -124,7 +185,14 @@ angular.module('famous.angular')
         } 
       },
 
-
+      /**
+       * Transitions are objects that define how one state should transfer to and from all other states
+       * in the application.  The keys in a transition object should be the name of the states being
+       * transitioned to/from and the value should be a string which references the name of a function
+       * in the controller that defines the transition.  A single transition function may also be passed,
+       * thereby assigning a single transition to/from that state.  If no transitions are definec, default
+       * transitions will be assigned.
+       */
       transitions: function(state) {
 
         if ( !angular.isDefined(state.inTransitionFrom) && !angular.isDefined(state.outTransitionTo) ) { return; } 
@@ -238,7 +306,36 @@ angular.module('famous.angular')
     $get.$inject = ['$rootScope','$http', '$location', '$q', '$famousTemplate'];
     function $get($rootScope, $http, $location, $q, $famousTemplate) {
 
-
+      /**
+       * @ngdoc service
+       * @name $famousState
+       * @module famous.angular
+       * @description
+       * This service gives you access to $famousState object.
+       *
+       * @usage
+       * Use this service to transition states and access information related to the current state.
+       *
+       * ```js
+       * angular.module('mySuperApp', ['famous.angular']).controller(
+       *   function($scope, $famousState) {
+       *
+       *     // Transition states
+       *     $scope.goHome = function() {
+       *       $famousState.go('home');
+       *     };
+       *     // Access information related to current state
+       *     $famousState.current = 'The name of the current state';
+       *     $famousState.$current = 'The current state object';
+       *     $famousState.locals = 'The properties of any static child views defined on the state';
+       *     $famousState.$prior = 'The previous state of the application;
+       *     $famousState.inTransitionTo = 'The in transitions assigned to the current state';
+       *     $famousState.outTransitionFrom = 'The out transitions assigned to the current state';
+       *   }  
+       * });
+       * ```
+       *
+       */
 
       $famousState = {
         current: root.name, // Name of the current state
@@ -250,17 +347,44 @@ angular.module('famous.angular')
         outTransitionFrom: ''
       };
 
-
+      /**
+       * @ngdoc method
+       * @name $famousState#includes
+       * @module famous.angular
+       * @description
+       * Allows the $famousState object to be queried to determine whether or not a state is registered.
+       * @param {String} state The name of a state
+       * @returns {Boolean} A boolean indicating whether or not the state is registered
+       */
       $famousState.includes = function(state) {  
         return stateValid(state);
       };
 
-
+      /**
+       * @ngdoc method
+       * @name $famousState#go
+       * @module famous.angular
+       * @description
+       * Initiates the state transition process.  Return if state is the current state and reload is not true.
+       * @param {String} state The name of a state
+       * @returns {Object} The $famousState object
+       */
       $famousState.go = function(state, reload){
         if ( state === $famousState.current && !reload) { return; }
         transitionState(state);     
       };
 
+      /**
+       * @ngdoc method
+       * @name $famousState#getStates
+       * @module famous.angular
+       * @description
+       * Returns all currently registered states.  This function exists solely for the purpose of 
+       * allowing the famousUrlRouter to update URL routes upon initiation.  As soon as the dependency
+       * injection issue is resolved, this function may be deleted.
+       * @param {String} state The name of a state
+       * @returns {Object} The states object
+       */
 
       $famousState.getStates = function() {
         return states;
@@ -283,6 +407,11 @@ angular.module('famous.angular')
         });
       }
 
+      /**
+       * Validates the name (or relative name) of the state parameter passed to '$famousState.go'
+       * @param {String} state The name (or relative name) of a state
+       * @returns {Boolean} Returns a value indicating whether or not the state is valid 
+       */
       function transferValid(state) {
 
         // '^' indicates that the parent state should be activated
@@ -303,7 +432,20 @@ angular.module('famous.angular')
           return stateValid(state) ? state : false;
         }
         
-
+        /**
+         * In order for a child state to be activated, the parent state of that child must first be active.  
+         * If the parent is not active, the closest commong ancestor of the two states will be found and 
+         * the child of the common ancestor which is along the same path as the requested state will be activated.
+         * If a common ancestor does not exists, the highest-level ancestor of the requested state will be 
+         * activated.  
+         * 
+         * Example: The current state is 'A.E.F.X' and $famousState.go('A.E.B.Q') is called. 'A.E.B.Q' cannot 
+         * be activated without 'A.E.B' first being active.  Since 'A.E' is part of the path of the currently 
+         * active state, 'A.E.B' will be activated.  
+         * 
+         * Example: The current state is 'B.C.E' and $famousState.go('A.D') is called.  Since the two states do
+         * not share a common ancestor, the highest-level ancestor of the requested state, 'A', will be activated.
+         */
         if ( state.indexOf('.') > 0 ) {
           if ( $famousState.current === '' ) { $location.path('^'); }
           var parentName = /^(.+)\.[^.]+$/.exec(state)[1];
@@ -318,6 +460,12 @@ angular.module('famous.angular')
         return stateValid(state) ? state: false;
       }
 
+      /**
+       * Accepts the parent name of a state and finds the closest common ancestor of the currently active state.
+       * If an ancestor is found, the child state of the ancestor which corresponds to the state passed into the
+       * the function will be returned.  If there is no common index, the highest-level ancestor of the passed in
+       * state will be returned.  
+       */
       function findCommonAncestor (parentName) {
         
         var currentParent = $famousState.$current.parent;
