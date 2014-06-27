@@ -63,23 +63,23 @@ angular.module('famous.angular')
               });
               
               scope.$on('registerChild', function (evt, data) {
-                if (evt.targetScope.$id != scope.$id) {
+                if (evt.targetScope.$id !== scope.$id) {
                   var _childCount = isolate.children.length;
-                  if (_childCount == 0) {
+                  if (_childCount === 0) {
                     isolate.renderNode.setFront(data.renderNode);
-                  }else if (_childCount == 1) {
+                  }else if (_childCount === 1) {
                     isolate.renderNode.setBack(data.renderNode);
                   }else{
-                    throw "fa-flipper accepts only two child elements; more than two have been provided"
+                    throw "fa-flipper accepts only two child elements; more than two have been provided";
                   }
                   isolate.children.push(data.renderNode);
                   evt.stopPropagation();
-                };
+                }
               });
 
               //TODO:  handle unregisterChild
               scope.$on('unregisterChild', function(evt, data){
-                if(evt.targetScope.$id != scope.$id){
+                if(evt.targetScope.$id !== scope.$id){
 
                 }
               });
