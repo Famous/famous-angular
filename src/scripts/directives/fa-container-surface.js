@@ -35,16 +35,16 @@ angular.module('famous.angular')
             isolate.renderNode = new ContainerSurface(options);
 
             scope.$on('registerChild', function(evt, data){
-              if(evt.targetScope.$id != scope.$id){
+              if(evt.targetScope.$id !== scope.$id){
                 isolate.renderNode.add(data.renderNode);
                 evt.stopPropagation();
-              };
+              }
             });
 
             scope.$on('unregisterChild', function(evt, data){
                 //TODO:  support removing children
-                throw "unimplemented: fa-container-surface does not support removing children"
-            })
+                throw "unimplemented: fa-container-surface does not support removing children";
+            });
 
           },
           post: function(scope, element, attrs){
