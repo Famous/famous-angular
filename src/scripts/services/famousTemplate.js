@@ -34,7 +34,35 @@ angular.module('famous.angular')
       return deferred.promise;
     }
 
+    /**
+     * Fetches a view template and returns the raw HTML as a promise.
+     */
 
+    function fetchTemplate(view, name) {
+
+      var deferred = $q.defer();
+      var template = {};
+
+      if ( view.template.html ) { 
+        template.name = name;
+        template.data = view.template.html;
+        deferred.resolve(template);
+      } else if ( view.template.link ) {
+        $http.get(view.template.link, {cache: $templateCache})
+        .success(function(data) {
+          template.name = name;
+          template.data = data;
+          deferred.resolve(template);
+        }).error(function(data) {
+          template.name = name;
+          template.data = data;
+          deferred.reject(template);
+        }); 
+      }
+
+      return deferred.promise;
+
+    }
 
     };
 
