@@ -1,4 +1,32 @@
-
+/**
+ * @ngdoc provider
+ * @name $famousUrlRouterProvider
+ * @module famous.angular
+ * @description
+ * This provider allows for state-based routing similar to that of the Angular UI Router.  The 
+ * difference being that $famousStateProvider allows Famo.us animations and transforms to be defined on
+ * state transitions.
+ *
+ * @usage
+ * URL routes may be defined in the configuration block using the 'when' and 'otherwise' methods.  If 
+ * $famousStateProvider is used to define URLs for states, they do not need to be defined here.  However,
+ * the 'otherwise' method should always be used to define the state which the application will
+ * default to when an invalid URL is specified.
+ *
+ * ```js
+ * angular.module('mySuperApp', ['famous.angular']).config(
+ *   function($famousUrlRouterProvider) {
+ *     
+ *    $famousUrlRouterProvider.when('/blog', 'blog');
+ *    $famousUrlRouterProvider.when('/portfolio', 'portfolio');
+ *    $famousUrlRouterProvider.when('/contact', 'contact');
+ *    $famousUrlRouterProvider.otherwise('home');
+ *    
+ *   }
+ * });
+ * ```
+ *
+ */
 angular.module('famous.angular')
   .provider('$famousUrlRouter', function(){
 
