@@ -64,6 +64,38 @@ angular.module('famous.angular')
 
     }
 
+    return {
+
+
+
+      resolve: function(state) {
+
+        var deferred = $q.defer();
+        var mainView = state.views['@'];
+        mainView.name = state.name;
+        var childViews = [];
+
+        angular.forEach(state.views, function(view, name) {
+          if ( name !== '@' && name.indexOf('@') !== 1 ) {
+            childViews.push({name: name, template: view.template});
+          }
+        });
+
+        fetchTemplate(mainView, mainView.name)
+        .then(function(mainTemplate) {
+          if ( childViews.length > 0 ) {
+            resolveChildViews(mainTemplate.data, childViews)
+            .then(function(template){
+              deferred.resolve(template);
+            });
+          } else {
+            deferred.resolve(mainTemplate.data);
+          }
+        });
+
+        return deferred.promise;
+
+      }
     };
 
 }]);
