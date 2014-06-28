@@ -38,11 +38,10 @@ angular.module('famous.angular')
               isolate.renderNode.add(data.renderNode);
             });
 
-            scope.$on('unregisterChild', function(evt, data){
-                //TODO:  support removing children
-                throw "unimplemented: fa-container-surface does not support removing children"
-            })
-
+            // TODO: support removing children
+            $famousDecorator.unsequenceWith(scope, function(data) {
+              throw "unimplemented: fa-container-surface does not support removing children";
+            });
           },
           post: function(scope, element, attrs){
             var isolate = $famousDecorator.ensureIsolate(scope);

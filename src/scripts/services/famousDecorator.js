@@ -145,6 +145,32 @@ angular.module('famous.angular')
             evt.stopPropagation();
           }
         });
+      },
+
+      /**
+       * @ngdoc method
+       * @name $famousDecorator#unsequenceWith
+       * @module famous.angular
+       * @description
+       * Attach a listener for `unregisterChild` events.
+       *
+       * @param {String} scope - the scope to listen on
+       * @param {Object} method - the method to apply to the incoming isolate's content to remove it
+       * to the sequence
+       *
+       * @usage
+       *
+       * ```js
+       * $famousDecorator.unsequenceWith($scope, isolate.renderNode.remove);
+       * ```
+       */
+      unsequenceWith: function(scope, method) {
+        scope.$on('unregisterChild', function(evt, data) {
+          if (evt.targetScope.$id !== scope.$id) {
+            method(data);
+            evt.stopPropagation();
+          }
+        });
       }
     };
   });

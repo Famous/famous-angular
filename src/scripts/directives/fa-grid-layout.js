@@ -73,11 +73,11 @@ angular.module('famous.angular')
                 return a.index - b.index;
               });
               isolate.renderNode.sequenceFrom(function(_children) {
-	              var _ch = [];
-	              angular.forEach(_children, function(c, i) {
-		              _ch[i] = c.renderNode;
-	              })
-	              return _ch;
+                var _ch = [];
+                angular.forEach(_children, function(c, i) {
+                  _ch[i] = c.renderNode;
+                })
+                return _ch;
               }(_children));
             }
 
@@ -86,21 +86,18 @@ angular.module('famous.angular')
               updateGridLayout();
             });
 
-            scope.$on('unregisterChild', function(evt, data){
-              if(evt.targetScope.$id != scope.$id){
-	            _children = function(_children) {
-		          var _ch = [];
-		          angular.forEach(_children, function(c) {
-			        if(c.id !== data.id) {
-				      _ch.push(c);
-			        }
-		          });
-		          return _ch;
-	            }(_children);
-                updateGridLayout();
-                evt.stopPropagation();
-              }
-            })
+            $famousDecorator.unsequenceWith(scope, function(data) {
+              _children = function(_children) {
+                var _ch = [];
+                angular.forEach(_children, function(c) {
+                  if (c.id !== data.id) {
+                    _ch.push(c);
+                  }
+                });
+                return _ch;
+              }(_children);
+              updateGridLayout();
+            });
 
           },
           post: function(scope, element, attrs){

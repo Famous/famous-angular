@@ -211,11 +211,11 @@ angular.module('famous.angular')
 
                 var options = {
                   array: function(_children) {
-	                  var _ch = [];
-	                  angular.forEach(_children, function(c, i) {
-		                  _ch[i] = c.renderNode;
-	                  })
-	                  return _ch;
+                    var _ch = [];
+                    angular.forEach(_children, function(c, i) {
+                      _ch[i] = c.renderNode;
+                    })
+                    return _ch;
                   }(_children)
                 };
                 //set the first page on the scrollview if
@@ -234,22 +234,18 @@ angular.module('famous.angular')
               updateScrollview(true);
             });
 
-            scope.$on('unregisterChild', function(evt, data){
-              if(evt.targetScope.$id != scope.$id){
-
-	            _children = function(_children) {
-		          var _ch = [];
-		          angular.forEach(_children, function(c) {
-			        if(c.id !== data.id) {
-				      _ch.push(c);
-			        }
-		          });
-		          return _ch;
-	            }(_children);
-                updateScrollview();
-                evt.stopPropagation();
-              }
-            })
+            $famousDecorator.unsequenceWith(scope, function(data) {
+              _children = function(_children) {
+                var _ch = [];
+                angular.forEach(_children, function(c) {
+                  if (c.id !== data.id) {
+                    _ch.push(c);
+                  }
+                });
+                return _ch;
+              }(_children);
+              updateScrollview();
+            });
 
           },
           post: function(scope, element, attrs){

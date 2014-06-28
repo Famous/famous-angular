@@ -73,13 +73,10 @@ angular.module('famous.angular')
                 isolate.children.push(data.renderNode);
               });
 
-              //TODO:  handle unregisterChild
-              scope.$on('unregisterChild', function(evt, data){
-                if(evt.targetScope.$id != scope.$id){
-
-                }
+              // TODO: support removing children
+              $famousDecorator.unsequenceWith(scope, function(data) {
+                throw "unimplemented: fa-flipper does not support removing children";
               });
-
             },
             post: function (scope, element, attrs) {
               var isolate = $famousDecorator.ensureIsolate(scope);

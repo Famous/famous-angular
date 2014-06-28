@@ -78,20 +78,17 @@ angular.module('famous.angular')
               _updateSequentialLayout();
             });
 
-            scope.$on('unregisterChild', function (evt, data) {
-              if (evt.targetScope.$id != scope.$id) {
-                _children = function (_children) {
-                  var _ch = [];
-                  angular.forEach(_children, function (c) {
-                    if (c.id !== data.id) {
-                      _ch.push(c);
-                    }
-                  });
-                  return _ch;
-                }(_children);
-                _updateSequentialLayout();
-                evt.stopPropagation();
-              }
+            $famousDecorator.unsequenceWith(scope, function(data) {
+              _children = function (_children) {
+                var _ch = [];
+                angular.forEach(_children, function (c) {
+                  if (c.id !== data.id) {
+                    _ch.push(c);
+                  }
+                });
+                return _ch;
+              }(_children);
+              _updateSequentialLayout();
             });
 
           },

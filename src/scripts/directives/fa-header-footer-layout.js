@@ -101,9 +101,9 @@ angular.module('famous.angular')
               }
             });
 
-            scope.$on('unregisterChild', function (evt, data) {
-              //TODO:  support removing children
-              throw "unimplemented: fa-header-footer-layout does not support removing children"
+            // TODO: support removing children
+            $famousDecorator.unsequenceWith(scope, function(data) {
+              throw "unimplemented: fa-header-footer-layout does not support removing children";
             });
 
           },
