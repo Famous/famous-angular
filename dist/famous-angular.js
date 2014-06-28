@@ -2082,7 +2082,7 @@ angular.module('famous.angular')
 */
 
 angular.module('famous.angular')
-  .directive('faModifier', ["$famous", "$famousDecorator", "$parse", function ($famous, $famousDecorator, $parse) {
+  .directive('faModifier', ["$famous", "$famousDecorator", "$parse", "$rootScope", function ($famous, $famousDecorator, $parse, $rootScope) {
     return {
       template: '<div></div>',
       transclude: true,
@@ -2253,7 +2253,7 @@ angular.module('famous.angular')
 
             // Trigger a $digest loop to make sure that callbacks for the
             // $observe listeners are executed in the compilation phase.
-            if(!scope.$$phase) scope.$apply();
+            if(!scope.$$phase && !$rootScope.$$phase) scope.$apply();
           }
         }
       }
