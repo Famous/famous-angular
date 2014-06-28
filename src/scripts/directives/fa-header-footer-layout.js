@@ -88,23 +88,26 @@ angular.module('famous.angular')
             isolate.renderNode = new HeaderFooterLayout(options);
 
             var _numberOfChildren = 0;
-            $famousDecorator.sequenceWith(scope, function(data) {
-              _numberOfChildren++;
-              if (_numberOfChildren === 1) {
-                isolate.renderNode.header.add(data.renderNode);
-              } else if (_numberOfChildren === 2){
-                isolate.renderNode.content.add(data.renderNode);
-              } else if (_numberOfChildren === 3){
-                isolate.renderNode.footer.add(data.renderNode);
-              } else {
-                throw "fa-header-footer-layout can accept no more than 3 children";
-              }
-            });
 
-            // TODO: support removing children
-            $famousDecorator.unsequenceWith(scope, function(data) {
-              throw "unimplemented: fa-header-footer-layout does not support removing children";
-            });
+            $famousDecorator.sequenceWith(
+              scope,
+              function(data) {
+                _numberOfChildren++;
+                if (_numberOfChildren === 1) {
+                  isolate.renderNode.header.add(data.renderNode);
+                } else if (_numberOfChildren === 2){
+                  isolate.renderNode.content.add(data.renderNode);
+                } else if (_numberOfChildren === 3){
+                  isolate.renderNode.footer.add(data.renderNode);
+                } else {
+                  throw "fa-header-footer-layout can accept no more than 3 children";
+                }
+              },
+              // TODO: support removing children
+              function(childScopeId) {
+                throw "unimplemented: fa-header-footer-layout does not support removing children";
+              }
+            );
 
           },
           post: function (scope, element, attrs) {

@@ -111,10 +111,13 @@ angular.module('famous.angular')
        * ```
        */
       unregisterChild: function(element, scope, callback) {
+        var ensureIsolate = this.ensureIsolate;
         element.one('$destroy', function() {
-          // @TODO: refactor this to not need scope; we typically want to invoke it after a scope has
-          // been destroyed.
-          scope.$emit('unregisterChild', {id: scope.$id});
+          var isolate = ensureIsolate(scope);
+
+          if ('removeMethod' in isolate) {
+            isolate.removeMethod(isolate.id);
+          }
 
           // Invoke the callback, if provided
           callback && callback();
@@ -129,8 +132,10 @@ angular.module('famous.angular')
        * Attach a listener for `registerChild` events.
        *
        * @param {String} scope - the scope to listen on
-       * @param {Object} method - the method to apply to the incoming isolate's content to add it
+       * @param {Object} addMethod - the method to apply to the incoming isolate's content to add it
        * to the sequence
+       * @param {Object} removeMethod - the method to apply to the incoming isolate's ID to remove it
+       * from the sequence
        *
        * @usage
        *
@@ -138,37 +143,14 @@ angular.module('famous.angular')
        * $famousDecorator.sequenceWith($scope, isolate.renderNode.add);
        * ```
        */
-      sequenceWith: function(scope, method) {
+      sequenceWith: function(scope, addMethod, removeMethod) {
         scope.$on('registerChild', function(evt, data) {
           if (evt.targetScope.$id !== scope.$id) {
-            method(data);
+            addMethod(data);
             evt.stopPropagation();
-          }
-        });
-      },
 
-      /**
-       * @ngdoc method
-       * @name $famousDecorator#unsequenceWith
-       * @module famous.angular
-       * @description
-       * Attach a listener for `unregisterChild` events.
-       *
-       * @param {String} scope - the scope to listen on
-       * @param {Object} method - the method to apply to the incoming isolate's content to remove it
-       * to the sequence
-       *
-       * @usage
-       *
-       * ```js
-       * $famousDecorator.unsequenceWith($scope, isolate.renderNode.remove);
-       * ```
-       */
-      unsequenceWith: function(scope, method) {
-        scope.$on('unregisterChild', function(evt, data) {
-          if (evt.targetScope.$id !== scope.$id) {
-            method(data);
-            evt.stopPropagation();
+            // Attach the remove method to the isolate, so it can be invoked without scope, if it is provided
+            removeMethod && (data.removeMethod = removeMethod);
           }
         });
       }

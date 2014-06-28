@@ -34,14 +34,15 @@ angular.module('famous.angular')
             var options = scope.$eval(attrs.faOptions) || {};
             isolate.renderNode = new ContainerSurface(options);
 
-            $famousDecorator.sequenceWith(scope, function(data) {
-              isolate.renderNode.add(data.renderNode);
-            });
-
-            // TODO: support removing children
-            $famousDecorator.unsequenceWith(scope, function(data) {
-              throw "unimplemented: fa-container-surface does not support removing children";
-            });
+            $famousDecorator.sequenceWith(
+              scope,
+              function(data) {
+                isolate.renderNode.add(data.renderNode);
+              },
+              function(childScopeId) {
+                throw "unimplemented: fa-container-surface does not support removing children";
+              }
+            );
           },
           post: function(scope, element, attrs){
             var isolate = $famousDecorator.ensureIsolate(scope);

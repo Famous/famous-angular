@@ -60,23 +60,25 @@ angular.module('famous.angular')
 
               $famousDecorator.unregisterChild(element, scope);
 
-              $famousDecorator.sequenceWith(scope, function(data) {
-                var _childCount = isolate.children.length;
-                if (_childCount == 0) {
-                  isolate.renderNode.setFront(data.renderNode);
-                } else if (_childCount == 1) {
-                  isolate.renderNode.setBack(data.renderNode);
-                } else {
-                  throw "fa-flipper accepts only two child elements; more than two have been provided";
+              $famousDecorator.sequenceWith(
+                scope,
+                function(data) {
+                  var _childCount = isolate.children.length;
+                  if (_childCount == 0) {
+                    isolate.renderNode.setFront(data.renderNode);
+                  } else if (_childCount == 1) {
+                    isolate.renderNode.setBack(data.renderNode);
+                  } else {
+                    throw "fa-flipper accepts only two child elements; more than two have been provided";
+                  }
+
+                  isolate.children.push(data.renderNode);
+                },
+                // TODO: support removing children
+                function(childScopeId) {
+                  throw "unimplemented: fa-flipper does not support removing children";
                 }
-
-                isolate.children.push(data.renderNode);
-              });
-
-              // TODO: support removing children
-              $famousDecorator.unsequenceWith(scope, function(data) {
-                throw "unimplemented: fa-flipper does not support removing children";
-              });
+              );
             },
             post: function (scope, element, attrs) {
               var isolate = $famousDecorator.ensureIsolate(scope);

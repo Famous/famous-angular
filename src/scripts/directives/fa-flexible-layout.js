@@ -31,23 +31,25 @@ angular.module('famous.angular')
               }(_children));
             }
 
-            $famousDecorator.sequenceWith(scope, function(data) {
-              _children.push(data);
-              updateFlexibleLayout();
-            });
-
-            $famousDecorator.unsequenceWith(scope, function(data) {
-              _children = function (_children) {
-                var _ch = [];
-                angular.forEach(_children, function (c) {
-                  if (c.id !== data.id) {
-                    _ch.push(c);
-                  }
-                });
-                return _ch;
-              }(_children);
-              updateFlexibleLayout();
-            });
+            $famousDecorator.sequenceWith(
+              scope,
+              function(data) {
+                _children.push(data);
+                updateFlexibleLayout();
+              },
+              function(childScopeId) {
+                _children = function (_children) {
+                  var _ch = [];
+                  angular.forEach(_children, function (c) {
+                    if (c.id !== childScopeId) {
+                      _ch.push(c);
+                    }
+                  });
+                  return _ch;
+                }(_children);
+                updateFlexibleLayout();
+              }
+            );
 
           },
           post: function (scope, element, attrs) {

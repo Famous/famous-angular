@@ -229,23 +229,25 @@ angular.module('famous.angular')
               })
             }
 
-            $famousDecorator.sequenceWith(scope, function(data) {
-              _children.push(data);
-              updateScrollview(true);
-            });
-
-            $famousDecorator.unsequenceWith(scope, function(data) {
-              _children = function(_children) {
-                var _ch = [];
-                angular.forEach(_children, function(c) {
-                  if (c.id !== data.id) {
-                    _ch.push(c);
-                  }
-                });
-                return _ch;
-              }(_children);
-              updateScrollview();
-            });
+            $famousDecorator.sequenceWith(
+              scope,
+              function(data) {
+                _children.push(data);
+                updateScrollview(true);
+              },
+              function(childScopeId) {
+                _children = function(_children) {
+                  var _ch = [];
+                  angular.forEach(_children, function(c) {
+                    if (c.id !== childScopeId) {
+                      _ch.push(c);
+                    }
+                  });
+                  return _ch;
+                }(_children);
+                updateScrollview();
+              }
+            );
 
           },
           post: function(scope, element, attrs){
