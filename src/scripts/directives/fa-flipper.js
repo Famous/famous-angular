@@ -58,9 +58,7 @@ angular.module('famous.angular')
                 isolate.renderNode.flip(overrideOptions || scope.$eval(attrs.faOptions));
               };
 
-              element.one('$destroy', function() {
-                scope.$emit('unregisterChild', {id: scope.$id});
-              });
+              $famousDecorator.unregisterChild(element, scope);
 
               $famousDecorator.sequenceWith(scope, function(data) {
                 var _childCount = isolate.children.length;

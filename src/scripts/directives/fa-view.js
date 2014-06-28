@@ -68,9 +68,7 @@ angular.module('famous.angular')
               size: scope.$eval(attrs.faSize) || [undefined, undefined]
             });
 
-            element.one('$destroy', function() {
-              scope.$emit('unregisterChild', {id: scope.$id});
-            });
+            $famousDecorator.unregisterChild(element, scope);
 
             $famousDecorator.sequenceWith(scope, function(data) {
               isolate.renderNode.add(data.renderNode);

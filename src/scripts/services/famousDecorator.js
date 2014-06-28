@@ -77,8 +77,7 @@ angular.module('famous.angular')
        * Register a child isolate's renderNode to the nearest parent that can sequence
        * it.
        *
-       * A `registerChild` event is sent upward with `scope.$emit` starting from scope.$parent
-       * to ensure we never add an isolate's renderNode to its own sequence.
+       * A `registerChild` event is sent upward with `scope.$emit`.
        *
        * @param {String} scope - the scope with an isolate to be sequenced.
        * @param {Object} isolate - an isolated scope object from $famousDecorator#ensureIsolate
@@ -95,13 +94,39 @@ angular.module('famous.angular')
 
       /**
        * @ngdoc method
+       * @name $famousDecorator#unregisterChild
+       * @module famous.angular
+       * @description
+       * An `unregisterChild` event is sent upward with `scope.$emit` when a a directive element's
+       * `$destroy` event occurs.
+       *
+       * @param {Object} element - the element to listen on
+       * @param {String} scope - the scope to emit from
+       * @param {Object} callback - an optional callback to invoke when the emission is complete
+       *
+       * @usage
+       *
+       * ```js
+       * $famousDecorator.unregisterChild($element, $scope);
+       * ```
+       */
+      unregisterChild: function(element, scope, callback) {
+        element.one('$destroy', function() {
+          // @TODO: refactor this to not need scope; we typically want to invoke it after a scope has
+          // been destroyed.
+          scope.$emit('unregisterChild', {id: scope.$id});
+
+          // Invoke the callback, if provided
+          callback && callback();
+        });
+      },
+
+      /**
+       * @ngdoc method
        * @name $famousDecorator#sequenceWith
        * @module famous.angular
        * @description
-       * Attach a listener to a scope for
-       *
-       * A `registerChild` event is sent upward with `scope.$emit` starting from scope.$parent
-       * to ensure we never add an isolate's content to its own sequence.
+       * Attach a listener for `registerChild` events.
        *
        * @param {String} scope - the scope to listen on
        * @param {Object} method - the method to apply to the incoming isolate's content to add it

@@ -365,9 +365,8 @@ angular.module('famous.angular')
 
             // When the actual element is destroyed by Angular,
             // "hide" the Modifier by setting its opacity to 0.
-            element.one('$destroy', function() {
+            $famousDecorator.unregisterChild(element, scope, function() {
               isolate.modifier.setOpacity(0);
-              scope.$emit('unregisterChild', {id: scope.$id});
             });
 
 

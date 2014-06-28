@@ -200,13 +200,8 @@ angular.module('famous.angular')
               isolate.renderNode.setClasses(attrs['class'].split(' '));
             }
 
-            element.one('$destroy', function() {
-              //TODO:  hook into RenderController and hide this render node
-              //       This whole function (scope.$on...) can probably
-              //       be handled by the $famousDecorator
-              scope.$emit('unregisterChild', {id: scope.$id});
-            });
-
+            // TODO: hook into RenderController and hide this render node
+            $famousDecorator.unregisterChild(element, scope);
           },
           post: function(scope, element, attrs){
             var isolate = $famousDecorator.ensureIsolate(scope);
