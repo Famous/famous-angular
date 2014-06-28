@@ -1,7 +1,7 @@
 {
   "name": "famous-angular",
   "description": "Bring structure to your Famo.us apps with the power of AngularJS. Famo.us/Angular integrates seamlessly with existing Angular and Famo.us apps.",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "license": "MPL v2.0",
   "homepage": "https://github.com/Famous/famous-angular",
   "repository": {
@@ -60,6 +60,8 @@
     "semver": "^2.3.0",
     "streamqueue": "0.0.7",
     "winston": "^0.7.3",
-    "karma-cli": "0.0.4"
+    "karma-cli": "0.0.4",
+    "gulp-inject": "^0.4.1",
+    "gulp-filter": "^0.4.1"
   }
 }

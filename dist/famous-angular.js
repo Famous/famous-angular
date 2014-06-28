@@ -1,6 +1,6 @@
 /**
  * famous-angular - Bring structure to your Famo.us apps with the power of AngularJS. Famo.us/Angular integrates seamlessly with existing Angular and Famo.us apps.
- * @version v0.0.16
+ * @version v0.0.17
  * @link https://github.com/Famous/famous-angular
  * @license MPL v2.0
  */
@@ -9,45 +9,103 @@
 // Put angular bootstrap on hold
 window.name = "NG_DEFER_BOOTSTRAP!" + window.name;
 
-//TODO:  Ensure that this list stays up-to-date with
-//       the filesystem (maybe write a bash script
-//       working around `ls -R1 app/scripts/famous` ?)
 var requirements = [
-  "famous/core/Engine",
-  "famous/core/EventEmitter",
-  "famous/core/EventHandler",
-  "famous/core/Modifier",
-  "famous/core/RenderNode",
-  "famous/core/Surface",
-  "famous/core/Transform",
-  "famous/core/View",
-  "famous/core/ViewSequence",
-  "famous/events/EventArbiter",
-  "famous/events/EventFilter",
-  "famous/events/EventMapper",
-  "famous/inputs/FastClick",
-  "famous/inputs/GenericSync",
-  "famous/inputs/MouseSync",
-  "famous/inputs/PinchSync",
-  "famous/inputs/RotateSync",
-  "famous/inputs/TouchSync",
-  "famous/surfaces/ContainerSurface",
-  "famous/surfaces/ImageSurface",
-  "famous/surfaces/InputSurface",
-  "famous/transitions/Easing",
-  "famous/transitions/SpringTransition",
-  "famous/transitions/Transitionable",
-  "famous/transitions/TransitionableTransform",
-  "famous/utilities/KeyCodes",
-  "famous/utilities/Timer",
-  "famous/views/Flipper",
-  "famous/views/GridLayout",
-  "famous/views/HeaderFooterLayout",
-  "famous/views/RenderController",
-  "famous/views/Scroller",
-  "famous/views/Scrollview",
-  "famous/views/SequentialLayout"
-]
+"famous/core/Context",
+"famous/core/ElementAllocator",
+"famous/core/Engine",
+"famous/core/Entity",
+"famous/core/EventEmitter",
+"famous/core/EventHandler",
+"famous/core/Group",
+"famous/core/Modifier",
+"famous/core/OptionsManager",
+"famous/core/RenderNode",
+"famous/core/Scene",
+"famous/core/SpecParser",
+"famous/core/Surface",
+"famous/core/Transform",
+"famous/core/View",
+"famous/core/ViewSequence",
+"famous/events/EventArbiter",
+"famous/events/EventFilter",
+"famous/events/EventMapper",
+"famous/inputs/FastClick",
+"famous/inputs/GenericSync",
+"famous/inputs/MouseSync",
+"famous/inputs/PinchSync",
+"famous/inputs/RotateSync",
+"famous/inputs/ScaleSync",
+"famous/inputs/ScrollSync",
+"famous/inputs/TouchSync",
+"famous/inputs/TouchTracker",
+"famous/inputs/TwoFingerSync",
+"famous/math/Matrix",
+"famous/math/Quaternion",
+"famous/math/Random",
+"famous/math/Utilities",
+"famous/math/Vector",
+"famous/modifiers/Draggable",
+"famous/modifiers/Fader",
+"famous/modifiers/ModifierChain",
+"famous/modifiers/StateModifier",
+"famous/physics/PhysicsEngine",
+"famous/surfaces/CanvasSurface",
+"famous/surfaces/ContainerSurface",
+"famous/surfaces/FormContainerSurface",
+"famous/surfaces/ImageSurface",
+"famous/surfaces/InputSurface",
+"famous/surfaces/SubmitInputSurface",
+"famous/surfaces/TextareaSurface",
+"famous/surfaces/VideoSurface",
+"famous/transitions/CachedMap",
+"famous/transitions/Easing",
+"famous/transitions/MultipleTransition",
+"famous/transitions/SnapTransition",
+"famous/transitions/SpringTransition",
+"famous/transitions/Transitionable",
+"famous/transitions/TransitionableTransform",
+"famous/transitions/TweenTransition",
+"famous/transitions/WallTransition",
+"famous/utilities/KeyCodes",
+"famous/utilities/Timer",
+"famous/utilities/Utility",
+"famous/views/Deck",
+"famous/views/EdgeSwapper",
+"famous/views/FlexibleLayout",
+"famous/views/Flipper",
+"famous/views/GridLayout",
+"famous/views/HeaderFooterLayout",
+"famous/views/Lightbox",
+"famous/views/RenderController",
+"famous/views/ScrollContainer",
+"famous/views/Scroller",
+"famous/views/Scrollview",
+"famous/views/SequentialLayout",
+"famous/widgets/NavigationBar",
+"famous/widgets/Slider",
+"famous/widgets/TabBar",
+"famous/widgets/ToggleButton",
+"famous/physics/bodies/Body",
+"famous/physics/bodies/Circle",
+"famous/physics/bodies/Particle",
+"famous/physics/bodies/Rectangle",
+"famous/physics/constraints/Collision",
+"famous/physics/constraints/Constraint",
+"famous/physics/constraints/Curve",
+"famous/physics/constraints/Distance",
+"famous/physics/constraints/Snap",
+"famous/physics/constraints/Surface",
+"famous/physics/constraints/Wall",
+"famous/physics/constraints/Walls",
+"famous/physics/forces/Drag",
+"famous/physics/forces/Force",
+"famous/physics/forces/Repulsion",
+"famous/physics/forces/RotationalDrag",
+"famous/physics/forces/RotationalSpring",
+"famous/physics/forces/Spring",
+"famous/physics/forces/VectorField",
+"famous/physics/integrators/SymplecticEuler"
+];
 
 //declare the module before the async callback so that
 //it will be accessible to other synchronously loaded angular
@@ -1179,6 +1237,78 @@ angular.module('famous.angular')
             var isolate = $famousDecorator.ensureIsolate(scope);
             
             transclude(scope, function(clone) {
+              element.find('div').append(clone);
+            });
+
+            scope.$emit('registerChild', isolate);
+          }
+        };
+      }
+    };
+  }]);
+
+angular.module('famous.angular')
+  .directive('faFlexibleLayout', ["$famous", "$famousDecorator", function ($famous, $famousDecorator) {
+    return {
+      template: '<div></div>',
+      restrict: 'E',
+      transclude: true,
+      scope: true,
+      compile: function (tElem, tAttrs, transclude) {
+        return {
+          pre: function (scope, element, attrs) {
+            var isolate = $famousDecorator.ensureIsolate(scope);
+
+            var FlexibleLayout = $famous["famous/views/FlexibleLayout"];
+            var ViewSequence = $famous['famous/core/ViewSequence'];
+
+            var _children = [];
+
+            var options = scope.$eval(attrs.faOptions) || {};
+            isolate.renderNode = new FlexibleLayout(options);
+
+            var updateFlexibleLayout = function () {
+              _children.sort(function (a, b) {
+                return a.index - b.index;
+              });
+              isolate.renderNode.sequenceFrom(function (_children) {
+                var _ch = [];
+                angular.forEach(_children, function (c, i) {
+                  _ch[i] = c.renderNode;
+                })
+                return _ch;
+              }(_children));
+            }
+
+            scope.$on('registerChild', function (evt, data) {
+              if (evt.targetScope.$id != scope.$id) {
+                _children.push(data);
+                updateFlexibleLayout();
+                evt.stopPropagation();
+              };
+            });
+
+            scope.$on('unregisterChild', function (evt, data) {
+              if (evt.targetScope.$id != scope.$id) {
+                _children = function (_children) {
+                  var _ch = [];
+                  angular.forEach(_children, function (c) {
+                    if (c.id !== data.id) {
+                      _ch.push(c);
+                    }
+                  });
+                  return _ch;
+                }(_children);
+                updateFlexibleLayout();
+                evt.stopPropagation();
+              }
+            })
+
+          },
+          post: function (scope, element, attrs) {
+            var isolate = $famousDecorator.ensureIsolate(scope);
+
+            transclude(scope, function (clone) {
               element.find('div').append(clone);
             });
 
