@@ -31,12 +31,9 @@ angular.module('famous.angular')
               }(_children));
             }
 
-            scope.$on('registerChild', function (evt, data) {
-              if (evt.targetScope.$id != scope.$id) {
-                _children.push(data);
-                updateFlexibleLayout();
-                evt.stopPropagation();
-              };
+            $famousDecorator.sequenceWith(scope, function(data) {
+              _children.push(data);
+              updateFlexibleLayout();
             });
 
             scope.$on('unregisterChild', function (evt, data) {

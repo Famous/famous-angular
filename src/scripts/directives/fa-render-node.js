@@ -83,13 +83,10 @@ angular.module('famous.angular')
               scope.$emit('unregisterChild', {id: scope.$id});
             });
 
-            scope.$on('registerChild', function(evt, data){
-              if(evt.targetScope.$id != scope.$id){
-                isolate.renderNode.add(data.renderNode);
-                isolate.children.push(data);
-                evt.stopPropagation();
-              }
-            })
+            $famousDecorator.sequenceWith(scope, function(data) {
+              isolate.renderNode.add(data.renderNode);
+              isolate.children.push(data);
+            });
 
           },
           post: function(scope, element, attrs){

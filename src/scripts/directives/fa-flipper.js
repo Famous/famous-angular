@@ -62,19 +62,17 @@ angular.module('famous.angular')
                 scope.$emit('unregisterChild', {id: scope.$id});
               });
 
-              scope.$on('registerChild', function (evt, data) {
-                if (evt.targetScope.$id != scope.$id) {
-                  var _childCount = isolate.children.length;
-                  if (_childCount == 0) {
-                    isolate.renderNode.setFront(data.renderNode);
-                  }else if (_childCount == 1) {
-                    isolate.renderNode.setBack(data.renderNode);
-                  }else{
-                    throw "fa-flipper accepts only two child elements; more than two have been provided"
-                  }
-                  isolate.children.push(data.renderNode);
-                  evt.stopPropagation();
-                };
+              $famousDecorator.sequenceWith(scope, function(data) {
+                var _childCount = isolate.children.length;
+                if (_childCount == 0) {
+                  isolate.renderNode.setFront(data.renderNode);
+                } else if (_childCount == 1) {
+                  isolate.renderNode.setBack(data.renderNode);
+                } else {
+                  throw "fa-flipper accepts only two child elements; more than two have been provided";
+                }
+
+                isolate.children.push(data.renderNode);
               });
 
               //TODO:  handle unregisterChild

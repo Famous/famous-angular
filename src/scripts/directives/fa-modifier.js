@@ -371,12 +371,9 @@ angular.module('famous.angular')
             });
 
 
-            scope.$on('registerChild', function(evt, data){
-              if(evt.targetScope.$id !== evt.currentScope.$id){
-                isolate.renderNode.add(data.renderNode);
-                evt.stopPropagation();
-              }
-            })
+            $famousDecorator.sequenceWith(scope, function(data) {
+              isolate.renderNode.add(data.renderNode);
+            });
 
             transclude(scope, function(clone) {
               element.find('div').append(clone);
