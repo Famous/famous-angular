@@ -293,7 +293,8 @@ angular.module('famous.angular')
       parent: null,
       views: null,
       template: null,
-      contoller: null
+      contoller: null,
+      locals: null
     };
     
     this.$get = $get;
@@ -335,6 +336,7 @@ angular.module('famous.angular')
       $famousState = {
         current: root.name, // Name of the current state
         $current: root,
+        parent: root.parent,
         locals: {},
         $prior: {}, // Prior state object
         inTransitionTo: '',
@@ -387,7 +389,7 @@ angular.module('famous.angular')
       // Updates the $famousState object so that the new state view may be rendered by the fa-router directive
       function transitionState(state) {
 
-        if ( !transferValid ) { return $rootScope.$broadcast('$stateNotFound'); }
+        if ( !transferValid(state) ) { return $rootScope.$broadcast('$stateNotFound'); }
 
         $famousState.$prior = $famousState.$current;
         $famousState.current = state;
@@ -425,6 +427,17 @@ angular.module('famous.angular')
         if ( state.indexOf('.') === 0 ) {
           state = $famousState.current + state;
           return stateValid(state);
+        }
+        
+        // 'parent.child' incicates that a child state should be activated.  If the child's
+        // parent is not the currently active state, the parent state will instead be activated.
+        if ( state.indexOf('.') > 0 ) {
+          var parentName = /^(.+)\.[^.]+$/.exec(state)[1];
+          if ( $famousState.parent === parentName ) { 
+            return stateValid(state);
+          } else {
+            transitionState(parentName);
+          }
         }
 
         return stateValid(state);
