@@ -10,7 +10,7 @@
  * With the attributes `fa-animate-enter`, `fa-animate-leave`, `fa-animate-move`, you can assign an arbitrary
  * expression to animation events.
  *
- * <strong>To notify Famo.us/Angular when your animations are complete, you must</strong> do one of two things:
+ * <strong>To notify Famo.us/Angular when your animations are complete, you must do one of two things</strong>:
  * either pass a `$done` callback in your animation expressions, or design your animation expressions to
  * evaluate as the numeric duration, in milliseconds, of the animation. If an animation expression
  * both evaluates as a non-number and fails to invoke the `$done` callback, the animation event pipeline
@@ -25,7 +25,8 @@
  *
  * The {@link https://docs.angularjs.org/api/ngAnimate ngAnimate} module's documentation lists the set of
  * core directives supporting $animate events. Please note that the `ngAnimate` module is *not* required
- * (or recommended) to implement $animate events with Famo.us, but it is compatible.
+ * (or recommended) to implement $animate events with Famo.us, but it is compatible and technically effective
+ * on Surfaces.
  *
  * @usage
  * ```html
