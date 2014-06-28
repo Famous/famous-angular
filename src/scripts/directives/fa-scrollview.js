@@ -257,7 +257,7 @@ angular.module('famous.angular')
               element.find('div').append(clone);
             });
 
-            $famousDecorator.registerChild(scope, isolate);
+            $famousDecorator.registerChild(scope, element, isolate);
 
           }
         };

@@ -15,7 +15,7 @@
  @example
  * To use `fa-image-surface`, declare an `fa-image-url` attribute with a string url.
  * ```html
- * <fa-image-surface 
+ * <fa-image-surface
  *            fa-image-url="img/my-image.png"
  *            class="img"
  *            fa-color="'blue'"
@@ -25,7 +25,7 @@
  * ```
  * `Fa-image-surface` accepts two css-style properties: `color` and `background color`, which may be assigned values by the `fa-color` and `fa-background-color` attributes respectively.
  *
- * `Fa-size` may also be declared as an attribute.  If void, the `fa-image-surface` will inherit the size of its parent node.  
+ * `Fa-size` may also be declared as an attribute.  If void, the `fa-image-surface` will inherit the size of its parent node.
  */
 
 angular.module('famous.angular')
@@ -99,7 +99,7 @@ angular.module('famous.angular')
 
             attrs.$observe('faImageUrl', updateContent);
 
-            $famousDecorator.registerChild(scope, isolate);
+            $famousDecorator.registerChild(scope, element, isolate);
           }
         }
       }

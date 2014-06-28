@@ -79,8 +79,6 @@ angular.module('famous.angular')
 
             isolate.renderNode = scope.$eval(attrs.faNode);
 
-            $famousDecorator.unregisterChild(element, scope);
-
             $famousDecorator.sequenceWith(scope, function(data) {
               isolate.renderNode.add(data.renderNode);
               isolate.children.push(data);
@@ -94,7 +92,7 @@ angular.module('famous.angular')
               element.find('div').append(clone);
             });
 
-            $famousDecorator.registerChild(scope, isolate);
+            $famousDecorator.registerChild(scope, element, isolate);
           }
         }
       }

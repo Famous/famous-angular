@@ -16,9 +16,7 @@
  * ```js
  * var isolate = $famousDecorator.ensureIsolate($scope);
  *
- * $famousDecorator.registerChild($scope, isolate);
- *
- * $famousDecorator.unregisterChild($element, $scope);
+ * $famousDecorator.registerChild($element, $scope, isolate);
  *
  * $famousDecorator.sequenceWith(
  *   $scope,
@@ -83,42 +81,27 @@ angular.module('famous.angular')
        * @module famous.angular
        * @description
        * Register a child isolate's renderNode to the nearest parent that can sequence
-       * it.
+       * it, and set up an event listener to remove it when the associated element is destroyed
+       * by Angular.
        *
        * A `registerChild` event is sent upward with `scope.$emit`.
        *
-       * @param {String} scope - the scope with an isolate to be sequenced.
+       * @param {String} scope - the scope with an isolate to be sequenced
+       * @param {String} element - the element to listen for destruction on
        * @param {Object} isolate - an isolated scope object from $famousDecorator#ensureIsolate
+       * @param {Function} unregisterCallback - an optional callback to invoke when unregistration is complete
        * @returns {void}
        */
-      registerChild: function(scope, isolate) {
+      registerChild: function(scope, element, isolate, unregisterCallback) {
         scope.$emit('registerChild', isolate);
-      },
 
-      /**
-       * @ngdoc method
-       * @name $famousDecorator#unregisterChild
-       * @module famous.angular
-       * @description
-       * An `unregisterChild` event is sent upward with `scope.$emit` when a a directive element's
-       * `$destroy` event occurs.
-       *
-       * @param {Object} element - the element to listen on
-       * @param {String} scope - the scope to emit from
-       * @param {Object} callback - an optional callback to invoke when the emission is complete
-       * @returns {void}
-       */
-      unregisterChild: function(element, scope, callback) {
-        var ensureIsolate = this.ensureIsolate;
         element.one('$destroy', function() {
-          var isolate = ensureIsolate(scope);
-
           if ('removeMethod' in isolate) {
             isolate.removeMethod(isolate.id);
           }
 
           // Invoke the callback, if provided
-          callback && callback();
+          unregisterCallback && unregisterCallback();
         });
       },
 

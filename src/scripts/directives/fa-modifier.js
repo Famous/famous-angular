@@ -363,13 +363,6 @@ angular.module('famous.angular')
 
             isolate.renderNode = new RenderNode().add(isolate.modifier)
 
-            // When the actual element is destroyed by Angular,
-            // "hide" the Modifier by setting its opacity to 0.
-            $famousDecorator.unregisterChild(element, scope, function() {
-              isolate.modifier.setOpacity(0);
-            });
-
-
             $famousDecorator.sequenceWith(scope, function(data) {
               isolate.renderNode.add(data.renderNode);
             });
@@ -378,7 +371,11 @@ angular.module('famous.angular')
               element.find('div').append(clone);
             });
 
-            $famousDecorator.registerChild(scope, isolate);
+            $famousDecorator.registerChild(scope, element, isolate, function() {
+              // When the actual element is destroyed by Angular,
+              // "hide" the Modifier by setting its opacity to 0.
+              isolate.modifier.setOpacity(0);
+            });
 
             // Trigger a $digest loop to make sure that callbacks for the
             // $observe listeners are executed in the compilation phase.

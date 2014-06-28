@@ -58,8 +58,6 @@ angular.module('famous.angular')
                 isolate.renderNode.flip(overrideOptions || scope.$eval(attrs.faOptions));
               };
 
-              $famousDecorator.unregisterChild(element, scope);
-
               $famousDecorator.sequenceWith(
                 scope,
                 function(data) {
@@ -85,7 +83,7 @@ angular.module('famous.angular')
               transclude(scope, function (clone) {
                 element.find('div').append(clone);
               });
-              $famousDecorator.registerChild(scope, isolate);
+              $famousDecorator.registerChild(scope, element, isolate);
             }
           };
         }

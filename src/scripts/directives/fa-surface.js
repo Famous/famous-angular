@@ -199,9 +199,6 @@ angular.module('famous.angular')
             if (attrs.class) {
               isolate.renderNode.setClasses(attrs['class'].split(' '));
             }
-
-            // TODO: hook into RenderController and hide this render node
-            $famousDecorator.unregisterChild(element, scope);
           },
           post: function(scope, element, attrs){
             var isolate = $famousDecorator.ensureIsolate(scope);
@@ -217,7 +214,9 @@ angular.module('famous.angular')
               angular.element(element[0].querySelectorAll('div.fa-surface')).append(clone);
             });
 
-            $famousDecorator.registerChild(scope, isolate);
+            $famousDecorator.registerChild(scope, element, isolate, function() {
+              // TODO: hook into RenderController and hide this render node
+            });
           }
         }
       }
