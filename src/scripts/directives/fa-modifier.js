@@ -382,7 +382,7 @@ angular.module('famous.angular')
               element.find('div').append(clone);
             });
 
-            scope.$emit('registerChild', isolate);
+            $famousDecorator.registerChild(scope, isolate);
 
             // Trigger a $digest loop to make sure that callbacks for the
             // $observe listeners are executed in the compilation phase.

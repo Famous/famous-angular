@@ -99,7 +99,7 @@ angular.module('famous.angular')
 
             attrs.$observe('faImageUrl', updateContent);
 
-            scope.$emit('registerChild', isolate);
+            $famousDecorator.registerChild(scope, isolate);
           }
         }
       }

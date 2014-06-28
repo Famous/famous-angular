@@ -90,7 +90,7 @@ angular.module('famous.angular')
               transclude(scope, function (clone) {
                 element.find('div').append(clone);
               });
-              scope.$emit('registerChild', isolate);
+              $famousDecorator.registerChild(scope, isolate);
             }
           };
         }

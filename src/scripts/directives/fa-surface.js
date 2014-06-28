@@ -222,7 +222,7 @@ angular.module('famous.angular')
               angular.element(element[0].querySelectorAll('div.fa-surface')).append(clone);
             });
 
-            scope.$emit('registerChild', isolate);
+            $famousDecorator.registerChild(scope, isolate);
           }
         }
       }

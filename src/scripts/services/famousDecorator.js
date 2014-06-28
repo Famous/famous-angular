@@ -67,6 +67,30 @@ angular.module('famous.angular')
         if(i && i !== '$index' && !isolate.index) isolate.index = i;
 
         return isolate;
+      },
+
+      /**
+       * @ngdoc method
+       * @name $famousDecorator#registerChild
+       * @module famous.angular
+       * @description
+       * Register a child isolate's renderNode to the nearest parent that can sequence
+       * it.
+       *
+       * A `registerChild` event is sent upward with `scope.$emit` starting from scope.$parent
+       * to ensure we never add an isolate's renderNode to its own sequence.
+       *
+       * @param {String} scope - the scope with an isolate to be sequenced.
+       * @param {Object} isolate - an isolated scope object from $famousDecorator#ensureIsolate
+       *
+       * @usage
+       *
+       * ```js
+       * $famousDecorator.registerChild($scope);
+       * ```
+       */
+      registerChild: function(scope, isolate) {
+        scope.$emit('registerChild', isolate);
       }
     };
   });
