@@ -137,13 +137,13 @@ angular.module('famous.angular')
        * @returns {void}
        */
       sequenceWith: function(scope, addMethod, removeMethod) {
-        scope.$on('registerChild', function(evt, data) {
+        scope.$on('registerChild', function(evt, isolate) {
           if (evt.targetScope.$id !== scope.$id) {
-            addMethod(data);
+            addMethod(isolate);
             evt.stopPropagation();
 
             // Attach the remove method to the isolate, so it can be invoked without scope, if it is provided
-            removeMethod && (data.removeMethod = removeMethod);
+            removeMethod && (isolate.removeMethod = removeMethod);
           }
         });
       }
