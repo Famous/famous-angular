@@ -12,6 +12,20 @@
  * ($emit, $broadcast), yet still have their own $scope properties that will
  * not conflict with the parent or other siblings.
  *
+ * @usage
+ * ```js
+ * var isolate = $famousDecorator.ensureIsolate($scope);
+ *
+ * $famousDecorator.registerChild($scope, isolate);
+ *
+ * $famousDecorator.unregisterChild($element, $scope);
+ *
+ * $famousDecorator.sequenceWith(
+ *   $scope,
+ *   function(data) { ... },
+ *   function(childScopeId) { ... }
+ * );
+ * ```
  */
 
 angular.module('famous.angular')
@@ -46,12 +60,6 @@ angular.module('famous.angular')
        *
        * @param {String} scope - the scope to ensure that the isolate property
        * exists on
-       *
-       * @usage
-       *
-       * ```js
-       * var isolate = $famousDecorator.ensureIsolate($scope);
-       * ```
        */
       ensureIsolate: function(scope) {
         scope.isolate = scope.isolate || {};
@@ -81,12 +89,7 @@ angular.module('famous.angular')
        *
        * @param {String} scope - the scope with an isolate to be sequenced.
        * @param {Object} isolate - an isolated scope object from $famousDecorator#ensureIsolate
-       *
-       * @usage
-       *
-       * ```js
-       * $famousDecorator.registerChild($scope, isolate);
-       * ```
+       * @returns {void}
        */
       registerChild: function(scope, isolate) {
         scope.$emit('registerChild', isolate);
@@ -103,12 +106,7 @@ angular.module('famous.angular')
        * @param {Object} element - the element to listen on
        * @param {String} scope - the scope to emit from
        * @param {Object} callback - an optional callback to invoke when the emission is complete
-       *
-       * @usage
-       *
-       * ```js
-       * $famousDecorator.unregisterChild($element, $scope);
-       * ```
+       * @returns {void}
        */
       unregisterChild: function(element, scope, callback) {
         var ensureIsolate = this.ensureIsolate;
@@ -136,12 +134,7 @@ angular.module('famous.angular')
        * to the sequence
        * @param {Object} removeMethod - the method to apply to the incoming isolate's ID to remove it
        * from the sequence
-       *
-       * @usage
-       *
-       * ```js
-       * $famousDecorator.sequenceWith($scope, isolate.renderNode.add);
-       * ```
+       * @returns {void}
        */
       sequenceWith: function(scope, addMethod, removeMethod) {
         scope.$on('registerChild', function(evt, data) {
