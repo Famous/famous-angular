@@ -1,7 +1,17 @@
-
+/**
+ * @ngdoc factory
+ * @name $famousTemplateFactory
+ * @module famous.angular
+ * @description
+ * This factory function is used to resolve templates and make the HTML available to the
+ * fa-router directive during state transitions.
+ */
 
 angular.module('famous.angular')
   .factory('$famousTemplate', ['$http', '$templateCache', '$q', function($http, $templateCache, $q){
+
+
+
 
     function resolveChildViews(mainTemplate, childViews) {
 
