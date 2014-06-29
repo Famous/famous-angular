@@ -262,6 +262,7 @@ angular.module('famous.angular')
      * @param {Object} view view object containing all properties related to the view
      */
      
+     
     function validateView (view) {
       
       stateBuilder.template(view);
@@ -405,14 +406,11 @@ angular.module('famous.angular')
         
         state = transferValid(state);
         if ( !state ) { return $rootScope.$broadcast('$stateNotFound'); }
-        console.log('states and gates', state);
 
         $famousState.$prior = $famousState.$current;
         $famousState.current = state;
         $famousState.$current = states[state];
         // $famousState.$current.locals = updateLocals(state);
-
-        // console.log('heheheheh', $famousState.$current);
 
         $famousTemplate.resolve($famousState.$current)
         .then(function(template){
@@ -435,7 +433,7 @@ angular.module('famous.angular')
 
         // '^.name' indicates that a sibling state should be activated
         if ( state.indexOf('^') === 0 && state.length > 1 ) {
-          state = $famousState.parent + state;
+          state = $famousState.$current.parent + state.slice(1);
           return stateValid(state) ? state : false;
         }
         
@@ -471,7 +469,7 @@ angular.module('famous.angular')
        */
       function findCommonAncestor (parentName) {
         
-        var currentParent = $famousState.$current.parent;
+        var currentParent = $famousState.$current.parent.name;
         var newParent = parentName;
         
         while (currentParent && newParent) {
