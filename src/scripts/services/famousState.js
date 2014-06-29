@@ -239,6 +239,19 @@ angular.module('famous.angular')
         });
 
         state.views = views;
+      },
+
+      /**
+       * Creates a locals object which contains all data relevant to the child views the states
+       * @param {String} state The name (or relative name) of a state
+       */
+      locals: function(state) {
+
+        state.locals = {};
+        
+        angular.forEach(state.views, function(view, name) {
+          if ( view.name !== '@' ) { state.locals[name] = view; }
+        });
       }
 
     };
@@ -248,6 +261,7 @@ angular.module('famous.angular')
      * and transitions defined.  Accordingly, all properties must be defined in the same manner. 
      * @param {Object} view view object containing all properties related to the view
      */
+     
     function validateView (view) {
       
       stateBuilder.template(view);
@@ -388,13 +402,17 @@ angular.module('famous.angular')
 
       // Updates the $famousState object so that the new state view may be rendered by the fa-router directive
       function transitionState(state) {
-
-        if ( !transferValid(state) ) { return $rootScope.$broadcast('$stateNotFound'); }
+        
+        state = transferValid(state);
+        if ( !state ) { return $rootScope.$broadcast('$stateNotFound'); }
+        console.log('states and gates', state);
 
         $famousState.$prior = $famousState.$current;
         $famousState.current = state;
         $famousState.$current = states[state];
-        $famousState.$current.locals = updateLocals();
+        // $famousState.$current.locals = updateLocals(state);
+
+        // console.log('heheheheh', $famousState.$current);
 
         $famousTemplate.resolve($famousState.$current)
         .then(function(template){
@@ -418,13 +436,13 @@ angular.module('famous.angular')
         // '^.name' indicates that a sibling state should be activated
         if ( state.indexOf('^') === 0 && state.length > 1 ) {
           state = $famousState.parent + state;
-          return stateValid(state);
+          return stateValid(state) ? state : false;
         }
         
         // '.name' indicates that a child state should be activated
         if ( state.indexOf('.') === 0 ) {
           state = $famousState.current + state;
-          return stateValid(state);
+          return stateValid(state) ? state : false;
         }
         
         /**
@@ -439,12 +457,11 @@ angular.module('famous.angular')
             return stateValid(state);
           } else { 
             var commonAncestor = findCommonAncestor(parentName);
-              return stateValid(commonAncestor);
-            }
+            return stateValid(commonAncestor) ? commonAncestor : false;
           }
         }
 
-        return stateValid(state);
+        return stateValid(state) ? state: false;
       }
 
       /**
@@ -453,7 +470,8 @@ angular.module('famous.angular')
        * return 'A').
        */
       function findCommonAncestor (parentName) {
-        var currentParent = $famousState.parent;
+        
+        var currentParent = $famousState.$current.parent;
         var newParent = parentName;
         
         while (currentParent && newParent) {
@@ -467,7 +485,6 @@ angular.module('famous.angular')
           if ( currentParent === newParent || currentParent.indexOf('.') === -1 && newParent.indexOf('.') === -1  ) { break; }
 
         }
-
         return newParent;
       }
 
@@ -476,22 +493,22 @@ angular.module('famous.angular')
        * @returns {Boolean} Return value indicates whether or not the given state has been registatered.
        */
       function stateValid (state) {
-        return states[state]? true : false;
+        return ( !!states[state] );
       }
 
       /**
        * Creates a locals object which contains all data relevant to the child views the states
        * @param {String} state The name (or relative name) of a state
        */
-      function updateLocals (){
+      // function updateLocals (state){
         
-        var locals = {};
+      //   var locals = {};
 
-        angular.forEach($famousState.$current.views, function (view, name) {
-          if ( name !== '@' ) { locals[name] = view; }
-        });
-        return locals;
-      }
+      //   angular.forEach(state.views, function (view, name) {
+      //     if ( name !== '@' ) { locals[name] = view; }
+      //   });
+      //   return locals;
+      // }
 
       return $famousState;
     }   
