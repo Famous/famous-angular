@@ -449,9 +449,9 @@ angular.module('famous.angular')
          * currently active state will be activated.  If a common ancestor does not exist, the highest-level
          * ancestor of the current state will be activated.
          */
-        if ( state.indexOf('.') > 0 ) {
+        if ( state.indexOf('.') > 0 && state.split('.')[2] === undefined ) {
           var parentName = /^(.+)\.[^.]+$/.exec(state)[1];
-          if ( $famousState.parent === parentName ) { 
+          if ( $famousState.$current.parent.name === parentName ) { 
             return stateValid(state);
           } else { 
             var commonAncestor = findCommonAncestor(parentName);
