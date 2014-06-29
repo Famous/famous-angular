@@ -34,7 +34,14 @@ angular.module('famous.angular')
     var rules = {}; // {url: stateName}
     var defaultState;
 
-
+    /**
+     * @ngdoc method
+     * @name $famousUrlRouter#when
+     * @module famous.angular
+     * Defines the routes during the configuration (.config) stage of the provider
+     * @param {String} url The relative path for the state
+     * @param {String} stateName The name of the state that corresponds to the url
+     */
     this.when = when;
     function when(url, stateName){
       if ( !angular.isDefined(url) || !angular.isDefined(stateName) ) {
@@ -44,6 +51,14 @@ angular.module('famous.angular')
       rules[url] = stateName;
     }
 
+    /**
+     * @ngdoc method
+     * @name $famousUrlRouter#otherwise
+     * @module famous.angular
+     * Defines the default route during the configuration stage of the provider.  If a URL route
+     * is triggered, but is not defined, the application will redirect to the default route.
+     * @param {String} state The name of the state that corresponds to the url
+     */
     this.otherwise = otherwise;
     function otherwise(state) {
       if ( !angular.isString(state) || state.indexOf('@') >= 0)  {
@@ -52,19 +67,47 @@ angular.module('famous.angular')
       defaultState = state;
     }
 
-
+    /**
+     * Validates a url (relative path), ensuring that it begins with a '/' and contains only
+     * alphanumeric characters, underscores, or '/'s.
+     */
     function validUrl(url) {
       // FIX: Currently allows for repeated slashes so long as they do not occur at the beginning of the string.
       var regex = /^\/(?!\/)[a-zA-Z\d_\-\/(?!\/)]*$/;   
       return ( angular.isString(url) && !!regex.exec(url) );
     }
 
-
+    /**
+     * $famousUrlProvider service is responsible for watching $location and ensuring
+     * that $location is updated whenever the state of the application changes.   
+     * $famousUrlRouter also signals $famousState.go to transition states whenever a user
+     * updates the status bar, thereby triggering a change in $location.
+     */
 
     this.$get = $get;
     $get.$inject = ['$rootScope', '$location', '$famousState'];
     function $get($rootScope, $location, $famousState) {
 
+      /**
+       * @ngdoc service
+       * @name $famousUrlRouter
+       * @module famous.angular
+       * @description
+       * This service gives you access to $famousUrlRouter object.
+       * @usage
+       * Use this service to sync the state of the application and $location.  After configuring the 
+       * provider, no interaction should be required.  However, $famousUrlRouter must be included in a 
+       * controller in order to use URL routing.
+       * 
+       * ```js
+       * angular.module('mySuperApp', ['famous.angular'])
+       *   .controller('mainCtrl', function($scope, $famousUrlRouter) {
+       *   
+       *   // Control things
+       *  
+       *   });   
+       * ```
+       */
 
       // Keeps a record of most recent location
       var currentPath = '';
