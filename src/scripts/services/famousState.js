@@ -413,10 +413,8 @@ angular.module('famous.angular')
       function transferValid(state) {
 
         // '^' indicates that the parent state should be activated
-        if ( state === '^' ) {
-          return $famousState.$parent !== root? stateValid($famousState.parent) : false;
-        } 
-        
+        if ( state === '^' ) { return $famousState.$parent !== root? stateValid($famousState.parent) : false; }
+
         // '^.name' indicates that a sibling state should be activated
         if ( state.indexOf('^') === 0 && state.length > 1 ) {
           state = $famousState.parent + state;
@@ -429,18 +427,48 @@ angular.module('famous.angular')
           return stateValid(state);
         }
         
-        // 'parent.child' incicates that a child state should be activated.  If the child's
-        // parent is not the currently active state, the parent state will instead be activated.
+        /**
+         * In order for a child state to be activated, the currently active state must be the parent state
+         * of that child.  If this is not the case, the closest common ancestor of the requested state and the
+         * currently active state will be activated.  If a common ancestor does not exist, the highest-level
+         * ancestor of the current state will be activated.
+         */
         if ( state.indexOf('.') > 0 ) {
           var parentName = /^(.+)\.[^.]+$/.exec(state)[1];
           if ( $famousState.parent === parentName ) { 
             return stateValid(state);
-          } else {
-            transitionState(parentName);
+          } else { 
+            var commonAncestor = findCommonAncestor(parentName);
+              return stateValid(commonAncestor);
+            }
           }
         }
 
         return stateValid(state);
+      }
+
+      /**
+       * Accepts the parent name of a state and finds the closest common ancestor of the currently active state.
+       * If a common ancestor does not exist, the highest-level ancestor of the state is returned (ex. A.B.E.F will
+       * return 'A').
+       */
+      function findCommonAncestor (parentName) {
+        var currentParent = $famousState.parent;
+        var newParent = parentName;
+        
+        while (currentParent && newParent) {
+          if ( currentParent.indexOf('.') !== -1 && currentParent.length >= newParent.length ) {
+            currentParent = /^(.+)\.[^.]+$/.exec(currentParent)[1];
+          }
+          if ( newParent.indexOf('.') !== -1 && newParent.length > currentParent.length ) {
+            newParent = /^(.+)\.[^.]+$/.exec(newParent)[1];
+          }
+
+          if ( currentParent === newParent || currentParent.indexOf('.') === -1 && newParent.indexOf('.') === -1  ) { break; }
+
+        }
+
+        return newParent;
       }
 
       /**
