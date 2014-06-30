@@ -96,7 +96,7 @@ angular.module('famous.angular')
       
       // Static child views may be defined using '@child@parent'
       var name = state.name;
-      if ( !angular.isDefined(name) || !angular.isString(name) || name.indexOf('@') >= 0)  {
+      if ( !angular.isDefined(name) || !angular.isString(name) || name.indexOf('@') >= 0  || name.indexOf('.') !== -1 )  {
         throw new Error('State must have a valid name');
       }
       if (states.hasOwnProperty(name)) {
