@@ -112,11 +112,25 @@ angular.module('famous.angular')
       // Keeps a record of most recent location
       var currentPath = '';
 
+      /**
+       * @ngdoc method
+       * @name $famousUrlRouter#listen
+       * @module famous.angular
+       * @description Listens for a $location change event and triggers the update function
+       */
       $famousUrlRouter.listen = function() {
         var listener = $rootScope.$on('$locationChangeSuccess', $famousUrlRouter.update);
         return listener;
       };
 
+      /**
+       * @ngdoc method
+       * @name $famousUrlRouter#update
+       * @module famous.angular
+       * @description Triggered on location change.  If the new location is registered, initiates
+       * transition to the corrsponding state by calling $famousState.go('stateName').  If the location
+       * is not registered, $famouState.go is called with the default state.
+       */
       $famousUrlRouter.update = function () {   
         var location = $location.path();
         var reload = currentPath === location? true : false;
@@ -129,7 +143,14 @@ angular.module('famous.angular')
           currentPath = $location.path(); // TODO: Find a better way to accomplish this
         }  
       };
-
+      
+      /**
+      * Currently unable to inject $famousUrlRouterProvider into $famousStateProvider.  This is a 
+      * workaround that fetches all of the states registered with state provider and registers their
+      * URL routes so that they don't need to be manually defined within the application .config block.
+      * If URL routes are defined using the router provider during configuration, they will not be
+      * overwritten by this function.
+      */
       function registerExternalUrls() {
         var states = $famousState.getStates();
         angular.forEach(states, function(state, name) {
