@@ -208,7 +208,7 @@ angular.module('famous.angular')
 
         for ( var direction in transitions ) {
           if ( angular.isString(transitions[direction]) ) {
-            // '($callback)' must be added to the function to create an invocation that can properly parsed
+            // '($callback)' must be added to the function to create an invocation that can be properly parsed
             state[direction] = transitions[direction] + '($callback)'; 
           } else if ( angular.isObject(transitions) ) {
             angular.forEach(transitions[direction], function(definition, state) {
@@ -305,6 +305,7 @@ angular.module('famous.angular')
 
     root = {
       name : '',
+      url: '^',
       parent: null,
       views: null,
       template: null,
@@ -451,23 +452,15 @@ angular.module('famous.angular')
          * ancestor of the current state will be activated.
          */
         if ( state.indexOf('.') > 0 ) {
+          if ( $famousState.current === '' ) { $location.path('^'); }
           var parentName = /^(.+)\.[^.]+$/.exec(state)[1];
-          if ( $famousState.$current.name === parentName ) {
+          if ( $famousState.current === parentName ) {
             return stateValid(state) ? state : false;
           } else {
+            // return transferValid(parentName);
             var commonAncestor = findCommonAncestor(parentName);
             return stateValid(commonAncestor) ? commonAncestor : false;
           }
-
-          // if ( state.split('.')[2] === undefined ) {
-
-          // }
-          // if ( $famousState.$current.name === parentName ) { 
-          //   return stateValid(state) ? state : false;
-          // } else { 
-          //   var commonAncestor = findCommonAncestor(parentName);
-          //   return stateValid(commonAncestor) ? commonAncestor : false;
-          // }
         }
 
         return stateValid(state) ? state: false;
@@ -494,6 +487,7 @@ angular.module('famous.angular')
           if ( currentParent === newParent || currentParent.indexOf('.') === -1 && newParent.indexOf('.') === -1  ) { break; }
 
         }
+
         return newParent;
       }
 
