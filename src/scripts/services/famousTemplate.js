@@ -12,11 +12,8 @@ angular.module('famous.angular')
 
 
     /**
-     * @description
-     * Fetches the HTML for each of the child views and inserts it into the HTML of the main view
-     * @param {Object} mainTemplate A view or state object containing a template property
-     * @param {Object} childViews Contains all child view information {childName: template, childName: template}
-     * @return {String} Returns the raw HTML of the main view, wrapped in a promise
+     * Fetches the HTML for each of the child views and inserts it into the HTML of the main view. The
+     * raw HTML of the parent is returned as a promise.
      */
 
     function resolveChildViews(mainTemplate, childViews) {
@@ -29,9 +26,9 @@ angular.module('famous.angular')
         var childName = template.name.split('@')[0];
         // TODO: Add a check to ensure the parent name matches the div tag (or not?)
         // var parentName = template.name.split('@')[1];
-        // TODO: It should be possible to define distinct behavior for child views.  In order to do this
-        //       the fa-router-view cannot be replaced as it is currently (transclusion = true). Ideally,
-        //       this should be broken out into a separate directive. 
+        // TODO: It should be possible to define distinct behavior for staticchild views.  In order to
+        //       do this the fa-router-view cannot be replaced as it is currently (transclusion = true).
+        //       Ideally, this should be broken out into a separate directive. 
         var target = '<div fa-router-view="' + childName + '"></div>';
         //TODO: Refactor so that the HTML only needs to be scanned one time
         if ( mainTemplate.indexOf(target) !== -1 ) {
@@ -51,10 +48,7 @@ angular.module('famous.angular')
     }
 
     /**
-     * Fetches a view template
-     * @param {Object} view A view or state object containing a template property
-     * @param {String} name The name associated with the provided state or view
-     * @return {Object} Returns a template object wrapped in a promise
+     * Fetches a view template and returns the raw HTML as a promise.
      */
 
     function fetchTemplate(view, name) {

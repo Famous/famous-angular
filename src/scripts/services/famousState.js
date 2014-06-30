@@ -91,7 +91,6 @@ angular.module('famous.angular')
 
     /**
      * Validates the name and parent of the state object being created.
-     * @param {Object} state State object containing all properties related to the state
      */
     function defineState(state) {
       
@@ -120,7 +119,6 @@ angular.module('famous.angular')
      * states object).  Finally, updateQueue is invoked to determine whether or not the state being 
      * added is the parent of one of the "orhpan" states in the queue.  If so, the child state will be 
      * registered.
-     * @param {Object} state State object containing all properties related to the state
      */
     function buildState (state) {
       
@@ -134,7 +132,6 @@ angular.module('famous.angular')
 
     /**
      * Validates each of the propeties on the state object before the state is registered.
-     * @param {Object} state State object containing all properties related to the state
      */
     var stateBuilder = {
       
@@ -195,7 +192,6 @@ angular.module('famous.angular')
        * in the controller that defines the transition.  A single transition function may also be passed,
        * thereby assigning a single transition to/from that state.  If no transitions are definec, default
        * transitions will be assigned.
-       * @param {Object} state State object containing all properties related to the state
        */
       transitions: function(state) {
 
@@ -243,7 +239,6 @@ angular.module('famous.angular')
 
       /**
        * Creates a locals object which contains all data relevant to the child views the states
-       * @param {String} state The name (or relative name) of a state
        */
       locals: function(state) {
 
@@ -259,10 +254,7 @@ angular.module('famous.angular')
     /**
      * Static views are similar to states in that they may have their own templates, controllers,
      * and transitions defined.  Accordingly, all properties must be defined in the same manner. 
-     * @param {Object} view view object containing all properties related to the view
      */
-     
-     
     function validateView (view) {
       
       stateBuilder.template(view);
@@ -272,7 +264,6 @@ angular.module('famous.angular')
 
     /**
      * Adds the state to the states object which stores all valid registered states
-     * @param {Object} state State object contains all properties related to the state
      */
     function registerState(state) {
 
@@ -282,7 +273,6 @@ angular.module('famous.angular')
 
     /**
      * Adds an "orphan" child state to the queue if it doesn't already exist within the queue
-     * @param {Object} state State object contains all properties related to the state
      */
     function queueState(state) {
       if ( !queue[state.name] ) {
@@ -294,7 +284,6 @@ angular.module('famous.angular')
      * Removes state from the queue if it is no longer an "orphan."" Iterates through 
      * the "orphan" queue ito determine is the parent of any of the child states has been registered.  
      * If so, the child state is registered.
-     * @param {Object} state State object contains all properties related to the state
      */
     function updateQueue(state){
       if ( queue[state.name] ) { delete queue[state.name]; }
@@ -339,7 +328,6 @@ angular.module('famous.angular')
        *     $famousState.current = 'The name of the current state';
        *     $famousState.$current = 'The current state object';
        *     $famousState.locals = 'The properties of any static child views defined on the state';
-       *     $famousState.parent = 'The parent of the current state';
        *     $famousState.$prior = 'The previous state of the application;
        *     $famousState.inTransitionTo = 'The in transitions assigned to the current state';
        *     $famousState.outTransitionFrom = 'The out transitions assigned to the current state';
@@ -410,7 +398,6 @@ angular.module('famous.angular')
         $famousState.$prior = $famousState.$current;
         $famousState.current = state;
         $famousState.$current = states[state];
-        $famousState.parent = states[state][parent];
         $famousTemplate.resolve($famousState.$current)
         .then(function(template){
           $famousState.$current.$template = template;
@@ -446,10 +433,18 @@ angular.module('famous.angular')
         }
         
         /**
-         * In order for a child state to be activated, the currently active state must be the parent state
-         * of that child.  If this is not the case, the closest common ancestor of the requested state and the
-         * currently active state will be activated.  If a common ancestor does not exist, the highest-level
-         * ancestor of the current state will be activated.
+         * In order for a child state to be activated, the parent state of that child must first be active.  
+         * If the parent is not active, the closest commong ancestor of the two states will be found and 
+         * the child of the common ancestor which is along the same path as the requested state will be activated.
+         * If a common ancestor does not exists, the highest-level ancestor of the requested state will be 
+         * activated.  
+         * 
+         * Example: The current state is 'A.E.F.X' and $famousState.go('A.E.B.Q') is called. 'A.E.B.Q' cannot 
+         * be activated without 'A.E.B' first being active.  Since 'A.E' is part of the path of the currently 
+         * active state, 'A.E.B' will be activated.  
+         * 
+         * Example: The current state is 'B.C.E' and $famousState.go('A.D') is called.  Since the two states do
+         * not share a common ancestor, the highest-level ancestor of the requested state, 'A', will be activated.
          */
         if ( state.indexOf('.') > 0 ) {
           if ( $famousState.current === '' ) { $location.path('^'); }
@@ -457,9 +452,8 @@ angular.module('famous.angular')
           if ( $famousState.current === parentName ) {
             return stateValid(state) ? state : false;
           } else {
-            // return transferValid(parentName);
-            var commonAncestor = findCommonAncestor(parentName);
-            return stateValid(commonAncestor) ? commonAncestor : false;
+            var relativeState  = findCommonAncestor(parentName);
+            return stateValid(relativeState) ? relativeState : false;
           }
         }
 
@@ -468,32 +462,34 @@ angular.module('famous.angular')
 
       /**
        * Accepts the parent name of a state and finds the closest common ancestor of the currently active state.
-       * If a common ancestor does not exist, the highest-level ancestor of the state is returned (ex. 'A.B.E.F' 
-       * will return 'A').
+       * If an ancestor is found, the child state of the ancestor which corresponds to the state passed into the
+       * the function will be returned.  If there is no common index, the highest-level ancestor of the passed in
+       * state will be returned.  
        */
       function findCommonAncestor (parentName) {
         
-        var currentParent = $famousState.parent;
+        var currentParent = $famousState.$current.parent;
         var newParent = parentName;
+        var newChild;
         
         while (currentParent && newParent) {
-          
+
           if ( currentParent.indexOf('.') !== -1 && currentParent.length >= newParent.length ) {
             currentParent = /^(.+)\.[^.]+$/.exec(currentParent)[1];
           }
           if ( newParent.indexOf('.') !== -1 && newParent.length > currentParent.length ) {
+            newChild = newParent.slice(newParent.lastIndexOf('.'));
             newParent = /^(.+)\.[^.]+$/.exec(newParent)[1];
           }
           if ( currentParent === newParent || currentParent.indexOf('.') === -1 && newParent.indexOf('.') === -1  ) { break; }
 
         }
 
-        return newParent;
+        return newParent + newChild;
       }
 
       /**
-       * @param {String} state The name (or relative name) of a state
-       * @returns {Boolean} Return value indicates whether or not the given state has been registatered.
+       * Returns a boolean indicating whether or not the state is registered
        */
       function stateValid (state) {
         return ( !!states[state] );

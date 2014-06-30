@@ -35,6 +35,9 @@ angular.module('famous.angular')
     var defaultState;
 
     /**
+     * @ngdoc method
+     * @name $famousUrlRouter#when
+     * @module famous.angular
      * Defines the routes during the configuration (.config) stage of the provider
      * @param {String} url The relative path for the state
      * @param {String} stateName The name of the state that corresponds to the url
@@ -49,6 +52,9 @@ angular.module('famous.angular')
     }
 
     /**
+     * @ngdoc method
+     * @name $famousUrlRouter#otherwise
+     * @module famous.angular
      * Defines the default route during the configuration stage of the provider.  If a URL route
      * is triggered, but is not defined, the application will redirect to the default route.
      * @param {String} state The name of the state that corresponds to the url
@@ -64,7 +70,6 @@ angular.module('famous.angular')
     /**
      * Validates a url (relative path), ensuring that it begins with a '/' and contains only
      * alphanumeric characters, underscores, or '/'s.
-     * @param {String} url The relative path for the state
      */
     function validUrl(url) {
       // FIX: Currently allows for repeated slashes so long as they do not occur at the beginning of the string.
