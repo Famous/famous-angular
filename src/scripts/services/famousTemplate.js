@@ -11,7 +11,10 @@ angular.module('famous.angular')
   .factory('$famousTemplate', ['$http', '$templateCache', '$q', function($http, $templateCache, $q){
 
 
-
+    /**
+     * Fetches the HTML for each of the child views and inserts it into the HTML of the main view. The
+     * raw HTML of the parent is returned as a promise.
+     */
 
     function resolveChildViews(mainTemplate, childViews) {
 
