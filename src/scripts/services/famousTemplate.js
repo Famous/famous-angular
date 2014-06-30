@@ -79,7 +79,32 @@ angular.module('famous.angular')
 
     return {
 
-
+      /**
+       * @ngdoc method
+       * @name $famousTemplate#resolve
+       * @module famous.angular
+       * 
+       * @description
+       * Accepts a state object with a views property.  Fetches the template for the main view and returns 
+       * the raw HTML to be inserted into the application by the fa-router directive.  If any static child views 
+       * are defined, the templates for the child views are fetched and injected into the HTML of the main view
+       * before it is returned.
+       *
+       * @param {Object} state The state for which the templates need to be fetched
+       * @returns {Object} The raw HTML for the state, wrapped in a promise
+       *  
+       * @usage 
+       * 
+       * ```js
+       * $famousTemplate.resolve($famousState.$current)
+       * .then(function(template){
+       *   $famousState.$current.$template = template;
+       *   $rootScope.$broadcast('$stateChangeSuccess');
+       *   if ( !!$famousState.$current.url ) { 
+       *     $location.path($famousState.$current.url); }
+       * });
+       * ```
+       */
 
       resolve: function(state) {
 
