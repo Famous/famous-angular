@@ -31,7 +31,6 @@ angular.module('famous.angular')
   .provider('$famousUrlRouter', function(){
 
     var $famousUrlRouter = {};
-    var registeredUrls = {}; //{ {name: url}, {name: url} }
     var rules = {}; // {url: stateName}
     var defaultState;
 

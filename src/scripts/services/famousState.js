@@ -250,7 +250,7 @@ angular.module('famous.angular')
         state.locals = {};
         
         angular.forEach(state.views, function(view, name) {
-          if ( view.name !== '@' ) { state.locals[name] = view; }
+          if ( name !== '@' ) { state.locals[name] = view; }
         });
       }
 
@@ -313,8 +313,8 @@ angular.module('famous.angular')
     };
     
     this.$get = $get;
-    $get.$inject = ['$rootScope','$http', '$location', '$q', '$famousTemplate', '$templateCache'];
-    function $get($rootScope, $http, $location, $q, $famousTemplate, $templateCache) {
+    $get.$inject = ['$rootScope','$http', '$location', '$q', '$famousTemplate'];
+    function $get($rootScope, $http, $location, $q, $famousTemplate) {
 
       /**
        * @ngdoc service
@@ -403,15 +403,13 @@ angular.module('famous.angular')
 
       // Updates the $famousState object so that the new state view may be rendered by the fa-router directive
       function transitionState(state) {
-        
         state = transferValid(state);
         if ( !state ) { return $rootScope.$broadcast('$stateNotFound'); }
 
         $famousState.$prior = $famousState.$current;
         $famousState.current = state;
         $famousState.$current = states[state];
-        // $famousState.$current.locals = updateLocals(state);
-
+        $famousState.parent = states[state][parent];
         $famousTemplate.resolve($famousState.$current)
         .then(function(template){
           $famousState.$current.$template = template;
@@ -429,7 +427,10 @@ angular.module('famous.angular')
       function transferValid(state) {
 
         // '^' indicates that the parent state should be activated
-        if ( state === '^' ) { return $famousState.$parent !== root? stateValid($famousState.parent) : false; }
+        if ( state === '^' ) { 
+          var parent = /^(.+)\.[^.]+$/.exec($famousState.current)[1];
+          return stateValid(parent) ? parent : false;
+        }
 
         // '^.name' indicates that a sibling state should be activated
         if ( state.indexOf('^') === 0 && state.length > 1 ) {
@@ -449,14 +450,24 @@ angular.module('famous.angular')
          * currently active state will be activated.  If a common ancestor does not exist, the highest-level
          * ancestor of the current state will be activated.
          */
-        if ( state.indexOf('.') > 0 && state.split('.')[2] === undefined ) {
+        if ( state.indexOf('.') > 0 ) {
           var parentName = /^(.+)\.[^.]+$/.exec(state)[1];
-          if ( $famousState.$current.parent.name === parentName ) { 
-            return stateValid(state);
-          } else { 
+          if ( $famousState.$current.name === parentName ) {
+            return stateValid(state) ? state : false;
+          } else {
             var commonAncestor = findCommonAncestor(parentName);
             return stateValid(commonAncestor) ? commonAncestor : false;
           }
+
+          // if ( state.split('.')[2] === undefined ) {
+
+          // }
+          // if ( $famousState.$current.name === parentName ) { 
+          //   return stateValid(state) ? state : false;
+          // } else { 
+          //   var commonAncestor = findCommonAncestor(parentName);
+          //   return stateValid(commonAncestor) ? commonAncestor : false;
+          // }
         }
 
         return stateValid(state) ? state: false;
@@ -464,22 +475,22 @@ angular.module('famous.angular')
 
       /**
        * Accepts the parent name of a state and finds the closest common ancestor of the currently active state.
-       * If a common ancestor does not exist, the highest-level ancestor of the state is returned (ex. A.B.E.F will
-       * return 'A').
+       * If a common ancestor does not exist, the highest-level ancestor of the state is returned (ex. 'A.B.E.F' 
+       * will return 'A').
        */
       function findCommonAncestor (parentName) {
         
-        var currentParent = $famousState.$current.parent.name;
+        var currentParent = $famousState.parent;
         var newParent = parentName;
         
         while (currentParent && newParent) {
+          
           if ( currentParent.indexOf('.') !== -1 && currentParent.length >= newParent.length ) {
             currentParent = /^(.+)\.[^.]+$/.exec(currentParent)[1];
           }
           if ( newParent.indexOf('.') !== -1 && newParent.length > currentParent.length ) {
             newParent = /^(.+)\.[^.]+$/.exec(newParent)[1];
           }
-
           if ( currentParent === newParent || currentParent.indexOf('.') === -1 && newParent.indexOf('.') === -1  ) { break; }
 
         }
@@ -493,20 +504,6 @@ angular.module('famous.angular')
       function stateValid (state) {
         return ( !!states[state] );
       }
-
-      /**
-       * Creates a locals object which contains all data relevant to the child views the states
-       * @param {String} state The name (or relative name) of a state
-       */
-      // function updateLocals (state){
-        
-      //   var locals = {};
-
-      //   angular.forEach(state.views, function (view, name) {
-      //     if ( name !== '@' ) { locals[name] = view; }
-      //   });
-      //   return locals;
-      // }
 
       return $famousState;
     }   
