@@ -214,6 +214,11 @@ angular.module('famous.angular')
               angular.element(element[0].querySelectorAll('div.fa-surface')).append(clone);
             });
 
+            //TODO:  on this and all other render-node-wrapping fa-directives,
+            //       expose an actual RenderNode in isolate.renderNode and
+            //       use that RenderNode's .set() function to add/remove content
+            //       from the scene graph.  This will probably be instead of
+            //       using RenderControllers.
             $famousDecorator.registerChild(scope, element, isolate, function() {
               // TODO: hook into RenderController and hide this render node
             });
