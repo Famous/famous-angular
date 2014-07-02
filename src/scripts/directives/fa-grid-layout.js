@@ -55,9 +55,9 @@ angular.module('famous.angular')
       restrict: 'E',
       transclude: true,
       scope: true,
-      compile: function(tElem, tAttrs, transclude){
+      compile: function (tElem, tAttrs, transclude) {
         return  {
-          pre: function(scope, element, attrs){
+          pre: function (scope, element, attrs) {
             var isolate = $famousDecorator.ensureIsolate(scope);
 
             var GridLayout = $famous["famous/views/GridLayout"];
@@ -68,48 +68,48 @@ angular.module('famous.angular')
             var options = scope.$eval(attrs.faOptions) || {};
             isolate.renderNode = new GridLayout(options);
 
-            var updateGridLayout = function(){
-              _children.sort(function(a, b){
+            var updateGridLayout = function () {
+              _children.sort(function (a, b) {
                 return a.index - b.index;
               });
-              isolate.renderNode.sequenceFrom(function(_children) {
-	              var _ch = [];
-	              angular.forEach(_children, function(c, i) {
-		              _ch[i] = c.renderNode;
-	              })
-	              return _ch;
+              isolate.renderNode.sequenceFrom(function (_children) {
+                var _ch = [];
+                angular.forEach(_children, function (c, i) {
+                  _ch[i] = c.renderNode;
+                });
+                return _ch;
               }(_children));
-            }
+            };
 
-            scope.$on('registerChild', function(evt, data){
-              if(evt.targetScope.$id != scope.$id){
+            scope.$on('registerChild', function (evt, data) {
+              if (evt.targetScope.$id !== scope.$id) {
                 _children.push(data);
                 updateGridLayout();
                 evt.stopPropagation();
-              };
+              }
             });
 
-            scope.$on('unregisterChild', function(evt, data){
-              if(evt.targetScope.$id != scope.$id){
-	            _children = function(_children) {
-		          var _ch = [];
-		          angular.forEach(_children, function(c) {
-			        if(c.id !== data.id) {
-				      _ch.push(c);
-			        }
-		          });
-		          return _ch;
-	            }(_children);
+            scope.$on('unregisterChild', function (evt, data) {
+              if (evt.targetScope.$id !== scope.$id) {
+                _children = function (_children) {
+                  var _ch = [];
+                  angular.forEach(_children, function (c) {
+                    if (c.id !== data.id) {
+                      _ch.push(c);
+                    }
+                  });
+                  return _ch;
+                }(_children);
                 updateGridLayout();
                 evt.stopPropagation();
               }
-            })
+            });
 
           },
-          post: function(scope, element, attrs){
+          post: function (scope, element, attrs) {
             var isolate = $famousDecorator.ensureIsolate(scope);
-            
-            transclude(scope, function(clone) {
+
+            transclude(scope, function (clone) {
               element.find('div').append(clone);
             });
 
