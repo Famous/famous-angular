@@ -176,7 +176,7 @@
  */
 
 angular.module('famous.angular')
-  .directive('faScrollView', ['$famous', '$famousDecorator', '$timeout', function ($famous, $famousDecorator, $timeout) {
+  .directive('faScrollView', ['$famous', '$famousDecorator', function ($famous, $famousDecorator) {
     return {
       template: '<div></div>',
       restrict: 'E',
@@ -197,14 +197,8 @@ angular.module('famous.angular')
             isolate.renderNode = new ScrollView(options);
 
             var updateScrollview = function(init){
-              //$timeout hack used here because the
-              //updateScrollview function will get called
-              //before the $index values get re-bound
-              //through ng-repeat.  The result is that
-              //the items get sorted here, then the indexes
-              //get re-bound, and thus the results are incorrectly
-              //ordered.
-              $timeout(function(){
+              // Synchronize the update on the next digest cycle
+              scope.$$postDigest(function(){
                 _children.sort(function(a, b){
                   return a.index - b.index;
                 });
@@ -225,9 +219,8 @@ angular.module('famous.angular')
 
                 var viewSeq = new ViewSequence(options);
                 isolate.renderNode.sequenceFrom(viewSeq);
-
-              })
-            }
+              });
+            };
 
             $famousDecorator.sequenceWith(
               scope,

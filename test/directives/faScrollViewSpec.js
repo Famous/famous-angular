@@ -1,13 +1,12 @@
 'use strict';
 
 describe('faScrollView', function() {
-  var eventHandler, common, $compile, $timeout, $scope, $famous;
+  var eventHandler, common, $compile, $scope, $famous;
 
   beforeEach(module('famous.angular'));
 
-  beforeEach(inject(function(_$compile_, _$timeout_, _$rootScope_, _$famous_) {
+  beforeEach(inject(function(_$compile_, _$rootScope_, _$famous_) {
     $compile = _$compile_;
-    $timeout = _$timeout_;
     $scope = _$rootScope_.$new();
     $famous = _$famous_;
 
@@ -51,13 +50,12 @@ describe('faScrollView', function() {
 
     $scope.eventHandler = eventHandler;
     $scope.views = [0, 1];
-    $scope.$apply();
 
     var scrollView = $famous.find('fa-scroll-view')[0].renderNode;
 
-    // The $timeout promise resolves view sequencing
+    // The watcher resolves view sequencing
     expect(scrollView._node).toBeNull();
-    $timeout.flush();
+    $scope.$apply();
     expect(scrollView._node.index).toBe(0);
 
     common.destroyApp(app);
@@ -75,8 +73,6 @@ describe('faScrollView', function() {
     $scope.eventHandler = eventHandler;
     $scope.views = [0, 1];
     $scope.$apply();
-
-    $timeout.flush();
 
     var scrollView = $famous.find('fa-scroll-view')[0].renderNode;
     expect(scrollView._node.index).toBe(1);
@@ -96,8 +92,6 @@ describe('faScrollView', function() {
     $scope.views = [0, 1, 2];
     $scope.$apply();
 
-    $timeout.flush();
-
     var scrollView = $famous.find('fa-scroll-view')[0].renderNode;
 
     expect(scrollView._node._.array.length).toBe(3);
@@ -105,8 +99,6 @@ describe('faScrollView', function() {
     // Pop out the current index
     $scope.views.splice(1, 1);
     $scope.$apply();
-
-    $timeout.flush();
 
     expect(scrollView._node._.array.length).toBe(2);
 
