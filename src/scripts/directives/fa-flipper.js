@@ -18,9 +18,9 @@
  *@example
  * A Famous Flipper has a `.flip()` method that toggles a rotation between front and back sides.
  * In the example below, when an `fa-surface` is clicked, it calls the function `flipIt`.
- * 
- * This function attempts a DOM lookup for an isolate of an `fa-flipper` element, and calls the `.flip()` function of `fa-flipper`. 
- * 
+ *
+ * This function attempts a DOM lookup for an isolate of an `fa-flipper` element, and calls the `.flip()` function of `fa-flipper`.
+ *
  *```html
  * <fa-flipper>
  *    <fa-surface fa-background-color="'yellow'" fa-click="flipIt()"></fa-surface>
@@ -50,7 +50,7 @@ angular.module('famous.angular')
 
               //TODO:  $watch and update, or $parse and attr.$observe
               var options = scope.$eval(attrs.faOptions) || {};
-              
+
               isolate.renderNode = new Flipper(options);
               isolate.children = [];
 
@@ -58,39 +58,32 @@ angular.module('famous.angular')
                 isolate.renderNode.flip(overrideOptions || scope.$eval(attrs.faOptions));
               };
 
-              scope.$on('$destroy', function() {
-                scope.$emit('unregisterChild', {id: scope.$id});
-              });
-              
-              scope.$on('registerChild', function (evt, data) {
-                if (evt.targetScope.$id != scope.$id) {
+              $famousDecorator.sequenceWith(
+                scope,
+                function(data) {
                   var _childCount = isolate.children.length;
                   if (_childCount == 0) {
                     isolate.renderNode.setFront(data.renderNode);
-                  }else if (_childCount == 1) {
+                  } else if (_childCount == 1) {
                     isolate.renderNode.setBack(data.renderNode);
-                  }else{
-                    throw "fa-flipper accepts only two child elements; more than two have been provided"
+                  } else {
+                    throw "fa-flipper accepts only two child elements; more than two have been provided";
                   }
+
                   isolate.children.push(data.renderNode);
-                  evt.stopPropagation();
-                };
-              });
-
-              //TODO:  handle unregisterChild
-              scope.$on('unregisterChild', function(evt, data){
-                if(evt.targetScope.$id != scope.$id){
-
+                },
+                // TODO: support removing children
+                function(childScopeId) {
+                  throw "unimplemented: fa-flipper does not support removing children";
                 }
-              });
-
+              );
             },
             post: function (scope, element, attrs) {
               var isolate = $famousDecorator.ensureIsolate(scope);
               transclude(scope, function (clone) {
                 element.find('div').append(clone);
               });
-              scope.$emit('registerChild', isolate);
+              $famousDecorator.registerChild(scope, element, isolate);
             }
           };
         }

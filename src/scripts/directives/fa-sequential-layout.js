@@ -4,7 +4,7 @@
  * @module famous.angular
  * @restrict EA
  * @description
- * This directive will create a Famo.us SequentialLayout containing the 
+ * This directive will create a Famo.us SequentialLayout containing the
  * specified child elements. The provided `options` object
  * will pass directly through to the Famo.us faSequentialLayout's
  * constructor.  See [https://famo.us/docs/0.2.0/views/SequentialLayout/]
@@ -73,29 +73,25 @@ angular.module('famous.angular')
               }(_children));
             };
 
-            scope.$on('registerChild', function (evt, data) {
-              if (evt.targetScope.$id != scope.$id) {
+            $famousDecorator.sequenceWith(
+              scope,
+              function(data) {
                 _children.push(data);
                 _updateSequentialLayout();
-                evt.stopPropagation();
-              };
-            });
-
-            scope.$on('unregisterChild', function (evt, data) {
-              if (evt.targetScope.$id != scope.$id) {
+              },
+              function(childScopeId) {
                 _children = function (_children) {
                   var _ch = [];
                   angular.forEach(_children, function (c) {
-                    if (c.id !== data.id) {
+                    if (c.id !== childScopeId) {
                       _ch.push(c);
                     }
                   });
                   return _ch;
                 }(_children);
                 _updateSequentialLayout();
-                evt.stopPropagation();
               }
-            });
+            );
 
           },
           post: function (scope, element, attrs) {
@@ -105,7 +101,7 @@ angular.module('famous.angular')
               element.find('div').append(clone);
             });
 
-            scope.$emit('registerChild', isolate);
+            $famousDecorator.registerChild(scope, element, isolate);
           }
         };
       }
