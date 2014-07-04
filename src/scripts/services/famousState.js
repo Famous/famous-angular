@@ -293,7 +293,7 @@ angular.module('famous.angular')
       parent: null,
       views: null,
       template: null,
-      contoller: null
+      controller: null
     };
     
     this.$get = $get;
