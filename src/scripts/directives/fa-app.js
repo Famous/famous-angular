@@ -76,40 +76,42 @@ angular.module('famous.angular')
       transclude: true,
       scope: true,
       restrict: 'EA',
-      compile: function(tElement, tAttrs, transclude){
+      compile: function (tElement, tAttrs, transclude) {
         return {
-          pre: function(scope, element, attrs){
+          pre: function (scope, element, attrs) {
             var isolate = $famousDecorator.ensureIsolate(scope);
-            
+
             var View = $famous['famous/core/View'];
             var Engine = $famous['famous/core/Engine'];
-            var Transform = $famous['famous/core/Transform']
+            var Transform = $famous['famous/core/Transform'];
 
-            
+
             element.append('<div class="famous-angular-container"></div>');
             isolate.context = Engine.createContext(element[0].querySelector('.famous-angular-container'));
 
-            function AppView(){
+            function AppView() {
               View.apply(this, arguments);
             }
 
             AppView.prototype = Object.create(View.prototype);
             AppView.prototype.constructor = AppView;
 
-            var getOrValue = function(x) {
+            var getOrValue = function (x) {
               return x.get ? x.get() : x;
             };
 
-            var getTransform = function(data) {
+            var getTransform = function (data) {
               var transforms = [];
               if (data.mod().translate && data.mod().translate.length) {
-                var values = data.mod().translate.map(getOrValue)
+                var values = data.mod().translate.map(getOrValue);
                 transforms.push(Transform.translate.apply(this, values));
               }
-              if (scope["faRotateZ"])
-                transforms.push(Transform.rotateZ(scope["faRotateZ"]));
-              if (scope["faSkew"])
-                transforms.push(Transform.skew(0, 0, scope["faSkew"]));
+              if (scope.faRotateZ) {
+                transforms.push(Transform.rotateZ(scope.faRotateZ));
+              }
+              if (scope.faSkew) {
+                transforms.push(Transform.skew(0, 0, scope.faSkew));
+              }
               return Transform.multiply.apply(this, transforms);
             };
 
@@ -119,24 +121,24 @@ angular.module('famous.angular')
             //HACK:  Since Famo.us Engine doesn't yet
             //support unregistering contexts, this will keep
             //the context from getting updated by the engine
-            scope.$on('$destroy', function(){
+            scope.$on('$destroy', function () {
               isolate.context.update = angular.noop;
-            })
+            });
 
-            scope.$on('registerChild', function(evt, data){
+            scope.$on('registerChild', function (evt, data) {
               isolate.view.add(data.renderNode);
               evt.stopPropagation();
-            })
+            });
           },
-          post: function(scope, element, attrs){
+          post: function (scope, element, attrs) {
 
             var isolate = $famousDecorator.ensureIsolate(scope);
-            transclude(scope, function(clone) {
-	            angular.element(element[0].querySelectorAll('div div')[0]).append(clone);
+            transclude(scope, function (clone) {
+              angular.element(element[0].querySelectorAll('div div')[0]).append(clone);
             });
             isolate.readyToRender = true;
           }
-        }
+        };
       }
     };
   }]);
