@@ -34,47 +34,50 @@ angular.module('famous.angular')
       scope: true,
       template: '<div class="fa-image-surface"></div>',
       restrict: 'EA',
-      compile: function(tElem, tAttrs, transclude){
+      compile: function (tElem, tAttrs, transclude) {
         return {
-          pre: function(scope, element, attrs){
+          pre: function (scope, element, attrs) {
             var isolate = $famousDecorator.ensureIsolate(scope);
 
             var ImageSurface = $famous['famous/surfaces/ImageSurface'];
-            var Transform = $famous['famous/core/Transform']
+            var Transform = $famous['famous/core/Transform'];
             var EventHandler = $famous['famous/core/EventHandler'];
 
             //update properties
             //TODO:  is this going to be a bottleneck?
             scope.$watch(
-              function(){
-                return isolate.getProperties()
+              function () {
+                return isolate.getProperties();
               },
-              function(){
-                if(isolate.renderNode)
+              function () {
+                if (isolate.renderNode) {
                   isolate.renderNode.setProperties(isolate.getProperties());
+                }
               },
               true
-            )
+            );
 
-            var _propToFaProp = function(prop){
+            var _propToFaProp = function (prop) {
               return "fa" + prop.charAt(0).toUpperCase() + prop.slice(1);
             };
 
-            isolate.getProperties = function(){
+            isolate.getProperties = function () {
               var baseProperties = scope.$eval(attrs.faProperties) || {};
               var properties = [
                 "backgroundColor",
                 "color"
               ];
-              for(var i = 0; i < properties.length; i++){
+              for (var i = 0; i < properties.length; i++) {
                 var prop = properties[i];
                 var faProp = _propToFaProp(prop);
-                if(attrs[faProp]) baseProperties[prop] = scope.$eval(attrs[faProp]);
+                if (attrs[faProp]) {
+                  baseProperties[prop] = scope.$eval(attrs[faProp]);
+                }
               }
               return baseProperties;
             };
 
-            var getOrValue = function(x) {
+            var getOrValue = function (x) {
               return x.get ? x.get() : x;
             };
 
@@ -88,11 +91,11 @@ angular.module('famous.angular')
               isolate.renderNode.setClasses(attrs['class'].split(' '));
             }
           },
-          post: function(scope, element, attrs){
+          post: function (scope, element, attrs) {
             var isolate = $famousDecorator.ensureIsolate(scope);
 
-            var updateContent = function(){
-              isolate.renderNode.setContent(attrs.faImageUrl)
+            var updateContent = function () {
+              isolate.renderNode.setContent(attrs.faImageUrl);
             };
 
             updateContent();
@@ -101,7 +104,7 @@ angular.module('famous.angular')
 
             $famousDecorator.registerChild(scope, element, isolate);
           }
-        }
+        };
       }
     };
   }]);
