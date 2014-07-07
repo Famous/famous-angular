@@ -198,6 +198,8 @@ angular.module('famous.angular')
 
             var updateScrollview = function(init){
               // Synchronize the update on the next digest cycle
+              // (if this isn't done, $index will not be up-to-date
+              // and sort order will be incorrect.)
               scope.$$postDigest(function(){
                 _children.sort(function(a, b){
                   return a.index - b.index;
