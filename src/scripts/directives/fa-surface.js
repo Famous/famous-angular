@@ -181,7 +181,9 @@ angular.module('famous.angular')
                 "backgroundColor",
                 "margin",
                 "padding",
-                "color"
+                "color",
+                "pointerEvents",
+                "zIndex"
               ];
               for(var i = 0; i < properties.length; i++){
                 var prop = properties[i];
