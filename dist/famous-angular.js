@@ -1808,6 +1808,13 @@ angular.module('famous.angular')
             var options = scope.$eval(attrs.faOptions) || {};
             isolate.renderNode = new GridLayout(options);
 
+            //watch options and update when changed
+            scope.$watch(function(){
+              return scope.$eval(attrs.faOptions);
+            }, function(oldVal, newVal){
+              isolate.renderNode.setOptions(newVal);
+            }, true);
+
             var updateGridLayout = function () {
               _children.sort(function (a, b) {
                 return a.index - b.index;
