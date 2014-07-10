@@ -66,10 +66,22 @@ gulp.task('build', ['clean'], function(event) {
 	.pipe(gulp.dest('dist/'));
 
 
+ gulp.src([
+		'src/scripts/services/**/*.js',
+		'src/scripts/directives/**/*.js',
+		'!src/scripts/services/famous.js'
+	])
+	.pipe(concat('famous-angular-browserify.js'))
+	.pipe(jshint('.jshintrc'))
+	.pipe(jshint.reporter('default'))
+	.pipe(header(banner, { pkg : pkg } ))
+	.pipe(gulp.dest('dist/'));
+
   // Build the JS
 	return gulp.src([
 		'src/scripts/services/**/*.js',
-		'src/scripts/directives/**/*.js'
+		'src/scripts/directives/**/*.js',
+		'!src/scripts/services/famous-browserify.js'
 	])
 	.pipe(concat('famous-angular.js'))
 	.pipe(jshint('.jshintrc'))
