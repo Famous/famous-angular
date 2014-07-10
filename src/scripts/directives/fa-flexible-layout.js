@@ -1,3 +1,21 @@
+/**
+ * @ngdoc directive
+ * @name faFlexibleLayout
+ * @module famous.angular
+ * @restrict E
+ * @description
+ * This directive will create a Famo.us FlexibleLayout that
+ * sequences from children passed in the provided `options` object,
+ * which passes directly through to the Famo.us FlexibleLayout's
+ * constructor. See [https://famo.us/docs/views/FlexibleLayout]
+ *
+ * @usage
+ * ```html
+ * <fa-flexible-layout fa-options="scopeOptionsObject">
+ * </fa-flexible-layout>
+ * ```
+ */
+
 angular.module('famous.angular')
   .directive('faFlexibleLayout', ["$famous", "$famousDecorator", function ($famous, $famousDecorator) {
     return {
@@ -26,10 +44,10 @@ angular.module('famous.angular')
                 var _ch = [];
                 angular.forEach(_children, function (c, i) {
                   _ch[i] = c.renderNode;
-                })
+                });
                 return _ch;
               }(_children));
-            }
+            };
 
             $famousDecorator.sequenceWith(
               scope,
