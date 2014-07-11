@@ -26,10 +26,10 @@ angular.module('famous.angular')
                 var _ch = [];
                 angular.forEach(_children, function (c, i) {
                   _ch[i] = c.renderNode;
-                })
+                });
                 return _ch;
               }(_children));
-            }
+            };
 
             $famousDecorator.sequenceWith(
               scope,
