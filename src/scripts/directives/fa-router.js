@@ -4,7 +4,6 @@ angular.module('famous.angular')
   return {
     scope: true,
     transclude: 'true',
-    // template: '<div></div>',
     restrict: 'ECA',
     compile: function(element , attrs, transclude ) {
           var parent;
@@ -13,12 +12,23 @@ angular.module('famous.angular')
       return   function($scope , element, attrs) {
 
           var isolate = $famousDecorator.ensureIsolate($scope);
+          var View = $famous['famous/core/View'];
+          var RenderNode = $famous['famous/core/RenderNode'];
+          var Modifier = $famous['famuos/core/Modifier'];
+          var Surface = $famous['famous/core/Surface'];
+          var anchorNode = new View();
+          isolate.renderNode = anchorNode;
+          var previousNode = new RenderNode();
+          var currentNode = new RenderNode();
+
+
+
+          anchorNode.add(previousNode);
+          anchorNode.add(currentNode);
+
           var currentScope , currentEl , previousEL, locals,flipperScope;
-          // console.log("post = ",isolate);
-          var RenderController = $famous['famous/views/RenderController'];
-          var renderController = new RenderController();
-          
-          isolate.renderNode = isolate.renderNode || renderController; 
+
+          isolate.renderNode = isolate.renderNode || anchorNode; 
           isolate.states = isolate.states || {}; 
           isolate.currentState = isolate.currentState || 'root';
           
@@ -26,46 +36,35 @@ angular.module('famous.angular')
           $scope.$on('$stateChangeSuccess', createView);
             
           function updateView (evt, data) {
-            // console.log(data);
 
             if(evt.targetScope.$id !== $scope.$id){
 
               var previousView = isolate.states[isolate.fromState];
               var currentView = isolate.states[isolate.currentState] ;
+              currentView.renderNode = data.renderNode;
 
-              currentView.renderNode =  data.renderNode;
-              if(previousView && previousView.renderNode){
-                if(previousView.outTransitionTo) {
-                  var outTransitionToFn = $parse(previousView.outTransitionTo);
-                  outTransitionTo(previousView.$scope, { $callback : function() {
-                    isolate.renderNode.hide( { duration : 0 } ,function() {
-                      // console.log('hide completed');
-                    });
-                  }});
-                }
-                else {
-                  isolate.renderNode.hide( null ,function() {
-                    // console.log('hide completed without transtions');
-                  });
-                }
+              if(previousView && previousView.renderNode ) {
+
+                currentNode.set(currentView.renderNode);
+                var inTransitionFromFn = $parse(currentView.inTransitionFrom);
+                inTransitionFromFn(currentView.$scope, {$callback : function() {
+                }});
                 
-              }
 
-              isolate.renderNode.show(currentView.renderNode, {duration:0},function () {
-
-                if(currentView.inTransitionFrom){
-                  // console.log(currentView.inTransitionFrom);
-                  var inTransitionFrom = $parse(currentView.inTransitionFrom);
-                  inTransitionFrom(currentView.$scope, {$callback : function() {
-                    // console.log('show completed');
-                  }});
-                }
-                else {
-                  // console.log('show completed without transtions');
-
-                }
+                previousNode.set(previousView.renderNode);
+                var outTransitionToFn = $parse(previousView.outTransitionTo);
+                outTransitionToFn(previousView.$scope, { $callback : function() {
+                  previousNode.set(new RenderNode());
+                }});
                
-              });
+              }else {
+                currentNode.set(currentView.renderNode);
+
+                var inTransitionFromFn = $parse(currentView.inTransitionFrom);
+                inTransitionFromFn(currentView.$scope, {$callback : function() {
+                }});
+              }
+             
               evt.stopPropagation();
             }
                
@@ -75,19 +74,11 @@ angular.module('famous.angular')
             
             locals =   isolate.states[$famousState.current] || $famousState.$current;
             locals.$template = $famousState.$template;
-            // console.log('locals :', locals);
             currentEl = "<fa-view>" + locals.$template +"</fa-view>";
             element.html(currentEl);
-            if (currentScope) {
-              currentScope.$destroy();
-              currentScope = null;
-            }
-            // console.log("local scope :",locals.$scope, currentEl);
-           
             currentScope =  $scope.$new();
             isolate.fromState = isolate.currentState;
             isolate.currentState = $famousState.current;
-            console.log(currentScope);
 
             var link  = $compile(element.contents());
             locals.$scope =  currentScope;
