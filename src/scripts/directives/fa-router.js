@@ -15,13 +15,10 @@ angular.module('famous.angular')
           var View = $famous['famous/core/View'];
           var RenderNode = $famous['famous/core/RenderNode'];
           var Modifier = $famous['famuos/core/Modifier'];
-          var Surface = $famous['famous/core/Surface'];
           var anchorNode = new View();
           isolate.renderNode = anchorNode;
           var previousNode = new RenderNode();
           var currentNode = new RenderNode();
-
-
 
           anchorNode.add(previousNode);
           anchorNode.add(currentNode);
@@ -32,39 +29,39 @@ angular.module('famous.angular')
           isolate.states = isolate.states || {}; 
           isolate.currentState = isolate.currentState || 'root';
           
-          $scope.$on('registerChild', updateView);
-          $scope.$on('$stateChangeSuccess', createView);
-            
+             
           function updateView (evt, data) {
 
             if(evt.targetScope.$id !== $scope.$id){
 
               var previousView = isolate.states[isolate.fromState];
               var currentView = isolate.states[isolate.currentState] ;
-              currentView.renderNode = data.renderNode;
+              currentView.isolate = data;
 
-              if(previousView && previousView.renderNode ) {
+              if(previousView && previousView.isolate.renderNode ) {
 
-                currentNode.set(currentView.renderNode);
+                currentNode.set(currentView.isolate.renderNode);
                 var inTransitionFromFn = $parse(currentView.inTransitionFrom);
                 inTransitionFromFn(currentView.$scope, {$callback : function() {
+                  console.log('show completed');
                 }});
                 
 
-                previousNode.set(previousView.renderNode);
+                previousNode.set(previousView.isolate.renderNode);
                 var outTransitionToFn = $parse(previousView.outTransitionTo);
                 outTransitionToFn(previousView.$scope, { $callback : function() {
                   previousNode.set(new RenderNode());
+                  console.log('hide completed');
                 }});
                
               }else {
-                currentNode.set(currentView.renderNode);
+                currentNode.set(currentView.isolate.renderNode);
 
                 var inTransitionFromFn = $parse(currentView.inTransitionFrom);
                 inTransitionFromFn(currentView.$scope, {$callback : function() {
+                  console.log('show completed');
                 }});
               }
-             
               evt.stopPropagation();
             }
                
@@ -76,28 +73,37 @@ angular.module('famous.angular')
             locals.$template = $famousState.$template;
             currentEl = "<fa-view>" + locals.$template +"</fa-view>";
             element.html(currentEl);
-            currentScope =  $scope.$new();
             isolate.fromState = isolate.currentState;
             isolate.currentState = $famousState.current;
 
-            var link  = $compile(element.contents());
-            locals.$scope =  currentScope;
-            isolate.states[$famousState.current] = locals;
-            if(locals.controller){
-              var controller = $controller(locals.controller, locals);
-              if($famousState.$current.controllerAs){
-                currentScope[$famousState.$current.controllerAs] = controller;
-              }
-              
-              angular.element(currentEl).data('$ngControllerController',controller);   
-            }
+            if(isolate.states[isolate.currentState] && isolate.states[isolate.currentState].isolate) {
+              currentScope = isolate.states[isolate.currentState].$scope;
+              currentScope.$emit('registerChild',isolate.states[isolate.currentState].isolate);
+            }else {
 
-            link(currentScope);
+              currentScope =  $scope.$new();
+              var link  = $compile(element.contents());
+              locals.$scope =  currentScope;
+              isolate.states[$famousState.current] = locals;
+              if(locals.controller){
+                var controller = $controller(locals.controller, locals);
+                if($famousState.$current.controllerAs){
+                  currentScope[$famousState.$current.controllerAs] = controller;
+                }
+                
+                angular.element(currentEl).data('$ngControllerController',controller);   
+              }
+
+              link(currentScope);
+            }
 
             currentScope.$emit('$viewContentLoaded');
 
           }
-
+          
+          $scope.$on('registerChild', updateView);
+          $scope.$on('$stateChangeSuccess', createView);
+         
 
           $scope.$emit('registerChild', isolate);
         };
