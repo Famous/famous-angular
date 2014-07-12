@@ -318,7 +318,7 @@ $scope.myScopeFunctionThatReturnsAnArray = function() {
 
 <h2 id="example">Example</h2><h2 id="values-that-fa-modifier-attributes-accept">Values that fa-modifier attributes accept</h2>
 <p><code>Fa-modifier</code> properties, (such as <code>faRotate</code>, <code>faScale</code>, etc) can be bound to number/arrays, object properties defined on the scope, function references, or function expressions.
-Some properties (<code>faOpacity</code>, <code>faSize</code>, <code>faOrigin</code>, <code>faAlign</code>) can be bound to a Transitionable object directly.  </p>
+Some properties (<code>faOpacity</code>, <code>faSize</code>, <code>faOrigin</code>, <code>faAlign</code>) can be bound to a Transitionable object directly.</p>
 <h3 id="number-array-values">Number/Array values</h3>
 <p><code>Fa-modifier</code> properties can be bound to number/array values.</p>
 <pre><code class="lang-html"> &lt;fa-modifier fa-origin=&quot;[.5,.5]&quot; fa-size=&quot;[100, 100]&quot; fa-rotate=&quot;.3&quot;&gt;
@@ -366,14 +366,14 @@ $scope.boxTransitionable = new Transitionable([0, 0, 0]);</code></pre>
 <p><code>FaTranslate</code> (along with <code>faRotate</code>, <code>faTranslate</code>, <code>faScale</code>, <code>faSkew</code>, &amp; more) pass through a Famous Transform function (<code>Transform.translate()</code>), whereas <code>faOpacity</code>, <code>faSize</code>, <code>faOrigin</code>, and <code>faAlign</code> are passed through a Famous Modifier.</p>
 <p>A Famous <code>Transform.translate()</code> function does not accept a Transitionable object, but only an array.
 A <code>.get()</code> function of a Transitionable returns an interpolated value of a current transition, therefore in the case of a <code>faTranslate</code>, it can return an array that a <code>Transform.translate()</code> can accept.</p>
-<p><code>faOpacity</code> passes through a Famous Modifier, which has an <code>.opacityFrom()</code> method that can accept a Transitionable object directly, therefore a <code>.get()</code> method is not required.  </p>
+<p><code>faOpacity</code> passes through a Famous Modifier, which has an <code>.opacityFrom()</code> method that can accept a Transitionable object directly, therefore a <code>.get()</code> method is not required.</p>
 <p>As a design principle, Famous-Angular attempts to pass values directly to Famous as much as possible, and these differences are due to the core Famous library.</p>
 <h2 id="fa-transform">Fa-transform</h2>
 <p>Whenever a &quot;transform&quot; <a href="https://famo.us/docs/0.2.0/core/Transform">https://famo.us/docs/0.2.0/core/Transform</a> property is used on a <code>fa-modifier</code>, such as <code>fa-translate</code>, <code>fa-scale</code>, <code>fa-origin</code>, etc, their values are passed through a <code>Transform function</code> which returns a 16 element transform array.
 <code>Fa-transform</code> can be used to directly pass a 16-element transform matrix to a <code>fa-modifier</code>.</p>
 <h3 id="values-that-fa-transform-accepts">Values that fa-transform accepts</h3>
 <p>Passed as an array:</p>
-<pre><code class="lang-html">&lt;fa-modifier 
+<pre><code class="lang-html">&lt;fa-modifier
     fa-transform=&quot;[1, .3, 0, 0, -.3, 1, 0, 0, 0, 0, 1, 0, 20, 110, 0, 1]&quot;
     fa-size=&quot;[100, 100]&quot;&gt;
   &lt;fa-surface fa-background-color=&quot;&#39;red&#39;&quot;&gt;&lt;/fa-surface&gt;
@@ -406,7 +406,7 @@ $scope.variousTransforms = function() {
 <h2 id="animate-modifier-properties-and-not-surfaces">Animate modifier properties and not surfaces</h2>
 <p>Famous surfaces are styled with position:absolute, and their positions are defined by matrix3d webkit transforms.
 The role of Modifiers is to to hold onto size, transform, origin, and opacity states, and applying those layout and styling properties to its child nodes.
-As in vanilla Famous, you should animate properties of modifiers, such as transform, opacity, etc, rather than animate properties on the surface itself, as modifiers are responsible for layout and visibility.  </p>
+As in vanilla Famous, you should animate properties of modifiers, such as transform, opacity, etc, rather than animate properties on the surface itself, as modifiers are responsible for layout and visibility.</p>
 <pre><code class="lang-html">  &lt;fa-modifier fa-rotate-z=&quot;boxA.rotate.get()&quot;&gt;
     &lt;fa-surface fa-click=&quot;animateBoxA()&quot; fa-background-color=&quot;&#39;red&#39;&quot;&gt;&lt;/fa-surface&gt;
   &lt;/fa-modifier&gt;</code></pre>
@@ -423,7 +423,7 @@ In the second example, the rotation happens first, and then the translation is c
   &lt;fa-surface fa-background-color=&quot;&#39;blue&#39;&quot;&gt;&lt;/fa-surface&gt;
 &lt;/fa-modifier&gt;</code></pre>
 <h3 id="nesting-modifiers">Nesting Modifiers</h3>
-<p>You can also specify the order of transforms by nesting Modifiers.  In the example below, each Mdifier has one Transform property (e.g. translate, rotate, skew, scale, etc).  Each Famous modifier affects all child nodes below it on the Render Tree. </p>
+<p>You can also specify the order of transforms by nesting Modifiers.  In the example below, each Mdifier has one Transform property (e.g. translate, rotate, skew, scale, etc).  Each Famous modifier affects all child nodes below it on the Render Tree.</p>
 <pre><code class="lang-html">&lt;fa-modifier fa-translate=&quot;[100, 100]&quot;&gt;
    &lt;fa-modifier fa-rotate-z=&quot;.6&quot; fa-size=&quot;[100, 100]&quot;&gt;
      &lt;fa-surface fa-background-color=&quot;red&quot;&gt;&lt;/fa-surface&gt;

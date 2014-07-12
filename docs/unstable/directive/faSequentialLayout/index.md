@@ -30,10 +30,10 @@ docType: "directive"
 
 
 
-This directive will create a Famo.us SequentialLayout containing the 
+This directive will create a Famo.us SequentialLayout containing the
 specified child elements. The provided `options` object
 will pass directly through to the Famo.us faSequentialLayout's
-constructor.  See [https://famo.us/docs/0.2.0/views/SequentialLayout/]
+constructor.  See [https://famo.us/docs/views/SequentialLayout]
 
 
 

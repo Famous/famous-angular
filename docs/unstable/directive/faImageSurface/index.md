@@ -88,7 +88,7 @@ the specified ImageUrl.
 
 
 <h2 id="example">Example</h2><p>To use <code>fa-image-surface</code>, declare an <code>fa-image-url</code> attribute with a string url.</p>
-<pre><code class="lang-html">&lt;fa-image-surface 
+<pre><code class="lang-html">&lt;fa-image-surface
            fa-image-url=&quot;img/my-image.png&quot;
            class=&quot;img&quot;
            fa-color=&quot;&#39;blue&#39;&quot;

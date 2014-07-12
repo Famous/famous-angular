@@ -30,10 +30,10 @@ docType: "directive"
 
 
 
-This directive will create a Famo.us GridLayout containing the 
+This directive will create a Famo.us GridLayout containing the
 specified child elements. The provided `options` object
 will pass directly through to the Famo.us GridLayout's
-constructor.  See [https://famo.us/docs/0.1.1/views/GridLayout/]
+constructor.  See [https://famo.us/docs/views/GridLayout]
 
 
 
@@ -58,13 +58,13 @@ constructor.  See [https://famo.us/docs/0.1.1/views/GridLayout/]
 
 
 <h2 id="example">Example</h2><p>A Famous Grid Layout divides a context into evenly-sized grid cells.  Pass an option such as <code>dimension</code> by binding an object with the property to <code>fa-options</code>.</p>
-<p>In the example below, <code>fa-options</code> references <code>myGridLayoutOptions</code> on the scope. </p>
+<p>In the example below, <code>fa-options</code> references <code>myGridLayoutOptions</code> on the scope.</p>
 <pre><code class="lang-javascript">$scope.myGridLayoutOptions = {
    dimensions: [2,2], // specifies number of columns and rows
 };</code></pre>
 <p>In the example below, <code>fa-size</code> is specified as <code>[100, 100]</code>, so each <code>fa-surface</code> will have these dimensions.</p>
 <pre><code class="lang-html">&lt;fa-grid-layout fa-options=&quot;myGridLayoutOptions&quot;&gt;
-   &lt;fa-modifier ng-repeat=&quot;grid in grids&quot; 
+   &lt;fa-modifier ng-repeat=&quot;grid in grids&quot;
                 fa-size=&quot;[100, 100]&quot;&gt;
      &lt;fa-surface fa-background-color=&quot;grid.bgColor&quot;&gt;&lt;/fa-surface&gt;
    &lt;/fa-modifier&gt;

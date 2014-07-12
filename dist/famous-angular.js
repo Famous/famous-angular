@@ -1527,7 +1527,7 @@ angular.module('famous.angular')
  * This directive will create a Famo.us ContainerSurface containing the
  * specified child elements. The provided `options` object
  * will pass directly through to the Famo.us ContainerSurface's
- * constructor.  See [https://famo.us/docs/0.2.0/surfaces/ContainerSurface/]
+ * constructor.  See [https://famo.us/docs/surfaces/ContainerSurface]
  *
  * @usage
  * ```html
@@ -1577,6 +1577,24 @@ angular.module('famous.angular')
       }
     };
   }]);
+
+/**
+ * @ngdoc directive
+ * @name faFlexibleLayout
+ * @module famous.angular
+ * @restrict E
+ * @description
+ * This directive will create a Famo.us FlexibleLayout that
+ * sequences from children passed in the provided `options` object,
+ * which passes directly through to the Famo.us FlexibleLayout's
+ * constructor. See [https://famo.us/docs/views/FlexibleLayout]
+ *
+ * @usage
+ * ```html
+ * <fa-flexible-layout fa-options="scopeOptionsObject">
+ * </fa-flexible-layout>
+ * ```
+ */
 
 angular.module('famous.angular')
   .directive('faFlexibleLayout', ["$famous", "$famousDecorator", function ($famous, $famousDecorator) {
@@ -1655,7 +1673,7 @@ angular.module('famous.angular')
  * This directive will create a Famo.us Flipper containing the
  * specified front and back elements. The provided `options` object
  * will pass directly through to the Famo.us Flipper's
- * constructor.  See [https://famo.us/docs/0.2.0/views/Flipper/]
+ * constructor.  See [https://famo.us/docs/views/Flipper]
  *
  * @usage
  * ```html
@@ -1747,7 +1765,7 @@ angular.module('famous.angular')
  * This directive will create a Famo.us GridLayout containing the
  * specified child elements. The provided `options` object
  * will pass directly through to the Famo.us GridLayout's
- * constructor.  See [https://famo.us/docs/0.1.1/views/GridLayout/]
+ * constructor.  See [https://famo.us/docs/views/GridLayout]
  *
  * @usage
  * ```html
@@ -3100,7 +3118,7 @@ angular.module('famous.angular')
  * @module famous.angular
  * @restrict EA
  * @description
- * A directive to insert a {@link https://famo.us/docs/0.1.1/core/RenderNode/ Famo.us RenderNode} that is
+ * A directive to insert a {@link https://famo.us/docs/core/RenderNode Famo.us RenderNode} that is
  * a wrapper for inserting a renderable component (like a Modifer or Surface) into the render tree.
  * It allows you to pass a reference to an arbitrary render node from your controller.
  * @usage
@@ -3201,7 +3219,7 @@ angular.module('famous.angular')
  * @module famous.angular
  * @restrict E
  * @description
- * This directive allows you to specify a {@link https://famo.us/docs/0.1.1/views/Scrollview/ famo.us Scrollview}
+ * This directive allows you to specify a {@link https://famo.us/docs/views/Scrollview famo.us Scrollview}
  * that will lay out a collection of renderables sequentially in the specified direction
  * and will allow you to scroll through them with mousewheel or touch events.
  *
@@ -3466,7 +3484,7 @@ angular.module('famous.angular')
  * This directive will create a Famo.us SequentialLayout containing the
  * specified child elements. The provided `options` object
  * will pass directly through to the Famo.us faSequentialLayout's
- * constructor.  See [https://famo.us/docs/0.2.0/views/SequentialLayout/]
+ * constructor.  See [https://famo.us/docs/views/SequentialLayout]
  *
  * @usage
  * ```html

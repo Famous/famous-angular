@@ -87,7 +87,7 @@ ngIncludes or custom (vanilla Angular) directives.
 <pre><code class="lang-html"> &lt;fa-surface&gt;
     &lt;!-- content --&gt;
     &lt;!-- databound content with curly braces --&gt;
-    &lt;!-- no other Famous renderable nodes allowed inside a Surface--&gt; 
+    &lt;!-- no other Famous renderable nodes allowed inside a Surface--&gt;
  &lt;/fa-surface&gt;</code></pre>
 <h3 id="properties-on-surfaces-vs-modifiers">Properties on surfaces vs modifiers</h3>
 <p>With Famous, properties related to layout and visibility belong on a Modifier.  A Surface should be added below a Modifier on the Render Tree, as Modifiers affect everything below them.</p>
@@ -96,13 +96,13 @@ ngIncludes or custom (vanilla Angular) directives.
 <p>While you can specify <code>fa-size</code> on surfaces themselves, it is not recommended.
 This is not best practice:</p>
 <pre><code class="lang-html">&lt;fa-surface fa-size=&quot;[100, 100]&quot;&gt;&lt;/fa-surface&gt;</code></pre>
-<p>Whereas this is the preferred approach: </p>
+<p>Whereas this is the preferred approach:</p>
 <pre><code class="lang-html">&lt;fa-modifier fa-size=&quot;[100, 100]&quot;&gt;
   &lt;fa-surface fa-size=&quot;[undefined, undefined]&quot;&gt;
   &lt;/fa-surface&gt;
 &lt;/fa-modifier&gt;</code></pre>
 <p>You may also omit <code>fa-size=&quot;[undefined, undefined]&quot;</code> on the surface and the surface will fill to the size of the modifier, in this case, <code>[100, 100]</code>.</p>
-<p>In Famous&#39; Render Tree, Modifiers modify all the nodes (other Modifiers and Surfaces) below them.  By setting the <code>fa-surface</code>&#39;s <code>fa-size</code> to <code>[undefined, undefined]</code>, it will inherit from the <code>fa-modifier</code>&#39;s <code>fa-size</code> of <code>[100, 100]</code>. </p>
+<p>In Famous&#39; Render Tree, Modifiers modify all the nodes (other Modifiers and Surfaces) below them.  By setting the <code>fa-surface</code>&#39;s <code>fa-size</code> to <code>[undefined, undefined]</code>, it will inherit from the <code>fa-modifier</code>&#39;s <code>fa-size</code> of <code>[100, 100]</code>.</p>
 <p><code>Fa-surfaces</code> also cannot have an <code>fa-size</code>, assigned to a function, as is in the case of modifiers, which can take number/array or a function.
 For example, this will not work:</p>
 <pre><code class="lang-html">&lt;fa-surface fa-size=&quot;sizeForBoxFunction&quot;&gt;&lt;/fa-surface&gt;</code></pre>
