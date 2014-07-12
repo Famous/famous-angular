@@ -89,6 +89,14 @@ angular.module('famous.angular')
             element.append('<div class="famous-angular-container"></div>');
             isolate.context = Engine.createContext(element[0].querySelector('.famous-angular-container'));
 
+            var _updatePerspective = function(){
+              var val = parseInt(attrs.faPerspective)
+              if(val) isolate.context.setPerspective(val);
+            };
+
+            attrs.$observe('faPerspective', _updatePerspective);
+            _updatePerspective();
+
             function AppView() {
               View.apply(this, arguments);
             }
