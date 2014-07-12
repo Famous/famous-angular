@@ -7,7 +7,7 @@
  * This directive will create a Famo.us Flipper containing the
  * specified front and back elements. The provided `options` object
  * will pass directly through to the Famo.us Flipper's
- * constructor.  See [https://famo.us/docs/0.2.0/views/Flipper/]
+ * constructor.  See [https://famo.us/docs/views/Flipper]
  *
  * @usage
  * ```html

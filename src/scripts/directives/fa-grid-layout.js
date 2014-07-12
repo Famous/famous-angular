@@ -7,7 +7,7 @@
  * This directive will create a Famo.us GridLayout containing the
  * specified child elements. The provided `options` object
  * will pass directly through to the Famo.us GridLayout's
- * constructor.  See [https://famo.us/docs/0.1.1/views/GridLayout/]
+ * constructor.  See [https://famo.us/docs/views/GridLayout]
  *
  * @usage
  * ```html

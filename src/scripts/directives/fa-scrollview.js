@@ -4,7 +4,7 @@
  * @module famous.angular
  * @restrict E
  * @description
- * This directive allows you to specify a {@link https://famo.us/docs/0.1.1/views/Scrollview/ famo.us Scrollview}
+ * This directive allows you to specify a {@link https://famo.us/docs/views/Scrollview famo.us Scrollview}
  * that will lay out a collection of renderables sequentially in the specified direction
  * and will allow you to scroll through them with mousewheel or touch events.
  *
