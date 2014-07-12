@@ -64,7 +64,7 @@ In the example below, when an <code>fa-surface</code> is clicked, it calls the f
    &lt;fa-surface fa-background-color=&quot;&#39;yellow&#39;&quot; fa-click=&quot;flipIt()&quot;&gt;&lt;/fa-surface&gt;
    &lt;fa-surface fa-background-color=&quot;&#39;red&#39;&quot; fa-click=&quot;flipIt()&quot;&gt;&lt;/fa-surface&gt;
 &lt;/fa-flipper&gt;</code></pre>
-<pre><code class="lang-javascript">$scope.flipHandler = function() {
+<pre><code class="lang-javascript">$scope.flipIt = function() {
    $famous.find(&#39;fa-flipper&#39;)[0].flip();
 };</code></pre>
 

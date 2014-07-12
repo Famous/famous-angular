@@ -28,7 +28,7 @@
  * </fa-flipper>
  *```
  *```javascript
- * $scope.flipHandler = function() {
+ * $scope.flipIt = function() {
  *    $famous.find('fa-flipper')[0].flip();
  * };
  *```
