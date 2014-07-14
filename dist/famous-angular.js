@@ -716,6 +716,822 @@ angular.module('famous.angular')
   });
 
 /**
+ * @ngdoc provider
+ * @name $famousStateProvider
+ * @module famous.angular
+ * @description
+ * This provider allows for state-based routing similar to that of the Angular UI Router.  The 
+ * difference being that $famousStateProvider allows Famo.us animations and transforms to be defined on
+ * state transitions.
+ *
+ * @usage
+ * States may defined in the following manner:
+ *
+ * ```js
+ * angular.module('mySuperApp', ['famous.angular']).config(
+ *   function($famousStateProvider) {
+ *    $famousStateProvider
+ *      .state('home', {
+ *        url: '/',
+ *        templateURL: 'views/home.html',
+ *        conroller: 'homeCtrl',
+ *        inTransitionFrom: {
+ *          contact: 'fromContact'
+ *          portfolio: 'fromPortfolio'  
+ *        },
+ *        outTransitionTo: {
+ *          contact: 'toContact'
+ *          portfolio: 'toPortfolio'
+ *        }
+ *      })
+ *      .state('portfolio', {
+ *        url: '/portfolio',
+ *        controller: function($scope) { $scope.name = 'My Portfolio'; },
+ *        inTransitionFrom: {
+ *          home: 'fromHome',
+ *          contact: 'fromContact'  
+ *        },
+ *        outTransitionTo: {
+ *          home: 'toHome',
+ *          contact: 'toContact'
+ *        },
+ *        views: {
+ *          '': {templateUrl: 'views/portfolioMain.html},
+ *          'project1@portfolio': {templateUrl: 'views/portfolioProject1.html},
+ *          'project2@portfolio': {templateUrl: 'views/portfolioProject2.html}
+ *        }
+ *      });
+ *      .state('contact', {
+ *        url: '/contact',
+ *        template: '<p>Contact us at contact@examples.com</p>',
+ *        controller: 'contactCtrl'
+ *      });
+ *   }
+ * });
+ * ```
+ *
+ */
+
+angular.module('famous.angular')
+
+  .provider('$famousState', function() {
+    
+    var states = {};
+    var queue = {};
+    var $famousState;
+    var root;
+
+    /**
+     * @ngdoc method
+     * @name $famousProvider#state
+     * @module famous.angular
+     * @description
+     * Defines the states of the application
+     * @param {String} definition Defines the name of the state
+     * @param {Object} definition Defines the parameters of the state
+     */
+
+    this.state = state;
+    function state(name, definition) {
+      /** 
+       * If only a single state definition object is passed as a parameter, will
+       * attempt to extract the state name from the parameter object 
+       */
+      if ( angular.isObject(name) ) {
+        definition = name;
+      } else {
+        definition.name = name;
+      }
+      defineState(definition);
+      return this;
+    }
+
+    /**
+     * Validates the name and parent of the state object being created.
+     */
+    function defineState(state) {
+      
+      // Static child views may be defined using '@child@parent'
+      var name = state.name;
+      if ( !angular.isDefined(name) || !angular.isString(name) || name.indexOf('@') >= 0  || name.indexOf('.') !== -1 )  {
+        throw new Error('State must have a valid name');
+      }
+      if (states.hasOwnProperty(name)) {
+        throw new Error('State ' + name + ' is already defined');
+      }
+
+      // Parent state may be defined within the name of the child state or as a separate property
+      var parentName = (name.indexOf('.') !== -1) ? name.substring(0, name.lastIndexOf('.'))
+          : ( angular.isString(state.parent) ) ? state.parent
+          : '';
+
+      if ( !!parentName && !states[parentName] ) { return queueState(state); }
+      
+      buildState(state);
+    }
+
+    /**
+     * Passes the state object into the state builder which validates each of the properties defined
+     * on the state.  If the object "passes" the state builder, it will be registered (added to the 
+     * states object).  Finally, updateQueue is invoked to determine whether or not the state being 
+     * added is the parent of one of the "orhpan" states in the queue.  If so, the child state will be 
+     * registered.
+     */
+    function buildState (state) {
+      
+      angular.forEach(stateBuilder, function(buildFunction) {
+        buildFunction(state);
+      });
+
+      registerState(state);
+      updateQueue(state);
+    }
+
+    /**
+     * Validates each of the propeties on the state object before the state is registered.
+     */
+    var stateBuilder = {
+      
+      // Extracts the name of the parent if implicitly ('parent.child') defined on the parent property
+      parent: function(state) {
+        if ( angular.isDefined(state.parent) && state.parent ) { return; }
+        
+        // Extract parent name from composite state name: grandparent.parent.child -> grandparent.parent 
+        var compositeName = /^(.+)\.[^.]+$/.exec(state.name);
+        state.parent = compositeName ? compositeName[1] : root;
+      },
+ 
+      url: function(state) {
+        
+        var url = state.url;
+
+        if ( !angular.isDefined(url) ) { return; }
+        if ( !angular.isString(url) ) { throw new Error('url for state ' + state.name + ' must be a string'); }
+        
+      },
+      
+      // Template should be a string or a link to an HTML document
+      template: function(state) {
+
+        var template;
+        if ( !!state.templateUrl ) {
+          template = state.templateUrl;
+          if ( !angular.isString(template) || template.substr(-5) !== '.html' ) {
+            throw new Error('templateUrl must be a string pointing to an HTML document (e.g. templates/myTemp.html)');
+          }
+          state.template = {link: template};
+        } else if ( !!state.template ) {
+          template = state.template;
+          if ( typeof template !== 'string' ){
+            throw new Error('template must be a string containing valid HTML');
+          }
+          state.template = {html: template};
+        }
+
+      },
+      
+      // An anonymous function or a string referring a controller to be defined within the application
+      controller: function(state){
+       
+        var controller = state.controller;
+        if ( (!state.template && !angular.isDefined(state.views)) && !!controller ) { 
+          throw new Error('A template must defined in order to create a controller');
+        } 
+        if ( !!controller && !angular.isString(controller) && !angular.isFunction(controller) ) {
+          throw new Error('Controller must be a function or reference an existing controller');
+        } 
+      },
+
+      /**
+       * Transitions are objects that define how one state should transfer to and from all other states
+       * in the application.  The keys in a transition object should be the name of the states being
+       * transitioned to/from and the value should be a string which references the name of a function
+       * in the controller that defines the transition.  A single transition function may also be passed,
+       * thereby assigning a single transition to/from that state.  If no transitions are definec, default
+       * transitions will be assigned.
+       */
+      transitions: function(state) {
+
+        if ( !angular.isDefined(state.inTransitionFrom) && !angular.isDefined(state.outTransitionTo) ) { return; } 
+        
+        var transitions = {}; 
+        transitions.inTransitionFrom = state.inTransitionFrom;
+        transitions.outTransitionTo = state.outTransitionTo;
+ 
+
+        for ( var direction in transitions ) {
+          if ( angular.isString(transitions[direction]) ) {
+            // '($callback)' must be added to the function to create an invocation that can be properly parsed
+            state[direction] = transitions[direction] + '($callback)'; 
+          } else if ( angular.isObject(transitions) ) {
+            angular.forEach(transitions[direction], function(definition, state) {
+              transitions[direction][state] = definition + '($callback)';
+            })
+            angular.extend(state[direction], transitions[direction]);
+          } else if ( angular.isDefined(state[direction]) ) { 
+            throw new Error('Transitions must be strings which reference function names');
+          }
+        }
+      },
+      
+      // Static views should be defined using 'staticChild@parent' notation
+      views: function(state) {
+
+        if ( !angular.isDefined(state.views) ) { 
+          state.views = { '@': state };
+          return;
+        }
+
+        var views = {};
+
+        angular.forEach(angular.isDefined(state.views) ? state.views : { '': state }, function (view, name) {
+          if ( !name ) { name = '@'; }
+          if ( name.indexOf('@') === -1 ) { name += '@' + state.parent.name; }
+          validateView(view, name);
+          views[name] = view;
+        });
+
+        state.views = views;
+      },
+
+      /**
+       * Creates a locals object which contains all data relevant to the child views the states
+       */
+      locals: function(state) {
+
+        state.locals = {};
+        
+        angular.forEach(state.views, function(view, name) {
+          if ( name !== '@' ) { state.locals[name] = view; }
+        });
+      }
+
+    };
+
+    /**
+     * Static views are similar to states in that they may have their own templates, controllers,
+     * and transitions defined.  Accordingly, all properties must be defined in the same manner. 
+     */
+    function validateView (view) {
+      
+      stateBuilder.template(view);
+      stateBuilder.controller(view);
+      stateBuilder.transitions(view);
+    }
+
+    /**
+     * Adds the state to the states object which stores all valid registered states
+     */
+    function registerState(state) {
+
+      var name = state.name;
+      states[name] = state;
+    }
+
+    /**
+     * Adds an "orphan" child state to the queue if it doesn't already exist within the queue
+     */
+    function queueState(state) {
+      if ( !queue[state.name] ) {
+        queue[state.name] = state;
+      }
+    }
+
+    /**
+     * Removes state from the queue if it is no longer an "orphan."" Iterates through 
+     * the "orphan" queue ito determine is the parent of any of the child states has been registered.  
+     * If so, the child state is registered.
+     */
+    function updateQueue(state){
+      if ( queue[state.name] ) { delete queue[state.name]; }
+      for ( var name in queue ) {
+        defineState(queue[name]);
+      }
+    }
+
+    root = {
+      name : '',
+      url: '^',
+      parent: null,
+      views: null,
+      template: null,
+      contoller: null,
+      locals: null
+    };
+    
+    this.$get = $get;
+    $get.$inject = ['$rootScope','$http', '$location', '$q', '$famousTemplate'];
+    function $get($rootScope, $http, $location, $q, $famousTemplate) {
+
+      /**
+       * @ngdoc service
+       * @name $famousState
+       * @module famous.angular
+       * @description
+       * This service gives you access to $famousState object.
+       *
+       * @usage
+       * Use this service to transition states and access information related to the current state.
+       *
+       * ```js
+       * angular.module('mySuperApp', ['famous.angular']).controller(
+       *   function($scope, $famousState) {
+       *
+       *     // Transition states
+       *     $scope.goHome = function() {
+       *       $famousState.go('home');
+       *     };
+       *     // Access information related to current state
+       *     $famousState.current = 'The name of the current state';
+       *     $famousState.$current = 'The current state object';
+       *     $famousState.locals = 'The properties of any static child views defined on the state';
+       *     $famousState.$prior = 'The previous state of the application;
+       *     $famousState.inTransitionTo = 'The in transitions assigned to the current state';
+       *     $famousState.outTransitionFrom = 'The out transitions assigned to the current state';
+       *   }  
+       * });
+       * ```
+       *
+       */
+
+      $famousState = {
+        current: root.name, // Name of the current state
+        $current: root,
+        parent: root.parent,
+        locals: {},
+        $prior: {}, // Prior state object
+        inTransitionTo: '',
+        outTransitionFrom: ''
+      };
+
+      /**
+       * @ngdoc method
+       * @name $famousState#includes
+       * @module famous.angular
+       * @description
+       * Allows the $famousState object to be queried to determine whether or not a state is registered.
+       * @param {String} state The name of a state
+       * @returns {Boolean} A boolean indicating whether or not the state is registered
+       */
+      $famousState.includes = function(state) {  
+        return stateValid(state);
+      };
+
+      /**
+       * @ngdoc method
+       * @name $famousState#go
+       * @module famous.angular
+       * @description
+       * Initiates the state transition process.  Return if state is the current state and reload is not true.
+       * @param {String} state The name of a state
+       * @returns {Object} The $famousState object
+       */
+      $famousState.go = function(state, reload){
+        if ( state === $famousState.current && !reload) { return; }
+        transitionState(state);     
+      };
+
+      /**
+       * @ngdoc method
+       * @name $famousState#getStates
+       * @module famous.angular
+       * @description
+       * Returns all currently registered states.  This function exists solely for the purpose of 
+       * allowing the famousUrlRouter to update URL routes upon initiation.  As soon as the dependency
+       * injection issue is resolved, this function may be deleted.
+       * @param {String} state The name of a state
+       * @returns {Object} The states object
+       */
+
+      $famousState.getStates = function() {
+        return states;
+      };
+
+      // Updates the $famousState object so that the new state view may be rendered by the fa-router directive
+      function transitionState(state) {
+        state = transferValid(state);
+        if ( !state ) { return $rootScope.$broadcast('$stateNotFound'); }
+
+        $famousState.$prior = $famousState.$current;
+        $famousState.current = state;
+        $famousState.$current = states[state];
+        $famousTemplate.resolve($famousState.$current)
+        .then(function(template){
+          $famousState.$current.$template = template;
+          $rootScope.$broadcast('$stateChangeSuccess');
+          if ( !!$famousState.$current.url ) { 
+            $location.path($famousState.$current.url); }
+        });
+      }
+
+      /**
+       * Validates the name (or relative name) of the state parameter passed to '$famousState.go'
+       * @param {String} state The name (or relative name) of a state
+       * @returns {Boolean} Returns a value indicating whether or not the state is valid 
+       */
+      function transferValid(state) {
+
+        // '^' indicates that the parent state should be activated
+        if ( state === '^' ) { 
+          var parent = /^(.+)\.[^.]+$/.exec($famousState.current)[1];
+          return stateValid(parent) ? parent : false;
+        }
+
+        // '^.name' indicates that a sibling state should be activated
+        if ( state.indexOf('^') === 0 && state.length > 1 ) {
+          state = $famousState.$current.parent + state.slice(1);
+          return stateValid(state) ? state : false;
+        }
+        
+        // '.name' indicates that a child state should be activated
+        if ( state.indexOf('.') === 0 ) {
+          state = $famousState.current + state;
+          return stateValid(state) ? state : false;
+        }
+        
+        /**
+         * In order for a child state to be activated, the parent state of that child must first be active.  
+         * If the parent is not active, the closest commong ancestor of the two states will be found and 
+         * the child of the common ancestor which is along the same path as the requested state will be activated.
+         * If a common ancestor does not exists, the highest-level ancestor of the requested state will be 
+         * activated.  
+         * 
+         * Example: The current state is 'A.E.F.X' and $famousState.go('A.E.B.Q') is called. 'A.E.B.Q' cannot 
+         * be activated without 'A.E.B' first being active.  Since 'A.E' is part of the path of the currently 
+         * active state, 'A.E.B' will be activated.  
+         * 
+         * Example: The current state is 'B.C.E' and $famousState.go('A.D') is called.  Since the two states do
+         * not share a common ancestor, the highest-level ancestor of the requested state, 'A', will be activated.
+         */
+        if ( state.indexOf('.') > 0 ) {
+          if ( $famousState.current === '' ) { $location.path('^'); }
+          var parentName = /^(.+)\.[^.]+$/.exec(state)[1];
+          if ( $famousState.current === parentName ) {
+            return stateValid(state) ? state : false;
+          } else {
+            var relativeState  = findCommonAncestor(parentName);
+            return stateValid(relativeState) ? relativeState : false;
+          }
+        }
+
+        return stateValid(state) ? state: false;
+      }
+
+      /**
+       * Accepts the parent name of a state and finds the closest common ancestor of the currently active state.
+       * If an ancestor is found, the child state of the ancestor which corresponds to the state passed into the
+       * the function will be returned.  If there is no common index, the highest-level ancestor of the passed in
+       * state will be returned.  
+       */
+      function findCommonAncestor (parentName) {
+        
+        var currentParent = $famousState.$current.parent;
+        var newParent = parentName;
+        var newChild;
+        
+        while (currentParent && newParent) {
+
+          if ( currentParent.indexOf('.') !== -1 && currentParent.length >= newParent.length ) {
+            currentParent = /^(.+)\.[^.]+$/.exec(currentParent)[1];
+          }
+          if ( newParent.indexOf('.') !== -1 && newParent.length > currentParent.length ) {
+            newChild = newParent.slice(newParent.lastIndexOf('.'));
+            newParent = /^(.+)\.[^.]+$/.exec(newParent)[1];
+          }
+          if ( currentParent === newParent || currentParent.indexOf('.') === -1 && newParent.indexOf('.') === -1  ) { break; }
+
+        }
+
+        return newParent + newChild;
+      }
+
+      /**
+       * Returns a boolean indicating whether or not the state is registered
+       */
+      function stateValid (state) {
+        return ( !!states[state] );
+      }
+
+      return $famousState;
+    }   
+});
+/**
+ * @ngdoc factory
+ * @name $famousTemplateFactory
+ * @module famous.angular
+ * @description
+ * This factory function is used to resolve templates and make the HTML available to the
+ * fa-router directive during state transitions.
+ */
+
+angular.module('famous.angular')
+  .factory('$famousTemplate', ['$http', '$templateCache', '$q', function($http, $templateCache, $q){
+
+
+    /**
+     * Fetches the HTML for each of the child views and inserts it into the HTML of the main view. The
+     * raw HTML of the parent is returned as a promise.
+     */
+
+    function resolveChildViews(mainTemplate, childViews) {
+
+      var deferred = $q.defer();
+      var templateRequests = [];
+      var statics = {};
+
+      angular.forEach(childViews, function(template) {
+        var childName = template.name.split('@')[0];
+        // TODO: Add a check to ensure the parent name matches the div tag (or not?)
+        // var parentName = template.name.split('@')[1];
+        // TODO: It should be possible to define distinct behavior for staticchild views.  In order to
+        //       do this the fa-router-view cannot be replaced as it is currently (transclusion = true).
+        //       Ideally, this should be broken out into a separate directive. 
+        var target = '<div fa-router-view="' + childName + '"></div>';
+        //TODO: Refactor so that the HTML only needs to be scanned one time
+        if ( mainTemplate.indexOf(target) !== -1 ) {
+          statics[childName] = target;
+          templateRequests.push(fetchTemplate(template, childName));
+        }
+      });
+
+      $q.all(templateRequests).then(function(templates) {
+        angular.forEach(templates, function(template) {
+          mainTemplate = mainTemplate.replace(statics[template.name], template.data);
+        });
+        deferred.resolve(mainTemplate);
+      });
+
+      return deferred.promise;
+    }
+
+    /**
+     * Fetches a view template and returns the raw HTML as a promise.
+     */
+
+    function fetchTemplate(view, name) {
+
+      var deferred = $q.defer();
+      var template = {};
+
+      if ( view.template.html ) { 
+        template.name = name;
+        template.data = view.template.html;
+        deferred.resolve(template);
+      } else if ( view.template.link ) {
+        $http.get(view.template.link, {cache: $templateCache})
+        .success(function(data) {
+          template.name = name;
+          template.data = data;
+          deferred.resolve(template);
+        }).error(function(data) {
+          template.name = name;
+          template.data = data;
+          deferred.reject(template);
+        }); 
+      }
+
+      return deferred.promise;
+
+    }
+
+    return {
+
+      /**
+       * @ngdoc method
+       * @name $famousTemplate#resolve
+       * @module famous.angular
+       * 
+       * @description
+       * Accepts a state object with a views property.  Fetches the template for the main view and returns 
+       * the raw HTML to be inserted into the application by the fa-router directive.  If any static child views 
+       * are defined, the templates for the child views are fetched and injected into the HTML of the main view
+       * before it is returned.
+       *
+       * @param {Object} state The state for which the templates need to be fetched
+       * @returns {Object} The raw HTML for the state, wrapped in a promise
+       *  
+       * @usage 
+       * 
+       * ```js
+       * $famousTemplate.resolve($famousState.$current)
+       * .then(function(template){
+       *   $famousState.$current.$template = template;
+       *   $rootScope.$broadcast('$stateChangeSuccess');
+       *   if ( !!$famousState.$current.url ) { 
+       *     $location.path($famousState.$current.url); }
+       * });
+       * ```
+       */
+
+      resolve: function(state) {
+
+        var deferred = $q.defer();
+        var mainView = state.views['@'];
+        mainView.name = state.name;
+        var childViews = [];
+
+        angular.forEach(state.views, function(view, name) {
+          if ( name !== '@' && name.indexOf('@') !== 1 ) {
+            childViews.push({name: name, template: view.template});
+          }
+        });
+
+        fetchTemplate(mainView, mainView.name)
+        .then(function(mainTemplate) {
+          if ( childViews.length > 0 ) {
+            resolveChildViews(mainTemplate.data, childViews)
+            .then(function(template){
+              deferred.resolve(template);
+            });
+          } else {
+            deferred.resolve(mainTemplate.data);
+          }
+        });
+
+        return deferred.promise;
+
+      }
+    };
+
+}]);
+/**
+ * @ngdoc provider
+ * @name $famousUrlRouterProvider
+ * @module famous.angular
+ * @description
+ * This provider allows for state-based routing similar to that of the Angular UI Router.  The 
+ * difference being that $famousStateProvider allows Famo.us animations and transforms to be defined on
+ * state transitions.
+ *
+ * @usage
+ * URL routes may be defined in the configuration block using the 'when' and 'otherwise' methods.  If 
+ * $famousStateProvider is used to define URLs for states, they do not need to be defined here.  However,
+ * the 'otherwise' method should always be used to define the state which the application will
+ * default to when an invalid URL is specified.
+ *
+ * ```js
+ * angular.module('mySuperApp', ['famous.angular']).config(
+ *   function($famousUrlRouterProvider) {
+ *     
+ *    $famousUrlRouterProvider.when('/blog', 'blog');
+ *    $famousUrlRouterProvider.when('/portfolio', 'portfolio');
+ *    $famousUrlRouterProvider.when('/contact', 'contact');
+ *    $famousUrlRouterProvider.otherwise('home');
+ *    
+ *   }
+ * });
+ * ```
+ *
+ */
+angular.module('famous.angular')
+  .provider('$famousUrlRouter', function(){
+
+    var $famousUrlRouter = {};
+    var rules = {}; // {url: stateName}
+    var defaultState;
+
+    /**
+     * @ngdoc method
+     * @name $famousUrlRouter#when
+     * @module famous.angular
+     * Defines the routes during the configuration (.config) stage of the provider
+     * @param {String} url The relative path for the state
+     * @param {String} stateName The name of the state that corresponds to the url
+     */
+    this.when = when;
+    function when(url, stateName){
+      if ( !angular.isDefined(url) || !angular.isDefined(stateName) ) {
+        throw new Error('URL and state name required to define URL route');
+      }
+      if ( !validUrl(url) ) { throw new Error('When defining routes, must specify a valid url'); }
+      rules[url] = stateName;
+    }
+
+    /**
+     * @ngdoc method
+     * @name $famousUrlRouter#otherwise
+     * @module famous.angular
+     * Defines the default route during the configuration stage of the provider.  If a URL route
+     * is triggered, but is not defined, the application will redirect to the default route.
+     * @param {String} state The name of the state that corresponds to the url
+     */
+    this.otherwise = otherwise;
+    function otherwise(state) {
+      if ( !angular.isString(state) || state.indexOf('@') >= 0)  {
+        throw new Error('Default state must have a valid name');
+      }
+      defaultState = state;
+    }
+
+    /**
+     * Validates a url (relative path), ensuring that it begins with a '/' and contains only
+     * alphanumeric characters, underscores, or '/'s.
+     */
+    function validUrl(url) {
+      // FIX: Currently allows for repeated slashes so long as they do not occur at the beginning of the string.
+      var regex = /^\/(?!\/)[a-zA-Z\d_\-\/(?!\/)]*$/;   
+      return ( angular.isString(url) && !!regex.exec(url) );
+    }
+
+    /**
+     * $famousUrlProvider service is responsible for watching $location and ensuring
+     * that $location is updated whenever the state of the application changes.   
+     * $famousUrlRouter also signals $famousState.go to transition states whenever a user
+     * updates the status bar, thereby triggering a change in $location.
+     */
+
+    this.$get = $get;
+    $get.$inject = ['$rootScope', '$location', '$famousState'];
+    function $get($rootScope, $location, $famousState) {
+
+      /**
+       * @ngdoc service
+       * @name $famousUrlRouter
+       * @module famous.angular
+       * @description
+       * This service gives you access to $famousUrlRouter object.
+       * @usage
+       * Use this service to sync the state of the application and $location.  After configuring the 
+       * provider, no interaction should be required.  However, $famousUrlRouter must be included in a 
+       * controller in order to use URL routing.
+       * 
+       * ```js
+       * angular.module('mySuperApp', ['famous.angular'])
+       *   .controller('mainCtrl', function($scope, $famousUrlRouter) {
+       *   
+       *   // Control things
+       *  
+       *   });   
+       * ```
+       */
+
+      // Keeps a record of most recent location
+      var currentPath = '';
+
+      /**
+       * @ngdoc method
+       * @name $famousUrlRouter#listen
+       * @module famous.angular
+       * @description Listens for a $location change event and triggers the update function
+       */
+      $famousUrlRouter.listen = function() {
+        var listener = $rootScope.$on('$locationChangeSuccess', $famousUrlRouter.update);
+        return listener;
+      };
+
+      /**
+       * @ngdoc method
+       * @name $famousUrlRouter#update
+       * @module famous.angular
+       * @description Triggered on location change.  If the new location is registered, initiates
+       * transition to the corrsponding state by calling $famousState.go('stateName').  If the location
+       * is not registered, $famouState.go is called with the default state.
+       */
+      $famousUrlRouter.update = function () {   
+        var location = $location.path();
+        var reload = currentPath === location? true : false;
+        if ( rules[location] ) { 
+          $famousState.go(rules[location], reload);
+          currentPath = location;
+        } else {
+          $location.path(defaultState);
+          $famousState.go(defaultState);
+          currentPath = $location.path(); // TODO: Find a better way to accomplish this
+        }  
+      };
+      
+      /**
+      * Currently unable to inject $famousUrlRouterProvider into $famousStateProvider.  This is a 
+      * workaround that fetches all of the states registered with state provider and registers their
+      * URL routes so that they don't need to be manually defined within the application .config block.
+      * If URL routes are defined using the router provider during configuration, they will not be
+      * overwritten by this function.
+      */
+      function registerExternalUrls() {
+        var states = $famousState.getStates();
+        angular.forEach(states, function(state, name) {
+          if ( !!state.url && !rules[state.url] ) { when(state.url, name); }
+        });
+      }
+
+      // Sets the currentPath to the initial url path on application load
+      function setInitialLocation() {
+        currentPath = $location.path();
+      }
+
+      registerExternalUrls();
+      setInitialLocation();
+      $famousUrlRouter.listen();
+      $famousUrlRouter.update();
+      
+      return $famousUrlRouter;
+    }
+})
+.run(function($famousUrlRouter){
+  
+});    
+  
+/**
  * @ngdoc directive
  * @name faAnimation
  * @module famous.angular
@@ -3162,6 +3978,142 @@ angular.module('famous.angular')
       }
     };
   }]);
+
+angular.module('famous.angular')
+.directive('faRouter', ["$famous", "$famousDecorator", "$famousState", "$compile", "$controller", "$parse",
+ function ($famous, $famousDecorator, $famousState, $compile, $controller, $parse) {
+  return {
+    scope: true,
+    transclude: 'true',
+    restrict: 'ECA',
+    compile: function(element , attrs, transclude ) {
+          var parent;
+          var initial = element.html();
+
+      return   function($scope , element, attrs) {
+
+          var isolate = $famousDecorator.ensureIsolate($scope);
+          var View = $famous['famous/core/View'];
+          var RenderNode = $famous['famous/core/RenderNode'];
+          var Modifier = $famous['famuos/core/Modifier'];
+          var anchorNode = new View();
+          isolate.renderNode = anchorNode;
+          var previousNode = new RenderNode();
+          var currentNode = new RenderNode();
+
+          anchorNode.add(previousNode);
+          anchorNode.add(currentNode);
+
+          var currentScope , currentEl, locals;
+
+          isolate.renderNode = isolate.renderNode || anchorNode; 
+          isolate.states = isolate.states || {}; 
+          isolate.currentState = isolate.currentState || 'root';
+          
+             
+          function updateView(evt, data) {
+
+            if(evt.targetScope.$id !== $scope.$id) {
+              var inTransitionFromFn, outTransitionToFn, inTransitionFromFnStr, outTransitionToFnStr;
+              var previousView = isolate.states[isolate.fromState];
+              var currentView = isolate.states[isolate.currentState] ;
+              currentView.isolate = data;
+
+              currentNode.set(currentView.isolate.renderNode);
+              if(currentView.inTransitionFrom) {
+                if(angular.isString(currentView.inTransitionFrom)) {
+                  inTransitionFromFnStr = currentView.inTransitionFrom;
+                }
+                else if(angular.isObject(currentView.inTransitionFrom)) {
+                  inTransitionFromFnStr = currentView.inTransitionFrom[isolate.fromState]?
+                                             currentView.inTransitionFrom[isolate.fromState] :
+                                             currentView.inTransitionFrom['default']? 
+                                             currentView.inTransitionFrom['default'] :
+                                             "";
+                                             
+                }
+                if(!!inTransitionFromFnStr) {
+                  inTransitionFromFn = $parse(inTransitionFromFnStr);
+                  inTransitionFromFn(currentView.$scope, {$callback : function() {
+                    console.log('show completed');
+                  }});
+                }
+              }
+              
+              if(previousView && previousView.isolate.renderNode && previousView.outTransitionTo) {
+                previousNode.set(previousView.isolate.renderNode);
+                if(angular.isString(previousView.outTransitionTo)) {
+                   outTransitionToFnStr = previousView.outTransitionTo;
+                }else if(angular.isObject(previousView.outTransitionTo)) {
+                  outTransitionToFnStr = previousView.outTransitionTo[isolate.currentState]?
+                                             previousView.outTransitionTo[isolate.currentState] :
+                                             previousView.outTransitionTo['default']? 
+                                             previousView.outTransitionTo['default'] :
+                                             "";
+                }
+                if(!!outTransitionToFnStr) {
+                  outTransitionToFn = $parse(outTransitionToFnStr);
+                  outTransitionToFn(previousView.$scope, { $callback : function() {
+                    previousNode.set(new RenderNode());
+                    console.log('hide completed');
+                  }});
+                }
+
+              }
+
+              evt.stopPropagation();
+            }
+               
+          }
+          function createView() {
+            if( isolate.currentState === $famousState.current) return;
+            
+            locals =   isolate.states[$famousState.current] || $famousState.$current;
+            currentEl = locals.$template;
+            isolate.fromState = isolate.currentState;
+            isolate.currentState = $famousState.current;
+            if(element[0].children[0]){
+              element[0].children[0].remove();
+            }
+
+            if(isolate.states[isolate.currentState] && isolate.states[isolate.currentState].isolate) {
+              currentScope = isolate.states[isolate.currentState].$scope;
+              element.append(isolate.states[isolate.currentState].element);
+              currentScope.$emit('registerChild',isolate.states[isolate.currentState].isolate);
+            }else {
+
+              element.html(currentEl);
+              currentScope =  $scope.$new();
+              var link  = $compile(element.contents());
+              locals.$scope =  currentScope;
+              isolate.states[$famousState.current] = locals;
+              if(locals.controller){
+                var controller = $controller(locals.controller, locals);
+                if($famousState.$current.controllerAs){
+                  currentScope[$famousState.$current.controllerAs] = controller;
+                }
+                
+                angular.element(currentEl).data('$ngControllerController',controller);   
+              }
+
+              link(currentScope);
+               isolate.states[$famousState.current].element = angular.element(element[0].children[0]);
+            }
+
+            currentScope.$emit('$viewContentLoaded');
+
+          }
+          
+          $scope.$on('registerChild', updateView);
+          $scope.$on('$stateChangeSuccess', createView);
+         
+
+          $scope.$emit('registerChild', isolate);
+        };
+      }
+    
+    };
+}]);
 
 /**
  * @ngdoc directive
