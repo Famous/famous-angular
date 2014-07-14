@@ -2441,14 +2441,14 @@ angular.module('famous.angular')
       restrict: 'EA',
       priority: 2,
       scope: true,
-      compile: function(tElement, tAttrs, transclude){
+      compile: function (tElement, tAttrs, transclude) {
         return {
-          post: function(scope, element, attrs){
+          post: function (scope, element, attrs) {
             var isolate = $famousDecorator.ensureIsolate(scope);
 
-            var RenderNode = $famous['famous/core/RenderNode']
-            var Modifier = $famous['famous/core/Modifier']
-            var Transform = $famous['famous/core/Transform']
+            var RenderNode = $famous['famous/core/RenderNode'];
+            var Modifier = $famous['famous/core/Modifier'];
+            var Transform = $famous['famous/core/Transform'];
 
             var get = function(x) {
               if (x instanceof Function) return x();
@@ -2460,17 +2460,21 @@ angular.module('famous.angular')
             /* Copied from angular.js */
             var SPECIAL_CHARS_REGEXP = /([\:\-\_]+(.))/g;
             var MOZ_HACK_REGEXP = /^moz([A-Z])/;
+
             function camelCase(name) {
               return name.
-                replace(SPECIAL_CHARS_REGEXP, function(_, separator, letter, offset) {
+                replace(SPECIAL_CHARS_REGEXP,function (_, separator, letter, offset) {
                   return offset ? letter.toUpperCase() : letter;
                 }).
                 replace(MOZ_HACK_REGEXP, 'Moz$1');
             }
+
             var PREFIX_REGEXP = /^(x[\:\-_]|data[\:\-_])/i;
+
             function directiveNormalize(name) {
               return camelCase(name.replace(PREFIX_REGEXP, ''));
             }
+
             /* end copy from angular.js */
 
             var _transformFields = [
@@ -2486,25 +2490,25 @@ angular.module('famous.angular')
               "translate"
             ];
 
-            attrs.$observe('faTransformOrder', function(){
+            attrs.$observe('faTransformOrder', function () {
               var candidate = scope.$eval(attrs.faTransformOrder);
               if(candidate !== undefined) _transformFields = candidate;
             });
 
             var _parsedTransforms = {};
-            angular.forEach(_transformFields, function(field){
+            angular.forEach(_transformFields, function (field) {
               var attrName = directiveNormalize('fa-' + field);
-              attrs.$observe(attrName, function(){
+              attrs.$observe(attrName, function () {
                 _parsedTransforms[field] = $parse(attrs[attrName]);
-              })
-            })
+              });
+            });
 
 
             var _transformFn = angular.noop;
-            attrs.$observe('faTransform', function(){
+            attrs.$observe('faTransform', function () {
               _transformFn = $parse(attrs.faTransform);
             });
-            isolate.getTransform = function() {
+            isolate.getTransform = function () {
               //if faTransform is provided, return it
               //instead of looping through the other transforms.
               var override = _transformFn(scope);
@@ -2515,9 +2519,9 @@ angular.module('famous.angular')
               }
 
               var transforms = [];
-              angular.forEach(_transformFields, function(field){
+              angular.forEach(_transformFields, function (field) {
                 var candidate = _parsedTransforms[field] ? _parsedTransforms[field](scope) : undefined;
-                if(candidate !== undefined){
+                if (candidate !== undefined) {
                   //TODO:feat Support Transitionables
                   if(candidate instanceof Function) candidate = candidate();
                   if(candidate instanceof Array) transforms.push(Transform[field].apply(this, candidate))
@@ -2531,10 +2535,10 @@ angular.module('famous.angular')
             };
 
             var _alignFn = angular.noop;
-            attrs.$observe('faAlign', function(){
+            attrs.$observe('faAlign', function () {
               _alignFn = $parse(attrs.faAlign);
             });
-            isolate.getAlign = function(){
+            isolate.getAlign = function () {
               var ret = _alignFn(scope);
               if(ret instanceof Function) return ret();
               else if(ret instanceof Object && ret.get !== undefined) return ret.get();
@@ -2542,10 +2546,10 @@ angular.module('famous.angular')
             }
 
             var _opacityFn = angular.noop;
-            attrs.$observe('faOpacity', function(){
+            attrs.$observe('faOpacity', function () {
               _opacityFn = $parse(attrs.faOpacity);
             });
-            isolate.getOpacity = function(){
+            isolate.getOpacity = function () {
               var ret = _opacityFn(scope);
               if(ret === undefined) return 1;
               else if(ret instanceof Function) return ret();
@@ -2554,10 +2558,10 @@ angular.module('famous.angular')
             }
 
             var _sizeFn = angular.noop;
-            attrs.$observe('faSize', function(){
+            attrs.$observe('faSize', function () {
               _sizeFn = $parse(attrs.faSize);
             });
-            isolate.getSize = function(){
+            isolate.getSize = function () {
               var ret = _sizeFn(scope);
               if(ret instanceof Function) return ret();
               else if(ret instanceof Object && ret.get !== undefined) return ret.get();
@@ -2565,10 +2569,10 @@ angular.module('famous.angular')
             }
 
             var _originFn = angular.noop;
-            attrs.$observe('faOrigin', function(){
+            attrs.$observe('faOrigin', function () {
               _originFn = $parse(attrs.faOrigin);
             });
-            isolate.getOrigin = function(){
+            isolate.getOrigin = function () {
               var ret = _originFn(scope);
               if(ret instanceof Function) return ret();
               else if(ret instanceof Object && ret.get !== undefined) return ret.get();
@@ -2583,13 +2587,13 @@ angular.module('famous.angular')
               align: isolate.getAlign
             });
 
-            isolate.renderNode = new RenderNode().add(isolate.modifier)
+            isolate.renderNode = new RenderNode().add(isolate.modifier);
 
             $famousDecorator.sequenceWith(scope, function(data) {
               isolate.renderNode.add(data.renderNode);
             });
 
-            transclude(scope, function(clone) {
+            transclude(scope, function (clone) {
               element.find('div').append(clone);
             });
 
@@ -2603,7 +2607,7 @@ angular.module('famous.angular')
             // $observe listeners are executed in the compilation phase.
             if(!scope.$$phase && !$rootScope.$$phase) scope.$apply();
           }
-        }
+        };
       }
     };
   }]);
