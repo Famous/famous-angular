@@ -12,6 +12,7 @@ angular.module('famous.angular')
 
 
     /**
+     * @description
      * Fetches the HTML for each of the child views and inserts it into the HTML of the main view. The
      * raw HTML of the parent is returned as a promise.
      */
@@ -48,8 +49,8 @@ angular.module('famous.angular')
     }
 
     /**
-     * Fetches a view template and returns the raw HTML as a promise.
-     */
+    * Fetches a view template and returns the raw HTML as a promise.
+    */
 
     function fetchTemplate(view, name) {
 

@@ -112,9 +112,10 @@ gulp.task('docs', ['build'], function(done) {
  * Watch task for developing with the famous-angular-examples submodule
  ***********************************************************************/
 gulp.task('build-to-examples', ['clean'], function(event) {
-    gulp.src('famous-angular-examples/app/views/jade/*.jade')
-         .pipe(jade())
-         .pipe(gulp.dest("famous-angular-examples/app/views"));
+	gulp.src('famous-angular-examples/app/views/jade/*.jade')
+	      .pipe(jade())
+	      .pipe(gulp.dest("famous-angular-examples/app/views"));
+
 	return gulp.src([
 		'src/scripts/services/**/*.js',
 		'src/scripts/directives/**/*.js'

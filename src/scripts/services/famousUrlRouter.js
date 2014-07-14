@@ -35,6 +35,7 @@ angular.module('famous.angular')
     var defaultState;
 
     /**
+
      * @ngdoc method
      * @name $famousUrlRouter#when
      * @module famous.angular
@@ -52,6 +53,7 @@ angular.module('famous.angular')
     }
 
     /**
+
      * @ngdoc method
      * @name $famousUrlRouter#otherwise
      * @module famous.angular
@@ -137,6 +139,7 @@ angular.module('famous.angular')
         if ( rules[location] ) { 
           $famousState.go(rules[location], reload);
           currentPath = location;
+
         } else if( defaultState ) {
           $location.path(defaultState);
           $famousState.go(defaultState);
@@ -170,6 +173,7 @@ angular.module('famous.angular')
       
       return $famousUrlRouter;
     }
+
 })
 .run(function($famousUrlRouter){
   

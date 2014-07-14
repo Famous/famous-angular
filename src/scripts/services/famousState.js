@@ -204,7 +204,9 @@ angular.module('famous.angular')
 
         for ( var direction in transitions ) {
           if ( angular.isString(transitions[direction]) ) {
+
             // '($callback)' must be added to the function to create an invocation that can be properly parsed
+
             state[direction] = transitions[direction] + '($callback)'; 
           } else if ( angular.isObject(transitions) ) {
             angular.forEach(transitions[direction], function(definition, state) {
@@ -294,6 +296,7 @@ angular.module('famous.angular')
 
     root = {
       name : '',
+
       url: '^',
       parent: null,
       views: null,
@@ -392,9 +395,8 @@ angular.module('famous.angular')
 
       // Updates the $famousState object so that the new state view may be rendered by the fa-router directive
       function transitionState(state) {
-        state = transferValid(state);
+       state = transferValid(state);
         if ( !state ) { return $rootScope.$broadcast('$stateNotFound'); }
-
         $famousState.$prior = $famousState.$current;
         $famousState.current = state;
         $famousState.$current = states[state];
@@ -415,6 +417,7 @@ angular.module('famous.angular')
       function transferValid(state) {
 
         // '^' indicates that the parent state should be activated
+
         if ( state === '^' ) { 
           var parent = /^(.+)\.[^.]+$/.exec($famousState.current)[1];
           return stateValid(parent) ? parent : false;
