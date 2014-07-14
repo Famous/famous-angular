@@ -123,12 +123,12 @@ angular.module('famous.angular')
             //the context from getting updated by the engine
             scope.$on('$destroy', function(){
               isolate.context.update = angular.noop;
-            })
+            });
 
             scope.$on('registerChild', function(evt, data){
               isolate.view.add(data.renderNode);
               evt.stopPropagation();
-            })
+            });
           },
           post: function(scope, element, attrs){
 
@@ -138,7 +138,7 @@ angular.module('famous.angular')
             });
             isolate.readyToRender = true;
           }
-        }
+        };
       }
     };
   }]);

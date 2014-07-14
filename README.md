@@ -1,6 +1,6 @@
 # Famo.us/Angular
 
-Famo.us/Angular is an AngularJS-powered framework for building Famo.us apps.
+Famo.us/Angular is an AngularJS-driven framework for building Famo.us apps.
 
 Using F/A, you can:
 * Create Famo.us apps using familiar AngularJS tools like controllers, directives, and services.
@@ -10,10 +10,6 @@ Using F/A, you can:
 
 
 ###Read more on the project page: [Famo.us/Angular](http://famo.us/angular)
-
-
-This library is under active development and is currently in alpha.  The library is at a point where you can create powerful apps, and a lot of the core API is reasonably stabilized, but some things are expected to change as the project moves forward.  Contributors welcome! (see below)
-
 
 
 ##Running (For using F/A in your Angular app)
@@ -62,7 +58,7 @@ To get started even faster, try the [famous-angular-starter](https://github.com/
 
 Npm start will use gulp to concatenate files into famous-angular.js, which is built into the app folder. It will also watch for changes inside app and livereload as necessary.
 
-As configured, you should be able to access the application at localhost:4000.
+Then open http://localhost:4000.
 
 ####To develop the library using the famous-angular-examples submodule
 
@@ -73,14 +69,16 @@ As configured, you should be able to access the application at localhost:4000.
 `gulp docs`
 
 ####To run tests
+Ensure that you have the [karma](http://karma-runner.github.io/0.12/intro/installation.html) command line interface installed.
+'npm install -g karma-cli'
 
-`karma start`
-
+`karma start'
 
 
 ##Support
 
 Please submit issues as Github issues or reach out for support on the Famous IRC channel on Freenode
+
 
 ##Contributing
 

@@ -153,6 +153,27 @@ describe('faSurface', function() {
         expect(surface.classList).toEqual(['existing-class', 'added-class']);
       });
     });
+
+    it("passes direct class addition and removal from the element down to the Surface", function() {
+      var faSurface = common.compileFaSurface();
+      var surface   = common.getSurface(faSurface);
+
+      faSurface.addClass('added-class');
+      expect(surface.classList).toEqual(['added-class']);
+    });
+
+    it("delegates core $animate class juggling events to the Surface", function() {
+      var faSurface = common.compileFaSurface('ng-hide="hideIt"');
+      var surface   = common.getSurface(faSurface);
+
+      $scope.hideIt = false;
+      $scope.$apply();
+      expect(surface.classList).toEqual([]);
+
+      $scope.hideIt = true;
+      $scope.$apply();
+      expect(surface.classList).toEqual(['ng-hide']);
+    });
   });
 });
 

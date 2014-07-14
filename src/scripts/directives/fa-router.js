@@ -8,7 +8,9 @@
  *
  * @usage
  * ```html
- * <fa-router></fa-router>
+ * <fa-app>
+ *   <fa-router></fa-router>
+ * </fa-app>
  * ```
  *
  * @example
@@ -210,3 +212,4 @@ angular.module('famous.angular')
       
       };
   }]);
+

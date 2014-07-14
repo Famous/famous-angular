@@ -91,13 +91,12 @@ angular.module('famous.angular')
 
     /**
      * Validates the name and parent of the state object being created.
-     * @param {Object} state State object containing all properties related to the state
      */
     function defineState(state) {
       
       // Static child views may be defined using '@child@parent'
       var name = state.name;
-      if ( !angular.isDefined(name) || !angular.isString(name) || name.indexOf('@') >= 0)  {
+      if ( !angular.isDefined(name) || !angular.isString(name) || name.indexOf('@') >= 0  || name.indexOf('.') !== -1 )  {
         throw new Error('State must have a valid name');
       }
       if (states.hasOwnProperty(name)) {
@@ -120,7 +119,6 @@ angular.module('famous.angular')
      * states object).  Finally, updateQueue is invoked to determine whether or not the state being 
      * added is the parent of one of the "orhpan" states in the queue.  If so, the child state will be 
      * registered.
-     * @param {Object} state State object containing all properties related to the state
      */
     function buildState (state) {
       
@@ -134,7 +132,6 @@ angular.module('famous.angular')
 
     /**
      * Validates each of the propeties on the state object before the state is registered.
-     * @param {Object} state State object containing all properties related to the state
      */
     var stateBuilder = {
       
@@ -195,7 +192,6 @@ angular.module('famous.angular')
        * in the controller that defines the transition.  A single transition function may also be passed,
        * thereby assigning a single transition to/from that state.  If no transitions are definec, default
        * transitions will be assigned.
-       * @param {Object} state State object containing all properties related to the state
        */
       transitions: function(state) {
 
@@ -208,7 +204,9 @@ angular.module('famous.angular')
 
         for ( var direction in transitions ) {
           if ( angular.isString(transitions[direction]) ) {
-            // '($callback)' must be added to the function to create an invocation that can properly parsed
+
+            // '($callback)' must be added to the function to create an invocation that can be properly parsed
+
             state[direction] = transitions[direction] + '($callback)'; 
           } else if ( angular.isObject(transitions) ) {
             angular.forEach(transitions[direction], function(definition, state) {
@@ -239,6 +237,18 @@ angular.module('famous.angular')
         });
 
         state.views = views;
+      },
+
+      /**
+       * Creates a locals object which contains all data relevant to the child views the states
+       */
+      locals: function(state) {
+
+        state.locals = {};
+        
+        angular.forEach(state.views, function(view, name) {
+          if ( name !== '@' ) { state.locals[name] = view; }
+        });
       }
 
     };
@@ -246,7 +256,6 @@ angular.module('famous.angular')
     /**
      * Static views are similar to states in that they may have their own templates, controllers,
      * and transitions defined.  Accordingly, all properties must be defined in the same manner. 
-     * @param {Object} view view object containing all properties related to the view
      */
     function validateView (view) {
       
@@ -257,7 +266,6 @@ angular.module('famous.angular')
 
     /**
      * Adds the state to the states object which stores all valid registered states
-     * @param {Object} state State object contains all properties related to the state
      */
     function registerState(state) {
 
@@ -267,7 +275,6 @@ angular.module('famous.angular')
 
     /**
      * Adds an "orphan" child state to the queue if it doesn't already exist within the queue
-     * @param {Object} state State object contains all properties related to the state
      */
     function queueState(state) {
       if ( !queue[state.name] ) {
@@ -279,7 +286,6 @@ angular.module('famous.angular')
      * Removes state from the queue if it is no longer an "orphan."" Iterates through 
      * the "orphan" queue ito determine is the parent of any of the child states has been registered.  
      * If so, the child state is registered.
-     * @param {Object} state State object contains all properties related to the state
      */
     function updateQueue(state){
       if ( queue[state.name] ) { delete queue[state.name]; }
@@ -290,15 +296,18 @@ angular.module('famous.angular')
 
     root = {
       name : '',
+
+      url: '^',
       parent: null,
       views: null,
       template: null,
-      controller: null
+      contoller: null,
+      locals: null
     };
     
     this.$get = $get;
-    $get.$inject = ['$rootScope','$http', '$location', '$q', '$famousTemplate', '$templateCache'];
-    function $get($rootScope, $http, $location, $q, $famousTemplate, $templateCache) {
+    $get.$inject = ['$rootScope','$http', '$location', '$q', '$famousTemplate'];
+    function $get($rootScope, $http, $location, $q, $famousTemplate) {
 
       /**
        * @ngdoc service
@@ -322,7 +331,6 @@ angular.module('famous.angular')
        *     $famousState.current = 'The name of the current state';
        *     $famousState.$current = 'The current state object';
        *     $famousState.locals = 'The properties of any static child views defined on the state';
-       *     $famousState.parent = 'The parent of the current state';
        *     $famousState.$prior = 'The previous state of the application;
        *     $famousState.inTransitionTo = 'The in transitions assigned to the current state';
        *     $famousState.outTransitionFrom = 'The out transitions assigned to the current state';
@@ -335,6 +343,7 @@ angular.module('famous.angular')
       $famousState = {
         current: root.name, // Name of the current state
         $current: root,
+        parent: root.parent,
         locals: {},
         $prior: {}, // Prior state object
         inTransitionTo: '',
@@ -386,14 +395,11 @@ angular.module('famous.angular')
 
       // Updates the $famousState object so that the new state view may be rendered by the fa-router directive
       function transitionState(state) {
-
-        if ( !transferValid ) { return $rootScope.$broadcast('$stateNotFound'); }
-
+       state = transferValid(state);
+        if ( !state ) { return $rootScope.$broadcast('$stateNotFound'); }
         $famousState.$prior = $famousState.$current;
         $famousState.current = state;
         $famousState.$current = states[state];
-        $famousState.$current.locals = updateLocals();
-
         $famousTemplate.resolve($famousState.$current)
         .then(function(template){
           $famousState.$current.$template = template;
@@ -411,45 +417,85 @@ angular.module('famous.angular')
       function transferValid(state) {
 
         // '^' indicates that the parent state should be activated
-        if ( state === '^' ) {
-          return $famousState.$parent !== root? stateValid($famousState.parent) : false;
-        } 
-        
+
+        if ( state === '^' ) { 
+          var parent = /^(.+)\.[^.]+$/.exec($famousState.current)[1];
+          return stateValid(parent) ? parent : false;
+        }
+
         // '^.name' indicates that a sibling state should be activated
         if ( state.indexOf('^') === 0 && state.length > 1 ) {
-          state = $famousState.parent + state;
-          return stateValid(state);
+          state = $famousState.$current.parent + state.slice(1);
+          return stateValid(state) ? state : false;
         }
         
         // '.name' indicates that a child state should be activated
         if ( state.indexOf('.') === 0 ) {
           state = $famousState.current + state;
-          return stateValid(state);
+          return stateValid(state) ? state : false;
+        }
+        
+        /**
+         * In order for a child state to be activated, the parent state of that child must first be active.  
+         * If the parent is not active, the closest commong ancestor of the two states will be found and 
+         * the child of the common ancestor which is along the same path as the requested state will be activated.
+         * If a common ancestor does not exists, the highest-level ancestor of the requested state will be 
+         * activated.  
+         * 
+         * Example: The current state is 'A.E.F.X' and $famousState.go('A.E.B.Q') is called. 'A.E.B.Q' cannot 
+         * be activated without 'A.E.B' first being active.  Since 'A.E' is part of the path of the currently 
+         * active state, 'A.E.B' will be activated.  
+         * 
+         * Example: The current state is 'B.C.E' and $famousState.go('A.D') is called.  Since the two states do
+         * not share a common ancestor, the highest-level ancestor of the requested state, 'A', will be activated.
+         */
+        if ( state.indexOf('.') > 0 ) {
+          if ( $famousState.current === '' ) { $location.path('^'); }
+          var parentName = /^(.+)\.[^.]+$/.exec(state)[1];
+          if ( $famousState.current === parentName ) {
+            return stateValid(state) ? state : false;
+          } else {
+            var relativeState  = findCommonAncestor(parentName);
+            return stateValid(relativeState) ? relativeState : false;
+          }
         }
 
-        return stateValid(state);
+        return stateValid(state) ? state: false;
       }
 
       /**
-       * @param {String} state The name (or relative name) of a state
-       * @returns {Boolean} Return value indicates whether or not the given state has been registatered.
+       * Accepts the parent name of a state and finds the closest common ancestor of the currently active state.
+       * If an ancestor is found, the child state of the ancestor which corresponds to the state passed into the
+       * the function will be returned.  If there is no common index, the highest-level ancestor of the passed in
+       * state will be returned.  
+       */
+      function findCommonAncestor (parentName) {
+        
+        var currentParent = $famousState.$current.parent;
+        var newParent = parentName;
+        var newChild;
+        
+        while (currentParent && newParent) {
+
+          if ( currentParent.indexOf('.') !== -1 && currentParent.length >= newParent.length ) {
+            currentParent = /^(.+)\.[^.]+$/.exec(currentParent)[1];
+          }
+          if ( newParent.indexOf('.') !== -1 && newParent.length > currentParent.length ) {
+            newChild = newParent.slice(newParent.lastIndexOf('.'));
+            newParent = /^(.+)\.[^.]+$/.exec(newParent)[1];
+          }
+          if ( currentParent === newParent || currentParent.indexOf('.') === -1 && newParent.indexOf('.') === -1  ) { break; }
+
+        }
+
+        return newParent + newChild;
+      }
+
+      /**
+       * Returns a boolean indicating whether or not the state is registered
        */
       function stateValid (state) {
-        return states[state]? true : false;
-      }
-
-      /**
-       * Creates a locals object which contains all data relevant to the child views the states
-       * @param {String} state The name (or relative name) of a state
-       */
-      function updateLocals (){
-        
-        var locals = {};
-
-        angular.forEach($famousState.$current.views, function (view, name) {
-          if ( name !== '@' ) { locals[name] = view; }
-        });
-        return locals;
+        return ( !!states[state] );
       }
 
       return $famousState;

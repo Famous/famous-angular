@@ -115,6 +115,7 @@ gulp.task('build-to-examples', ['clean'], function(event) {
 	gulp.src('famous-angular-examples/app/views/jade/*.jade')
 	      .pipe(jade())
 	      .pipe(gulp.dest("famous-angular-examples/app/views"));
+
 	return gulp.src([
 		'src/scripts/services/**/*.js',
 		'src/scripts/directives/**/*.js'
@@ -131,7 +132,7 @@ gulp.task('watch-examples', function(event) {
 	// Watch .js files
 	gulp.watch([
 			'src/scripts/*/**/*.js',
-			'famous-angular-examples/app/views/jade/*.jade',
+      'famous-angular-examples/app/views/jade/*.jade',
 			EXAMPLES_DIR + 'app/*'
 		],
 		['build-to-examples', 'build']

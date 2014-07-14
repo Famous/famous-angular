@@ -36,8 +36,8 @@
  * @example
  * ## Values that fa-modifier attributes accept
  * `Fa-modifier` properties, (such as `faRotate`, `faScale`, etc) can be bound to number/arrays, object properties defined on the scope, function references, or function expressions.
- * Some properties (`faOpacity`, `faSize`, `faOrigin`, `faAlign`) can be bound to a Transitionable object directly.  
- * 
+ * Some properties (`faOpacity`, `faSize`, `faOrigin`, `faAlign`) can be bound to a Transitionable object directly.
+ *
  * ### Number/Array values
  * `Fa-modifier` properties can be bound to number/array values.
  * ```html
@@ -101,33 +101,33 @@
  * ```javascript
  * $scope.opacityTrans = new Transitionable(.25);
  * ```
- * 
+ *
  * ### Transitionable.get() vs Transitionable
  * `FaTranslate` (along with `faRotate`, `faTranslate`, `faScale`, `faSkew`, & more) pass through a Famous Transform function (`Transform.translate()`), whereas `faOpacity`, `faSize`, `faOrigin`, and `faAlign` are passed through a Famous Modifier.
- * 
+ *
  * A Famous `Transform.translate()` function does not accept a Transitionable object, but only an array.
  * A `.get()` function of a Transitionable returns an interpolated value of a current transition, therefore in the case of a `faTranslate`, it can return an array that a `Transform.translate()` can accept.
- * 
- * `faOpacity` passes through a Famous Modifier, which has an `.opacityFrom()` method that can accept a Transitionable object directly, therefore a `.get()` method is not required.  
- * 
+ *
+ * `faOpacity` passes through a Famous Modifier, which has an `.opacityFrom()` method that can accept a Transitionable object directly, therefore a `.get()` method is not required.
+ *
  * As a design principle, Famous-Angular attempts to pass values directly to Famous as much as possible, and these differences are due to the core Famous library.
- * 
+ *
  *
  * ## Fa-transform
  * Whenever a "transform" https://famo.us/docs/0.2.0/core/Transform property is used on a `fa-modifier`, such as `fa-translate`, `fa-scale`, `fa-origin`, etc, their values are passed through a `Transform function` which returns a 16 element transform array.
  * `Fa-transform` can be used to directly pass a 16-element transform matrix to a `fa-modifier`.
- * 
+ *
  * ### Values that fa-transform accepts
  * Passed as an array:
  * ```html
- * <fa-modifier 
+ * <fa-modifier
  *     fa-transform="[1, .3, 0, 0, -.3, 1, 0, 0, 0, 0, 1, 0, 20, 110, 0, 1]"
  *     fa-size="[100, 100]">
  *   <fa-surface fa-background-color="'red'"></fa-surface>
  * </fa-modifier>
  * ```
  * Passed as an object on the scope:
- * 
+ *
  * ```javascript
  * $scope.matrix = [1, .3, 0, 0, -.3, 1, 0, 0, 0, 0, 1, 0, 20, 110, 0, 1];
  * ```
@@ -170,14 +170,14 @@
  * ## Animate modifier properties and not surfaces
  * Famous surfaces are styled with position:absolute, and their positions are defined by matrix3d webkit transforms.
  * The role of Modifiers is to to hold onto size, transform, origin, and opacity states, and applying those layout and styling properties to its child nodes.
- * As in vanilla Famous, you should animate properties of modifiers, such as transform, opacity, etc, rather than animate properties on the surface itself, as modifiers are responsible for layout and visibility.  
+ * As in vanilla Famous, you should animate properties of modifiers, such as transform, opacity, etc, rather than animate properties on the surface itself, as modifiers are responsible for layout and visibility.
  * ```html
  *   <fa-modifier fa-rotate-z="boxA.rotate.get()">
  *     <fa-surface fa-click="animateBoxA()" fa-background-color="'red'"></fa-surface>
  *   </fa-modifier>
  * ```
  *
- * ## The order of transforms matter 
+ * ## The order of transforms matter
  * ### Fa-Transform-order
  *
  * `Fa-transform-order` can be used to specify the order of transforms on a modifier.  In the first example below, the translate is applied first, translating the box over to the right, and then it is rotated around its origin.
@@ -189,13 +189,13 @@
  * <fa-modifier fa-transform-order="['translate', 'rotateZ']" fa-rotate-z="0.3" fa-translate="[100, 0, 0]" fa-size="[100, 100]">
  *   <fa-surface fa-background-color="'red'"></fa-surface>
  * </fa-modifier>
- * 
+ *
  * <fa-modifier fa-transform-order="['rotateZ', 'translate']" fa-rotate-z="0.3" fa-translate="[100, 0, 0]" fa-size="[100, 100]">
  *   <fa-surface fa-background-color="'blue'"></fa-surface>
  * </fa-modifier>
  * ```
  * ### Nesting Modifiers
- * You can also specify the order of transforms by nesting Modifiers.  In the example below, each Mdifier has one Transform property (e.g. translate, rotate, skew, scale, etc).  Each Famous modifier affects all child nodes below it on the Render Tree. 
+ * You can also specify the order of transforms by nesting Modifiers.  In the example below, each Mdifier has one Transform property (e.g. translate, rotate, skew, scale, etc).  Each Famous modifier affects all child nodes below it on the Render Tree.
  * ```html
  * <fa-modifier fa-translate="[100, 100]">
  *    <fa-modifier fa-rotate-z=".6" fa-size="[100, 100]">
@@ -212,7 +212,7 @@
 */
 
 angular.module('famous.angular')
-  .directive('faModifier', ["$famous", "$famousDecorator", "$parse", function ($famous, $famousDecorator, $parse) {
+  .directive('faModifier', ["$famous", "$famousDecorator", "$parse", "$rootScope", function ($famous, $famousDecorator, $parse, $rootScope) {
     return {
       template: '<div></div>',
       transclude: true,
@@ -352,7 +352,7 @@ angular.module('famous.angular')
               else if(ret instanceof Object && ret.get !== undefined) return ret.get();
               else return ret;
             }
-            
+
             isolate.modifier = new Modifier({
               transform: isolate.getTransform,
               size: isolate.getSize,
@@ -363,27 +363,23 @@ angular.module('famous.angular')
 
             isolate.renderNode = new RenderNode().add(isolate.modifier)
 
-            scope.$on('$destroy', function() {
-              isolate.modifier.setOpacity(0);
-              scope.$emit('unregisterChild', {id: scope.$id});
+            $famousDecorator.sequenceWith(scope, function(data) {
+              isolate.renderNode.add(data.renderNode);
             });
-            
-            scope.$on('registerChild', function(evt, data){
-              if(evt.targetScope.$id !== evt.currentScope.$id){
-                isolate.renderNode.add(data.renderNode);
-                evt.stopPropagation();
-              }
-            })
 
             transclude(scope, function(clone) {
               element.find('div').append(clone);
             });
 
-            scope.$emit('registerChild', isolate);
+            $famousDecorator.registerChild(scope, element, isolate, function() {
+              // When the actual element is destroyed by Angular,
+              // "hide" the Modifier by setting its opacity to 0.
+              isolate.modifier.setOpacity(0);
+            });
 
             // Trigger a $digest loop to make sure that callbacks for the
             // $observe listeners are executed in the compilation phase.
-            if(!scope.$$phase) scope.$apply();
+            if(!scope.$$phase && !$rootScope.$$phase) scope.$apply();
           }
         }
       }
