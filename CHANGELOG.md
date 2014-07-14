@@ -1,3 +1,57 @@
+<a name="0.1.0"></a>
+# 0.1.0 (2014-07-13)
+
+
+## Bug Fixes
+
+- remove $timeout in faScrollView and use scope.$$postDigest instead
+ ([137f260f](https://github.com/Famous/famous-angular/commit/137f260fe117ae7260d7bdad848241616fa92f29))
+- fix some cases where 'digest is already in progress' is thrown for fa-modifiers
+ ([f5d9fa01](https://github.com/Famous/famous-angular/commit/f5d9fa0127b4135efef0d2f622077dec1cfbdfa4))
+- consolidating the sequencer into a single call, and modifying the destruction listener to run on scope.$id instead of scope
+ ([aa65be37](https://github.com/Famous/famous-angular/commit/aa65be37fb4f4bdc3ab638ccb253056b5f806d27))
+- track if the animation has been halted at the level of the element using the existing status data
+ ([a265623b](https://github.com/Famous/famous-angular/commit/a265623b714e7a8cc1fba6231ad2108c1535cca4))
+- defer unregistering sequenced items until their elements, not their scopes, are destroyed
+ ([8517838c](https://github.com/Famous/famous-angular/commit/8517838c909a546a36045a589a634f887251953a))
+- defer execution of modifier blanking to the resolution of the animation queue
+ ([d5889834](https://github.com/Famous/famous-angular/commit/d5889834111e6ce55d710a8753baed1610dcf749))
+
+
+## Features
+
+- enable setting perspective on an fa-app (Famo.us Context)
+ ([d99b39be](https://github.com/Famous/famous-angular/commit/d99b39beb8b35fd014cb61b8daa7fc53d04eac07))
+-  fa-grid-layout options and update the GridLayout when changed
+ ([445707fb](https://github.com/Famous/famous-angular/commit/445707fbb7d4158acae35153c643bb331bd13fd8))
+- support $done callbacks for complex animations and conditional animation chains in the $animate event lifecycle
+ ([82bdfe0d](https://github.com/Famous/famous-angular/commit/82bdfe0d9d2d876669c72f9fe8c86edb3ecd5f68))
+- restore coverage for ng-class manipulation, with and without ngAnimate
+ ([1cf7f151](https://github.com/Famous/famous-angular/commit/1cf7f1513b129a1fef97ffb8f5a3c76be42958b4))
+- full and ngAnimate-compliant  event lifecycle support for Famo.us/Angular
+ ([2f857868](https://github.com/Famous/famous-angular/commit/2f857868a0ffcc8b66f73bd3580faaade66592c9))
+
+
+## Documentation
+
+- fix naming typo in fa-flipper
+ ([6345ca76](https://github.com/Famous/famous-angular/commit/6345ca763024c4ac98c9593e664cad0878c35e7c))
+- fix broken links to famous docs
+ ([56fad126](https://github.com/Famous/famous-angular/commit/56fad126fd0aa593fabee8b5bdaf6489788114a0))
+- add basic documentation for fa-flexible-layout
+ ([1a6794da](https://github.com/Famous/famous-angular/commit/1a6794dac1d4449880f7e7cb87773fb47f989006))
+- clarifying and cleaning up famousAnimate.js documentation
+ ([93eec030](https://github.com/Famous/famous-angular/commit/93eec030aa0aad5f172c8a00e809f85a800d35b8))
+- cleaning up examples for $famousDecorator
+ ([3c74717d](https://github.com/Famous/famous-angular/commit/3c74717dda361212f0215d46cc36bcc1190d7d75))
+- added a step for test
+ ([0bc9bdb0](https://github.com/Famous/famous-angular/commit/0bc9bdb09b1a92707272679c2249f49307a3f27b))
+- corrected command to start tests
+ ([4c92e30c](https://github.com/Famous/famous-angular/commit/4c92e30c8a09e44f05b33409f90b8e059d898aa0))
+- ANIMATION_DURATION should be DURATION
+ ([f70264d8](https://github.com/Famous/famous-angular/commit/f70264d87a668ae83ebc852059428230b1650996))
+
+
 <a name="0.0.17"></a>
 # 0.0.17 (2014-06-24)
 
