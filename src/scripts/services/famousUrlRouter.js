@@ -137,7 +137,7 @@ angular.module('famous.angular')
         if ( rules[location] ) { 
           $famousState.go(rules[location], reload);
           currentPath = location;
-        } else {
+        } else if( defaultState ) {
           $location.path(defaultState);
           $famousState.go(defaultState);
           currentPath = $location.path(); // TODO: Find a better way to accomplish this
