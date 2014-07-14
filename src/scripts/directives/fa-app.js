@@ -77,8 +77,6 @@ angular.module('famous.angular')
       scope: true,
       restrict: 'EA',
       compile: function(tElement, tAttrs, transclude){
-        alert('compiled!')
-
         return {
           pre: function(scope, element, attrs){
             var isolate = $famousDecorator.ensureIsolate(scope);
