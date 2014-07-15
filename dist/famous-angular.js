@@ -210,7 +210,7 @@ require(requirements, function(/*args*/) {
         return _s;
       }(scopes);
       return isolates;
-    }
+    };
 
     this.$get = function() {
 
