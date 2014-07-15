@@ -1,5 +1,3 @@
-'use strict';
-
 // Put angular bootstrap on hold
 window.name = "NG_DEFER_BOOTSTRAP!" + window.name;
 

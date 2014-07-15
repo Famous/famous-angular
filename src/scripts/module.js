@@ -1,3 +1,2 @@
-"use strict";
-
+'use strict';
 var ngFameApp = angular.module('famous.angular', []);

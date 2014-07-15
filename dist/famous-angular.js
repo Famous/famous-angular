@@ -5,7 +5,7 @@
  * @license MPL v2.0
  */
 'use strict';
-
+var ngFameApp = angular.module('famous.angular', []);
 // Put angular bootstrap on hold
 window.name = "NG_DEFER_BOOTSTRAP!" + window.name;
 
@@ -106,11 +106,6 @@ var requirements = [
 "famous/physics/forces/VectorField",
 "famous/physics/integrators/SymplecticEuler"
 ];
-
-//declare the module before the async callback so that
-//it will be accessible to other synchronously loaded angular
-//components
-var ngFameApp = angular.module('famous.angular', []);
 
 require(requirements, function(/*args*/) {
   //capture 'arguments' in a variable that will exist in
