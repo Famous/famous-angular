@@ -1026,7 +1026,7 @@ angular.module('famous.angular')
                 }
               }
               if (!isolate.timeline instanceof Function){
-                throw 'timeline must be a reference to a function or duration must be provided';
+                throw new Error('timeline must be a reference to a function or duration must be provided');
               }
 
 
@@ -1091,13 +1091,13 @@ angular.module('famous.angular')
                             : 1;
 
                         if (!animate.attributes.startvalue){
-                          throw 'you must provide a start value for the animation';
+                          throw new Error('you must provide a start value for the animation');
                         }
 
                         var startValue = scope.$eval(animate.attributes.startvalue.value);
 
                         if (!animate.attributes.endvalue){
-                          throw 'you must provide an end value for the animation';
+                          throw new Error('you must provide an end value for the animation');
                         }
 
                         var endValue = scope.$eval(animate.attributes.endValue.value);
@@ -1131,10 +1131,10 @@ angular.module('famous.angular')
                           var lower = segments[j].lowerBound;
                           for (var k = 0; k < j; k++) {
                             if (lower < segments[k].upperBound) {
-                              throw "Animate segments have overlapping \
+                              throw new Error('Animate segments have overlapping \
                                 domains for the same field (" + field + "). \
                                 At any point in the timeline, only one <animate> \
-                                can affect a given field on the same modifier."
+                                can affect a given field on the same modifier.')
                             }
                           }
                         }
@@ -1563,7 +1563,7 @@ angular.module('famous.angular')
                 isolate.renderNode.add(data.renderNode);
               },
               function(childScopeId) {
-                throw "unimplemented: fa-container-surface does not support removing children";
+                throw new Error('unimplemented: fa-container-surface does not support removing children');
               }
             );
           },
@@ -1736,14 +1736,14 @@ angular.module('famous.angular')
                   } else if (_childCount == 1) {
                     isolate.renderNode.setBack(data.renderNode);
                   } else {
-                    throw "fa-flipper accepts only two child elements; more than two have been provided";
+                    throw new Error('fa-flipper accepts only two child elements; more than two have been provided');
                   }
 
                   isolate.children.push(data.renderNode);
                 },
                 // TODO: support removing children
                 function(childScopeId) {
-                  throw "unimplemented: fa-flipper does not support removing children";
+                  throw new Error('unimplemented: fa-flipper does not support removing children');
                 }
               );
             },
@@ -1986,12 +1986,12 @@ angular.module('famous.angular')
                 } else if (_numberOfChildren === 3){
                   isolate.renderNode.footer.add(data.renderNode);
                 } else {
-                  throw "fa-header-footer-layout can accept no more than 3 children";
+                  throw new Error('fa-header-footer-layout can accept no more than 3 children');
                 }
               },
               // TODO: support removing children
               function(childScopeId) {
-                throw "unimplemented: fa-header-footer-layout does not support removing children";
+                throw new Error ('unimplemented: fa-header-footer-layout does not support removing children');
               }
             );
 
