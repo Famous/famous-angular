@@ -40,7 +40,7 @@ angular.module('famous.angular')
                 isolate.renderNode.add(data.renderNode);
               },
               function(childScopeId) {
-                throw "unimplemented: fa-container-surface does not support removing children";
+                throw new Error('unimplemented: fa-container-surface does not support removing children');
               }
             );
           },

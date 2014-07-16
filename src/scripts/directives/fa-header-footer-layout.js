@@ -100,12 +100,12 @@ angular.module('famous.angular')
                 } else if (_numberOfChildren === 3){
                   isolate.renderNode.footer.add(data.renderNode);
                 } else {
-                  throw "fa-header-footer-layout can accept no more than 3 children";
+                  throw new Error('fa-header-footer-layout can accept no more than 3 children');
                 }
               },
               // TODO: support removing children
               function(childScopeId) {
-                throw "unimplemented: fa-header-footer-layout does not support removing children";
+                throw new Error ('unimplemented: fa-header-footer-layout does not support removing children');
               }
             );
 

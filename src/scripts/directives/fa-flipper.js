@@ -67,14 +67,14 @@ angular.module('famous.angular')
                   } else if (_childCount == 1) {
                     isolate.renderNode.setBack(data.renderNode);
                   } else {
-                    throw "fa-flipper accepts only two child elements; more than two have been provided";
+                    throw new Error('fa-flipper accepts only two child elements; more than two have been provided');
                   }
 
                   isolate.children.push(data.renderNode);
                 },
                 // TODO: support removing children
                 function(childScopeId) {
-                  throw "unimplemented: fa-flipper does not support removing children";
+                  throw new Error('unimplemented: fa-flipper does not support removing children');
                 }
               );
             },
