@@ -34,7 +34,7 @@ angular.module('famous.angular')
       },
       parent: {
       }
-    }
+    };
 
     return {
       //TODO:  patch into _roles and assign the
@@ -101,7 +101,7 @@ angular.module('famous.angular')
           }
 
           // Invoke the callback, if provided
-          unregisterCallback && unregisterCallback();
+          if(unregisterCallback) unregisterCallback();
         });
       },
 
@@ -126,7 +126,7 @@ angular.module('famous.angular')
             evt.stopPropagation();
 
             // Attach the remove method to the isolate, so it can be invoked without scope, if it is provided
-            removeMethod && (isolate.removeMethod = removeMethod);
+            if(removeMethod) isolate.removeMethod = removeMethod;
           }
         });
       }
