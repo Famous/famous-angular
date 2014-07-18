@@ -64,6 +64,7 @@ angular.module('famous.angular')
             var isolate = $famousDecorator.ensureIsolate(scope);
 
             var Engine = $famous['famous/core/Engine'];
+            var RenderNode = $famous['famous/core/RenderNode'];
 
             var getOrValue = function(x) {
               return x.get ? x.get() : x;
@@ -79,8 +80,11 @@ angular.module('famous.angular')
 
             isolate.renderNode = scope.$eval(attrs.faNode);
 
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show();
+
             $famousDecorator.sequenceWith(scope, function(data) {
-              isolate.renderNode.add(data.renderNode);
+              isolate.renderNode.add(data.renderGate);
               isolate.children.push(data);
             });
 

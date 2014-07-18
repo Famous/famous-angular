@@ -384,6 +384,15 @@ angular.module('famous.angular')
       }
 
       /**
+          Check if the element selected is an fa- element
+          @param {Array} element - derived element
+          @return {boolean}
+       */
+       function isFaElement(element) {
+          var isolate = $famous.getIsolate(element.scope());
+          return  !! (isolate && isolate.id)
+       }
+      /**
        * Pass through $animate methods that are strictly class based.
        * These will work on Surfaces, and will be ignored elsewhere.
        * ngAnimate has a complex API for determining when an animation should be
@@ -420,13 +429,35 @@ angular.module('famous.angular')
          * directively to their Surfaces whenever possible.
          */
         animationHandlers[classManipulator] = function(element, className, done) {
+         
           $delegate[classManipulator](element, className, done);
 
-          if (isClassable(element)) {
-            var surface = $famous.getIsolate(element.scope()).renderNode;
-            angular.forEach(className.split(' '), function(splitClassName) {
-              surface[classManipulator](splitClassName);
-            });
+          if(isFaElement(element)){
+            var isolate = $famous.getIsolate(element.scope());
+            if (isClassable(element)) {
+              var surface = isolate.renderNode;
+              angular.forEach(className.split(' '), function(splitClassName) {
+                if(splitClassName === 'ng-hide'){
+                  if(classManipulator === 'addClass'){
+                    isolate.hide();
+                  } else if( classManipulator === 'removeClass' ){
+                    isolate.show();
+                  }
+                }else {
+                  surface[classManipulator](splitClassName);
+                }
+              });
+            } else {
+              angular.forEach(className.split(' '), function(splitClassName) {
+                if(splitClassName === 'ng-hide'){
+                  if(classManipulator === 'addClass'){
+                    isolate.hide();
+                  } else if( classManipulator === 'removeClass' ){
+                    isolate.show();
+                  }
+                }
+              });
+            }
           }
          };
       });
@@ -435,6 +466,7 @@ angular.module('famous.angular')
       // because Angular has already negotiated the list of items to add
       // and items to remove. Manually loop through both lists.
       animationHandlers.setClass = function(element, add, remove, done) {
+        
         $delegate.setClass(element, add, remove, done);
 
         if (isClassable(element)) {
@@ -462,15 +494,21 @@ angular.module('famous.angular')
        */
       angular.forEach(['enter', 'leave', 'move'], function(operation) {
         animationHandlers[operation] = function(element) {
+          console.log("animationHandlers", operation,element);
           var self = this;
           var selfArgs = arguments;
           var delegateFirst = (operation === 'enter');
 
           if (delegateFirst === true) {
+            var scopeId = element.scope().$id;
+            // console.log(element,element.scope());
+            // console.log("enter",scopeId, element, element.scope()[scopeId] );
+            // get scope from element then isolate from scope  isolate.show
+            // isolate[scopeId] && console.log(isolate.show);
             $delegate[operation].apply(this, arguments);
           }
 
-          // Detect if an animation is currently running
+           // Detect if an animation is currently running
           if (element.data(FA_ANIMATION_ACTIVE) === true) {
             $parse(element.attr('fa-animate-halt'))(element.scope());
           }
@@ -479,6 +517,14 @@ angular.module('famous.angular')
           element.data(FA_ANIMATION_ACTIVE, true);
 
           var doneCallback = function() {
+
+            var scopeId = element.scope() && element.scope().$id;
+
+            //Isolate.hide
+            if(operation === 'leave'){
+              var isolate = $famous.getIsolate(element.scope());
+              isolate.id && isolate.hide();
+             }
             // Abort if the done callback has already been invoked
             if (element.data(FA_ANIMATION_ACTIVE) === false) {
               return;
@@ -547,20 +593,34 @@ angular.module('famous.angular')
  */
 
 angular.module('famous.angular')
-  .factory('$famousDecorator', function () {
+  .factory('$famousDecorator', function ($famous) {
     //TODO:  add repeated logic to these roles
     var _roles = {
       child: {
       },
       parent: {
+      },
+      renderable: function( isolate ) {
+        var RenderNode = $famous['famous/core/RenderNode'];
+
+        isolate.renderGate = new RenderNode();
+        isolate.emptyNode = new RenderNode();
+          
+        isolate.show = function() {
+          isolate.renderGate && isolate.renderGate.set(isolate.renderNode);
+        };
+        isolate.hide = function() {
+          isolate.renderGate.set(isolate.emptyNode);
+        };
       }
-    }
+      
+    };
 
     return {
       //TODO:  patch into _roles and assign the
       // appropriate role to the given scope
-      addRole: function(role, scope){
-
+      addRole: function(role, isolate){
+          _roles[role](isolate);
       },
 
       /**
@@ -1377,7 +1437,7 @@ angular.module('famous.angular')
 
             element.append('<div class="famous-angular-container"></div>');
             isolate.context = Engine.createContext(element[0].querySelector('.famous-angular-container'));
-
+            window.context = isolate.context;
             var _updatePerspective = function(){
               var val = parseInt(attrs.faPerspective)
               if(val) isolate.context.setPerspective(val);
@@ -1561,11 +1621,13 @@ angular.module('famous.angular')
 
             var options = scope.$eval(attrs.faOptions) || {};
             isolate.renderNode = new ContainerSurface(options);
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show();
 
             $famousDecorator.sequenceWith(
               scope,
               function(data) {
-                isolate.renderNode.add(data.renderNode);
+                isolate.renderNode.add(data.renderGate);
               },
               function(childScopeId) {
                 throw "unimplemented: fa-container-surface does not support removing children";
@@ -1618,11 +1680,17 @@ angular.module('famous.angular')
 
             var FlexibleLayout = $famous["famous/views/FlexibleLayout"];
             var ViewSequence = $famous['famous/core/ViewSequence'];
+            var RenderNode = $famous['famous/core/RenderNode'];
+
 
             var _children = [];
 
             var options = scope.$eval(attrs.faOptions) || {};
+
             isolate.renderNode = new FlexibleLayout(options);
+
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show();
 
             var updateFlexibleLayout = function () {
               _children.sort(function (a, b) {
@@ -1631,7 +1699,7 @@ angular.module('famous.angular')
               isolate.renderNode.sequenceFrom(function (_children) {
                 var _ch = [];
                 angular.forEach(_children, function (c, i) {
-                  _ch[i] = c.renderNode;
+                  _ch[i] = c.renderGate;
                 });
                 return _ch;
               }(_children));
@@ -1722,10 +1790,13 @@ angular.module('famous.angular')
               var isolate = $famousDecorator.ensureIsolate(scope);
               var Flipper = $famous["famous/views/Flipper"];
 
+
               //TODO:  $watch and update, or $parse and attr.$observe
               var options = scope.$eval(attrs.faOptions) || {};
-
               isolate.renderNode = new Flipper(options);
+              $famousDecorator.addRole('renderable',isolate);
+              isolate.show();
+           
               isolate.children = [];
 
               isolate.flip = function (overrideOptions) {
@@ -1737,14 +1808,14 @@ angular.module('famous.angular')
                 function(data) {
                   var _childCount = isolate.children.length;
                   if (_childCount == 0) {
-                    isolate.renderNode.setFront(data.renderNode);
+                    isolate.renderNode.setFront(data.renderGate);
                   } else if (_childCount == 1) {
-                    isolate.renderNode.setBack(data.renderNode);
+                    isolate.renderNode.setBack(data.renderGate);
                   } else {
                     throw "fa-flipper accepts only two child elements; more than two have been provided";
                   }
 
-                  isolate.children.push(data.renderNode);
+                  isolate.children.push(data.renderGate);
                 },
                 // TODO: support removing children
                 function(childScopeId) {
@@ -1834,6 +1905,8 @@ angular.module('famous.angular')
             var options = scope.$eval(attrs.faOptions) || {};
             isolate.renderNode = new GridLayout(options);
 
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show();
             //watch options and update when changed
             scope.$watch(function(){
               return scope.$eval(attrs.faOptions);
@@ -1848,7 +1921,7 @@ angular.module('famous.angular')
               isolate.renderNode.sequenceFrom(function(_children) {
                 var _ch = [];
                 angular.forEach(_children, function(c, i) {
-                  _ch[i] = c.renderNode;
+                  _ch[i] = c.renderGate;
                 })
                 return _ch;
               }(_children));
@@ -1977,6 +2050,8 @@ angular.module('famous.angular')
 
             var options = scope.$eval(attrs.faOptions) || {};
             isolate.renderNode = new HeaderFooterLayout(options);
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show();
 
             var _numberOfChildren = 0;
 
@@ -1985,11 +2060,11 @@ angular.module('famous.angular')
               function(data) {
                 _numberOfChildren++;
                 if (_numberOfChildren === 1) {
-                  isolate.renderNode.header.add(data.renderNode);
+                  isolate.renderNode.header.add(data.renderGate);
                 } else if (_numberOfChildren === 2){
-                  isolate.renderNode.content.add(data.renderNode);
+                  isolate.renderNode.content.add(data.renderGate);
                 } else if (_numberOfChildren === 3){
-                  isolate.renderNode.footer.add(data.renderNode);
+                  isolate.renderNode.footer.add(data.renderGate);
                 } else {
                   throw "fa-header-footer-layout can accept no more than 3 children";
                 }
@@ -2103,6 +2178,9 @@ angular.module('famous.angular')
               class: scope.$eval(attrs.class),
               properties: isolate.getProperties()
             });
+            
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show();
 
             if (attrs.class) {
               isolate.renderNode.setClasses(attrs['class'].split(' '));
@@ -2589,8 +2667,11 @@ angular.module('famous.angular')
 
             isolate.renderNode = new RenderNode().add(isolate.modifier);
 
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show()
+            
             $famousDecorator.sequenceWith(scope, function(data) {
-              isolate.renderNode.add(data.renderNode);
+              isolate.renderNode.add(data.renderGate);
             });
 
             transclude(scope, function (clone) {
@@ -3190,6 +3271,7 @@ angular.module('famous.angular')
             var isolate = $famousDecorator.ensureIsolate(scope);
 
             var Engine = $famous['famous/core/Engine'];
+            var RenderNode = $famous['famous/core/RenderNode'];
 
             var getOrValue = function(x) {
               return x.get ? x.get() : x;
@@ -3205,8 +3287,11 @@ angular.module('famous.angular')
 
             isolate.renderNode = scope.$eval(attrs.faNode);
 
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show();
+
             $famousDecorator.sequenceWith(scope, function(data) {
-              isolate.renderNode.add(data.renderNode);
+              isolate.renderNode.add(data.renderGate);
               isolate.children.push(data);
             });
 
@@ -3423,6 +3508,10 @@ angular.module('famous.angular')
             var options = scope.$eval(attrs.faOptions) || {};
             isolate.renderNode = new ScrollView(options);
 
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show();
+
+
             var updateScrollview = function(init){
               // Synchronize the update on the next digest cycle
               // (if this isn't done, $index will not be up-to-date
@@ -3436,7 +3525,7 @@ angular.module('famous.angular')
                   array: function(_children) {
                     var _ch = [];
                     angular.forEach(_children, function(c, i) {
-                      _ch[i] = c.renderNode;
+                      _ch[i] = c.renderGate;
                     })
                     return _ch;
                   }(_children)
@@ -3543,11 +3632,15 @@ angular.module('famous.angular')
 
             var SequentialLayout = $famous["famous/views/SequentialLayout"];
 
+
             var _children = [];
 
             var options = scope.$eval(attrs.faOptions) || {};
 
             isolate.renderNode = new SequentialLayout(options);
+
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show();
 
             var _updateSequentialLayout = function() {
               _children.sort(function(a, b) {
@@ -3556,7 +3649,7 @@ angular.module('famous.angular')
               isolate.renderNode.sequenceFrom(function(_children) {
                 var _ch = [];
                 angular.forEach(_children, function(c, i) {
-                  _ch[i] = c.renderNode;
+                  _ch[i] = c.renderGate;
                 });
                 return _ch;
               }(_children));
@@ -3743,8 +3836,9 @@ angular.module('famous.angular')
       compile: function(tElem, tAttrs, transclude){
         return {
           pre: function(scope, element, attrs){
+            
             var isolate = $famousDecorator.ensureIsolate(scope);
-
+            // console.log("fa-surface", isolate);
             var Surface = $famous['famous/core/Surface'];
             var Transform = $famous['famous/core/Transform']
             var EventHandler = $famous['famous/core/EventHandler'];
@@ -3791,11 +3885,12 @@ angular.module('famous.angular')
               }
               return baseProperties;
             };
-
-            isolate.renderNode = new Surface({
+             isolate.renderNode = new Surface({
               size: scope.$eval(attrs.faSize),
               properties: isolate.getProperties()
             });
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show();
 
             if (attrs.class) {
               isolate.renderNode.setClasses(attrs['class'].split(' '));
@@ -4258,9 +4353,11 @@ angular.module('famous.angular')
             isolate.renderNode = new View({
               size: scope.$eval(attrs.faSize) || [undefined, undefined]
             });
-
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show();
+            
             $famousDecorator.sequenceWith(scope, function(data) {
-              isolate.renderNode.add(data.renderNode);
+              isolate.renderNode.add(data.renderGate);
               isolate.children.push(data);
             });
 

@@ -113,6 +113,15 @@ angular.module('famous.angular')
       }
 
       /**
+          Check if the element selected is an fa- element
+          @param {Array} element - derived element
+          @return {boolean}
+       */
+       function isFaElement(element) {
+          var isolate = $famous.getIsolate(element.scope());
+          return  !! (isolate && isolate.id)
+       }
+      /**
        * Pass through $animate methods that are strictly class based.
        * These will work on Surfaces, and will be ignored elsewhere.
        * ngAnimate has a complex API for determining when an animation should be
@@ -149,13 +158,35 @@ angular.module('famous.angular')
          * directively to their Surfaces whenever possible.
          */
         animationHandlers[classManipulator] = function(element, className, done) {
+         
           $delegate[classManipulator](element, className, done);
 
-          if (isClassable(element)) {
-            var surface = $famous.getIsolate(element.scope()).renderNode;
-            angular.forEach(className.split(' '), function(splitClassName) {
-              surface[classManipulator](splitClassName);
-            });
+          if(isFaElement(element)){
+            var isolate = $famous.getIsolate(element.scope());
+            if (isClassable(element)) {
+              var surface = isolate.renderNode;
+              angular.forEach(className.split(' '), function(splitClassName) {
+                if(splitClassName === 'ng-hide'){
+                  if(classManipulator === 'addClass'){
+                    isolate.hide();
+                  } else if( classManipulator === 'removeClass' ){
+                    isolate.show();
+                  }
+                }else {
+                  surface[classManipulator](splitClassName);
+                }
+              });
+            } else {
+              angular.forEach(className.split(' '), function(splitClassName) {
+                if(splitClassName === 'ng-hide'){
+                  if(classManipulator === 'addClass'){
+                    isolate.hide();
+                  } else if( classManipulator === 'removeClass' ){
+                    isolate.show();
+                  }
+                }
+              });
+            }
           }
          };
       });
@@ -164,6 +195,7 @@ angular.module('famous.angular')
       // because Angular has already negotiated the list of items to add
       // and items to remove. Manually loop through both lists.
       animationHandlers.setClass = function(element, add, remove, done) {
+        
         $delegate.setClass(element, add, remove, done);
 
         if (isClassable(element)) {
@@ -191,15 +223,21 @@ angular.module('famous.angular')
        */
       angular.forEach(['enter', 'leave', 'move'], function(operation) {
         animationHandlers[operation] = function(element) {
+          console.log("animationHandlers", operation,element);
           var self = this;
           var selfArgs = arguments;
           var delegateFirst = (operation === 'enter');
 
           if (delegateFirst === true) {
+            var scopeId = element.scope().$id;
+            // console.log(element,element.scope());
+            // console.log("enter",scopeId, element, element.scope()[scopeId] );
+            // get scope from element then isolate from scope  isolate.show
+            // isolate[scopeId] && console.log(isolate.show);
             $delegate[operation].apply(this, arguments);
           }
 
-          // Detect if an animation is currently running
+           // Detect if an animation is currently running
           if (element.data(FA_ANIMATION_ACTIVE) === true) {
             $parse(element.attr('fa-animate-halt'))(element.scope());
           }
@@ -208,6 +246,14 @@ angular.module('famous.angular')
           element.data(FA_ANIMATION_ACTIVE, true);
 
           var doneCallback = function() {
+
+            var scopeId = element.scope() && element.scope().$id;
+
+            //Isolate.hide
+            if(operation === 'leave'){
+              var isolate = $famous.getIsolate(element.scope());
+              isolate.id && isolate.hide();
+             }
             // Abort if the done callback has already been invoked
             if (element.data(FA_ANIMATION_ACTIVE) === false) {
               return;

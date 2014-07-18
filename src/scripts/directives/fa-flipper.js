@@ -48,10 +48,13 @@ angular.module('famous.angular')
               var isolate = $famousDecorator.ensureIsolate(scope);
               var Flipper = $famous["famous/views/Flipper"];
 
+
               //TODO:  $watch and update, or $parse and attr.$observe
               var options = scope.$eval(attrs.faOptions) || {};
-
               isolate.renderNode = new Flipper(options);
+              $famousDecorator.addRole('renderable',isolate);
+              isolate.show();
+           
               isolate.children = [];
 
               isolate.flip = function (overrideOptions) {
@@ -63,14 +66,14 @@ angular.module('famous.angular')
                 function(data) {
                   var _childCount = isolate.children.length;
                   if (_childCount == 0) {
-                    isolate.renderNode.setFront(data.renderNode);
+                    isolate.renderNode.setFront(data.renderGate);
                   } else if (_childCount == 1) {
-                    isolate.renderNode.setBack(data.renderNode);
+                    isolate.renderNode.setBack(data.renderGate);
                   } else {
                     throw "fa-flipper accepts only two child elements; more than two have been provided";
                   }
 
-                  isolate.children.push(data.renderNode);
+                  isolate.children.push(data.renderGate);
                 },
                 // TODO: support removing children
                 function(childScopeId) {
