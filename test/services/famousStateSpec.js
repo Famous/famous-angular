@@ -89,5 +89,9 @@ describe('$famousState', function() {
         }).toThrow();
       });
     });
+
+    describe('queueState', function() {}); // deferred until childviews are implemented
+
+    describe('updateQueue', function() {}); // deferred until childviews are implemented
   });
 });
