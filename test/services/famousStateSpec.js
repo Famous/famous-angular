@@ -150,5 +150,30 @@ describe('$famousState', function() {
         // TODO: some async listener
       });
     });
+
+    describe('getStates', function() {
+      it('should return registered states', function() {
+        // add a state to see if it ends up in the states object
+        $famousStateProvider.state({
+          name: 'test',
+          url: '/test',
+          template: '<div></div>',
+          inTransitionFrom: { a: 'a' },
+          outTransitionTo: { a: 'a' }
+        });
+        expect($famousState.getStates()).toBeDefined();
+        expect($famousState.getStates()).toEqual({
+          test: { 
+            name: 'test',
+            url: '/test',
+            template: '<div></div>',
+            inTransitionFrom: { a: 'a($callback)' },
+            outTransitionTo: { a: 'a($callback)' },
+            parent: { name: '', parent: null, views: null, template: null, controller: null }, //controller [sic]
+            views: {}
+          }
+        });
+      });
+    });
   });
 });
