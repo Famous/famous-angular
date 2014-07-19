@@ -73,9 +73,9 @@ gulp.task('build', ['clean'], function(event) {
     'src/scripts/directives/**/*.js'
   ])
   .pipe(concat('famous-angular.js'))
+  .pipe(header(banner, { pkg : pkg } ))
   .pipe(jshint('.jshintrc'))
   .pipe(jshint.reporter('default'))
-  .pipe(header(banner, { pkg : pkg } ))
   .pipe(gulp.dest('dist/'))
   .pipe(uglify())
   .pipe(rename({suffix: '.min'}))
