@@ -12,6 +12,12 @@ Using F/A, you can:
 ###Read more on the project page: [Famo.us/Angular](http://famo.us/angular)
 
 
+##Project Roadmap
+
+[https://www.pivotaltracker.com/n/projects/1119890](https://www.pivotaltracker.com/n/projects/1119890)
+Contact [famous-angular@thomasstreet.com](mailto:famous-angular@thomasstreet.com) if you want to claim tasks or contribute to the roadmap.
+
+
 ##Running (For using F/A in your Angular app)
 
 ####Before you start, tools you will need
