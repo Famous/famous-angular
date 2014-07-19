@@ -62,7 +62,7 @@ angular.module('famous.angular')
               });
             }
           }
-        }
+        };
       }
     };
   }]);

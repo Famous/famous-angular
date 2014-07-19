@@ -83,7 +83,7 @@ angular.module('famous.angular')
 
             $famousDecorator.registerChild(scope, element, isolate);
           }
-        }
+        };
       }
     };
   }]);

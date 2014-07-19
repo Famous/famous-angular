@@ -3432,7 +3432,7 @@ angular.module('famous.angular')
                     var _ch = [];
                     angular.forEach(_children, function(c, i) {
                       _ch[i] = c.renderNode;
-                    })
+                    });
                     return _ch;
                   }(_children)
                 };
@@ -3888,7 +3888,7 @@ angular.module('famous.angular')
               });
             }
           }
-        }
+        };
       }
     };
   }]);
@@ -4072,7 +4072,7 @@ angular.module('famous.angular')
             var isolate = $famousDecorator.ensureIsolate(scope);
 
             if (attrs.faTouchmove) {
-              var renderNode = (isolate.renderNode._eventInput || isolate.renderNode)
+              var renderNode = (isolate.renderNode._eventInput || isolate.renderNode);
 
               renderNode.on("touchmove", function(data) {
                 var fn = $parse(attrs.faTouchmove);
@@ -4269,7 +4269,7 @@ angular.module('famous.angular')
 
             $famousDecorator.registerChild(scope, element, isolate);
           }
-        }
+        };
       }
     };
   }]);
