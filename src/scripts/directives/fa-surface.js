@@ -147,21 +147,21 @@ angular.module('famous.angular')
             var isolate = $famousDecorator.ensureIsolate(scope);
 
             var Surface = $famous['famous/core/Surface'];
-            var Transform = $famous['famous/core/Transform']
+            var Transform = $famous['famous/core/Transform'];
             var EventHandler = $famous['famous/core/EventHandler'];
 
             //update properties
             //TODO:  is this going to be a bottleneck?
             scope.$watch(
               function(){
-                return isolate.getProperties()
+                return isolate.getProperties();
               },
               function(){
                 if(isolate.renderNode)
                   isolate.renderNode.setProperties(isolate.getProperties());
               },
               true
-            )
+            );
 
 
             var _propToFaProp = function(prop){
@@ -225,7 +225,7 @@ angular.module('famous.angular')
               // TODO: hook into RenderController and hide this render node
             });
           }
-        }
+        };
       }
     };
   }]);
