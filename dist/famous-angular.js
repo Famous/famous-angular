@@ -3868,7 +3868,7 @@ angular.module('famous.angular')
             var isolate = $famousDecorator.ensureIsolate(scope);
 
             if (attrs.faTap) {
-              var renderNode = (isolate.renderNode._eventInput || isolate.renderNode)
+              var renderNode = (isolate.renderNode._eventInput || isolate.renderNode);
 
               var _dragging = false;
 
@@ -3884,7 +3884,7 @@ angular.module('famous.angular')
                   if(!scope.$$phase)
                     scope.$apply();
                 }
-                _dragging = false
+                _dragging = false;
               });
             }
           }
