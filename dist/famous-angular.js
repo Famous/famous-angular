@@ -1374,7 +1374,7 @@ angular.module('famous.angular')
             isolate.context = Engine.createContext(element[0].querySelector('.famous-angular-container'));
 
             var _updatePerspective = function(){
-              var val = parseInt(attrs.faPerspective)
+              var val = parseInt(attrs.faPerspective);
               if(val) isolate.context.setPerspective(val);
             };
 
