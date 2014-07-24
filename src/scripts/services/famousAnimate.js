@@ -135,9 +135,10 @@ angular.module('famous.angular')
         angular.element.prototype[classManipulator] = function(className) {
           originalManipulator.apply(this, arguments);
 
-          // If and only if the current element represents a Famo.us Surface, pass through
+          // If and only if the current element represents a Famo.us Surface,
+          // AND the class is not an empty string, pass through
           // the addClass and removeClass methods to the underlying renderNode.
-          if (isClassable(this)) {
+          if (isClassable(this) && typeof className === 'string' && className.trim() !== '') {
             $famous.getIsolate(this.scope()).renderNode[classManipulator](className);
           }
         };
