@@ -1838,16 +1838,18 @@ angular.module('famous.angular')
             }, true);
 
             var updateGridLayout = function () {
-              _children.sort(function (a, b) {
-                return a.index - b.index;
+              scope.$$postDigest(function(){
+                _children.sort(function (a, b) {
+                  return a.index - b.index;
+                });
+                isolate.renderNode.sequenceFrom(function(_children) {
+                  var _ch = [];
+                  angular.forEach(_children, function(c, i) {
+                    _ch[i] = c.renderNode;
+                  })
+                  return _ch;
+                }(_children));
               });
-              isolate.renderNode.sequenceFrom(function(_children) {
-                var _ch = [];
-                angular.forEach(_children, function(c, i) {
-                  _ch[i] = c.renderNode;
-                })
-                return _ch;
-              }(_children));
             };
 
             $famousDecorator.sequenceWith(
