@@ -91,7 +91,7 @@ angular.module('famous.angular')
               });
             }
           }
-        }
+        };
       }
     };
   }]);

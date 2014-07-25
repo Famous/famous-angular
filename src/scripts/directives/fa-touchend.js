@@ -78,7 +78,7 @@ angular.module('famous.angular')
             var isolate = $famousDecorator.ensureIsolate(scope);
 
             if (attrs.faTouchend) {
-              var renderNode = (isolate.renderNode._eventInput || isolate.renderNode)
+              var renderNode = (isolate.renderNode._eventInput || isolate.renderNode);
 
               renderNode.on("touchend", function(data) {
                 var fn = $parse(attrs.faTouchend);
@@ -89,7 +89,7 @@ angular.module('famous.angular')
 
             }
           }
-        }
+        };
       }
     };
   }]);

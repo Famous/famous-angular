@@ -80,7 +80,7 @@ angular.module('famous.angular')
             var isolate = $famousDecorator.ensureIsolate(scope);
 
             if (attrs.faTouchstart) {
-              var renderNode = (isolate.renderNode._eventInput || isolate.renderNode)
+              var renderNode = (isolate.renderNode._eventInput || isolate.renderNode);
 
               renderNode.on("touchstart", function(data) {
                 var fn = $parse(attrs.faTouchstart);
@@ -90,7 +90,7 @@ angular.module('famous.angular')
               });
             }
           }
-        }
+        };
       }
     };
   }]);
