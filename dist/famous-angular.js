@@ -2861,7 +2861,7 @@ angular.module('famous.angular')
               );
             });
           }
-        }
+        };
       }
     };
   }]);
@@ -3117,7 +3117,7 @@ angular.module('famous.angular')
               );
             });
           }
-        }
+        };
       }
     };
   }]);

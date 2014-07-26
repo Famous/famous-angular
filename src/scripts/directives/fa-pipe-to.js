@@ -249,7 +249,7 @@ angular.module('famous.angular')
               );
             });
           }
-        }
+        };
       }
     };
   }]);
