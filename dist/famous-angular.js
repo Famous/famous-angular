@@ -2522,13 +2522,13 @@ angular.module('famous.angular')
                 if (candidate !== undefined) {
                   //TODO:feat Support Transitionables
                   if(candidate instanceof Function) candidate = candidate();
-                  if(candidate instanceof Array) transforms.push(Transform[field].apply(this, candidate))
+                  if(candidate instanceof Array) transforms.push(Transform[field].apply(this, candidate));
                   else transforms.push(Transform[field].call(this, candidate));
                 }
               });
 
               if(!transforms.length) return undefined;
-              else if (transforms.length === 1) return transforms[0]
+              else if (transforms.length === 1) return transforms[0];
               else return Transform.multiply.apply(this, transforms);
             };
 
@@ -2541,7 +2541,7 @@ angular.module('famous.angular')
               if(ret instanceof Function) return ret();
               else if(ret instanceof Object && ret.get !== undefined) return ret.get();
               else return ret;
-            }
+            };
 
             var _opacityFn = angular.noop;
             attrs.$observe('faOpacity', function () {
@@ -2553,7 +2553,7 @@ angular.module('famous.angular')
               else if(ret instanceof Function) return ret();
               else if(ret instanceof Object && ret.get !== undefined) return ret.get();
               else return ret;
-            }
+            };
 
             var _sizeFn = angular.noop;
             attrs.$observe('faSize', function () {
@@ -2564,7 +2564,7 @@ angular.module('famous.angular')
               if(ret instanceof Function) return ret();
               else if(ret instanceof Object && ret.get !== undefined) return ret.get();
               else return ret;
-            }
+            };
 
             var _originFn = angular.noop;
             attrs.$observe('faOrigin', function () {
@@ -2575,7 +2575,7 @@ angular.module('famous.angular')
               if(ret instanceof Function) return ret();
               else if(ret instanceof Object && ret.get !== undefined) return ret.get();
               else return ret;
-            }
+            };
 
             isolate.modifier = new Modifier({
               transform: isolate.getTransform,
