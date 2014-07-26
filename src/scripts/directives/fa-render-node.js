@@ -75,7 +75,7 @@ angular.module('famous.angular')
               var pipeTo = scope.$eval(val);
               if(pipeTo)
                 Engine.pipe(pipeTo);
-            })
+            });
 
             isolate.renderNode = scope.$eval(attrs.faNode);
 
@@ -94,7 +94,7 @@ angular.module('famous.angular')
 
             $famousDecorator.registerChild(scope, element, isolate);
           }
-        }
+        };
       }
     };
   }]);
