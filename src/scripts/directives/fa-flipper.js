@@ -62,9 +62,9 @@ angular.module('famous.angular')
                 scope,
                 function(data) {
                   var _childCount = isolate.children.length;
-                  if (_childCount == 0) {
+                  if (_childCount === 0) {
                     isolate.renderNode.setFront(data.renderNode);
-                  } else if (_childCount == 1) {
+                  } else if (_childCount === 1) {
                     isolate.renderNode.setBack(data.renderNode);
                   } else {
                     throw new Error('fa-flipper accepts only two child elements; more than two have been provided');
