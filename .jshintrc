@@ -1,5 +1,6 @@
 {
   "node": true,
+  "loopfunc": true,
   "browser": true,
   "esnext": true,
   "bitwise": false,

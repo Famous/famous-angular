@@ -419,10 +419,10 @@ angular.module('famous.angular')
                           var lower = segments[j].lowerBound;
                           for (var k = 0; k < j; k++) {
                             if (lower < segments[k].upperBound) {
-                              throw new Error('Animate segments have overlapping \
-                                domains for the same field (" + field + "). \
-                                At any point in the timeline, only one <animate> \
-                                can affect a given field on the same modifier.')
+                              throw new Error("Animate segments have overlapping" +
+                                "domains for the same field (" + field + ")." + 
+                                "At any point in the timeline, only one <animate>" +
+                                "can affect a given field on the same modifier.");
                             }
                           }
                         }
@@ -489,11 +489,11 @@ angular.module('famous.angular')
                           //Support interpolating multiple values, e.g. for a Scale array [x,y,z]
                           if (Array.isArray(relevantSegment.startValue)) {
                             var ret = [];
-                            for (var j = 0; j < relevantSegment.startValue.length; j++) {
+                            for (var k = 0; k < relevantSegment.startValue.length; k++) {
                               ret.push(
-                                relevantSegment.startValue[j] + relevantSegment.curve(normalizedX)
+                                relevantSegment.startValue[k] + relevantSegment.curve(normalizedX)
                                   *
-                                  (relevantSegment.endValue[j] - relevantSegment.startValue[j])
+                                  (relevantSegment.endValue[k] - relevantSegment.startValue[k])
                               );
                             }
                             return ret;
@@ -564,7 +564,7 @@ angular.module('famous.angular')
             }, 1);//end setTimeout
           }
 
-        }
+        };
 
       }
     };
