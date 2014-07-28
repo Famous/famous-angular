@@ -407,6 +407,7 @@ angular.module('famous.angular')
           if (isClassable(this) && typeof className === 'string' && className.trim() !== '') {
             $famous.getIsolate(this.scope()).renderNode[classManipulator](className);
           }
+          return this;
         };
 
         /**
