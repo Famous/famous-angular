@@ -71,6 +71,12 @@ angular.module('famous.angular')
         //and index isn't already assigned
         var i = scope.$eval("$index");
         if(i && i !== '$index' && !isolate.index) isolate.index = i;
+        //getter for dynamic ng-repeat index
+        if(!isolate.getIndex) {
+          isolate.getIndex = function() {
+            return scope.$index || isolate.index;
+          };
+        }
 
         return isolate;
       },

@@ -76,9 +76,9 @@ angular.module('famous.angular')
             }, true);
 
             var updateGridLayout = function () {
-              scope.$$postDigest(function(){
+              scope.$watch(function(){
                 _children.sort(function (a, b) {
-                  return a.index - b.index;
+                  return a.getIndex() - b.getIndex();
                 });
                 isolate.renderNode.sequenceFrom(function(_children) {
                   var _ch = [];
