@@ -2075,6 +2075,8 @@ angular.module('famous.angular')
               true
             );
 
+            //TODO:  duplicate of fa-surface's _propToFaProp function.
+            //       Refactor into a util object/service?
             var _propToFaProp = function (prop) {
               return "fa" + prop.charAt(0).toUpperCase() + prop.slice(1);
             };
@@ -3765,7 +3767,8 @@ angular.module('famous.angular')
               true
             );
 
-
+            //TODO:  duplicate of fa-image-surface's _propToFaProp function.
+            //       Refactor into a util object/service? 
             var _propToFaProp = function(prop){
               return "fa" + prop.charAt(0).toUpperCase() + prop.slice(1);
             };
