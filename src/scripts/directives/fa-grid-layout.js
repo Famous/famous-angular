@@ -107,7 +107,8 @@ angular.module('famous.angular')
                   return _ch;
                 }(_children);
                 updateGridLayout();
-              }
+              },
+              updateGridLayout
             );
 
           },

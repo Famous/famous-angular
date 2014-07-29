@@ -86,6 +86,7 @@ angular.module('famous.angular')
               return scope.$eval(attrs.faIndex);
             }, function () {
               isolate.index = scope.$eval(attrs.faIndex);
+              if(isolate.updateMethod) isolate.updateMethod();
             });
           }
         };

@@ -241,7 +241,8 @@ angular.module('famous.angular')
                   return _ch;
                 }(_children);
                 updateScrollview();
-              }
+              },
+              updateScrollview
             );
 
           },

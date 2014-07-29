@@ -119,7 +119,7 @@ angular.module('famous.angular')
        * from the sequence
        * @returns {void}
        */
-      sequenceWith: function(scope, addMethod, removeMethod) {
+      sequenceWith: function(scope, addMethod, removeMethod, updateMethod) {
         scope.$on('registerChild', function(evt, isolate) {
           if (evt.targetScope.$id !== scope.$id) {
             addMethod(isolate);
@@ -127,6 +127,7 @@ angular.module('famous.angular')
 
             // Attach the remove method to the isolate, so it can be invoked without scope, if it is provided
             if(removeMethod) isolate.removeMethod = removeMethod;
+            if(updateMethod) isolate.updateMethod = updateMethod;
           }
         });
       }
