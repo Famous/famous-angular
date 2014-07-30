@@ -71,7 +71,7 @@ angular.module('famous.angular')
             //watch options and update when changed
             scope.$watch(function(){
               return scope.$eval(attrs.faOptions);
-            }, function(oldVal, newVal){
+            }, function(newVal, oldVal){
               isolate.renderNode.setOptions(newVal);
             }, true);
 
