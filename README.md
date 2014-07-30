@@ -10,6 +10,7 @@ Using F/A, you can:
 
 
 ###Read more on the project page: [Famo.us/Angular](http://famo.us/angular)
+###Or download the starter kit: [famous-angular-starter-kit.zip](http://code.famo.us/famous-angular/latest/famous-angular-starter-kit.zip?src=github-readme)
 
 
 ##Project Roadmap
