@@ -123,6 +123,6 @@ angular.module('famous.angular')
           return points[points.length-1][1];
         };
 
-      }
+      };
 
   });
