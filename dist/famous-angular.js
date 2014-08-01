@@ -713,6 +713,46 @@ angular.module('famous.angular')
     };
   });
 
+/**
+ * @ngdoc service
+ * @name $timeline
+ * @function
+ *
+ * @description
+ * The timeline service provides support for mapping timeline functions to different values.
+ *
+ * @usage
+ * ```html
+ * @example
+ * ```html
+ * <fa-modifier
+ *   fa-rotate-y="rRotation(t.get())"
+ *   fa-translate="translation(t.get())"
+ * >
+ *   ...
+ * </fa-modifier>
+ * ```
+ * ```javascript
+ * var Transitionable = $famous['famous/transitions/Transitionable'];
+ * var Easing = $famous['famous/transitions/Easing'];
+ *
+ * $scope.t = new Transitionable(0);
+ *
+ * $scope.yRotation = $timeline([
+ *   [0, 0, Easing.inOutQuad],
+ *   [0.8, 1.1 * (Math.PI/2), Easing.inOutQuart],
+ *   [1, Math.PI/2]
+ * ]);
+ *
+ * $scope.translation = $timeline([
+ *   [0, [100, 100, 0], Easing.inOutQuad],
+ *   [1, [400, 200, 0]]
+ * ]);
+ *
+ * ```
+ */
+
+
 angular.module('famous.angular')
   .factory('$timeline', function () {
 
