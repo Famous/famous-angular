@@ -721,8 +721,6 @@ angular.module('famous.angular')
  * @description
  * The timeline service provides support for mapping timeline functions to different values.
  *
- * @usage
- * ```html
  * @example
  * ```html
  * <fa-modifier
