@@ -227,10 +227,15 @@ angular.module('famous.angular')
             var RenderNode = $famous['famous/core/RenderNode'];
             var Modifier = $famous['famous/core/Modifier'];
             var Transform = $famous['famous/core/Transform'];
+            var Particle = $famous['famous/physics/bodies/Particle'];
 
             var get = function(x) {
               if (x instanceof Function) return x();
               return x.get ? x.get() : x;
+            };
+
+            var _unwrapParticle = function(part){
+              return part.getPosition();
             };
 
             //TODO:  make a stand-alone window-level utility
@@ -303,6 +308,7 @@ angular.module('famous.angular')
                   //TODO:feat Support Transitionables
                   if(candidate instanceof Function) candidate = candidate();
                   if(candidate instanceof Array) transforms.push(Transform[field].apply(this, candidate));
+                  else if(candidate instanceof Particle) transforms.push(Transform[field].apply(this, _unwrapParticle(candidate)));
                   else transforms.push(Transform[field].call(this, candidate));
                 }
               });
@@ -320,6 +326,7 @@ angular.module('famous.angular')
               var ret = _alignFn(scope);
               if(ret instanceof Function) return ret();
               else if(ret instanceof Object && ret.get !== undefined) return ret.get();
+              else if(ret instanceof Particle) return _unwrapParticle(ret);
               else return ret;
             };
 
@@ -332,6 +339,7 @@ angular.module('famous.angular')
               if(ret === undefined) return 1;
               else if(ret instanceof Function) return ret();
               else if(ret instanceof Object && ret.get !== undefined) return ret.get();
+              else if(ret instanceof Particle) return _unwrapParticle(ret);
               else return ret;
             };
 
@@ -343,6 +351,7 @@ angular.module('famous.angular')
               var ret = _sizeFn(scope);
               if(ret instanceof Function) return ret();
               else if(ret instanceof Object && ret.get !== undefined) return ret.get();
+              else if(ret instanceof Particle) return _unwrapParticle(ret);
               else return ret;
             };
 
@@ -354,6 +363,7 @@ angular.module('famous.angular')
               var ret = _originFn(scope);
               if(ret instanceof Function) return ret();
               else if(ret instanceof Object && ret.get !== undefined) return ret.get();
+              else if(ret instanceof Particle) return _unwrapParticle(ret);
               else return ret;
             };
 

@@ -2311,7 +2311,7 @@ angular.module('famous.angular')
  * @param {Array|Function|Particle} faAboutOrigin  -  Array of arguments (or a function returning an array of arguments) to pass to Transform.aboutOrigin
  * @param {Number|Function|Particle} faPerspective  -  Number or array returning a number to which this modifier's perspective (focusZ) should be bound.
  * @param {Transform} faTransform - Manually created Famo.us Transform object (an array) that can be passed to the modifier.  *Will override all other transform attributes.*
- * @param {Number|Function|Transitionable} faOpacity  -  Number or function returning a number to which this Modifier's opacity should be bound
+ * @param {Number|Function|Transitionable|Particle} faOpacity  -  Number or function returning a number to which this Modifier's opacity should be bound
  * @param {Array|Function|Transitionable|Particle} faSize  -  Array of numbers (e.g. [100, 500] for the x- and y-sizes) or function returning an array of numbers to which this Modifier's size should be bound
  * @param {Array|Function|Transitionable|Particle} faOrigin  -  Array of numbers (e.g. [.5, 0] for the x- and y-origins) or function returning an array of numbers to which this Modifier's origin should be bound
  * @param {Array|Function|Transitionable|Particle} faAlign  -  Array of numbers (e.g. [.5, 0] for the x- and y-aligns) or function returning an array of numbers to which this Modifier's align should be bound
@@ -2526,10 +2526,15 @@ angular.module('famous.angular')
             var RenderNode = $famous['famous/core/RenderNode'];
             var Modifier = $famous['famous/core/Modifier'];
             var Transform = $famous['famous/core/Transform'];
+            var Particle = $famous['famous/physics/bodies/Particle'];
 
             var get = function(x) {
               if (x instanceof Function) return x();
               return x.get ? x.get() : x;
+            };
+
+            var _unwrapParticle = function(part){
+              return part.getPosition();
             };
 
             //TODO:  make a stand-alone window-level utility
@@ -2602,6 +2607,7 @@ angular.module('famous.angular')
                   //TODO:feat Support Transitionables
                   if(candidate instanceof Function) candidate = candidate();
                   if(candidate instanceof Array) transforms.push(Transform[field].apply(this, candidate));
+                  else if(candidate instanceof Particle) transforms.push(Transform[field].apply(this, _unwrapParticle(candidate)));
                   else transforms.push(Transform[field].call(this, candidate));
                 }
               });
@@ -2619,6 +2625,7 @@ angular.module('famous.angular')
               var ret = _alignFn(scope);
               if(ret instanceof Function) return ret();
               else if(ret instanceof Object && ret.get !== undefined) return ret.get();
+              else if(ret instanceof Particle) return _unwrapParticle(ret);
               else return ret;
             };
 
@@ -2631,6 +2638,7 @@ angular.module('famous.angular')
               if(ret === undefined) return 1;
               else if(ret instanceof Function) return ret();
               else if(ret instanceof Object && ret.get !== undefined) return ret.get();
+              else if(ret instanceof Particle) return _unwrapParticle(ret);
               else return ret;
             };
 
@@ -2642,6 +2650,7 @@ angular.module('famous.angular')
               var ret = _sizeFn(scope);
               if(ret instanceof Function) return ret();
               else if(ret instanceof Object && ret.get !== undefined) return ret.get();
+              else if(ret instanceof Particle) return _unwrapParticle(ret);
               else return ret;
             };
 
@@ -2653,6 +2662,7 @@ angular.module('famous.angular')
               var ret = _originFn(scope);
               if(ret instanceof Function) return ret();
               else if(ret instanceof Object && ret.get !== undefined) return ret.get();
+              else if(ret instanceof Particle) return _unwrapParticle(ret);
               else return ret;
             };
 
@@ -2688,7 +2698,6 @@ angular.module('famous.angular')
       }
     };
   }]);
-
 
 /**
  * @ngdoc directive
