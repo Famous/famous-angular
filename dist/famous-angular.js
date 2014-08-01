@@ -2174,10 +2174,6 @@ angular.module('famous.angular')
               return baseProperties;
             };
 
-            var getOrValue = function (x) {
-              return x.get ? x.get() : x;
-            };
-
             isolate.renderNode = new ImageSurface({
               size: scope.$eval(attrs.faSize),
               class: scope.$eval(attrs.class),
@@ -4333,10 +4329,6 @@ angular.module('famous.angular')
             var isolate = $famousDecorator.ensureIsolate(scope);
 
             isolate.children = [];
-
-            var getOrValue = function(x) {
-              return x.get ? x.get() : x;
-            };
 
             isolate.renderNode = new View({
               size: scope.$eval(attrs.faSize) || [undefined, undefined]

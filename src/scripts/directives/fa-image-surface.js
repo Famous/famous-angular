@@ -79,10 +79,6 @@ angular.module('famous.angular')
               return baseProperties;
             };
 
-            var getOrValue = function (x) {
-              return x.get ? x.get() : x;
-            };
-
             isolate.renderNode = new ImageSurface({
               size: scope.$eval(attrs.faSize),
               class: scope.$eval(attrs.class),
