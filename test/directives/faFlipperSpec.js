@@ -40,5 +40,14 @@ describe('faFlipper', function() {
     }).toThrow();
   });
 
+  it("should decrement its children array when a child is destroyed", function(){
+    var faFlipper = $compile('<fa-flipper><fa-surface></fa-surface><fa-surface class="destroy-me"></fa-surface></fa-flipper>')($scope);
+    var children = common.getIsolateFromElement(faFlipper).children;
+    var destroyMe = faFlipper[0].querySelectorAll('.destroy-me');
+    expect(children.length).toBe(2);
+    angular.element(destroyMe[0]).remove();
+    expect(children.length).toBe(1);
+  });
+
 });
 

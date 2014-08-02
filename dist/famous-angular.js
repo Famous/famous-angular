@@ -1810,6 +1810,7 @@ angular.module('famous.angular')
               $famousDecorator.sequenceWith(
                 scope,
                 function(data) {
+                  //TODO:  support fa-index + sorting children instead of just a stack
                   var _childCount = isolate.children.length;
                   if (_childCount === 0) {
                     isolate.renderNode.setFront(data.renderNode);
@@ -1821,9 +1822,13 @@ angular.module('famous.angular')
 
                   isolate.children.push(data.renderNode);
                 },
-                // TODO: support removing children
                 function(childScopeId) {
-                  throw new Error('unimplemented: fa-flipper does not support removing children');
+                  //TODO:  support fa-index + sorting children and removing
+                  //       the child at the proper index instead of just popping off a stack
+
+                  //Since children should handle hiding themselves, all we need to do is
+                  //update our children array
+                  isolate.children.splice(isolate.children.length - 1, 1);
                 }
               );
             },
