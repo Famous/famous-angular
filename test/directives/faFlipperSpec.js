@@ -32,13 +32,30 @@ describe('faFlipper', function() {
     var flipper = common.getIsolateFromElement(faFlipper).renderNode;
     expect(flipper.frontNode._object instanceof Surface).toBe(true);
     expect(flipper.backNode._object instanceof View).toBe(true);
-    
+
   });
 
   it("should throw an exception if more than two child elements are added", function(){
     expect(function(){
       var faFlipper = $compile('<fa-flipper><fa-surface></fa-surface><fa-view></fa-view><fa-view></fa-view></fa-flipper>')($scope);
     }).toThrow();
+  });
+  describe("hide and show", function() {
+
+    it("hide and show properties on the Flipper", function() {
+       var faFlipper = $compile('<fa-flipper><fa-surface></fa-surface><fa-view></fa-view></fa-flipper>')($scope);
+      var scope = faFlipper.scope();
+      var isolate = faFlipper.scope().isolate[scope.$id];
+      
+      expect(isolate.renderGate._object === isolate.renderNode).toEqual(true);
+      isolate.hide()
+      $scope.$apply();
+      expect(isolate.renderGate._object === isolate.emptyNode).toEqual(true);
+
+      isolate.show()
+      $scope.$apply();
+      expect(isolate.renderGate._object === isolate.renderNode).toEqual(true);
+    });
   });
 
 });

@@ -48,7 +48,25 @@ describe('faContainerSurface', function() {
     expect(/surfacecontent/.test(surface.content.innerHTML)).toEqual(true);
     common.destroyApp(app);
   });
+  describe("hide and show", function() {
 
+    it("hide and show properties on the ContainerSurface", function() {
+      var faContainerSurface = $compile('<fa-container-surface id="container-surface">' +
+        '<fa-surface>surfacecontent</fa-surface>' +
+      '</fa-container-surface>')($scope);
+      var scope = faContainerSurface.scope();
+      var isolate = faContainerSurface.scope().isolate[scope.$id];
+      
+      expect(isolate.renderGate._object === isolate.renderNode).toEqual(true);
+      isolate.hide()
+      $scope.$apply();
+      expect(isolate.renderGate._object === isolate.emptyNode).toEqual(true);
+
+      isolate.show()
+      $scope.$apply();
+      expect(isolate.renderGate._object === isolate.renderNode).toEqual(true);
+    });
+  });
 
 });
 

@@ -2,19 +2,31 @@
 
 describe('$famousDecorator', function() {
   var $famousDecorator;
-  var $compile, $scope;
+  var $compile, $scope, $famous;
 
   beforeEach(module('famous.angular'));
 
-  beforeEach(inject(function(_$famousDecorator_, _$compile_, _$rootScope_) {
+  beforeEach(inject(function(_$famousDecorator_, _$compile_, _$rootScope_,_$famous_) {
     $famousDecorator = _$famousDecorator_;
     $compile = _$compile_;
     $scope = _$rootScope_;
+    $famous = _$famous_;
   }));
 
 
   describe('addRole', function() {
-    it('should assign a role to a specific scope', function() {
+    describe('renderables', function(){
+      it('should assign a role renderables to a specific scope', function() {
+        var isolate = $famousDecorator.ensureIsolate($scope);
+        var RenderNode = $famous['famous/core/RenderNode'];
+
+        $famousDecorator.addRole('renderable',isolate);
+        expect(isolate.renderGate instanceof RenderNode).toEqual(true);
+        expect(isolate.emptyNode instanceof RenderNode).toEqual(true);
+        expect(isolate.show).toBeDefined();
+        expect(isolate.hide).toBeDefined();
+
+      });
     });
   });
 

@@ -178,5 +178,22 @@ describe('faSurface', function() {
       expect(isolate.renderGate._object === isolate.emptyNode).toEqual(true);
     });
   });
+  describe("hide and show", function() {
+
+    it("hide and show properties on the Surface", function() {
+      var faSurface = common.compileFaSurface();
+      var scope = faSurface.scope();
+      var isolate = faSurface.scope().isolate[scope.$id];
+      
+      expect(isolate.renderGate._object === isolate.renderNode).toEqual(true);
+      isolate.hide()
+      $scope.$apply();
+      expect(isolate.renderGate._object === isolate.emptyNode).toEqual(true);
+
+      isolate.show()
+      $scope.$apply();
+      expect(isolate.renderGate._object === isolate.renderNode).toEqual(true);
+    });
+  });
 });
 
