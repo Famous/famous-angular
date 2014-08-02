@@ -163,16 +163,19 @@ describe('faSurface', function() {
     });
 
     it("delegates core $animate class juggling events to the Surface", function() {
+      var Surface = $famous['famous/core/Surface'];
+      var RenderNode = $famous['famous/core/RenderNode'];
       var faSurface = common.compileFaSurface('ng-hide="hideIt"');
-      var surface   = common.getSurface(faSurface);
+      var scope = faSurface.scope();
+      var isolate = faSurface.scope().isolate[scope.$id];
 
       $scope.hideIt = false;
       $scope.$apply();
-      expect(surface.classList).toEqual([]);
+      expect(isolate.renderGate._object === isolate.renderNode).toEqual(true);
 
       $scope.hideIt = true;
       $scope.$apply();
-      expect(surface.classList).toEqual(['ng-hide']);
+      expect(isolate.renderGate._object === isolate.emptyNode).toEqual(true);
     });
   });
 });

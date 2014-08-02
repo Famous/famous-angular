@@ -13,7 +13,6 @@ describe('faFlipper', function() {
     common = window.famousAngularCommon($scope, $compile);
     Flipper = $famous['famous/views/Flipper'];
     Surface = $famous['famous/core/Surface'];
-    RenderNode = $famous['famous/core/RenderNode'];
     View = $famous['famous/core/View'];
   }));
 
@@ -31,8 +30,9 @@ describe('faFlipper', function() {
     });
     var faFlipper = $compile('<fa-flipper><fa-surface></fa-surface><fa-view></fa-view></fa-flipper>')($scope);
     var flipper = common.getIsolateFromElement(faFlipper).renderNode;
-    expect(flipper.frontNode instanceof RenderNode).toBe(true);
-    expect(flipper.backNode instanceof View).toBe(true);
+    expect(flipper.frontNode._object instanceof Surface).toBe(true);
+    expect(flipper.backNode._object instanceof View).toBe(true);
+    
   });
 
   it("should throw an exception if more than two child elements are added", function(){

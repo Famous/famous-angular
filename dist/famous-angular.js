@@ -494,18 +494,12 @@ angular.module('famous.angular')
        */
       angular.forEach(['enter', 'leave', 'move'], function(operation) {
         animationHandlers[operation] = function(element) {
-          console.log("animationHandlers", operation,element);
           var self = this;
           var selfArgs = arguments;
           var delegateFirst = (operation === 'enter');
 
           if (delegateFirst === true) {
-            var scopeId = element.scope().$id;
-            // console.log(element,element.scope());
-            // console.log("enter",scopeId, element, element.scope()[scopeId] );
-            // get scope from element then isolate from scope  isolate.show
-            // isolate[scopeId] && console.log(isolate.show);
-            $delegate[operation].apply(this, arguments);
+             $delegate[operation].apply(this, arguments);
           }
 
            // Detect if an animation is currently running
@@ -520,7 +514,7 @@ angular.module('famous.angular')
 
             var scopeId = element.scope() && element.scope().$id;
 
-            //Isolate.hide
+            //hide the element on animate.leave
             if(operation === 'leave'){
               var isolate = $famous.getIsolate(element.scope());
               isolate.id && isolate.hide();
