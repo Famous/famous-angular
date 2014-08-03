@@ -260,7 +260,7 @@ require(requirements, function(/*args*/) {
 
   // To delay Karma's bootstrapping until $famous is ready, fire off a global
   // event to allow karma to know when the $famous provider has been declared.
-  window.dispatchEvent(new Event('$famousModulesLoaded'));
+  window.dispatchEvent(new CustomEvent('$famousModulesLoaded'));
 
 });
 
