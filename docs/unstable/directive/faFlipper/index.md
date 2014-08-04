@@ -18,6 +18,7 @@ docType: "directive"
 
 
 
+
 <h1 class="api-title">
 
   fa-flipper
@@ -34,8 +35,6 @@ This directive will create a Famo.us Flipper containing the
 specified front and back elements. The provided `options` object
 will pass directly through to the Famo.us Flipper's
 constructor.  See [https://famo.us/docs/views/Flipper]
-
-
 
 
 

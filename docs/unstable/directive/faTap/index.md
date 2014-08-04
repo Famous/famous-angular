@@ -18,6 +18,7 @@ docType: "directive"
 
 
 
+
 <h1 class="api-title">
 
   fa-tap
@@ -31,8 +32,6 @@ docType: "directive"
 
 
 This directive allows you to specify custom behavior when an element is tapped.
-
-
 
 
 

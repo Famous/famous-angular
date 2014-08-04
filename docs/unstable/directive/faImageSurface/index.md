@@ -18,6 +18,7 @@ docType: "directive"
 
 
 
+
 <h1 class="api-title">
 
   fa-image-surface
@@ -32,8 +33,6 @@ docType: "directive"
 
 This directive creates a Famo.us ImageSurface and loads
 the specified ImageUrl.
-
-
 
 
 

@@ -18,6 +18,7 @@ docType: "provider"
 
 
 
+
 <h1 class="api-title">
 
   $famousProvider
@@ -32,8 +33,6 @@ docType: "provider"
 
 This provider is loaded as an AMD module and will keep a reference on the complete Famo.us library.
 We use this provider to avoid needing to deal with AMD on any other angular files.
-
-
 
 
 

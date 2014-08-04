@@ -18,6 +18,7 @@ docType: "service"
 
 
 
+
 <h1 class="api-title">
 
   $famousPipe
@@ -31,8 +32,6 @@ docType: "service"
 
 
 Provides common helpers for the event pipe directives fa-pipe-from and fa-pipe-to.
-
-
 
 
 

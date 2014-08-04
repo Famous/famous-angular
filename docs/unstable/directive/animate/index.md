@@ -15,6 +15,10 @@ docType: "directive"
   </a>
 </div>
 
+  <br>
+  <strong>This directive is deprecated.</strong>
+
+
 
 
 
@@ -30,9 +34,7 @@ docType: "directive"
 
 
 
-This element is used to specify the animation of an element in a <a href="api/directive/faAnimation">faAnimation</a> directive
-
-
+This directive is deprecated.  Prefer using the $timeline service.  This element is used to specify the animation of an element in a <a href="api/directive/faAnimation">faAnimation</a> directive
 
 
 

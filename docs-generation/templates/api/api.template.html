@@ -11,6 +11,10 @@ docType: "<$ doc.docType $>"
     Improve this doc
   </a>
 </div>
+<@ if doc.deprecated @>
+  <br>
+  <strong>This <$ doc.docType $> is deprecated.</strong>
+<@ endif @>
 
 <@ block content @>
 
@@ -43,13 +47,6 @@ docType: "<$ doc.docType $>"
 <@ block description @>
 <$ doc.description $>
 <@ endblock @>
-
-<@ if doc.deprecated @>
-<fieldset class="deprecated">
-  <legend>Deprecated API</legend>
-  <$ doc.deprecated| marked $>
-</fieldset>
-<@ endif @>
 
 <@ block dependencies @>
 <@- if doc.requires @>

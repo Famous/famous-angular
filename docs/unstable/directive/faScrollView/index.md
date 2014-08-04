@@ -18,6 +18,7 @@ docType: "directive"
 
 
 
+
 <h1 class="api-title">
 
   fa-scroll-view
@@ -33,8 +34,6 @@ docType: "directive"
 This directive allows you to specify a <a href="https://famo.us/docs/views/Scrollview">famo.us Scrollview</a>
 that will lay out a collection of renderables sequentially in the specified direction
 and will allow you to scroll through them with mousewheel or touch events.
-
-
 
 
 

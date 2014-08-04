@@ -18,6 +18,7 @@ docType: "service"
 
 
 
+
 <h1 class="api-title">
 
   $famousDecorator
@@ -38,8 +39,6 @@ scope.
 The scopes are still able to communicate with the parent via events
 ($emit, $broadcast), yet still have their own $scope properties that will
 not conflict with the parent or other siblings.
-
-
 
 
 

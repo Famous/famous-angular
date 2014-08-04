@@ -18,6 +18,7 @@ docType: "service"
 
 
 
+
 <h1 class="api-title">
 
   $famous
@@ -31,8 +32,6 @@ docType: "service"
 
 
 This service gives you access to the complete Famo.us library.
-
-
 
 
 
