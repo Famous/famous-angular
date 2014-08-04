@@ -384,8 +384,8 @@ angular.module('famous.angular')
           @return {boolean}
        */
        function isFaElement(element) {
-          var isolate = $famous.getIsolate(element.scope());
-          return  !! (isolate && isolate.id)
+        var isFa = /^FA\-.*/;
+        return isFa.test(element[0].tagName );
        }
       /**
        * Pass through $animate methods that are strictly class based.
@@ -428,10 +428,10 @@ angular.module('famous.angular')
         animationHandlers[classManipulator] = function(element, className, done) {
          
           $delegate[classManipulator](element, className, done);
-
           if(isFaElement(element)){
             var isolate = $famous.getIsolate(element.scope());
             if (isClassable(element)) {
+
               var surface = isolate.renderNode;
               angular.forEach(className.split(' '), function(splitClassName) {
                 if(splitClassName === 'ng-hide'){
@@ -441,6 +441,7 @@ angular.module('famous.angular')
                     isolate.show();
                   }
                 }else {
+
                   surface[classManipulator](splitClassName);
                 }
               });
@@ -512,7 +513,7 @@ angular.module('famous.angular')
             var scopeId = element.scope() && element.scope().$id;
 
             //hide the element on animate.leave
-            if(operation === 'leave'){
+            if(operation === 'leave' && isFaElement(element)){
               var isolate = $famous.getIsolate(element.scope());
               isolate.id && isolate.hide();
              }
