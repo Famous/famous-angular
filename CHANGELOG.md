@@ -1,3 +1,51 @@
+<a name="0.2.0"></a>
+# 0.2.0 (2014-08-04)
+
+
+## Bug Fixes
+
+- faOptions in faGridLayout to work properly
+ ([99086406](https://github.com/Famous/famous-angular/commit/990864068c1b8f7ee8ce052e9622033620ab3d9e))
+- make addClass and removeClass return the correct element (enables ng-bind-html)
+ ([4c62288a](https://github.com/Famous/famous-angular/commit/4c62288a11f081fc4e59f682e8371265b6c26875))
+- make fa-grid-layout respect changes in ng-repeat index when updating
+ ([0410113d](https://github.com/Famous/famous-angular/commit/0410113d07df68a147137efe8c89c7283bdc9bd7))
+- fix errors caused by empty class names getting applied to Surfaces via
+ ([4054c446](https://github.com/Famous/famous-angular/commit/4054c446c9d0995814805ce3406cc3ad1247051b))
+
+
+## Features
+
+- deprecate fa-animation
+ ([e50d3536](https://github.com/Famous/famous-angular/commit/e50d35367b8f28181fe40ce47d312456f81bfada))
+- run unit tests with PhantomJS
+ ([481a483c](https://github.com/Famous/famous-angular/commit/481a483c3a3a0c4359790f21c0fd106e68ed12bd))
+- add fa-mouseover directive
+ ([b2d00d09](https://github.com/Famous/famous-angular/commit/b2d00d095fff2fb9f3d66cf406e28633cf7ef730))
+- support removing children from fa-flipper
+ ([f97e357d](https://github.com/Famous/famous-angular/commit/f97e357d5e231c01c8f45c4464a8b2477460fd01))
+- implement physics support by accepting Particles as fa-modifier attributes
+ ([32c8ebe9](https://github.com/Famous/famous-angular/commit/32c8ebe97011b5fc6adcb964cfc209924654a77f))
+- add timeline service to replace fa-animation
+ ([dd5494d1](https://github.com/Famous/famous-angular/commit/dd5494d15329413cd6033df8db43f9a37b597cd9))
+- added faCanvasSurface
+ ([82295bf1](https://github.com/Famous/famous-angular/commit/82295bf1448d35529befe9e22c1be0ee2201adad))
+- support reflowing fa-grid-layout and fa-scrollview when fa-index changes
+ ([3a7d6ee4](https://github.com/Famous/famous-angular/commit/3a7d6ee4e990e1a0e81832fdfb1f066b15821cc7))
+- throw error objects
+ ([c0d3130a](https://github.com/Famous/famous-angular/commit/c0d3130abf7eba74da176ffbbfb2db5656bc7fa8))
+
+
+## Documentation
+
+- update fa-modifier ng-doc with support for Particles
+ ([32f296db](https://github.com/Famous/famous-angular/commit/32f296dbb972956d949b15e6293f1cce1acb2a1f))
+- add link to starter kit zip in README
+ ([cd75fd43](https://github.com/Famous/famous-angular/commit/cd75fd436715703769897c03bf303a746b94bd8a))
+- add link to Pivotal roadmap in README
+ ([b9599c1e](https://github.com/Famous/famous-angular/commit/b9599c1ea494f478920a86345a772dbccba24403))
+
+
 <a name="0.1.0"></a>
 # 0.1.0 (2014-07-13)
 
