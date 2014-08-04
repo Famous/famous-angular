@@ -18,6 +18,7 @@ docType: "directive"
 
 
 
+
 <h1 class="api-title">
 
   fa-modifier
@@ -32,8 +33,6 @@ docType: "directive"
 
 This directive creates a Famo.us Modifier that will affect all children render nodes.  Its properties can be bound
 to values (e.g. `fa-translate="[15, 20, 1]"`, Famo.us Transitionable objects, or to functions that return numbers.
-
-
 
 
 

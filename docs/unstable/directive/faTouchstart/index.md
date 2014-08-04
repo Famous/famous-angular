@@ -18,6 +18,7 @@ docType: "directive"
 
 
 
+
 <h1 class="api-title">
 
   fa-touchstart
@@ -31,8 +32,6 @@ docType: "directive"
 
 
 This directive allows you to specify custom behavior when an element is <a href="https://developer.mozilla.org/en-US/docs/Web/Reference/Events/touchstart">touched upon a touch surface</a>.
-
-
 
 
 

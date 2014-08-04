@@ -18,6 +18,7 @@ docType: "directive"
 
 
 
+
 <h1 class="api-title">
 
   fa-surface
@@ -37,8 +38,6 @@ This is where you can create form elements, attach
 images, or output raw text content with one-way databinding {{lb}}{{rb}}.
 You can include entire complex HTML snippets inside a faSurface, including
 ngIncludes or custom (vanilla Angular) directives.
-
-
 
 
 

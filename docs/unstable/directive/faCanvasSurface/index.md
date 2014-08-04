@@ -18,6 +18,7 @@ docType: "directive"
 
 
 
+
 <h1 class="api-title">
 
   fa-canvas-surface
@@ -31,8 +32,6 @@ docType: "directive"
 
 
 This directive creates a Famo.us CanvasSurface.
-
-
 
 
 

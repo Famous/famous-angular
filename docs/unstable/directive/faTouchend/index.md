@@ -18,6 +18,7 @@ docType: "directive"
 
 
 
+
 <h1 class="api-title">
 
   fa-touchend
@@ -31,8 +32,6 @@ docType: "directive"
 
 
 This directive allows you to specify custom behavior after an element that <a href="https://developer.mozilla.org/en-US/docs/Web/Reference/Events/touchend">has been touched</a>.
-
-
 
 
 
