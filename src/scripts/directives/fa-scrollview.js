@@ -196,6 +196,10 @@ angular.module('famous.angular')
             var options = scope.$eval(attrs.faOptions) || {};
             isolate.renderNode = new ScrollView(options);
 
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show();
+
+
             var updateScrollview = function(init){
               // Synchronize the update on the next digest cycle
               // (if this isn't done, $index will not be up-to-date
@@ -209,8 +213,8 @@ angular.module('famous.angular')
                   array: function(_children) {
                     var _ch = [];
                     angular.forEach(_children, function(c, i) {
-                      _ch[i] = c.renderNode;
-                    });
+                      _ch[i] = c.renderGate;
+                    })
                     return _ch;
                   }(_children)
                 };

@@ -55,4 +55,26 @@ describe('faHeaderFooterLayout', function() {
     pending();
 
   });
+  describe("hide and show", function() {
+
+    it("hide and show properties on the headerFooterLayout", function() {
+      var faHeaderFooterLayout = $compile('<fa-header-footer-layout>' +
+        '<fa-surface ng-repeat="view in views" fa-size="[undefined, 100]">{{view}}</fa-surface>' +
+      '</fa-header-footer-layout>')($scope);
+
+      $scope.views = ["header", "content", "footer"];
+      $scope.$apply();
+      var scope = faHeaderFooterLayout.scope();
+      var isolate = faHeaderFooterLayout.scope().isolate[scope.$id];
+
+      expect(isolate.renderGate._object === isolate.renderNode).toEqual(true);
+      isolate.hide();
+      $scope.$apply();
+      expect(isolate.renderGate._object === isolate.emptyNode).toEqual(true);
+
+      isolate.show();
+      $scope.$apply();
+      expect(isolate.renderGate._object === isolate.renderNode).toEqual(true);
+    });
+  });
 });

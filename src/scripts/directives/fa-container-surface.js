@@ -33,11 +33,13 @@ angular.module('famous.angular')
 
             var options = scope.$eval(attrs.faOptions) || {};
             isolate.renderNode = new ContainerSurface(options);
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show();
 
             $famousDecorator.sequenceWith(
               scope,
               function(data) {
-                isolate.renderNode.add(data.renderNode);
+                isolate.renderNode.add(data.renderGate);
               },
               function(childScopeId) {
                 throw new Error('unimplemented: fa-container-surface does not support removing children');
