@@ -77,7 +77,7 @@ $scope.myScopeFunctionThatReturnsAnArray = function() {
       </td>
       <td>
         
-  <code>Array</code>|<code>function()</code>
+  <code>Array</code>|<code>function()</code>|<code>Particle</code>
       </td>
       <td>
         <p>Array of numbers or function returning an array of numbers to which this Modifier&#39;s rotate should be bound.</p>
@@ -94,7 +94,7 @@ $scope.myScopeFunctionThatReturnsAnArray = function() {
       </td>
       <td>
         
-  <code>Number</code>|<code>function()</code>
+  <code>Number</code>|<code>function()</code>|<code>Particle</code>
       </td>
       <td>
         <p>Number or function returning a number to which this Modifier&#39;s rotateX should be bound</p>
@@ -111,7 +111,7 @@ $scope.myScopeFunctionThatReturnsAnArray = function() {
       </td>
       <td>
         
-  <code>Number</code>|<code>function()</code>
+  <code>Number</code>|<code>function()</code>|<code>Particle</code>
       </td>
       <td>
         <p>Number or function returning a number to which this Modifier&#39;s rotateY should be bound</p>
@@ -128,7 +128,7 @@ $scope.myScopeFunctionThatReturnsAnArray = function() {
       </td>
       <td>
         
-  <code>Number</code>|<code>function()</code>
+  <code>Number</code>|<code>function()</code>|<code>Particle</code>
       </td>
       <td>
         <p>Number or function returning a number to which this Modifier&#39;s rotateZ should be bound</p>
@@ -145,7 +145,7 @@ $scope.myScopeFunctionThatReturnsAnArray = function() {
       </td>
       <td>
         
-  <code>Array</code>|<code>function()</code>
+  <code>Array</code>|<code>function()</code>|<code>Particle</code>
       </td>
       <td>
         <p>Array of numbers or function returning an array of numbers to which this Modifier&#39;s scale should be bound</p>
@@ -162,7 +162,7 @@ $scope.myScopeFunctionThatReturnsAnArray = function() {
       </td>
       <td>
         
-  <code>Array</code>|<code>function()</code>
+  <code>Array</code>|<code>function()</code>|<code>Particle</code>
       </td>
       <td>
         <p>Array of numbers or function returning an array of numbers to which this Modifier&#39;s skew should be bound</p>
@@ -179,7 +179,7 @@ $scope.myScopeFunctionThatReturnsAnArray = function() {
       </td>
       <td>
         
-  <code>Array</code>|<code>function()</code>
+  <code>Array</code>|<code>function()</code>|<code>Particle</code>
       </td>
       <td>
         <p>Array of arguments (or a function returning an array of arguments) to pass to Transform.aboutOrigin</p>
@@ -196,7 +196,7 @@ $scope.myScopeFunctionThatReturnsAnArray = function() {
       </td>
       <td>
         
-  <code>Number</code>|<code>function()</code>
+  <code>Number</code>|<code>function()</code>|<code>Particle</code>
       </td>
       <td>
         <p>Number or array returning a number to which this modifier&#39;s perspective (focusZ) should be bound.</p>
@@ -230,7 +230,7 @@ $scope.myScopeFunctionThatReturnsAnArray = function() {
       </td>
       <td>
         
-  <code>Number</code>|<code>function()</code>|<code>Transitionable</code>
+  <code>Number</code>|<code>function()</code>|<code>Transitionable</code>|<code>Particle</code>
       </td>
       <td>
         <p>Number or function returning a number to which this Modifier&#39;s opacity should be bound</p>
@@ -247,7 +247,7 @@ $scope.myScopeFunctionThatReturnsAnArray = function() {
       </td>
       <td>
         
-  <code>Array</code>|<code>function()</code>|<code>Transitionable</code>
+  <code>Array</code>|<code>function()</code>|<code>Transitionable</code>|<code>Particle</code>
       </td>
       <td>
         <p>Array of numbers (e.g. [100, 500] for the x- and y-sizes) or function returning an array of numbers to which this Modifier&#39;s size should be bound</p>
@@ -264,7 +264,7 @@ $scope.myScopeFunctionThatReturnsAnArray = function() {
       </td>
       <td>
         
-  <code>Array</code>|<code>function()</code>|<code>Transitionable</code>
+  <code>Array</code>|<code>function()</code>|<code>Transitionable</code>|<code>Particle</code>
       </td>
       <td>
         <p>Array of numbers (e.g. [.5, 0] for the x- and y-origins) or function returning an array of numbers to which this Modifier&#39;s origin should be bound</p>
@@ -281,7 +281,7 @@ $scope.myScopeFunctionThatReturnsAnArray = function() {
       </td>
       <td>
         
-  <code>Array</code>|<code>function()</code>|<code>Transitionable</code>
+  <code>Array</code>|<code>function()</code>|<code>Transitionable</code>|<code>Particle</code>
       </td>
       <td>
         <p>Array of numbers (e.g. [.5, 0] for the x- and y-aligns) or function returning an array of numbers to which this Modifier&#39;s align should be bound</p>
