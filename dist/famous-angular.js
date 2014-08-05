@@ -1708,31 +1708,65 @@ angular.module('famous.angular')
  * ```
  */
 
+  // .directive('faClick', ["$parse", "$famousDecorator", function ($parse, $famousDecorator) {
+  //   return {
+  //     restrict: 'A',
+  //     compile: function () {
+  //       return {
+  //         post: function (scope, element, attrs) {
+  //           var isolate = $famousDecorator.ensureIsolate(scope);
+
+  //           if (attrs.faClick) {
+  //             var renderNode = (isolate.renderNode._eventInput || isolate.renderNode);
+
+  //             renderNode.on("click", function (data) {
+  //               var fn = $parse(attrs.faClick);
+  //               fn(scope, {$event: data});
+  //               if (!scope.$$phase){
+  //                 scope.$apply();
+  //               }
+  //             });
+  //           }
+  //         }
+  //       };
+  //     }
+  //   };
+  // }])
 angular.module('famous.angular')
-  .directive('faClick', ["$parse", "$famousDecorator", function ($parse, $famousDecorator) {
-    return {
-      restrict: 'A',
-      compile: function () {
-        return {
-          post: function (scope, element, attrs) {
-            var isolate = $famousDecorator.ensureIsolate(scope);
+.config(function($provide) {
+  $provide.decorator('ngClickDirective', function($delegate, $famousDecorator, $parse) {
+      var directive = $delegate[0];
 
-            if (attrs.faClick) {
-              var renderNode = (isolate.renderNode._eventInput || isolate.renderNode);
+      var compile = directive.compile;
+      directive.compile = function(element , attrs, transclude) {
+        var isFa = /^FA\-.*/;
+        if(isFa.test(element[0].tagName)) {
+          console.log("compile in",element[0]);
+          return {
+            post: function (scope, element, attrs) {
+              var isolate = $famousDecorator.ensureIsolate(scope);
 
-              renderNode.on("click", function (data) {
-                var fn = $parse(attrs.faClick);
-                fn(scope, {$event: data});
-                if (!scope.$$phase){
-                  scope.$apply();
-                }
-              });
+              if (attrs.ngClick) {
+                var renderNode = (isolate.renderNode._eventInput || isolate.renderNode);
+
+                renderNode.on("click", function (data) {
+                  var fn = $parse(attrs.ngClick);
+                  fn(scope, {$event: data});
+                  if (!scope.$$phase){
+                    scope.$apply();
+                  }
+                });
+              }
             }
-          }
-        };
-      }
-    };
-  }]);
+          };
+        }else {
+          console.log("compile in normal");
+          return compile(element , attrs, transclude);
+        }
+      };
+      return $delegate;
+  });
+});
 
 /**
  * @ngdoc directive
