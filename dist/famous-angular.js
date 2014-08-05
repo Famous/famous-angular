@@ -4,8 +4,47 @@
  * @link https://github.com/Famous/famous-angular
  * @license MPL v2.0
  */
-'use strict';
-var ngFameApp = angular.module('famous.angular', []);
+// 'use strict';
+
+window.$famousUtils = function() {
+ 
+  var SPECIAL_CHARS_REGEXP = /([\:\-\_]+(.))/g;
+  var MOZ_HACK_REGEXP = /^moz([A-Z])/;
+
+  /**
+   * Converts snake_case to camelCase.
+   * Also there is special case for Moz prefix starting with upper case letter.
+   * @param name Name to normalize
+   */
+  function camelCase(name) {
+    return name.
+      replace(SPECIAL_CHARS_REGEXP, function(_, separator, letter, offset) {
+        return offset ? letter.toUpperCase() : letter;
+      }).
+      replace(MOZ_HACK_REGEXP, 'Moz$1');
+  }
+
+  var PREFIX_REGEXP = /^(x[\:\-_]|data[\:\-_])/i;
+  
+  return {
+    /**
+     * @description Converts all accepted directives format into proper directive name.
+     * All of these will become 'myDirective':
+     *   my:Directive
+     *   my-directive
+     *   x-my-directive
+     *   data-my:directive
+     *
+     * Also there is special case for Moz prefix starting with upper case letter.
+     * @param name Name to normalize
+     */
+    directiveNormalize: function(name) {
+        return camelCase(name.replace(PREFIX_REGEXP, ''));
+    }
+  };
+}();
+var ngFameApp = angular.module('famous.angular', ['ngTouch']);
+
 /**
  * @ngdoc provider
  * @name $famousProvider
@@ -215,6 +254,8 @@ ngFameApp.provider('$famous', function() {
     return _modules;
   };
 });
+
+
 /**
  * @ngdoc service
  * @name $animate
@@ -1655,6 +1696,7 @@ angular.module('famous.angular')
  * @restrict A
  * @param {expression} faClick {@link https://docs.angularjs.org/guide/expression Expression} to evaluate upon
  * click. ({@link https://docs.angularjs.org/guide/expression#-event- Event object is available as `$event`})
+ * @deprecated true
  * @description
  * This directive allows you to specify custom behavior when an element is clicked.
  *
@@ -1707,66 +1749,30 @@ angular.module('famous.angular')
  * };
  * ```
  */
-
-  // .directive('faClick', ["$parse", "$famousDecorator", function ($parse, $famousDecorator) {
-  //   return {
-  //     restrict: 'A',
-  //     compile: function () {
-  //       return {
-  //         post: function (scope, element, attrs) {
-  //           var isolate = $famousDecorator.ensureIsolate(scope);
-
-  //           if (attrs.faClick) {
-  //             var renderNode = (isolate.renderNode._eventInput || isolate.renderNode);
-
-  //             renderNode.on("click", function (data) {
-  //               var fn = $parse(attrs.faClick);
-  //               fn(scope, {$event: data});
-  //               if (!scope.$$phase){
-  //                 scope.$apply();
-  //               }
-  //             });
-  //           }
-  //         }
-  //       };
-  //     }
-  //   };
-  // }])
 angular.module('famous.angular')
-.config(function($provide) {
-  $provide.decorator('ngClickDirective', function($delegate, $famousDecorator, $parse) {
-      var directive = $delegate[0];
+  .directive('faClick', ["$parse", "$famousDecorator", function ($parse, $famousDecorator) {
+    return {
+      restrict: 'A',
+      compile: function () {
+        return {
+          post: function (scope, element, attrs) {
+            var isolate = $famousDecorator.ensureIsolate(scope);
 
-      var compile = directive.compile;
-      directive.compile = function(element , attrs, transclude) {
-        var isFa = /^FA\-.*/;
-        if(isFa.test(element[0].tagName)) {
-          console.log("compile in",element[0]);
-          return {
-            post: function (scope, element, attrs) {
-              var isolate = $famousDecorator.ensureIsolate(scope);
-
-              if (attrs.ngClick) {
-                var renderNode = (isolate.renderNode._eventInput || isolate.renderNode);
-
-                renderNode.on("click", function (data) {
-                  var fn = $parse(attrs.ngClick);
-                  fn(scope, {$event: data});
-                  if (!scope.$$phase){
-                    scope.$apply();
-                  }
-                });
-              }
+            if (attrs.faClick) {
+              var renderNode = (isolate.renderNode._eventInput || isolate.renderNode);
+              renderNode.on("click", function (data) {
+                var fn = $parse(attrs.faClick);
+                fn(scope, {$event: data});
+                if (!scope.$$phase){
+                  scope.$apply();
+                }
+              });
             }
-          };
-        }else {
-          console.log("compile in normal");
-          return compile(element , attrs, transclude);
-        }
-      };
-      return $delegate;
-  });
-});
+          }
+        };
+      }
+    };
+  }])
 
 /**
  * @ngdoc directive
@@ -2727,28 +2733,6 @@ angular.module('famous.angular')
               return part.getPosition();
             };
 
-            //TODO:  make a stand-alone window-level utility
-            //       object to store stuff like this
-            /* Copied from angular.js */
-            var SPECIAL_CHARS_REGEXP = /([\:\-\_]+(.))/g;
-            var MOZ_HACK_REGEXP = /^moz([A-Z])/;
-
-            function camelCase(name) {
-              return name.
-                replace(SPECIAL_CHARS_REGEXP,function (_, separator, letter, offset) {
-                  return offset ? letter.toUpperCase() : letter;
-                }).
-                replace(MOZ_HACK_REGEXP, 'Moz$1');
-            }
-
-            var PREFIX_REGEXP = /^(x[\:\-_]|data[\:\-_])/i;
-
-            function directiveNormalize(name) {
-              return camelCase(name.replace(PREFIX_REGEXP, ''));
-            }
-
-            /* end copy from angular.js */
-
             var _transformFields = [
               "aboutOrigin",
               "perspective",
@@ -2769,7 +2753,7 @@ angular.module('famous.angular')
 
             var _parsedTransforms = {};
             angular.forEach(_transformFields, function (field) {
-              var attrName = directiveNormalize('fa-' + field);
+              var attrName = window.$famousUtils.directiveNormalize('fa-' + field);
               attrs.$observe(attrName, function () {
                 _parsedTransforms[field] = $parse(attrs[attrName]);
               });

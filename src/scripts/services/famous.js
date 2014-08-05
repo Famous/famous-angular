@@ -207,3 +207,4 @@ ngFameApp.provider('$famous', function() {
     return _modules;
   };
 });
+
