@@ -5,8 +5,8 @@
  * @restrict A
  * @description
  * This directive is used to specify the rendering order of elements
- * inside of a ViewSequence-based component, such as @link api/directive/faScrollView faScrollView}
- * or @link api/directive/faGridLayout faGridLayout}.  As a special case, when elements are added to
+ * inside of a ViewSequence-based component, such as {@link faScrollView faScrollView}
+ * or {@link faGridLayout faGridLayout}.  As a special case, when elements are added to
  * these controls using ng-repeat, they are automatically assigned the
  * $index property exposed by ng-repeat.  When adding elements manually
  * (e.g. to a faScrollView but not using ng-repeat) or in a case where custom
