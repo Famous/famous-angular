@@ -20,7 +20,7 @@
  * 
  * ```javascript
  * var Transitionable = $famous['famous/transitions/Transitionable'];
- * var Easing = require('famous/transitions/Easing');
+ * var Easing = $famous['famous/transitions/Easing'];
  * 
  * $scope.boxTransitionable = new Transitionable([0, 0, 0]);
  * 
