@@ -6,7 +6,7 @@
   "homepage": "https://github.com/Famous/famous-angular",
   "main": "dist/famous-angular.js",
   "dependencies": {
-    "angular": "1.2.18",
+    "angular": "1.2.21",
     "famous": "http://code.famo.us/famous/global/0.2.2/famous-global-0.2.2.tar.gz"
   },
   "devDependencies": {
