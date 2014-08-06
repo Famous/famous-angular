@@ -18,6 +18,7 @@ docType: "service"
 
 
 
+
 <h1 class="api-title">
 
   $animate
@@ -53,8 +54,6 @@ The <a href="https://docs.angularjs.org/api/ngAnimate">ngAnimate</a> module's do
 core directives supporting $animate events. Please note that the `ngAnimate` module is *not* required
 (or recommended) to implement $animate events with Famo.us, but it is compatible and technically effective
 on Surfaces.
-
-
 
 
 

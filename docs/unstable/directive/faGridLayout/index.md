@@ -18,6 +18,7 @@ docType: "directive"
 
 
 
+
 <h1 class="api-title">
 
   fa-grid-layout
@@ -34,8 +35,6 @@ This directive will create a Famo.us GridLayout containing the
 specified child elements. The provided `options` object
 will pass directly through to the Famo.us GridLayout's
 constructor.  See [https://famo.us/docs/views/GridLayout]
-
-
 
 
 

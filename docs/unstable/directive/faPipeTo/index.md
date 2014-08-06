@@ -18,6 +18,7 @@ docType: "directive"
 
 
 
+
 <h1 class="api-title">
 
   fa-pipe-to
@@ -31,8 +32,6 @@ docType: "directive"
 
 
 This directive pipes an element's event handler to a source event handler.
-
-
 
 
 

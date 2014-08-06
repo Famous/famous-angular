@@ -1,7 +1,7 @@
 {
   "name": "famous-angular",
   "description": "Bring structure to your Famo.us apps with the power of AngularJS. Famo.us/Angular integrates seamlessly with existing Angular and Famo.us apps.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "license": "MPL v2.0",
   "homepage": "https://github.com/Famous/famous-angular",
   "main": "dist/famous-angular.js",
@@ -10,7 +10,7 @@
     "famous": "http://code.famo.us/famous/global/0.2.2/famous-global-0.2.2.tar.gz"
   },
   "devDependencies": {
-    "angular-mocks": "1.2.18"
+    "angular-mocks": "1.2.21"
   },
   "ignore": [
     "**/.*",

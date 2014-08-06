@@ -63,9 +63,11 @@ angular.module('famous.angular')
             isolate.renderNode = new View({
               size: scope.$eval(attrs.faSize) || [undefined, undefined]
             });
-
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show();
+            
             $famousDecorator.sequenceWith(scope, function(data) {
-              isolate.renderNode.add(data.renderNode);
+              isolate.renderNode.add(data.renderGate);
               isolate.children.push(data);
             });
 

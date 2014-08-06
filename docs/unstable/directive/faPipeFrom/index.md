@@ -18,6 +18,7 @@ docType: "directive"
 
 
 
+
 <h1 class="api-title">
 
   fa-pipe-from
@@ -31,8 +32,6 @@ docType: "directive"
 
 
 This directive pipes a target event handler to an element's event handler.
-
-
 
 
 

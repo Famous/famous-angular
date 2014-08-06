@@ -1,6 +1,6 @@
 /**
  * famous-angular - Bring structure to your Famo.us apps with the power of AngularJS. Famo.us/Angular integrates seamlessly with existing Angular and Famo.us apps.
- * @version v0.1.0
+ * @version v0.2.0
  * @link https://github.com/Famous/famous-angular
  * @license MPL v2.0
  */
@@ -32,8 +32,13 @@ fa-app, .fa-app {
     width: 100%;
 }
 
-.famous-angular-container {
+.famous-angular-clipping-container {
     overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+.famous-angular-container {
     -webkit-transform-style: preserve-3d;
     transform-style: preserve-3d;
     -webkit-backface-visibility: visible;

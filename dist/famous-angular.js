@@ -1,6 +1,6 @@
 /**
  * famous-angular - Bring structure to your Famo.us apps with the power of AngularJS. Famo.us/Angular integrates seamlessly with existing Angular and Famo.us apps.
- * @version v0.1.0
+ * @version v0.2.0
  * @link https://github.com/Famous/famous-angular
  * @license MPL v2.0
  */
@@ -330,6 +330,15 @@ angular.module('famous.angular')
       }
 
       /**
+          Check if the element selected is an fa- element
+          @param {Array} element - derived element
+          @return {boolean}
+       */
+       function isFaElement(element) {
+        var isFa = /^FA\-.*/;
+        return isFa.test(element[0].tagName );
+       }
+      /**
        * Pass through $animate methods that are strictly class based.
        * These will work on Surfaces, and will be ignored elsewhere.
        * ngAnimate has a complex API for determining when an animation should be
@@ -368,13 +377,36 @@ angular.module('famous.angular')
          * directively to their Surfaces whenever possible.
          */
         animationHandlers[classManipulator] = function(element, className, done) {
+         
           $delegate[classManipulator](element, className, done);
+          if(isFaElement(element)){
+            var isolate = $famous.getIsolate(element.scope());
+            if (isClassable(element)) {
 
-          if (isClassable(element)) {
-            var surface = $famous.getIsolate(element.scope()).renderNode;
-            angular.forEach(className.split(' '), function(splitClassName) {
-              surface[classManipulator](splitClassName);
-            });
+              var surface = isolate.renderNode;
+              angular.forEach(className.split(' '), function(splitClassName) {
+                if(splitClassName === 'ng-hide'){
+                  if(classManipulator === 'addClass'){
+                    isolate.hide();
+                  } else if( classManipulator === 'removeClass' ){
+                    isolate.show();
+                  }
+                }else {
+
+                  surface[classManipulator](splitClassName);
+                }
+              });
+            } else {
+              angular.forEach(className.split(' '), function(splitClassName) {
+                if(splitClassName === 'ng-hide'){
+                  if(classManipulator === 'addClass'){
+                    isolate.hide();
+                  } else if( classManipulator === 'removeClass' ){
+                    isolate.show();
+                  }
+                }
+              });
+            }
           }
          };
       });
@@ -383,6 +415,7 @@ angular.module('famous.angular')
       // because Angular has already negotiated the list of items to add
       // and items to remove. Manually loop through both lists.
       animationHandlers.setClass = function(element, add, remove, done) {
+        
         $delegate.setClass(element, add, remove, done);
 
         if (isClassable(element)) {
@@ -415,10 +448,10 @@ angular.module('famous.angular')
           var delegateFirst = (operation === 'enter');
 
           if (delegateFirst === true) {
-            $delegate[operation].apply(this, arguments);
+             $delegate[operation].apply(this, arguments);
           }
 
-          // Detect if an animation is currently running
+           // Detect if an animation is currently running
           if (element.data(FA_ANIMATION_ACTIVE) === true) {
             $parse(element.attr('fa-animate-halt'))(element.scope());
           }
@@ -427,6 +460,14 @@ angular.module('famous.angular')
           element.data(FA_ANIMATION_ACTIVE, true);
 
           var doneCallback = function() {
+
+            var scopeId = element.scope() && element.scope().$id;
+
+            //hide the element on animate.leave
+            if(operation === 'leave' && isFaElement(element)){
+              var isolate = $famous.getIsolate(element.scope());
+              isolate.id && isolate.hide();
+             }
             // Abort if the done callback has already been invoked
             if (element.data(FA_ANIMATION_ACTIVE) === false) {
               return;
@@ -495,20 +536,34 @@ angular.module('famous.angular')
  */
 
 angular.module('famous.angular')
-  .factory('$famousDecorator', function () {
+  .factory('$famousDecorator', function ($famous) {
     //TODO:  add repeated logic to these roles
     var _roles = {
       child: {
       },
       parent: {
+      },
+      renderable: function( isolate ) {
+        var RenderNode = $famous['famous/core/RenderNode'];
+
+        isolate.renderGate = new RenderNode();
+        isolate.emptyNode = new RenderNode();
+          
+        isolate.show = function() {
+          isolate.renderGate && isolate.renderGate.set(isolate.renderNode);
+        };
+        isolate.hide = function() {
+          isolate.renderGate.set(isolate.emptyNode);
+        };
       }
+      
     };
 
     return {
       //TODO:  patch into _roles and assign the
       // appropriate role to the given scope
-      addRole: function(role, scope){
-
+      addRole: function(role, isolate){
+          _roles[role](isolate);
       },
 
       /**
@@ -665,13 +720,140 @@ angular.module('famous.angular')
   });
 
 /**
+ * @ngdoc service
+ * @name $timeline
+ * @function
+ *
+ * @description
+ * The timeline service provides support for mapping timeline functions to different values.
+ *
+ * @example
+ * ```html
+ * <fa-modifier
+ *   fa-rotate-y="rRotation(t.get())"
+ *   fa-translate="translation(t.get())"
+ * >
+ *   ...
+ * </fa-modifier>
+ * ```
+ * ```javascript
+ * var Transitionable = $famous['famous/transitions/Transitionable'];
+ * var Easing = $famous['famous/transitions/Easing'];
+ *
+ * $scope.t = new Transitionable(0);
+ *
+ * $scope.yRotation = $timeline([
+ *   [0, 0, Easing.inOutQuad],
+ *   [0.8, 1.1 * (Math.PI/2), Easing.inOutQuart],
+ *   [1, Math.PI/2]
+ * ]);
+ *
+ * $scope.translation = $timeline([
+ *   [0, [100, 100, 0], Easing.inOutQuad],
+ *   [1, [400, 200, 0]]
+ * ]);
+ *
+ * ```
+ */
+
+
+angular.module('famous.angular')
+  .factory('$timeline', function () {
+
+    // polymorphic add for scalars and vectors
+    var add = function(a, b) {
+      if (typeof a === "number") {
+        return a + b;
+      }
+      else {
+        return a.map(function(x, i) { return x + b[i]; });
+      }
+    };
+
+    // polymorphic subtract for scalars and vectors
+    var subtract = function(a, b) {
+      if (typeof a === "number") {
+        return a - b;
+      }
+      else {
+        return a.map(function(x, i) { return x - b[i]; });
+      }
+    };
+
+    // polymorphic multiply for scalar and vectors
+    var multiply = function(A, b) {
+      // b is a scalar, A is a scalar or a vector
+      if (typeof A === "number") {
+        return A * b;
+      }
+      else {
+        return A.map(function(x) { return x * b; });
+      }
+    };
+
+    var scale = function (f, x1, x2, y1, y2) {
+      // x1 and x2 must be scalars. y1 and y2 can be scalars or vectors
+      return function(x) {
+        var yTranslate = y1;
+        var xTranslate = -x1;
+        var xScale = 1 / (x2 - x1);
+        var yScale = subtract(y2, y1);
+        return add(multiply(yScale, f(xScale * (x + xTranslate))), yTranslate);
+      };
+    };
+
+    return function(points) {
+        //
+        // Takes a list of points, with the curve to follow to the next point.
+        // Any curve value on the last point is ignored.
+        //
+        //  e.g., [[0, 100, Easings.inOutQuad], [1, 500]]
+        //
+        // Returns a piecewise function f:
+        //
+        //
+        //         / y₀,             if x < x₀
+        //         |
+        //         | scaled(curveᵢ,  if xᵢ ≤ x < xᵢ₊₁
+        //         |        xᵢ,
+        //         |        xᵢ,
+        // f(x) = <         yᵢ₊₁,
+        //         |        yᵢ₊₁)(x)
+        //         | for i in 0..segments.length - 1
+        //         |
+        //         \ last x,         otherwise
+        //
+
+        return function(x) {
+          if (x < points[0][0]) {
+            return points[0][1];
+          }
+          for (var i = 0; i < points.length - 1; i++) {
+            if (points[i][0] <= x && x < points[i+1][0]) {
+              var f = scale(points[i][2],
+                            points[i][0],
+                            points[i+1][0],
+                            points[i][1],
+                            points[i+1][1]);
+
+              return f(x);
+            }
+          }
+          return points[points.length-1][1];
+        };
+
+      };
+
+  });
+
+/**
  * @ngdoc directive
  * @name faAnimation
  * @module famous.angular
  * @restrict EA
  * @description
- * This directive is used to animate an element in conjunction with an {@link api/directive/animate animate} directive
- *
+ * This directive is deprecated.  Prefer using the $timeline service.  This directive is used to animate an element in conjunction with an {@link api/directive/animate animate} directive
+ * @deprecated true
  * @usage
  * ```html
  * <fa-animation timeline="functionThatReturnsATimelineValueBetween0And1">
@@ -989,8 +1171,9 @@ angular.module('famous.angular')
                * @name animate
                * @module famous.angular
                * @restrict E
+               * @deprecated true
                * @description
-               * This element is used to specify the animation of an element in a {@link api/directive/faAnimation faAnimation} directive
+               * This directive is deprecated.  Prefer using the $timeline service.  This element is used to specify the animation of an element in a {@link api/directive/faAnimation faAnimation} directive
                *
                * @usage
                * ```html
@@ -1323,10 +1506,9 @@ angular.module('famous.angular')
             var Engine = $famous['famous/core/Engine'];
             var Transform = $famous['famous/core/Transform'];
 
-
-            element.append('<div class="famous-angular-container"></div>');
+            element.append('<div class="famous-angular-clipping-container"><div class="famous-angular-container"></div></div>');
             isolate.context = Engine.createContext(element[0].querySelector('.famous-angular-container'));
-
+            window.context = isolate.context;
             var _updatePerspective = function(){
               var val = parseInt(attrs.faPerspective);
               if(val) isolate.context.setPerspective(val);
@@ -1587,11 +1769,13 @@ angular.module('famous.angular')
 
             var options = scope.$eval(attrs.faOptions) || {};
             isolate.renderNode = new ContainerSurface(options);
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show();
 
             $famousDecorator.sequenceWith(
               scope,
               function(data) {
-                isolate.renderNode.add(data.renderNode);
+                isolate.renderNode.add(data.renderGate);
               },
               function(childScopeId) {
                 throw new Error('unimplemented: fa-container-surface does not support removing children');
@@ -1644,11 +1828,17 @@ angular.module('famous.angular')
 
             var FlexibleLayout = $famous["famous/views/FlexibleLayout"];
             var ViewSequence = $famous['famous/core/ViewSequence'];
+            var RenderNode = $famous['famous/core/RenderNode'];
+
 
             var _children = [];
 
             var options = scope.$eval(attrs.faOptions) || {};
+
             isolate.renderNode = new FlexibleLayout(options);
+
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show();
 
             var updateFlexibleLayout = function () {
               _children.sort(function (a, b) {
@@ -1657,7 +1847,7 @@ angular.module('famous.angular')
               isolate.renderNode.sequenceFrom(function (_children) {
                 var _ch = [];
                 angular.forEach(_children, function (c, i) {
-                  _ch[i] = c.renderNode;
+                  _ch[i] = c.renderGate;
                 });
                 return _ch;
               }(_children));
@@ -1748,10 +1938,13 @@ angular.module('famous.angular')
               var isolate = $famousDecorator.ensureIsolate(scope);
               var Flipper = $famous["famous/views/Flipper"];
 
+
               //TODO:  $watch and update, or $parse and attr.$observe
               var options = scope.$eval(attrs.faOptions) || {};
-
               isolate.renderNode = new Flipper(options);
+              $famousDecorator.addRole('renderable',isolate);
+              isolate.show();
+           
               isolate.children = [];
 
               isolate.flip = function (overrideOptions) {
@@ -1763,15 +1956,15 @@ angular.module('famous.angular')
                 function(data) {
                   //TODO:  support fa-index + sorting children instead of just a stack
                   var _childCount = isolate.children.length;
-                  if (_childCount === 0) {
-                    isolate.renderNode.setFront(data.renderNode);
-                  } else if (_childCount === 1) {
-                    isolate.renderNode.setBack(data.renderNode);
+                  if (_childCount == 0) {
+                    isolate.renderNode.setFront(data.renderGate);
+                  } else if (_childCount == 1) {
+                    isolate.renderNode.setBack(data.renderGate);
                   } else {
                     throw new Error('fa-flipper accepts only two child elements; more than two have been provided');
                   }
 
-                  isolate.children.push(data.renderNode);
+                  isolate.children.push(data.renderGate);
                 },
                 function(childScopeId) {
                   //TODO:  support fa-index + sorting children and removing
@@ -1865,6 +2058,8 @@ angular.module('famous.angular')
             var options = scope.$eval(attrs.faOptions) || {};
             isolate.renderNode = new GridLayout(options);
 
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show();
             //watch options and update when changed
             scope.$watch(function(){
               return scope.$eval(attrs.faOptions);
@@ -1880,7 +2075,7 @@ angular.module('famous.angular')
                 isolate.renderNode.sequenceFrom(function(_children) {
                   var _ch = [];
                   angular.forEach(_children, function(c, i) {
-                    _ch[i] = c.renderNode;
+                    _ch[i] = c.renderGate;
                   });
                   return _ch;
                 }(_children));
@@ -2011,6 +2206,8 @@ angular.module('famous.angular')
 
             var options = scope.$eval(attrs.faOptions) || {};
             isolate.renderNode = new HeaderFooterLayout(options);
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show();
 
             var _numberOfChildren = 0;
 
@@ -2019,11 +2216,11 @@ angular.module('famous.angular')
               function(data) {
                 _numberOfChildren++;
                 if (_numberOfChildren === 1) {
-                  isolate.renderNode.header.add(data.renderNode);
+                  isolate.renderNode.header.add(data.renderGate);
                 } else if (_numberOfChildren === 2){
-                  isolate.renderNode.content.add(data.renderNode);
+                  isolate.renderNode.content.add(data.renderGate);
                 } else if (_numberOfChildren === 3){
-                  isolate.renderNode.footer.add(data.renderNode);
+                  isolate.renderNode.footer.add(data.renderGate);
                 } else {
                   throw new Error('fa-header-footer-layout can accept no more than 3 children');
                 }
@@ -2135,6 +2332,9 @@ angular.module('famous.angular')
               class: scope.$eval(attrs.class),
               properties: isolate.getProperties()
             });
+            
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show();
 
             if (attrs.class) {
               isolate.renderNode.setClasses(attrs['class'].split(' '));
@@ -2632,8 +2832,11 @@ angular.module('famous.angular')
 
             isolate.renderNode = new RenderNode().add(isolate.modifier);
 
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show()
+            
             $famousDecorator.sequenceWith(scope, function(data) {
-              isolate.renderNode.add(data.renderNode);
+              isolate.renderNode.add(data.renderGate);
             });
 
             transclude(scope, function (clone) {
@@ -3258,6 +3461,7 @@ angular.module('famous.angular')
             var isolate = $famousDecorator.ensureIsolate(scope);
 
             var Engine = $famous['famous/core/Engine'];
+            var RenderNode = $famous['famous/core/RenderNode'];
 
             var getOrValue = function(x) {
               return x.get ? x.get() : x;
@@ -3273,8 +3477,11 @@ angular.module('famous.angular')
 
             isolate.renderNode = scope.$eval(attrs.faNode);
 
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show();
+
             $famousDecorator.sequenceWith(scope, function(data) {
-              isolate.renderNode.add(data.renderNode);
+              isolate.renderNode.add(data.renderGate);
               isolate.children.push(data);
             });
 
@@ -3491,6 +3698,10 @@ angular.module('famous.angular')
             var options = scope.$eval(attrs.faOptions) || {};
             isolate.renderNode = new ScrollView(options);
 
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show();
+
+
             var updateScrollview = function(init){
               // Synchronize the update on the next digest cycle
               // (if this isn't done, $index will not be up-to-date
@@ -3504,8 +3715,8 @@ angular.module('famous.angular')
                   array: function(_children) {
                     var _ch = [];
                     angular.forEach(_children, function(c, i) {
-                      _ch[i] = c.renderNode;
-                    });
+                      _ch[i] = c.renderGate;
+                    })
                     return _ch;
                   }(_children)
                 };
@@ -3612,11 +3823,15 @@ angular.module('famous.angular')
 
             var SequentialLayout = $famous["famous/views/SequentialLayout"];
 
+
             var _children = [];
 
             var options = scope.$eval(attrs.faOptions) || {};
 
             isolate.renderNode = new SequentialLayout(options);
+
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show();
 
             var _updateSequentialLayout = function() {
               _children.sort(function(a, b) {
@@ -3625,7 +3840,7 @@ angular.module('famous.angular')
               isolate.renderNode.sequenceFrom(function(_children) {
                 var _ch = [];
                 angular.forEach(_children, function(c, i) {
-                  _ch[i] = c.renderNode;
+                  _ch[i] = c.renderGate;
                 });
                 return _ch;
               }(_children));
@@ -3812,8 +4027,9 @@ angular.module('famous.angular')
       compile: function(tElem, tAttrs, transclude){
         return {
           pre: function(scope, element, attrs){
+            
             var isolate = $famousDecorator.ensureIsolate(scope);
-
+            // console.log("fa-surface", isolate);
             var Surface = $famous['famous/core/Surface'];
             var Transform = $famous['famous/core/Transform'];
             var EventHandler = $famous['famous/core/EventHandler'];
@@ -3861,11 +4077,12 @@ angular.module('famous.angular')
               }
               return baseProperties;
             };
-
-            isolate.renderNode = new Surface({
+             isolate.renderNode = new Surface({
               size: scope.$eval(attrs.faSize),
               properties: isolate.getProperties()
             });
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show();
 
             if (attrs.class) {
               isolate.renderNode.setClasses(attrs['class'].split(' '));
@@ -4324,9 +4541,11 @@ angular.module('famous.angular')
             isolate.renderNode = new View({
               size: scope.$eval(attrs.faSize) || [undefined, undefined]
             });
-
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show();
+            
             $famousDecorator.sequenceWith(scope, function(data) {
-              isolate.renderNode.add(data.renderNode);
+              isolate.renderNode.add(data.renderGate);
               isolate.children.push(data);
             });
 

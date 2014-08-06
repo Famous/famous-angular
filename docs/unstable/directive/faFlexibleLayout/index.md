@@ -18,6 +18,7 @@ docType: "directive"
 
 
 
+
 <h1 class="api-title">
 
   fa-flexible-layout
@@ -34,8 +35,6 @@ This directive will create a Famo.us FlexibleLayout that
 sequences from children passed in the provided `options` object,
 which passes directly through to the Famo.us FlexibleLayout's
 constructor. See [https://famo.us/docs/views/FlexibleLayout]
-
-
 
 
 

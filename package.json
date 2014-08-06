@@ -1,7 +1,7 @@
 {
   "name": "famous-angular",
   "description": "Bring structure to your Famo.us apps with the power of AngularJS. Famo.us/Angular integrates seamlessly with existing Angular and Famo.us apps.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "license": "MPL v2.0",
   "homepage": "https://github.com/Famous/famous-angular",
   "repository": {
@@ -32,7 +32,9 @@
     "gulp-clean": "^0.2.4",
     "gulp-concat": "^2.2.0",
     "gulp-exec": "^2.0.1",
+    "gulp-filter": "^0.4.1",
     "gulp-header": "^1.0.2",
+    "gulp-inject": "^0.4.1",
     "gulp-jasmine": "^0.2.0",
     "gulp-jshint": "^1.5.3",
     "gulp-json-editor": "^2.0.2",
@@ -44,12 +46,14 @@
     "gulp-stylus": "^1.0.0",
     "gulp-uglify": "^0.2.1",
     "gulp-util": "^2.2.14",
-    "karma": "^0.12.16",
-    "karma-jasmine": "~0.2.1",
+    "karma": "^0.12.19",
     "karma-chrome-launcher": "~0.1.3",
+    "karma-cli": "0.0.4",
     "karma-firefox-launcher": "~0.1.3",
+    "karma-jasmine": "~0.2.1",
     "karma-ng-html2js-preprocessor": "^0.1.0",
     "karma-ng-scenario": "^0.1.0",
+    "karma-phantomjs-launcher": "^0.1.4",
     "karma-requirejs": "~0.2.1",
     "karma-spec-reporter": "0.0.13",
     "lodash": "^2.4.1",
@@ -59,9 +63,6 @@
     "requirejs": "~2.1.11",
     "semver": "^2.3.0",
     "streamqueue": "0.0.7",
-    "winston": "^0.7.3",
-    "karma-cli": "0.0.4",
-    "gulp-inject": "^0.4.1",
-    "gulp-filter": "^0.4.1"
+    "winston": "^0.7.3"
   }
 }

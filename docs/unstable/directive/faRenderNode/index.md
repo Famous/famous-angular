@@ -18,6 +18,7 @@ docType: "directive"
 
 
 
+
 <h1 class="api-title">
 
   fa-render-node
@@ -33,8 +34,6 @@ docType: "directive"
 A directive to insert a <a href="https://famo.us/docs/core/RenderNode">Famo.us RenderNode</a> that is
 a wrapper for inserting a renderable component (like a Modifer or Surface) into the render tree.
 It allows you to pass a reference to an arbitrary render node from your controller.
-
-
 
 
 
