@@ -2,15 +2,20 @@
 
 Famo.us/Angular is an AngularJS-driven framework for building Famo.us apps.
 
+###Read More
+[Project Site](https://famo.us/angular)
+
+###Download
+[Famo.us/Angular Starter Kit](http://code.famo.us/famous-angular/latest/famous-angular-starter-kit.zip?src=github-readme)
+  or
+`bower install famous-angular`
+
+
 Using F/A, you can:
 * Create Famo.us apps using familiar AngularJS tools like controllers, directives, and services.
 * Bring rich Famo.us animations to new or existing AngularJS apps.
 * Use HTML to declare Famo.us UIs, complete with Angular's two-way databinding.
 * Easily integrate Famo.us and AngularJS apps.
-
-
-###Read more on the project page: [Famo.us/Angular](http://famo.us/angular)
-###Or download the starter kit: [famous-angular-starter-kit.zip](http://code.famo.us/famous-angular/latest/famous-angular-starter-kit.zip?src=github-readme)
 
 
 ##Project Roadmap
@@ -30,11 +35,7 @@ Contact [famous-angular@thomasstreet.com](mailto:famous-angular@thomasstreet.com
 * Run `bower install famous-angular`
 * Add the following to your index.html
 ```html
-  <script src="bower_components/requirejs/require.js"></script>
-  <script>
-    //set requirejs's base to where the famous lib folder lives
-    require.config({baseUrl: 'bower_components'});
-  </script>
+  <script src="bower_components/famous/famous-global.js"></script>
   <script src="bower_components/famous-angular/dist/famous-angular.js"></script>
 ```
 * Add`<link rel="stylesheet" href="bower_components/famous-angular/dist/famous-angular.css">` to the `<head>` of your index.html
@@ -42,8 +43,10 @@ Contact [famous-angular@thomasstreet.com](mailto:famous-angular@thomasstreet.com
 * And add an `<fa-app style="height: 200px"><fa-surface fa-background-color="'red'">Hello world</fa-surface></fa-app>` in one of your templates.  If you see 'Hello world' on a red background, you should be good to go.
 **Note: currently, the element that the `<fa-app>` is on must be display: block (like a `<div fa-app>` or a `<p fa-app>`, or just `<fa-app>`) and must have a set height (like `style="height: 200px"` in this example.)  Future versions will not have these requirements.**
 
+
 ####Build off of the starter app
 To get started even faster, try the [famous-angular-starter](https://github.com/thomasstreet/famous-angular-starter) seed project, with everything already in place.  The starter app has a powerful gulp-based workflow, which includes live reloading and Jade/HAML support.
+
 
 
 
@@ -59,7 +62,6 @@ To get started even faster, try the [famous-angular-starter](https://github.com/
 `npm install`
 
 `npm install -g gulp`
-
 
 
 ####Thereafter:
