@@ -10,7 +10,7 @@ docType: "provider"
 ---
 
 <div class="improve-docs">
-  <a href='https://github.com/Famous/famous-angular/edit/master/src/scripts/services/famous.js#L107'>
+  <a href='https://github.com/Famous/famous-angular/edit/master/src/scripts/services/famous.js#L1'>
     Improve this doc
   </a>
 </div>
@@ -31,28 +31,13 @@ docType: "provider"
 
 
 
-This provider is loaded as an AMD module and will keep a reference on the complete Famo.us library.
-We use this provider to avoid needing to deal with AMD on any other angular files.
+This provider will keep a reference on the complete Famo.us library and provide a few useful functions.
 
 
 
 
 
 
-
-## Usage
-You probably won't have to configure this provider
-
-```js
-angular.module('mySuperApp', ['famous.angular']).config(
-  function($famousProvider) {
-
-      // Register your modules
-      $famousProvider.registerModule('moduleKey', module);
-
-  };
-});
-```
 
 
   
