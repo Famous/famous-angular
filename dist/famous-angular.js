@@ -286,8 +286,8 @@ require(requirements, function(/*args*/) {
  *
  * The core Angular animation API is fundamentally CSS class-based. Because only Famo.us Surfaces
  * support CSS classes, core directives such as `ngClass`, `ngShow`, `ngIf`, and others should be applied
- * only with directives representing Surfaces (such as {@link api/directive/faSurface faSurface} and
- * {@link api/directive/faImageSurface faImageSurface}).
+ * only with directives representing Surfaces (such as {@link faSurface faSurface} and
+ * {@link faImageSurface faImageSurface}).
  *
  * The {@link https://docs.angularjs.org/api/ngAnimate ngAnimate} module's documentation lists the set of
  * core directives supporting $animate events. Please note that the `ngAnimate` module is *not* required
@@ -901,7 +901,7 @@ angular.module('famous.angular')
  * @module famous.angular
  * @restrict EA
  * @description
- * This directive is deprecated.  Prefer using the $timeline service.  This directive is used to animate an element in conjunction with an {@link api/directive/animate animate} directive
+ * This directive is deprecated.  Prefer using the $timeline service.  This directive is used to animate an element in conjunction with an {@link animate animate} directive
  * @deprecated true
  * @usage
  * ```html
@@ -1222,7 +1222,7 @@ angular.module('famous.angular')
                * @restrict E
                * @deprecated true
                * @description
-               * This directive is deprecated.  Prefer using the $timeline service.  This element is used to specify the animation of an element in a {@link api/directive/faAnimation faAnimation} directive
+               * This directive is deprecated.  Prefer using the $timeline service.  This element is used to specify the animation of an element in a {@link faAnimation faAnimation} directive
                *
                * @usage
                * ```html
@@ -1478,7 +1478,7 @@ angular.module('famous.angular')
  * it creates a Famous context and then adds child elements
  * to that context as they get compiled.  Inside of this directive,
  * normal HTML content will not get rendered to the screen unless
- * it is inside of a {@link api/directive/faSurface fa-surface} directive.
+ * it is inside of a {@link faSurface fa-surface} directive.
  *
  * @usage
  * ```html
@@ -2414,8 +2414,8 @@ angular.module('famous.angular')
  * @restrict A
  * @description
  * This directive is used to specify the rendering order of elements
- * inside of a ViewSequence-based component, such as @link api/directive/faScrollView faScrollView}
- * or @link api/directive/faGridLayout faGridLayout}.  As a special case, when elements are added to
+ * inside of a ViewSequence-based component, such as {@link faScrollView faScrollView}
+ * or {@link faGridLayout faGridLayout}.  As a special case, when elements are added to
  * these controls using ng-repeat, they are automatically assigned the
  * $index property exposed by ng-repeat.  When adding elements manually
  * (e.g. to a faScrollView but not using ng-repeat) or in a case where custom

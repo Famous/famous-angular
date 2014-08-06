@@ -4,7 +4,7 @@
  * @module famous.angular
  * @restrict EA
  * @description
- * This directive is deprecated.  Prefer using the $timeline service.  This directive is used to animate an element in conjunction with an {@link api/directive/animate animate} directive
+ * This directive is deprecated.  Prefer using the $timeline service.  This directive is used to animate an element in conjunction with an {@link animate animate} directive
  * @deprecated true
  * @usage
  * ```html
@@ -325,7 +325,7 @@ angular.module('famous.angular')
                * @restrict E
                * @deprecated true
                * @description
-               * This directive is deprecated.  Prefer using the $timeline service.  This element is used to specify the animation of an element in a {@link api/directive/faAnimation faAnimation} directive
+               * This directive is deprecated.  Prefer using the $timeline service.  This element is used to specify the animation of an element in a {@link faAnimation faAnimation} directive
                *
                * @usage
                * ```html

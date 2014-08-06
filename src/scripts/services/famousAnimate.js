@@ -20,8 +20,8 @@
  *
  * The core Angular animation API is fundamentally CSS class-based. Because only Famo.us Surfaces
  * support CSS classes, core directives such as `ngClass`, `ngShow`, `ngIf`, and others should be applied
- * only with directives representing Surfaces (such as {@link api/directive/faSurface faSurface} and
- * {@link api/directive/faImageSurface faImageSurface}).
+ * only with directives representing Surfaces (such as {@link faSurface faSurface} and
+ * {@link faImageSurface faImageSurface}).
  *
  * The {@link https://docs.angularjs.org/api/ngAnimate ngAnimate} module's documentation lists the set of
  * core directives supporting $animate events. Please note that the `ngAnimate` module is *not* required
