@@ -131,7 +131,7 @@ ngFameApp.provider('$famous', function() {
    */
 
   _modules.getIsolate = function(scope) {
-    return ('isolate' in scope) ? scope.isolate[scope.$id] : {};
+    return (scope && ('isolate' in scope)) ? scope.isolate[scope.$id] : {};
   };
 
   /**
