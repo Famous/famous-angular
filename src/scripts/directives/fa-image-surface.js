@@ -79,15 +79,14 @@ angular.module('famous.angular')
               return baseProperties;
             };
 
-            var getOrValue = function (x) {
-              return x.get ? x.get() : x;
-            };
-
             isolate.renderNode = new ImageSurface({
               size: scope.$eval(attrs.faSize),
               class: scope.$eval(attrs.class),
               properties: isolate.getProperties()
             });
+            
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show();
 
             if (attrs.class) {
               isolate.renderNode.setClasses(attrs['class'].split(' '));

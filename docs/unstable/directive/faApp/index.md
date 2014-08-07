@@ -18,6 +18,7 @@ docType: "directive"
 
 
 
+
 <h1 class="api-title">
 
   fa-app
@@ -35,8 +36,6 @@ it creates a Famous context and then adds child elements
 to that context as they get compiled.  Inside of this directive,
 normal HTML content will not get rendered to the screen unless
 it is inside of a <a href="api/directive/faSurface">fa-surface</a> directive.
-
-
 
 
 

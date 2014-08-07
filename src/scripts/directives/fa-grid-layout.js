@@ -68,10 +68,12 @@ angular.module('famous.angular')
             var options = scope.$eval(attrs.faOptions) || {};
             isolate.renderNode = new GridLayout(options);
 
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show();
             //watch options and update when changed
             scope.$watch(function(){
               return scope.$eval(attrs.faOptions);
-            }, function(oldVal, newVal){
+            }, function(newVal, oldVal){
               isolate.renderNode.setOptions(newVal);
             }, true);
 
@@ -83,7 +85,7 @@ angular.module('famous.angular')
                 isolate.renderNode.sequenceFrom(function(_children) {
                   var _ch = [];
                   angular.forEach(_children, function(c, i) {
-                    _ch[i] = c.renderNode;
+                    _ch[i] = c.renderGate;
                   });
                   return _ch;
                 }(_children));

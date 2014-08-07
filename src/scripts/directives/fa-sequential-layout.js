@@ -54,11 +54,15 @@ angular.module('famous.angular')
 
             var SequentialLayout = $famous["famous/views/SequentialLayout"];
 
+
             var _children = [];
 
             var options = scope.$eval(attrs.faOptions) || {};
 
             isolate.renderNode = new SequentialLayout(options);
+
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show();
 
             var _updateSequentialLayout = function() {
               _children.sort(function(a, b) {
@@ -67,7 +71,7 @@ angular.module('famous.angular')
               isolate.renderNode.sequenceFrom(function(_children) {
                 var _ch = [];
                 angular.forEach(_children, function(c, i) {
-                  _ch[i] = c.renderNode;
+                  _ch[i] = c.renderGate;
                 });
                 return _ch;
               }(_children));

@@ -60,16 +60,14 @@ angular.module('famous.angular')
 
             isolate.children = [];
 
-            var getOrValue = function(x) {
-              return x.get ? x.get() : x;
-            };
-
             isolate.renderNode = new View({
               size: scope.$eval(attrs.faSize) || [undefined, undefined]
             });
-
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show();
+            
             $famousDecorator.sequenceWith(scope, function(data) {
-              isolate.renderNode.add(data.renderNode);
+              isolate.renderNode.add(data.renderGate);
               isolate.children.push(data);
             });
 

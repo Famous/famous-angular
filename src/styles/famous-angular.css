@@ -26,8 +26,13 @@ fa-app, .fa-app {
     width: 100%;
 }
 
-.famous-angular-container {
+.famous-angular-clipping-container {
     overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+.famous-angular-container {
     -webkit-transform-style: preserve-3d;
     transform-style: preserve-3d;
     -webkit-backface-visibility: visible;

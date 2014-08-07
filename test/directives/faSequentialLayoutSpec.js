@@ -84,4 +84,31 @@ describe('faSequentialLayout', function() {
 
     common.destroyApp(app);
   });
+  describe("hide and show", function() {
+
+    it("hide and show properties on the SequentialLayout", function() {
+      var sequentialLayout = $compile(
+          '<fa-sequential-layout fa-pipe-from="eventHandler" fa-start-index="1">' +
+            '<fa-view ng-repeat="view in views">' +
+              '<fa-surface fa-pipe-to="eventHandler" fa-size="[undefined, 100]"></fa-surface>' +
+            '</fa-view>' +
+          '</fa-sequential-layout>'
+        )($scope);
+      $scope.eventHandler = eventHandler;
+      $scope.views = [0, 1, 2];
+      $scope.$apply();
+
+      var scope = sequentialLayout.scope();
+      var isolate = scope.isolate[scope.$id];
+      
+      expect(isolate.renderGate._object === isolate.renderNode).toEqual(true);
+      isolate.hide()
+      $scope.$apply();
+      expect(isolate.renderGate._object === isolate.emptyNode).toEqual(true);
+
+      isolate.show()
+      $scope.$apply();
+      expect(isolate.renderGate._object === isolate.renderNode).toEqual(true);
+    });
+  });
 });

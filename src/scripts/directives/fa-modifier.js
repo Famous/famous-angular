@@ -3,19 +3,19 @@
  * @name faModifier
  * @module famous.angular
  * @restrict EA
- * @param {Array|Function} faRotate  -  Array of numbers or function returning an array of numbers to which this Modifier's rotate should be bound.
- * @param {Number|Function} faRotateX  -  Number or function returning a number to which this Modifier's rotateX should be bound
- * @param {Number|Function} faRotateY  -  Number or function returning a number to which this Modifier's rotateY should be bound
- * @param {Number|Function} faRotateZ  -  Number or function returning a number to which this Modifier's rotateZ should be bound
- * @param {Array|Function} faScale  -  Array of numbers or function returning an array of numbers to which this Modifier's scale should be bound
- * @param {Array|Function} faSkew  -  Array of numbers or function returning an array of numbers to which this Modifier's skew should be bound
- * @param {Array|Function} faAboutOrigin  -  Array of arguments (or a function returning an array of arguments) to pass to Transform.aboutOrigin
- * @param {Number|Function} faPerspective  -  Number or array returning a number to which this modifier's perspective (focusZ) should be bound.
+ * @param {Array|Function|Particle} faRotate  -  Array of numbers or function returning an array of numbers to which this Modifier's rotate should be bound.
+ * @param {Number|Function|Particle} faRotateX  -  Number or function returning a number to which this Modifier's rotateX should be bound
+ * @param {Number|Function|Particle} faRotateY  -  Number or function returning a number to which this Modifier's rotateY should be bound
+ * @param {Number|Function|Particle} faRotateZ  -  Number or function returning a number to which this Modifier's rotateZ should be bound
+ * @param {Array|Function|Particle} faScale  -  Array of numbers or function returning an array of numbers to which this Modifier's scale should be bound
+ * @param {Array|Function|Particle} faSkew  -  Array of numbers or function returning an array of numbers to which this Modifier's skew should be bound
+ * @param {Array|Function|Particle} faAboutOrigin  -  Array of arguments (or a function returning an array of arguments) to pass to Transform.aboutOrigin
+ * @param {Number|Function|Particle} faPerspective  -  Number or array returning a number to which this modifier's perspective (focusZ) should be bound.
  * @param {Transform} faTransform - Manually created Famo.us Transform object (an array) that can be passed to the modifier.  *Will override all other transform attributes.*
- * @param {Number|Function|Transitionable} faOpacity  -  Number or function returning a number to which this Modifier's opacity should be bound
- * @param {Array|Function|Transitionable} faSize  -  Array of numbers (e.g. [100, 500] for the x- and y-sizes) or function returning an array of numbers to which this Modifier's size should be bound
- * @param {Array|Function|Transitionable} faOrigin  -  Array of numbers (e.g. [.5, 0] for the x- and y-origins) or function returning an array of numbers to which this Modifier's origin should be bound
- * @param {Array|Function|Transitionable} faAlign  -  Array of numbers (e.g. [.5, 0] for the x- and y-aligns) or function returning an array of numbers to which this Modifier's align should be bound
+ * @param {Number|Function|Transitionable|Particle} faOpacity  -  Number or function returning a number to which this Modifier's opacity should be bound
+ * @param {Array|Function|Transitionable|Particle} faSize  -  Array of numbers (e.g. [100, 500] for the x- and y-sizes) or function returning an array of numbers to which this Modifier's size should be bound
+ * @param {Array|Function|Transitionable|Particle} faOrigin  -  Array of numbers (e.g. [.5, 0] for the x- and y-origins) or function returning an array of numbers to which this Modifier's origin should be bound
+ * @param {Array|Function|Transitionable|Particle} faAlign  -  Array of numbers (e.g. [.5, 0] for the x- and y-aligns) or function returning an array of numbers to which this Modifier's align should be bound
  * @param {Array.String} faTransformOrder  -  Optional array of strings to specify which transforms to apply and in which order. (e.g. `fa-transform-order="['rotateZ', 'translate', 'scale']"`)  Default behavior is to evaluate all supported transforms and apply them in alphabetical order.
  * @description
  * This directive creates a Famo.us Modifier that will affect all children render nodes.  Its properties can be bound
@@ -227,10 +227,15 @@ angular.module('famous.angular')
             var RenderNode = $famous['famous/core/RenderNode'];
             var Modifier = $famous['famous/core/Modifier'];
             var Transform = $famous['famous/core/Transform'];
+            var Particle = $famous['famous/physics/bodies/Particle'];
 
             var get = function(x) {
               if (x instanceof Function) return x();
               return x.get ? x.get() : x;
+            };
+
+            var _unwrapParticle = function(part){
+              return part.getPosition();
             };
 
             //TODO:  make a stand-alone window-level utility
@@ -303,6 +308,7 @@ angular.module('famous.angular')
                   //TODO:feat Support Transitionables
                   if(candidate instanceof Function) candidate = candidate();
                   if(candidate instanceof Array) transforms.push(Transform[field].apply(this, candidate));
+                  else if(candidate instanceof Particle) transforms.push(Transform[field].apply(this, _unwrapParticle(candidate)));
                   else transforms.push(Transform[field].call(this, candidate));
                 }
               });
@@ -320,6 +326,7 @@ angular.module('famous.angular')
               var ret = _alignFn(scope);
               if(ret instanceof Function) return ret();
               else if(ret instanceof Object && ret.get !== undefined) return ret.get();
+              else if(ret instanceof Particle) return _unwrapParticle(ret);
               else return ret;
             };
 
@@ -332,6 +339,7 @@ angular.module('famous.angular')
               if(ret === undefined) return 1;
               else if(ret instanceof Function) return ret();
               else if(ret instanceof Object && ret.get !== undefined) return ret.get();
+              else if(ret instanceof Particle) return _unwrapParticle(ret);
               else return ret;
             };
 
@@ -343,6 +351,7 @@ angular.module('famous.angular')
               var ret = _sizeFn(scope);
               if(ret instanceof Function) return ret();
               else if(ret instanceof Object && ret.get !== undefined) return ret.get();
+              else if(ret instanceof Particle) return _unwrapParticle(ret);
               else return ret;
             };
 
@@ -354,6 +363,7 @@ angular.module('famous.angular')
               var ret = _originFn(scope);
               if(ret instanceof Function) return ret();
               else if(ret instanceof Object && ret.get !== undefined) return ret.get();
+              else if(ret instanceof Particle) return _unwrapParticle(ret);
               else return ret;
             };
 
@@ -367,8 +377,11 @@ angular.module('famous.angular')
 
             isolate.renderNode = new RenderNode().add(isolate.modifier);
 
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show()
+            
             $famousDecorator.sequenceWith(scope, function(data) {
-              isolate.renderNode.add(data.renderNode);
+              isolate.renderNode.add(data.renderGate);
             });
 
             transclude(scope, function (clone) {

@@ -11,20 +11,18 @@ module.exports = function(config) {
     // Even though we do not need the requirejs framework to load requirejs
     // modules, we need to add it to frameworks so that karma will wait to 
     // start until __karma__.start() is called in karma-start.js
-    frameworks: ['jasmine', 'requirejs'],
+    frameworks: ['jasmine'],
 
 
     // list of files / patterns to load in the browser
     files: [
+	    'test/phantomjs-polyfills.js',
       'bower_components/angular/angular.js',
       'bower_components/angular-mocks/angular-mocks.js',
-      'bower_components/requirejs/require.js',
-      'http://code.famo.us/famous/0.2.0/famous.min.js',
+      'bower_components/famous/famous-global.js',
       'dist/famous-angular.js',
       'test/bootstrap/common.js',
-      'test/**/*Spec.js',
-      // Delay the starting of karma until $famous provider is declared
-      'karma-start.js'
+      'test/**/*Spec.js'
 
       // Dependencies for famous-angular-examples
 			//'famous-angular-examples/app/bower_components/angular-animate/angular-animate.js',
@@ -73,8 +71,7 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Chrome'],
-
+    browsers: ['PhantomJS'],
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits

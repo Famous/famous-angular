@@ -48,10 +48,13 @@ angular.module('famous.angular')
               var isolate = $famousDecorator.ensureIsolate(scope);
               var Flipper = $famous["famous/views/Flipper"];
 
+
               //TODO:  $watch and update, or $parse and attr.$observe
               var options = scope.$eval(attrs.faOptions) || {};
-
               isolate.renderNode = new Flipper(options);
+              $famousDecorator.addRole('renderable',isolate);
+              isolate.show();
+           
               isolate.children = [];
 
               isolate.flip = function (overrideOptions) {
@@ -61,20 +64,25 @@ angular.module('famous.angular')
               $famousDecorator.sequenceWith(
                 scope,
                 function(data) {
+                  //TODO:  support fa-index + sorting children instead of just a stack
                   var _childCount = isolate.children.length;
-                  if (_childCount === 0) {
-                    isolate.renderNode.setFront(data.renderNode);
-                  } else if (_childCount === 1) {
-                    isolate.renderNode.setBack(data.renderNode);
+                  if (_childCount == 0) {
+                    isolate.renderNode.setFront(data.renderGate);
+                  } else if (_childCount == 1) {
+                    isolate.renderNode.setBack(data.renderGate);
                   } else {
                     throw new Error('fa-flipper accepts only two child elements; more than two have been provided');
                   }
 
-                  isolate.children.push(data.renderNode);
+                  isolate.children.push(data.renderGate);
                 },
-                // TODO: support removing children
                 function(childScopeId) {
-                  throw new Error('unimplemented: fa-flipper does not support removing children');
+                  //TODO:  support fa-index + sorting children and removing
+                  //       the child at the proper index instead of just popping off a stack
+
+                  //Since children should handle hiding themselves, all we need to do is
+                  //update our children array
+                  isolate.children.splice(isolate.children.length - 1, 1);
                 }
               );
             },

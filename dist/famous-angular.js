@@ -1,269 +1,220 @@
 /**
  * famous-angular - Bring structure to your Famo.us apps with the power of AngularJS. Famo.us/Angular integrates seamlessly with existing Angular and Famo.us apps.
- * @version v0.1.0
+ * @version v0.2.0
  * @link https://github.com/Famous/famous-angular
  * @license MPL v2.0
  */
 'use strict';
 var ngFameApp = angular.module('famous.angular', []);
-// Put angular bootstrap on hold
-window.name = "NG_DEFER_BOOTSTRAP!" + window.name;
-
-var requirements = [
-"famous/core/Context",
-"famous/core/ElementAllocator",
-"famous/core/Engine",
-"famous/core/Entity",
-"famous/core/EventEmitter",
-"famous/core/EventHandler",
-"famous/core/Group",
-"famous/core/Modifier",
-"famous/core/OptionsManager",
-"famous/core/RenderNode",
-"famous/core/Scene",
-"famous/core/SpecParser",
-"famous/core/Surface",
-"famous/core/Transform",
-"famous/core/View",
-"famous/core/ViewSequence",
-"famous/events/EventArbiter",
-"famous/events/EventFilter",
-"famous/events/EventMapper",
-"famous/inputs/FastClick",
-"famous/inputs/GenericSync",
-"famous/inputs/MouseSync",
-"famous/inputs/PinchSync",
-"famous/inputs/RotateSync",
-"famous/inputs/ScaleSync",
-"famous/inputs/ScrollSync",
-"famous/inputs/TouchSync",
-"famous/inputs/TouchTracker",
-"famous/inputs/TwoFingerSync",
-"famous/math/Matrix",
-"famous/math/Quaternion",
-"famous/math/Random",
-"famous/math/Utilities",
-"famous/math/Vector",
-"famous/modifiers/Draggable",
-"famous/modifiers/Fader",
-"famous/modifiers/ModifierChain",
-"famous/modifiers/StateModifier",
-"famous/physics/PhysicsEngine",
-"famous/surfaces/CanvasSurface",
-"famous/surfaces/ContainerSurface",
-"famous/surfaces/FormContainerSurface",
-"famous/surfaces/ImageSurface",
-"famous/surfaces/InputSurface",
-"famous/surfaces/SubmitInputSurface",
-"famous/surfaces/TextareaSurface",
-"famous/surfaces/VideoSurface",
-"famous/transitions/CachedMap",
-"famous/transitions/Easing",
-"famous/transitions/MultipleTransition",
-"famous/transitions/SnapTransition",
-"famous/transitions/SpringTransition",
-"famous/transitions/Transitionable",
-"famous/transitions/TransitionableTransform",
-"famous/transitions/TweenTransition",
-"famous/transitions/WallTransition",
-"famous/utilities/KeyCodes",
-"famous/utilities/Timer",
-"famous/utilities/Utility",
-"famous/views/Deck",
-"famous/views/EdgeSwapper",
-"famous/views/FlexibleLayout",
-"famous/views/Flipper",
-"famous/views/GridLayout",
-"famous/views/HeaderFooterLayout",
-"famous/views/Lightbox",
-"famous/views/RenderController",
-"famous/views/ScrollContainer",
-"famous/views/Scroller",
-"famous/views/Scrollview",
-"famous/views/SequentialLayout",
-"famous/widgets/NavigationBar",
-"famous/widgets/Slider",
-"famous/widgets/TabBar",
-"famous/widgets/ToggleButton",
-"famous/physics/bodies/Body",
-"famous/physics/bodies/Circle",
-"famous/physics/bodies/Particle",
-"famous/physics/bodies/Rectangle",
-"famous/physics/constraints/Collision",
-"famous/physics/constraints/Constraint",
-"famous/physics/constraints/Curve",
-"famous/physics/constraints/Distance",
-"famous/physics/constraints/Snap",
-"famous/physics/constraints/Surface",
-"famous/physics/constraints/Wall",
-"famous/physics/constraints/Walls",
-"famous/physics/forces/Drag",
-"famous/physics/forces/Force",
-"famous/physics/forces/Repulsion",
-"famous/physics/forces/RotationalDrag",
-"famous/physics/forces/RotationalSpring",
-"famous/physics/forces/Spring",
-"famous/physics/forces/VectorField",
-"famous/physics/integrators/SymplecticEuler"
-];
-
-require(requirements, function(/*args*/) {
-  //capture 'arguments' in a variable that will exist in
-  //child scopes
-  var required = arguments;
+/**
+ * @ngdoc provider
+ * @name $famousProvider
+ * @module famous.angular
+ * @description
+ * This provider will keep a reference on the complete Famo.us library and provide a few useful functions.
+ */
+ngFameApp.provider('$famous', function() {
+  // hash for storing modules
+  var _modules = {
+    "famous/core/Context": famous.core.Context,
+    "famous/core/ElementAllocator": famous.core.ElementAllocator,
+    "famous/core/Engine": famous.core.Engine,
+    "famous/core/Entity": famous.core.Entity,
+    "famous/core/EventEmitter": famous.core.EventEmitter,
+    "famous/core/EventHandler": famous.core.EventHandler,
+    "famous/core/Group": famous.core.Group,
+    "famous/core/Modifier": famous.core.Modifier,
+    "famous/core/OptionsManager": famous.core.OptionsManager,
+    "famous/core/RenderNode": famous.core.RenderNode,
+    "famous/core/Scene": famous.core.Scene,
+    "famous/core/SpecParser": famous.core.SpecParser,
+    "famous/core/Surface": famous.core.Surface,
+    "famous/core/Transform": famous.core.Transform,
+    "famous/core/View": famous.core.View,
+    "famous/core/ViewSequence": famous.core.ViewSequence,
+    "famous/events/EventArbiter": famous.events.EventArbiter,
+    "famous/events/EventFilter": famous.events.EventFilter,
+    "famous/events/EventMapper": famous.events.EventMapper,
+    "famous/inputs/FastClick": famous.inputs.FastClick,
+    "famous/inputs/GenericSync": famous.inputs.GenericSync,
+    "famous/inputs/MouseSync": famous.inputs.MouseSync,
+    "famous/inputs/PinchSync": famous.inputs.PinchSync,
+    "famous/inputs/RotateSync": famous.inputs.RotateSync,
+    "famous/inputs/ScaleSync": famous.inputs.ScaleSync,
+    "famous/inputs/ScrollSync": famous.inputs.ScrollSync,
+    "famous/inputs/TouchSync": famous.inputs.TouchSync,
+    "famous/inputs/TouchTracker": famous.inputs.TouchTracker,
+    "famous/inputs/TwoFingerSync": famous.inputs.TwoFingerSync,
+    "famous/math/Matrix": famous.math.Matrix,
+    "famous/math/Quaternion": famous.math.Quaternion,
+    "famous/math/Random": famous.math.Random,
+    "famous/math/Utilities": famous.math.Utilities,
+    "famous/math/Vector": famous.math.Vector,
+    "famous/modifiers/Draggable": famous.modifiers.Draggable,
+    "famous/modifiers/Fader": famous.modifiers.Fader,
+    "famous/modifiers/ModifierChain": famous.modifiers.ModifierChain,
+    "famous/modifiers/StateModifier": famous.modifiers.StateModifier,
+    "famous/surfaces/CanvasSurface": famous.surfaces.CanvasSurface,
+    "famous/surfaces/ContainerSurface": famous.surfaces.ContainerSurface,
+    "famous/surfaces/FormContainerSurface": famous.surfaces.FormContainerSurface,
+    "famous/surfaces/ImageSurface": famous.surfaces.ImageSurface,
+    "famous/surfaces/InputSurface": famous.surfaces.InputSurface,
+    "famous/surfaces/SubmitInputSurface": famous.surfaces.SubmitInputSurface,
+    "famous/surfaces/TextareaSurface": famous.surfaces.TextareaSurface,
+    "famous/surfaces/VideoSurface": famous.surfaces.VideoSurface,
+    "famous/transitions/CachedMap": famous.transitions.CachedMap,
+    "famous/transitions/Easing": famous.transitions.Easing,
+    "famous/transitions/MultipleTransition": famous.transitions.MultipleTransition,
+    "famous/transitions/SnapTransition": famous.transitions.SnapTransition,
+    "famous/transitions/SpringTransition": famous.transitions.SpringTransition,
+    "famous/transitions/Transitionable": famous.transitions.Transitionable,
+    "famous/transitions/TransitionableTransform": famous.transitions.TransitionableTransform,
+    "famous/transitions/TweenTransition": famous.transitions.TweenTransition,
+    "famous/transitions/WallTransition": famous.transitions.WallTransition,
+    "famous/utilities/KeyCodes": famous.utilities.KeyCodes,
+    "famous/utilities/Timer": famous.utilities.Timer,
+    "famous/utilities/Utility": famous.utilities.Utility,
+    "famous/views/Deck": famous.views.Deck,
+    "famous/views/EdgeSwapper": famous.views.EdgeSwapper,
+    "famous/views/FlexibleLayout": famous.views.FlexibleLayout,
+    "famous/views/Flipper": famous.views.Flipper,
+    "famous/views/GridLayout": famous.views.GridLayout,
+    "famous/views/HeaderFooterLayout": famous.views.HeaderFooterLayout,
+    "famous/views/Lightbox": famous.views.Lightbox,
+    "famous/views/RenderController": famous.views.RenderController,
+    "famous/views/ScrollContainer": famous.views.ScrollContainer,
+    "famous/views/Scroller": famous.views.Scroller,
+    "famous/views/Scrollview": famous.views.Scrollview,
+    "famous/views/SequentialLayout": famous.views.SequentialLayout,
+    "famous/widgets/NavigationBar": famous.widgets.NavigationBar,
+    "famous/widgets/Slider": famous.widgets.Slider,
+    "famous/widgets/TabBar": famous.widgets.TabBar,
+    "famous/widgets/ToggleButton": famous.widgets.ToggleButton,
+    "famous/physics/PhysicsEngine": famous.physics.PhysicsEngine,
+    "famous/physics/bodies/Body": famous.physics.bodies.Body,
+    "famous/physics/bodies/Circle": famous.physics.bodies.Circle,
+    "famous/physics/bodies/Particle": famous.physics.bodies.Particle,
+    "famous/physics/bodies/Rectangle": famous.physics.bodies.Rectangle,
+    "famous/physics/constraints/Collision": famous.physics.constraints.Collision,
+    "famous/physics/constraints/Constraint": famous.physics.constraints.Constraint,
+    "famous/physics/constraints/Curve": famous.physics.constraints.Curve,
+    "famous/physics/constraints/Distance": famous.physics.constraints.Distance,
+    "famous/physics/constraints/Snap": famous.physics.constraints.Snap,
+    "famous/physics/constraints/Surface": famous.physics.constraints.Surface,
+    "famous/physics/constraints/Wall": famous.physics.constraints.Wall,
+    "famous/physics/constraints/Walls": famous.physics.constraints.Walls,
+    "famous/physics/forces/Drag": famous.physics.forces.Drag,
+    "famous/physics/forces/Force": famous.physics.forces.Force,
+    "famous/physics/forces/Repulsion": famous.physics.forces.Repulsion,
+    "famous/physics/forces/RotationalDrag": famous.physics.forces.RotationalDrag,
+    "famous/physics/forces/RotationalSpring": famous.physics.forces.RotationalSpring,
+    "famous/physics/forces/Spring": famous.physics.forces.Spring,
+    "famous/physics/forces/VectorField": famous.physics.forces.VectorField,
+    "famous/physics/integrators/SymplecticEuler": famous.physics.integrators.SymplecticEuler
+  };
 
   /**
-   * @ngdoc provider
-   * @name $famousProvider
+   * @ngdoc method
+   * @name $famousProvider#registerModule
    * @module famous.angular
    * @description
-   * This provider is loaded as an AMD module and will keep a reference on the complete Famo.us library.
-   * We use this provider to avoid needing to deal with AMD on any other angular files.
+   * Register the modules that will be available in the $famous service
    *
-   * @usage
-   * You probably won't have to configure this provider
-   *
-   * ```js
-   * angular.module('mySuperApp', ['famous.angular']).config(
-   *   function($famousProvider) {
-   *
-   *       // Register your modules
-   *       $famousProvider.registerModule('moduleKey', module);
-   *
-   *   };
-   * });
-   * ```
-   *
+   * @param {String} key the key that will be used to register the module
+   * @param {Misc} module the data that will be returned by the service
    */
-  ngFameApp.provider('$famous', function() {
-    // hash for storing modules
-    var _modules = {};
+  this.registerModule = function(key, module) {
+    //TODO warning if the key is already registered ?
+    _modules[key] = module;
+  };
+
+  /**
+   * @ngdoc method
+   * @name $famousProvider#getIsolate
+   * @module famous.angular
+   * @description
+   * Given an scope, retrieves the corresponding isolate.
+   * @param {Object} scope
+   * @returns {Object} The requested isolate
+   */
+
+  _modules.getIsolate = function(scope) {
+    return ('isolate' in scope) ? scope.isolate[scope.$id] : {};
+  };
+
+  /**
+   * @ngdoc method
+   * @name $famousProvider#find
+   * @module famous.angular
+   * @description given a selector, retrieves
+   * the isolate on a template-declared scene graph element.  This is useful
+   * for manipulating Famo.us objects directly after they've been declared in the DOM.
+   * As in normal Angular, this DOM look-up should be performed in the postLink function
+   * of a directive.
+   * @returns {Array} an array of the isolate objects of the selected elements.
+   *
+   * @param {String} selector - the selector for the elements to look up
+   * @usage
+   * View:
+   * ```html
+   * <fa-scroll-view id="myScrollView"></fa-scroll-view>
+   * ```
+   * Controller:
+   * ```javascript
+   * var scrollViewReference = $famous.find('#myScrollView')[0].renderNode;
+   * //Now scrollViewReference is pointing to the Famo.us Scrollview object
+   * //that we created in the view.
+   * ```
+   */
+
+  _modules.find = function(selector) {
+    var elems = angular.element(window.document.querySelectorAll(selector));
+    var scopes = function(elems) {
+      var _s = [];
+      angular.forEach(elems, function(elem, i) {
+        _s[i] = angular.element(elem).scope();
+      });
+      return _s;
+    }(elems);
+    var isolates = function(scopes) {
+      var _s = [];
+      angular.forEach(scopes, function(scope, i) {
+        _s[i] = _modules.getIsolate(scope);
+      });
+      return _s;
+    }(scopes);
+    return isolates;
+  };
+
+  this.$get = function() {
 
     /**
-     * @ngdoc method
-     * @name $famousProvider#registerModule
+     * @ngdoc service
+     * @name $famous
      * @module famous.angular
      * @description
-     * Register the modules that will be available in the $famous service
+     * This service gives you access to the complete Famo.us library.
      *
-     * @param {String} key the key that will be used to register the module
-     * @param {Misc} module the data that will be returned by the service
-     */
-    this.registerModule = function(key, module) {
-      //TODO warning if the key is already registered ?
-      _modules[key] = module;
-    };
-
-    /**
-     * @ngdoc method
-     * @name $famousProvider#getIsolate
-     * @module famous.angular
-     * @description
-     * Given an scope, retrieves the corresponding isolate.
-     * @param {Object} scope
-     * @returns {Object} The requested isolate
-     */
-
-    _modules.getIsolate = function(scope) {
-      return ('isolate' in scope) ? scope.isolate[scope.$id] : {};
-    };
-
-    /**
-     * @ngdoc method
-     * @name $famousProvider#find
-     * @module famous.angular
-     * @description given a selector, retrieves
-     * the isolate on a template-declared scene graph element.  This is useful
-     * for manipulating Famo.us objects directly after they've been declared in the DOM.
-     * As in normal Angular, this DOM look-up should be performed in the postLink function
-     * of a directive.
-     * @returns {Array} an array of the isolate objects of the selected elements.
-     *
-     * @param {String} selector - the selector for the elements to look up
      * @usage
-     * View:
-     * ```html
-     * <fa-scroll-view id="myScrollView"></fa-scroll-view>
+     * Use this service to access the registered Famo.us modules as an object.
+     *
+     * ```js
+     * angular.module('mySuperApp', ['famous.angular']).controller(
+     *   function($scope, $famous) {
+     *
+     *       // Access any registered module
+     *       var EventHandler = $famous['famous/core/EventHandler'];
+     *       $scope.eventHandler = new EventHandler();
+     *
+     *   };
+     * });
      * ```
-     * Controller:
-     * ```javascript
-     * var scrollViewReference = $famous.find('#myScrollView')[0].renderNode;
-     * //Now scrollViewReference is pointing to the Famo.us Scrollview object
-     * //that we created in the view.
-     * ```
+     *
      */
 
-    _modules.find = function(selector){
-      var elems = angular.element(window.document.querySelectorAll(selector));
-      var scopes = function(elems) {
-        var _s = [];
-        angular.forEach(elems, function(elem, i) {
-          _s[i] = angular.element(elem).scope();
-        });
-        return _s;
-      }(elems);
-      var isolates = function(scopes) {
-        var _s = [];
-        angular.forEach(scopes, function(scope, i) {
-          _s[i] = _modules.getIsolate(scope);
-        });
-        return _s;
-      }(scopes);
-      return isolates;
-    };
-
-    this.$get = function() {
-
-      /**
-       * @ngdoc service
-       * @name $famous
-       * @module famous.angular
-       * @description
-       * This service gives you access to the complete Famo.us library.
-       *
-       * @usage
-       * Use this service to access the registered Famo.us modules as an object.
-       *
-       * ```js
-       * angular.module('mySuperApp', ['famous.angular']).controller(
-       *   function($scope, $famous) {
-       *
-       *       // Access any registered module
-       *       var EventHandler = $famous['famous/core/EventHandler'];
-       *       $scope.eventHandler = new EventHandler();
-       *
-       *   };
-       * });
-       * ```
-       *
-       */
-      return _modules;
-    };
-  });
-
-  ngFameApp.config(['$famousProvider', function($famousProvider) {
-    for(var i = 0; i < requirements.length; i++) {
-      $famousProvider.registerModule(requirements[i], required[i]);
-    }
-    //    console.log('registered modules', famousProvider.$get());
-  }]);
-
-  angular.element(document).ready(function() {
-    // For some reason Karma evaluates angular.resumeBootstrap as undefined.
-    // Our versions of angular, angular-mocks and karma the latest stable
-    // releases, so not sure why this is happening.
-    // Quick fix until then.
-    if (angular.resumeBootstrap) {
-      angular.resumeBootstrap();
-    }
-  });
-
-  // To delay Karma's bootstrapping until $famous is ready, fire off a global
-  // event to allow karma to know when the $famous provider has been declared.
-  window.dispatchEvent(new Event('$famousModulesLoaded'));
-
+    return _modules;
+  };
 });
-
 /**
  * @ngdoc service
  * @name $animate
@@ -379,6 +330,15 @@ angular.module('famous.angular')
       }
 
       /**
+          Check if the element selected is an fa- element
+          @param {Array} element - derived element
+          @return {boolean}
+       */
+       function isFaElement(element) {
+        var isFa = /^FA\-.*/;
+        return isFa.test(element[0].tagName );
+       }
+      /**
        * Pass through $animate methods that are strictly class based.
        * These will work on Surfaces, and will be ignored elsewhere.
        * ngAnimate has a complex API for determining when an animation should be
@@ -417,13 +377,36 @@ angular.module('famous.angular')
          * directively to their Surfaces whenever possible.
          */
         animationHandlers[classManipulator] = function(element, className, done) {
+         
           $delegate[classManipulator](element, className, done);
+          if(isFaElement(element)){
+            var isolate = $famous.getIsolate(element.scope());
+            if (isClassable(element)) {
 
-          if (isClassable(element)) {
-            var surface = $famous.getIsolate(element.scope()).renderNode;
-            angular.forEach(className.split(' '), function(splitClassName) {
-              surface[classManipulator](splitClassName);
-            });
+              var surface = isolate.renderNode;
+              angular.forEach(className.split(' '), function(splitClassName) {
+                if(splitClassName === 'ng-hide'){
+                  if(classManipulator === 'addClass'){
+                    isolate.hide();
+                  } else if( classManipulator === 'removeClass' ){
+                    isolate.show();
+                  }
+                }else {
+
+                  surface[classManipulator](splitClassName);
+                }
+              });
+            } else {
+              angular.forEach(className.split(' '), function(splitClassName) {
+                if(splitClassName === 'ng-hide'){
+                  if(classManipulator === 'addClass'){
+                    isolate.hide();
+                  } else if( classManipulator === 'removeClass' ){
+                    isolate.show();
+                  }
+                }
+              });
+            }
           }
          };
       });
@@ -432,6 +415,7 @@ angular.module('famous.angular')
       // because Angular has already negotiated the list of items to add
       // and items to remove. Manually loop through both lists.
       animationHandlers.setClass = function(element, add, remove, done) {
+        
         $delegate.setClass(element, add, remove, done);
 
         if (isClassable(element)) {
@@ -464,10 +448,10 @@ angular.module('famous.angular')
           var delegateFirst = (operation === 'enter');
 
           if (delegateFirst === true) {
-            $delegate[operation].apply(this, arguments);
+             $delegate[operation].apply(this, arguments);
           }
 
-          // Detect if an animation is currently running
+           // Detect if an animation is currently running
           if (element.data(FA_ANIMATION_ACTIVE) === true) {
             $parse(element.attr('fa-animate-halt'))(element.scope());
           }
@@ -476,6 +460,14 @@ angular.module('famous.angular')
           element.data(FA_ANIMATION_ACTIVE, true);
 
           var doneCallback = function() {
+
+            var scopeId = element.scope() && element.scope().$id;
+
+            //hide the element on animate.leave
+            if(operation === 'leave' && isFaElement(element)){
+              var isolate = $famous.getIsolate(element.scope());
+              isolate.id && isolate.hide();
+             }
             // Abort if the done callback has already been invoked
             if (element.data(FA_ANIMATION_ACTIVE) === false) {
               return;
@@ -544,20 +536,34 @@ angular.module('famous.angular')
  */
 
 angular.module('famous.angular')
-  .factory('$famousDecorator', function () {
+  .factory('$famousDecorator', function ($famous) {
     //TODO:  add repeated logic to these roles
     var _roles = {
       child: {
       },
       parent: {
+      },
+      renderable: function( isolate ) {
+        var RenderNode = $famous['famous/core/RenderNode'];
+
+        isolate.renderGate = new RenderNode();
+        isolate.emptyNode = new RenderNode();
+          
+        isolate.show = function() {
+          isolate.renderGate && isolate.renderGate.set(isolate.renderNode);
+        };
+        isolate.hide = function() {
+          isolate.renderGate.set(isolate.emptyNode);
+        };
       }
+      
     };
 
     return {
       //TODO:  patch into _roles and assign the
       // appropriate role to the given scope
-      addRole: function(role, scope){
-
+      addRole: function(role, isolate){
+          _roles[role](isolate);
       },
 
       /**
@@ -714,13 +720,140 @@ angular.module('famous.angular')
   });
 
 /**
+ * @ngdoc service
+ * @name $timeline
+ * @function
+ *
+ * @description
+ * The timeline service provides support for mapping timeline functions to different values.
+ *
+ * @example
+ * ```html
+ * <fa-modifier
+ *   fa-rotate-y="rRotation(t.get())"
+ *   fa-translate="translation(t.get())"
+ * >
+ *   ...
+ * </fa-modifier>
+ * ```
+ * ```javascript
+ * var Transitionable = $famous['famous/transitions/Transitionable'];
+ * var Easing = $famous['famous/transitions/Easing'];
+ *
+ * $scope.t = new Transitionable(0);
+ *
+ * $scope.yRotation = $timeline([
+ *   [0, 0, Easing.inOutQuad],
+ *   [0.8, 1.1 * (Math.PI/2), Easing.inOutQuart],
+ *   [1, Math.PI/2]
+ * ]);
+ *
+ * $scope.translation = $timeline([
+ *   [0, [100, 100, 0], Easing.inOutQuad],
+ *   [1, [400, 200, 0]]
+ * ]);
+ *
+ * ```
+ */
+
+
+angular.module('famous.angular')
+  .factory('$timeline', function () {
+
+    // polymorphic add for scalars and vectors
+    var add = function(a, b) {
+      if (typeof a === "number") {
+        return a + b;
+      }
+      else {
+        return a.map(function(x, i) { return x + b[i]; });
+      }
+    };
+
+    // polymorphic subtract for scalars and vectors
+    var subtract = function(a, b) {
+      if (typeof a === "number") {
+        return a - b;
+      }
+      else {
+        return a.map(function(x, i) { return x - b[i]; });
+      }
+    };
+
+    // polymorphic multiply for scalar and vectors
+    var multiply = function(A, b) {
+      // b is a scalar, A is a scalar or a vector
+      if (typeof A === "number") {
+        return A * b;
+      }
+      else {
+        return A.map(function(x) { return x * b; });
+      }
+    };
+
+    var scale = function (f, x1, x2, y1, y2) {
+      // x1 and x2 must be scalars. y1 and y2 can be scalars or vectors
+      return function(x) {
+        var yTranslate = y1;
+        var xTranslate = -x1;
+        var xScale = 1 / (x2 - x1);
+        var yScale = subtract(y2, y1);
+        return add(multiply(yScale, f(xScale * (x + xTranslate))), yTranslate);
+      };
+    };
+
+    return function(points) {
+        //
+        // Takes a list of points, with the curve to follow to the next point.
+        // Any curve value on the last point is ignored.
+        //
+        //  e.g., [[0, 100, Easings.inOutQuad], [1, 500]]
+        //
+        // Returns a piecewise function f:
+        //
+        //
+        //         / y₀,             if x < x₀
+        //         |
+        //         | scaled(curveᵢ,  if xᵢ ≤ x < xᵢ₊₁
+        //         |        xᵢ,
+        //         |        xᵢ,
+        // f(x) = <         yᵢ₊₁,
+        //         |        yᵢ₊₁)(x)
+        //         | for i in 0..segments.length - 1
+        //         |
+        //         \ last x,         otherwise
+        //
+
+        return function(x) {
+          if (x < points[0][0]) {
+            return points[0][1];
+          }
+          for (var i = 0; i < points.length - 1; i++) {
+            if (points[i][0] <= x && x < points[i+1][0]) {
+              var f = scale(points[i][2],
+                            points[i][0],
+                            points[i+1][0],
+                            points[i][1],
+                            points[i+1][1]);
+
+              return f(x);
+            }
+          }
+          return points[points.length-1][1];
+        };
+
+      };
+
+  });
+
+/**
  * @ngdoc directive
  * @name faAnimation
  * @module famous.angular
  * @restrict EA
  * @description
- * This directive is used to animate an element in conjunction with an {@link api/directive/animate animate} directive
- *
+ * This directive is deprecated.  Prefer using the $timeline service.  This directive is used to animate an element in conjunction with an {@link api/directive/animate animate} directive
+ * @deprecated true
  * @usage
  * ```html
  * <fa-animation timeline="functionThatReturnsATimelineValueBetween0And1">
@@ -735,7 +868,7 @@ angular.module('famous.angular')
  * 
  * ```javascript
  * var Transitionable = $famous['famous/transitions/Transitionable'];
- * var Easing = require('famous/transitions/Easing');
+ * var Easing = $famous['famous/transitions/Easing'];
  * 
  * $scope.boxTransitionable = new Transitionable([0, 0, 0]);
  * 
@@ -1038,8 +1171,9 @@ angular.module('famous.angular')
                * @name animate
                * @module famous.angular
                * @restrict E
+               * @deprecated true
                * @description
-               * This element is used to specify the animation of an element in a {@link api/directive/faAnimation faAnimation} directive
+               * This directive is deprecated.  Prefer using the $timeline service.  This element is used to specify the animation of an element in a {@link api/directive/faAnimation faAnimation} directive
                *
                * @usage
                * ```html
@@ -1372,10 +1506,9 @@ angular.module('famous.angular')
             var Engine = $famous['famous/core/Engine'];
             var Transform = $famous['famous/core/Transform'];
 
-
-            element.append('<div class="famous-angular-container"></div>');
+            element.append('<div class="famous-angular-clipping-container"><div class="famous-angular-container"></div></div>');
             isolate.context = Engine.createContext(element[0].querySelector('.famous-angular-container'));
-
+            window.context = isolate.context;
             var _updatePerspective = function(){
               var val = parseInt(attrs.faPerspective);
               if(val) isolate.context.setPerspective(val);
@@ -1636,11 +1769,13 @@ angular.module('famous.angular')
 
             var options = scope.$eval(attrs.faOptions) || {};
             isolate.renderNode = new ContainerSurface(options);
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show();
 
             $famousDecorator.sequenceWith(
               scope,
               function(data) {
-                isolate.renderNode.add(data.renderNode);
+                isolate.renderNode.add(data.renderGate);
               },
               function(childScopeId) {
                 throw new Error('unimplemented: fa-container-surface does not support removing children');
@@ -1693,11 +1828,17 @@ angular.module('famous.angular')
 
             var FlexibleLayout = $famous["famous/views/FlexibleLayout"];
             var ViewSequence = $famous['famous/core/ViewSequence'];
+            var RenderNode = $famous['famous/core/RenderNode'];
+
 
             var _children = [];
 
             var options = scope.$eval(attrs.faOptions) || {};
+
             isolate.renderNode = new FlexibleLayout(options);
+
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show();
 
             var updateFlexibleLayout = function () {
               _children.sort(function (a, b) {
@@ -1706,7 +1847,7 @@ angular.module('famous.angular')
               isolate.renderNode.sequenceFrom(function (_children) {
                 var _ch = [];
                 angular.forEach(_children, function (c, i) {
-                  _ch[i] = c.renderNode;
+                  _ch[i] = c.renderGate;
                 });
                 return _ch;
               }(_children));
@@ -1797,10 +1938,13 @@ angular.module('famous.angular')
               var isolate = $famousDecorator.ensureIsolate(scope);
               var Flipper = $famous["famous/views/Flipper"];
 
+
               //TODO:  $watch and update, or $parse and attr.$observe
               var options = scope.$eval(attrs.faOptions) || {};
-
               isolate.renderNode = new Flipper(options);
+              $famousDecorator.addRole('renderable',isolate);
+              isolate.show();
+           
               isolate.children = [];
 
               isolate.flip = function (overrideOptions) {
@@ -1810,20 +1954,25 @@ angular.module('famous.angular')
               $famousDecorator.sequenceWith(
                 scope,
                 function(data) {
+                  //TODO:  support fa-index + sorting children instead of just a stack
                   var _childCount = isolate.children.length;
-                  if (_childCount === 0) {
-                    isolate.renderNode.setFront(data.renderNode);
-                  } else if (_childCount === 1) {
-                    isolate.renderNode.setBack(data.renderNode);
+                  if (_childCount == 0) {
+                    isolate.renderNode.setFront(data.renderGate);
+                  } else if (_childCount == 1) {
+                    isolate.renderNode.setBack(data.renderGate);
                   } else {
                     throw new Error('fa-flipper accepts only two child elements; more than two have been provided');
                   }
 
-                  isolate.children.push(data.renderNode);
+                  isolate.children.push(data.renderGate);
                 },
-                // TODO: support removing children
                 function(childScopeId) {
-                  throw new Error('unimplemented: fa-flipper does not support removing children');
+                  //TODO:  support fa-index + sorting children and removing
+                  //       the child at the proper index instead of just popping off a stack
+
+                  //Since children should handle hiding themselves, all we need to do is
+                  //update our children array
+                  isolate.children.splice(isolate.children.length - 1, 1);
                 }
               );
             },
@@ -1909,10 +2058,12 @@ angular.module('famous.angular')
             var options = scope.$eval(attrs.faOptions) || {};
             isolate.renderNode = new GridLayout(options);
 
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show();
             //watch options and update when changed
             scope.$watch(function(){
               return scope.$eval(attrs.faOptions);
-            }, function(oldVal, newVal){
+            }, function(newVal, oldVal){
               isolate.renderNode.setOptions(newVal);
             }, true);
 
@@ -1924,7 +2075,7 @@ angular.module('famous.angular')
                 isolate.renderNode.sequenceFrom(function(_children) {
                   var _ch = [];
                   angular.forEach(_children, function(c, i) {
-                    _ch[i] = c.renderNode;
+                    _ch[i] = c.renderGate;
                   });
                   return _ch;
                 }(_children));
@@ -2055,6 +2206,8 @@ angular.module('famous.angular')
 
             var options = scope.$eval(attrs.faOptions) || {};
             isolate.renderNode = new HeaderFooterLayout(options);
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show();
 
             var _numberOfChildren = 0;
 
@@ -2063,11 +2216,11 @@ angular.module('famous.angular')
               function(data) {
                 _numberOfChildren++;
                 if (_numberOfChildren === 1) {
-                  isolate.renderNode.header.add(data.renderNode);
+                  isolate.renderNode.header.add(data.renderGate);
                 } else if (_numberOfChildren === 2){
-                  isolate.renderNode.content.add(data.renderNode);
+                  isolate.renderNode.content.add(data.renderGate);
                 } else if (_numberOfChildren === 3){
-                  isolate.renderNode.footer.add(data.renderNode);
+                  isolate.renderNode.footer.add(data.renderGate);
                 } else {
                   throw new Error('fa-header-footer-layout can accept no more than 3 children');
                 }
@@ -2174,15 +2327,14 @@ angular.module('famous.angular')
               return baseProperties;
             };
 
-            var getOrValue = function (x) {
-              return x.get ? x.get() : x;
-            };
-
             isolate.renderNode = new ImageSurface({
               size: scope.$eval(attrs.faSize),
               class: scope.$eval(attrs.class),
               properties: isolate.getProperties()
             });
+            
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show();
 
             if (attrs.class) {
               isolate.renderNode.setClasses(attrs['class'].split(' '));
@@ -2306,19 +2458,19 @@ angular.module('famous.angular')
  * @name faModifier
  * @module famous.angular
  * @restrict EA
- * @param {Array|Function} faRotate  -  Array of numbers or function returning an array of numbers to which this Modifier's rotate should be bound.
- * @param {Number|Function} faRotateX  -  Number or function returning a number to which this Modifier's rotateX should be bound
- * @param {Number|Function} faRotateY  -  Number or function returning a number to which this Modifier's rotateY should be bound
- * @param {Number|Function} faRotateZ  -  Number or function returning a number to which this Modifier's rotateZ should be bound
- * @param {Array|Function} faScale  -  Array of numbers or function returning an array of numbers to which this Modifier's scale should be bound
- * @param {Array|Function} faSkew  -  Array of numbers or function returning an array of numbers to which this Modifier's skew should be bound
- * @param {Array|Function} faAboutOrigin  -  Array of arguments (or a function returning an array of arguments) to pass to Transform.aboutOrigin
- * @param {Number|Function} faPerspective  -  Number or array returning a number to which this modifier's perspective (focusZ) should be bound.
+ * @param {Array|Function|Particle} faRotate  -  Array of numbers or function returning an array of numbers to which this Modifier's rotate should be bound.
+ * @param {Number|Function|Particle} faRotateX  -  Number or function returning a number to which this Modifier's rotateX should be bound
+ * @param {Number|Function|Particle} faRotateY  -  Number or function returning a number to which this Modifier's rotateY should be bound
+ * @param {Number|Function|Particle} faRotateZ  -  Number or function returning a number to which this Modifier's rotateZ should be bound
+ * @param {Array|Function|Particle} faScale  -  Array of numbers or function returning an array of numbers to which this Modifier's scale should be bound
+ * @param {Array|Function|Particle} faSkew  -  Array of numbers or function returning an array of numbers to which this Modifier's skew should be bound
+ * @param {Array|Function|Particle} faAboutOrigin  -  Array of arguments (or a function returning an array of arguments) to pass to Transform.aboutOrigin
+ * @param {Number|Function|Particle} faPerspective  -  Number or array returning a number to which this modifier's perspective (focusZ) should be bound.
  * @param {Transform} faTransform - Manually created Famo.us Transform object (an array) that can be passed to the modifier.  *Will override all other transform attributes.*
- * @param {Number|Function|Transitionable} faOpacity  -  Number or function returning a number to which this Modifier's opacity should be bound
- * @param {Array|Function|Transitionable} faSize  -  Array of numbers (e.g. [100, 500] for the x- and y-sizes) or function returning an array of numbers to which this Modifier's size should be bound
- * @param {Array|Function|Transitionable} faOrigin  -  Array of numbers (e.g. [.5, 0] for the x- and y-origins) or function returning an array of numbers to which this Modifier's origin should be bound
- * @param {Array|Function|Transitionable} faAlign  -  Array of numbers (e.g. [.5, 0] for the x- and y-aligns) or function returning an array of numbers to which this Modifier's align should be bound
+ * @param {Number|Function|Transitionable|Particle} faOpacity  -  Number or function returning a number to which this Modifier's opacity should be bound
+ * @param {Array|Function|Transitionable|Particle} faSize  -  Array of numbers (e.g. [100, 500] for the x- and y-sizes) or function returning an array of numbers to which this Modifier's size should be bound
+ * @param {Array|Function|Transitionable|Particle} faOrigin  -  Array of numbers (e.g. [.5, 0] for the x- and y-origins) or function returning an array of numbers to which this Modifier's origin should be bound
+ * @param {Array|Function|Transitionable|Particle} faAlign  -  Array of numbers (e.g. [.5, 0] for the x- and y-aligns) or function returning an array of numbers to which this Modifier's align should be bound
  * @param {Array.String} faTransformOrder  -  Optional array of strings to specify which transforms to apply and in which order. (e.g. `fa-transform-order="['rotateZ', 'translate', 'scale']"`)  Default behavior is to evaluate all supported transforms and apply them in alphabetical order.
  * @description
  * This directive creates a Famo.us Modifier that will affect all children render nodes.  Its properties can be bound
@@ -2530,10 +2682,15 @@ angular.module('famous.angular')
             var RenderNode = $famous['famous/core/RenderNode'];
             var Modifier = $famous['famous/core/Modifier'];
             var Transform = $famous['famous/core/Transform'];
+            var Particle = $famous['famous/physics/bodies/Particle'];
 
             var get = function(x) {
               if (x instanceof Function) return x();
               return x.get ? x.get() : x;
+            };
+
+            var _unwrapParticle = function(part){
+              return part.getPosition();
             };
 
             //TODO:  make a stand-alone window-level utility
@@ -2606,6 +2763,7 @@ angular.module('famous.angular')
                   //TODO:feat Support Transitionables
                   if(candidate instanceof Function) candidate = candidate();
                   if(candidate instanceof Array) transforms.push(Transform[field].apply(this, candidate));
+                  else if(candidate instanceof Particle) transforms.push(Transform[field].apply(this, _unwrapParticle(candidate)));
                   else transforms.push(Transform[field].call(this, candidate));
                 }
               });
@@ -2623,6 +2781,7 @@ angular.module('famous.angular')
               var ret = _alignFn(scope);
               if(ret instanceof Function) return ret();
               else if(ret instanceof Object && ret.get !== undefined) return ret.get();
+              else if(ret instanceof Particle) return _unwrapParticle(ret);
               else return ret;
             };
 
@@ -2635,6 +2794,7 @@ angular.module('famous.angular')
               if(ret === undefined) return 1;
               else if(ret instanceof Function) return ret();
               else if(ret instanceof Object && ret.get !== undefined) return ret.get();
+              else if(ret instanceof Particle) return _unwrapParticle(ret);
               else return ret;
             };
 
@@ -2646,6 +2806,7 @@ angular.module('famous.angular')
               var ret = _sizeFn(scope);
               if(ret instanceof Function) return ret();
               else if(ret instanceof Object && ret.get !== undefined) return ret.get();
+              else if(ret instanceof Particle) return _unwrapParticle(ret);
               else return ret;
             };
 
@@ -2657,6 +2818,7 @@ angular.module('famous.angular')
               var ret = _originFn(scope);
               if(ret instanceof Function) return ret();
               else if(ret instanceof Object && ret.get !== undefined) return ret.get();
+              else if(ret instanceof Particle) return _unwrapParticle(ret);
               else return ret;
             };
 
@@ -2670,8 +2832,11 @@ angular.module('famous.angular')
 
             isolate.renderNode = new RenderNode().add(isolate.modifier);
 
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show()
+            
             $famousDecorator.sequenceWith(scope, function(data) {
-              isolate.renderNode.add(data.renderNode);
+              isolate.renderNode.add(data.renderGate);
             });
 
             transclude(scope, function (clone) {
@@ -2693,6 +2858,31 @@ angular.module('famous.angular')
     };
   }]);
 
+angular.module('famous.angular')
+  .directive('faMouseover', ['$parse', '$famousDecorator', function ($parse, $famousDecorator) {
+    return {
+      restrict: 'A',
+      scope: false,
+      compile: function() {
+        return { 
+          post: function(scope, element, attrs) {
+            var isolate = $famousDecorator.ensureIsolate(scope);
+
+            if (attrs.faMouseover) {
+              var renderNode = (isolate.renderNode._eventInput || isolate.renderNode);
+
+              renderNode.on("mouseover", function(data) {
+                var fn = $parse(attrs.faMouseover);
+                fn(scope, {$event:data});
+                if(!scope.$$phase)
+                  scope.$apply();
+              });
+            }
+          }
+        };
+      }
+    };
+  }]);
 /**
  * @ngdoc directive
  * @name faPipeFrom
@@ -3271,6 +3461,7 @@ angular.module('famous.angular')
             var isolate = $famousDecorator.ensureIsolate(scope);
 
             var Engine = $famous['famous/core/Engine'];
+            var RenderNode = $famous['famous/core/RenderNode'];
 
             var getOrValue = function(x) {
               return x.get ? x.get() : x;
@@ -3286,8 +3477,11 @@ angular.module('famous.angular')
 
             isolate.renderNode = scope.$eval(attrs.faNode);
 
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show();
+
             $famousDecorator.sequenceWith(scope, function(data) {
-              isolate.renderNode.add(data.renderNode);
+              isolate.renderNode.add(data.renderGate);
               isolate.children.push(data);
             });
 
@@ -3504,6 +3698,10 @@ angular.module('famous.angular')
             var options = scope.$eval(attrs.faOptions) || {};
             isolate.renderNode = new ScrollView(options);
 
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show();
+
+
             var updateScrollview = function(init){
               // Synchronize the update on the next digest cycle
               // (if this isn't done, $index will not be up-to-date
@@ -3517,8 +3715,8 @@ angular.module('famous.angular')
                   array: function(_children) {
                     var _ch = [];
                     angular.forEach(_children, function(c, i) {
-                      _ch[i] = c.renderNode;
-                    });
+                      _ch[i] = c.renderGate;
+                    })
                     return _ch;
                   }(_children)
                 };
@@ -3625,11 +3823,15 @@ angular.module('famous.angular')
 
             var SequentialLayout = $famous["famous/views/SequentialLayout"];
 
+
             var _children = [];
 
             var options = scope.$eval(attrs.faOptions) || {};
 
             isolate.renderNode = new SequentialLayout(options);
+
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show();
 
             var _updateSequentialLayout = function() {
               _children.sort(function(a, b) {
@@ -3638,7 +3840,7 @@ angular.module('famous.angular')
               isolate.renderNode.sequenceFrom(function(_children) {
                 var _ch = [];
                 angular.forEach(_children, function(c, i) {
-                  _ch[i] = c.renderNode;
+                  _ch[i] = c.renderGate;
                 });
                 return _ch;
               }(_children));
@@ -3825,8 +4027,9 @@ angular.module('famous.angular')
       compile: function(tElem, tAttrs, transclude){
         return {
           pre: function(scope, element, attrs){
+            
             var isolate = $famousDecorator.ensureIsolate(scope);
-
+            // console.log("fa-surface", isolate);
             var Surface = $famous['famous/core/Surface'];
             var Transform = $famous['famous/core/Transform'];
             var EventHandler = $famous['famous/core/EventHandler'];
@@ -3874,11 +4077,12 @@ angular.module('famous.angular')
               }
               return baseProperties;
             };
-
-            isolate.renderNode = new Surface({
+             isolate.renderNode = new Surface({
               size: scope.$eval(attrs.faSize),
               properties: isolate.getProperties()
             });
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show();
 
             if (attrs.class) {
               isolate.renderNode.setClasses(attrs['class'].split(' '));
@@ -4421,16 +4625,14 @@ angular.module('famous.angular')
 
             isolate.children = [];
 
-            var getOrValue = function(x) {
-              return x.get ? x.get() : x;
-            };
-
             isolate.renderNode = new View({
               size: scope.$eval(attrs.faSize) || [undefined, undefined]
             });
-
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show();
+            
             $famousDecorator.sequenceWith(scope, function(data) {
-              isolate.renderNode.add(data.renderNode);
+              isolate.renderNode.add(data.renderGate);
               isolate.children.push(data);
             });
 

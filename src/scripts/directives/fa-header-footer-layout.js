@@ -86,6 +86,8 @@ angular.module('famous.angular')
 
             var options = scope.$eval(attrs.faOptions) || {};
             isolate.renderNode = new HeaderFooterLayout(options);
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show();
 
             var _numberOfChildren = 0;
 
@@ -94,11 +96,11 @@ angular.module('famous.angular')
               function(data) {
                 _numberOfChildren++;
                 if (_numberOfChildren === 1) {
-                  isolate.renderNode.header.add(data.renderNode);
+                  isolate.renderNode.header.add(data.renderGate);
                 } else if (_numberOfChildren === 2){
-                  isolate.renderNode.content.add(data.renderNode);
+                  isolate.renderNode.content.add(data.renderGate);
                 } else if (_numberOfChildren === 3){
-                  isolate.renderNode.footer.add(data.renderNode);
+                  isolate.renderNode.footer.add(data.renderGate);
                 } else {
                   throw new Error('fa-header-footer-layout can accept no more than 3 children');
                 }

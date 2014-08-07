@@ -112,14 +112,18 @@ gulp.task('docs', ['build'], function(done) {
  * Watch task for developing with the famous-angular-examples submodule
  ***********************************************************************/
 gulp.task('build-to-examples', ['clean', 'build'], function(event) {
-  return gulp.src([
+  gulp.src([
     'src/scripts/module.js',
     'src/scripts/services/**/*.js',
     'src/scripts/directives/**/*.js'
   ])
   .pipe(concat('famous-angular.js'))
+  .pipe(gulp.dest(EXAMPLES_DIR + 'app/bower_components/famous-angular/dist/'));
+
+  return gulp.src('src/styles/famous-angular.css')
   .pipe(gulp.dest(EXAMPLES_DIR + 'app/bower_components/famous-angular/dist/'))
   .pipe(notify({ message: 'Build task complete' }));
+  
 })
 
 // Watch

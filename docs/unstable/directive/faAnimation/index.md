@@ -15,6 +15,10 @@ docType: "directive"
   </a>
 </div>
 
+  <br>
+  <strong>This directive is deprecated.</strong>
+
+
 
 
 
@@ -30,9 +34,7 @@ docType: "directive"
 
 
 
-This directive is used to animate an element in conjunction with an <a href="api/directive/animate">animate</a> directive
-
-
+This directive is deprecated.  Prefer using the $timeline service.  This directive is used to animate an element in conjunction with an <a href="api/directive/animate">animate</a> directive
 
 
 
@@ -58,7 +60,7 @@ This directive is used to animate an element in conjunction with an <a href="api
 <p>The most flexible way to animate modifier properties is by creating a Transitionable object on the scope and binding the property in the html.
 Any changes to the Transitionable object on the scope will be reflected in the view immediately via Angular&#39;s two-way data binding.</p>
 <pre><code class="lang-javascript">var Transitionable = $famous[&#39;famous/transitions/Transitionable&#39;];
-var Easing = require(&#39;famous/transitions/Easing&#39;);
+var Easing = $famous[&#39;famous/transitions/Easing&#39;];
 
 $scope.boxTransitionable = new Transitionable([0, 0, 0]);
 

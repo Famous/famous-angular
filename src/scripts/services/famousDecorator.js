@@ -27,20 +27,34 @@
  */
 
 angular.module('famous.angular')
-  .factory('$famousDecorator', function () {
+  .factory('$famousDecorator', function ($famous) {
     //TODO:  add repeated logic to these roles
     var _roles = {
       child: {
       },
       parent: {
+      },
+      renderable: function( isolate ) {
+        var RenderNode = $famous['famous/core/RenderNode'];
+
+        isolate.renderGate = new RenderNode();
+        isolate.emptyNode = new RenderNode();
+          
+        isolate.show = function() {
+          isolate.renderGate && isolate.renderGate.set(isolate.renderNode);
+        };
+        isolate.hide = function() {
+          isolate.renderGate.set(isolate.emptyNode);
+        };
       }
+      
     };
 
     return {
       //TODO:  patch into _roles and assign the
       // appropriate role to the given scope
-      addRole: function(role, scope){
-
+      addRole: function(role, isolate){
+          _roles[role](isolate);
       },
 
       /**
