@@ -550,7 +550,7 @@ angular.module('famous.angular')
         isolate.emptyNode = new RenderNode();
           
         isolate.show = function() {
-          isolate.renderGate && isolate.renderGate.set(isolate.renderNode);
+          if(isolate.renderGate) isolate.renderGate.set(isolate.renderNode);
         };
         isolate.hide = function() {
           isolate.renderGate.set(isolate.emptyNode);
