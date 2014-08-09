@@ -66,9 +66,9 @@ angular.module('famous.angular')
                 function(data) {
                   //TODO:  support fa-index + sorting children instead of just a stack
                   var _childCount = isolate.children.length;
-                  if (_childCount == 0) {
+                  if (_childCount === 0) {
                     isolate.renderNode.setFront(data.renderGate);
-                  } else if (_childCount == 1) {
+                  } else if (_childCount === 1) {
                     isolate.renderNode.setBack(data.renderGate);
                   } else {
                     throw new Error('fa-flipper accepts only two child elements; more than two have been provided');
