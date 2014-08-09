@@ -178,6 +178,29 @@ ngFameApp.provider('$famous', function() {
     return isolates;
   };
 
+  /**
+   * Check if the element selected has an isolate renderNode that accepts classes.
+   * @param {Array} element - derived element
+   * @return {boolean}
+   */
+  _modules.utils = {
+    isASurface : function (element) {
+      var Surface = _module['famous/core/Surface'];
+      var isolate = _module.getIsolate(element.scope());
+      return isolate && isolate.renderNode instanceof Surface;
+    },
+
+    /**
+      Check if the element selected is an fa- element
+      @param {Array} element - derived element
+      @return {boolean}
+    */
+    isFaElement : function (element) {
+      var isFa = /^FA\-.*/;
+      return isFa.test(element[0].tagName);
+    }
+  };
+
   this.$get = function() {
 
     /**
