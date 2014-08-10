@@ -4,46 +4,9 @@
  * @link https://github.com/Famous/famous-angular
  * @license MPL v2.0
  */
-// 'use strict';
+'use strict';
 
-window.$famousUtils = function() {
- 
-  var SPECIAL_CHARS_REGEXP = /([\:\-\_]+(.))/g;
-  var MOZ_HACK_REGEXP = /^moz([A-Z])/;
-
-  /**
-   * Converts snake_case to camelCase.
-   * Also there is special case for Moz prefix starting with upper case letter.
-   * @param name Name to normalize
-   */
-  function camelCase(name) {
-    return name.
-      replace(SPECIAL_CHARS_REGEXP, function(_, separator, letter, offset) {
-        return offset ? letter.toUpperCase() : letter;
-      }).
-      replace(MOZ_HACK_REGEXP, 'Moz$1');
-  }
-
-  var PREFIX_REGEXP = /^(x[\:\-_]|data[\:\-_])/i;
-  
-  return {
-    /**
-     * @description Converts all accepted directives format into proper directive name.
-     * All of these will become 'myDirective':
-     *   my:Directive
-     *   my-directive
-     *   x-my-directive
-     *   data-my:directive
-     *
-     * Also there is special case for Moz prefix starting with upper case letter.
-     * @param name Name to normalize
-     */
-    directiveNormalize: function(name) {
-        return camelCase(name.replace(PREFIX_REGEXP, ''));
-    }
-  };
-}();
-var ngFameApp = angular.module('famous.angular', ['ngTouch']);
+var ngFameApp = angular.module('famous.angular', []);
 
 /**
  * @ngdoc provider
@@ -225,16 +188,24 @@ ngFameApp.provider('$famous', function() {
     return isolates;
   };
 
+
+  var SPECIAL_CHARS_REGEXP = /([\:\-\_]+(.))/g;
+  var MOZ_HACK_REGEXP = /^moz([A-Z])/;
+  var PREFIX_REGEXP = /^(x[\:\-_]|data[\:\-_])/i;
+  var IS_A_SURFACE = /^FA\-.*SURFACE/;
+  var IS_FA = /^FA\-.*/;
   /**
+    Util functions.
+  */ 
+
+  _modules.util = {
+    /**
    * Check if the element selected has an isolate renderNode that accepts classes.
    * @param {Array} element - derived element
    * @return {boolean}
    */
-  _modules.utils = {
     isASurface : function (element) {
-      var Surface = _module['famous/core/Surface'];
-      var isolate = _module.getIsolate(element.scope());
-      return isolate && isolate.renderNode instanceof Surface;
+      return IS_A_SURFACE.test(element[0].tagName);
     },
 
     /**
@@ -243,11 +214,38 @@ ngFameApp.provider('$famous', function() {
       @return {boolean}
     */
     isFaElement : function (element) {
-      var isFa = /^FA\-.*/;
-      return isFa.test(element[0].tagName);
+      return IS_FA.test(element[0].tagName);
+    },
+    /**
+     * Converts snake_case to camelCase.
+     * Also there is special case for Moz prefix starting with upper case letter.
+     * @param name Name to normalize
+     */
+
+    camelCase :function(name) {
+      return name.
+        replace(SPECIAL_CHARS_REGEXP, function(_, separator, letter, offset) {
+          return offset ? letter.toUpperCase() : letter;
+        }).
+        replace(MOZ_HACK_REGEXP, 'Moz$1');
+    },
+
+    /**
+     * @description Converts all accepted directives format into proper directive name.
+     * All of these will become 'myDirective':
+     *   my:Directive
+     *   my-directive
+     *   x-my-directive
+     *   data-my:directive
+     *
+     * Also there is special case for Moz prefix starting with upper case letter.
+     * @param name Name to normalize
+     */
+    directiveNormalize: function(name) {
+        return _modules.util.camelCase(name.replace(PREFIX_REGEXP, ''));
     }
   };
-
+  
   this.$get = function() {
 
     /**
@@ -409,7 +407,7 @@ angular.module('famous.angular')
           // If and only if the current element represents a Famo.us Surface,
           // AND the class is not an empty string, pass through
           // the addClass and removeClass methods to the underlying renderNode.
-          if ($famous.utils.isASurface(this) && typeof className === 'string' && className.trim() !== '') {
+          if ($famous.util.isASurface(this) && typeof className === 'string' && className.trim() !== '') {
             $famous.getIsolate(this.scope()).renderNode[classManipulator](className);
           }
           return this;
@@ -424,9 +422,9 @@ angular.module('famous.angular')
         animationHandlers[classManipulator] = function(element, className, done) {
          
           $delegate[classManipulator](element, className, done);
-          if($famous.utils.isFaElement(element)){
+          if($famous.util.isFaElement(element)){
             var isolate = $famous.getIsolate(element.scope());
-            if ($famous.utils.isASurface(element)) {
+            if ($famous.util.isASurface(element)) {
 
               var surface = isolate.renderNode;
               angular.forEach(className.split(' '), function(splitClassName) {
@@ -463,7 +461,7 @@ angular.module('famous.angular')
         
         $delegate.setClass(element, add, remove, done);
 
-        if ($famous.utils.isASurface(element)) {
+        if ($famous.util.isASurface(element)) {
           var surface = $famous.getIsolate(element.scope()).renderNode;
           angular.forEach(add.split(' '), function(className) {
             surface.addClass(className);
@@ -509,7 +507,7 @@ angular.module('famous.angular')
             var scopeId = element.scope() && element.scope().$id;
 
             //hide the element on animate.leave
-            if(operation === 'leave' && $famous.utils.isFaElement(element)){
+            if(operation === 'leave' && $famous.util.isFaElement(element)){
               var isolate = $famous.getIsolate(element.scope());
               if(isolate && isolate.id) isolate.hide();
              }
@@ -2500,20 +2498,49 @@ angular.module('famous.angular')
 'use strict';
 /**
  * @ngdoc directive
- * @name faClick
+ * @name ngClick
  * @module famous.angular
  * @restrict A
  * 
  * @description
- * This directive allows you to specify custom behavior when an element is clicked.
+ * This is a wrapped for tha default ngCick which allows you to specify custom behavior when an fa-surface is clicked.
+ * the wrapper is also design to be be used on touchscreen devices. It matches all the features supported by ngClick on 
+ * including ngTouch module for all types of fa-surface. 
+ * 
+ * If ngTouch is requried to add touch click capabilites in non F/A elements. Add ngTouch dependence before adding famous.angular otherwise 
+ * this functionality will be lost.
  *
+ * @usage
+ * ```html
+ * <ANY fa-click="expression">
+ *
+ * </ANY>
+ * ```
+ * @example
+ * ### ng-click on an fa-surface
+ * `ng-click` can be used on an `fa-surface`.  Internally, a Famous Surface has a `.on()` method that binds a callback function to an event type handled by that Surface.
+ *  The function expression bound to `ng-click` is bound to that `fa-surface`'s click eventHandler, and when the `fa-surface` is clicked, the function expression will be called. 
+ *
+ * ```html
+ * <fa-modifier fa-size="[100, 100]">
+ *   <fa-surface ng-click="myClickHandler($event)" fa-background-color="'red'"></fa-surface>
+ * </fa-modifier>
+ * ```
+ * ```javascript
+ * $scope.myClickHandler = function($event) {
+ *   console.log("click");
+ *   console.log($event);
+ * };
+ * 
 **/
 angular.module('famous.angular')
-.config(function($provide) {
-  $provide.decorator('ngClickDirective', function ($delegate, $famousDecorator, $parse, $famous, $timeout, $famous) {
+.config(function  ($provide) {
+  
+  $provide.decorator('ngClickDirective', function ($delegate, $famousDecorator, $parse, $rootElement, $famous, $timeout) {
     var directive = $delegate[0];
 
     var compile = directive.compile;
+    
     var TAP_DURATION = 750; // Shorter than 750ms is a tap, longer is a taphold or drag.
     var MOVE_TOLERANCE = 12; // 12px seems to work in most mobile browsers.
     var PREVENT_DURATION = 2500; // 2.5 seconds maximum from preventGhostClick call to click
@@ -2595,8 +2622,8 @@ angular.module('famous.angular')
     // zone around the touchstart where clicks will get busted.
     function preventGhostClick(x, y) {
       if (!touchCoordinates) {
-        Engine.on('click', onClick);
-        Engine.on('touchstart', onTouchStart);
+        $rootElement[0].addEventListener('click', onClick, true);
+        $rootElement[0].addEventListener('touchstart', onTouchStart, true);
         touchCoordinates = [];
       }
 
@@ -2606,19 +2633,17 @@ angular.module('famous.angular')
     }
 
     directive.compile = function(element , attrs, transclude) {
-
-      if($famous.utils.isFaElement(element)) {
-        if($famous.utils.isASurface(element)) {
-
+      if($famous.util.isFaElement(element)) {
+        if($famous.util.isASurface(element)) {
           return {
-            link: function(scope, element, attr) {
+            post: function(scope, element, attr) {
               var clickHandler = $parse(attr.ngClick),
                   tapping = false,
                   tapElement,  // Used to blur the element after a tap.
                   startTime,   // Used to check if the tap was held too long.
                   touchStartX,
                   touchStartY;
-              var isolate = $famous.getIsolate(element.scope());
+              var isolate = $famous.getIsolate(scope);
               var renderNode = isolate.renderNode;
 
               function resetState() {
@@ -2698,32 +2723,31 @@ angular.module('famous.angular')
         return compile(element, attrs, transclude);
       }
     };
+    return $delegate; 
   });
+
+
 
   angular.forEach(
   'dblclick mousedown mouseup mouseover mouseout mousemove mouseenter mouseleave keydown keyup keypress submit focus blur copy cut paste'.split(' '),
   function(name) {
-    var directiveName = window.$famousUtils.directiveNormalize('ng-' + name) ;
+    var directiveName = $famous.util.directiveNormalize('ng-' + name) ;
     
     $provide.decorator(directiveName+'Directive', function ($delegate, $famousDecorator, $parse, $famous) {
-       console.log($delegate);
         var directive = $delegate[0];
 
         var compile = directive.compile;
         directive.compile = function(element , attrs, transclude) {
-          var isFa = /^FA\-.*/;
-          if(isFa.test(element[0].tagName)) {
+          if($famous.util.isFaElement(element)) {
             return {
 
               post: function (scope, element, attrs) {
-                console.log(element[0].tagName, name);
                 var isolate = $famousDecorator.ensureIsolate(scope);
 
                 if (attrs[directiveName]) {
                   var renderNode = (isolate.renderNode._eventInput || isolate.renderNode);
 
                   renderNode.on(name, function (data) {
-                    console.log(name,element, data);
                     var fn = $parse(attrs[directiveName]);
                     fn(scope, {$event: data});
                     if (!scope.$$phase){
@@ -2734,7 +2758,6 @@ angular.module('famous.angular')
               }
             };
           }else {
-                console.log(element[0].tagName, name);
 
             return compile(element , attrs, transclude);
           }
@@ -2744,6 +2767,363 @@ angular.module('famous.angular')
   });
 });
 
+/**
+ * @ngdoc directive
+ * @name ngDblclick
+ *
+ * @description
+ * This wrapped on `ngDblclick` directive allows you to specify custom behavior on a dblclick event on a fa-surface .
+ *
+ * @element ANY
+ * @priority 0
+ * @param {expression} ngDblclick {@link guide/expression Expression} to evaluate upon
+ * a dblclick. (The Event object is available as `$event`)
+ *
+ * @example
+   <example>
+     <file name="index.html">
+      <fa-surface ng-dblclick="count = count + 1" ng-init="count=0">
+        Increment (on double click)
+      </fa-surface>
+      count: {{count}}
+     </file>
+   </example>
+ */
+
+
+/**
+ * @ngdoc directive
+ * @name ngMousedown
+ *
+ * @description
+ * The ngMousedown directive allows you to specify custom behavior on mousedown event on a fa-surface.
+ *
+ * @element ANY
+ * @priority 0
+ * @param {expression} ngMousedown {@link guide/expression Expression} to evaluate upon
+ * mousedown. ({@link guide/expression#-event- Event object is available as `$event`})
+ *
+ * @example
+   <example>
+     <file name="index.html">
+      <fa-surface ng-mousedown="count = count + 1" ng-init="count=0">
+        Increment (on mouse down)
+      </fa-surface>
+      <fa-surface>
+        count: {{count}}
+      </fa-surface>
+     </file>
+   </example>
+ */
+
+
+/**
+ * @ngdoc directive
+ * @name ngMouseup
+ *
+ * @description
+ * Specify custom behavior on mouseup event on a fa-surface.
+ *
+ * @element ANY
+ * @priority 0
+ * @param {expression} ngMouseup {@link guide/expression Expression} to evaluate upon
+ * mouseup. ({@link guide/expression#-event- Event object is available as `$event`})
+ *
+ * @example
+  <example>
+     <file name="index.html">
+      <fa-surface ng-mouseup="count = count + 1" ng-init="count=0">
+        Increment (on mouse up)
+      </fa-surface>
+      <fa-surface>
+        count: {{count}}
+      </fa-surface>
+     </file>
+   </example>
+ */
+
+/**
+ * @ngdoc directive
+ * @name ngMouseover
+ *
+ * @description
+ * Specify custom behavior on mouseover event on a fa-surface.
+ *
+ * @element ANY
+ * @priority 0
+ * @param {expression} ngMouseover {@link guide/expression Expression} to evaluate upon
+ * mouseover. ({@link guide/expression#-event- Event object is available as `$event`})
+ *
+ * @example
+   <example>
+     <file name="index.html">
+      <fa-surface ng-mouseover="count = count + 1" ng-init="count=0">
+        Increment (when mouse is over)
+      </fa-surface>
+      <fa-surface>
+        count: {{count}}
+      </fa-surface>
+     </file>
+   </example>
+ */
+
+
+/**
+ * @ngdoc directive
+ * @name ngMouseenter
+ *
+ * @description
+ * Specify custom behavior on mouseenter event on a fa-surface.
+ *
+ * @element ANY
+ * @priority 0
+ * @param {expression} ngMouseenter {@link guide/expression Expression} to evaluate upon
+ * mouseenter. ({@link guide/expression#-event- Event object is available as `$event`})
+ *
+ * @example
+   <example>
+     <file name="index.html">
+      <fa-surface ng-mouseenter="count = count + 1" ng-init="count=0">
+        Increment (when mouse enters)
+      </fa-surface>
+      <fa-surface>
+        count: {{count}}
+      </fa-surface>
+     </file>
+   </example>
+ */
+
+
+/**
+ * @ngdoc directive
+ * @name ngMouseleave
+ *
+ * @description
+ * Specify custom behavior on mouseleave event on a fa-surface.
+ *
+ * @element ANY
+ * @priority 0
+ * @param {expression} ngMouseleave {@link guide/expression Expression} to evaluate upon
+ * mouseleave. ({@link guide/expression#-event- Event object is available as `$event`})
+ *
+ * @example
+   <example>
+     <file name="index.html">
+      <fa-surface ng-mouseleave="count = count + 1" ng-init="count=0">
+        Increment (when mouse leaves)
+      </fa-surface>
+      <fa-surface>
+        count: {{count}}
+      </fa-surface>
+     </file>
+   </example>
+ */
+
+
+/**
+ * @ngdoc directive
+ * @name ngMousemove
+ *
+ * @description
+ * Specify custom behavior on mousemove event on a fa-surface.
+ *
+ * @element ANY
+ * @priority 0
+ * @param {expression} ngMousemove {@link guide/expression Expression} to evaluate upon
+ * mousemove. ({@link guide/expression#-event- Event object is available as `$event`})
+ *
+ * @example
+   <example>
+     <file name="index.html">
+      <fa-surface ng-mousemove="count = count + 1" ng-init="count=0">
+        Increment (when mouse moves)
+      </fa-surface>
+      <fa-surface>
+        count: {{count}}
+      </fa-surface>
+     </file>
+   </example>
+ */
+
+
+/**
+ * @ngdoc directive
+ * @name ngKeydown
+ *
+ * @description
+ * Specify custom behavior on keydown event on a fa-surface.
+ *
+ * @element ANY
+ * @priority 0
+ * @param {expression} ngKeydown {@link guide/expression Expression} to evaluate upon
+ * keydown. (Event object is available as `$event` and can be interrogated for keyCode, altKey, etc.)
+ *
+ * @example
+   <example>
+     <file name="index.html">
+      <fa-surface ng-keydown="count = count + 1" ng-init="count=0">
+      key down count: {{count}}
+     </fa-surface>
+   </example>
+ */
+
+
+/**
+ * @ngdoc directive
+ * @name ngKeyup
+ *
+ * @description
+ * Specify custom behavior on keyup event on a fa-surface.
+ *
+ * @element ANY
+ * @priority 0
+ * @param {expression} ngKeyup {@link guide/expression Expression} to evaluate upon
+ * keyup. (Event object is available as `$event` and can be interrogated for keyCode, altKey, etc.)
+ *
+ * @example
+   <example>
+     <file name="index.html">
+      <fa-surface ng-keyup="count = count + 1" ng-init="count=0">
+      key up count: {{count}}
+     </fa-surface>
+   </example>
+ */
+
+
+/**
+ * @ngdoc directive
+ * @name ngKeypress
+ *
+ * @description
+ * Specify custom behavior on keypress event on a fa-surface.
+ *
+ * @element ANY
+ * @param {expression} ngKeypress {@link guide/expression Expression} to evaluate upon
+ * keypress. ({@link guide/expression#-event- Event object is available as `$event`}
+ * and can be interrogated for keyCode, altKey, etc.)
+ *
+ * @example
+   <example>
+     <file name="index.html">
+      <fa-surface ng-keypress="count = count + 1" ng-init="count=0">
+      key press count: {{count}}
+      </fa-surface>
+     </file>
+   </example>
+ */
+
+
+/**
+ * @ngdoc directive
+ * @name ngSubmit
+ *
+ * @description
+ * Enables binding angular expressions to onsubmit events on a fa-surface.
+ *
+ * Additionally it prevents the default action (which for form means sending the request to the
+ * server and reloading the current page), but only if the form does not contain `action`,
+ * `data-action`, or `x-action` attributes.
+ *
+ * <div class="alert alert-warning">
+ * **Warning:** Be careful not to cause "double-submission" by using both the `ngClick` and
+ * `ngSubmit` handlers together. See the
+ * {@link form#submitting-a-form-and-preventing-the-default-action `form` directive documentation}
+ * for a detailed discussion of when `ngSubmit` may be triggered.
+ * </div>
+ *
+ * @element form
+ * @priority 0
+ * @param {expression} ngSubmit {@link guide/expression Expression} to eval.
+ * ({@link guide/expression#-event- Event object is available as `$event`})
+ *
+ * @example
+   <example module="submitExample">
+   </example>
+ */
+
+/**
+ * @ngdoc directive
+ * @name ngFocus
+ *
+ * @description
+ * Specify custom behavior on focus event.
+ *
+ * @element window, input, select, textarea, a
+ * @priority 0
+ * @param {expression} ngFocus {@link guide/expression Expression} to evaluate upon
+ * focus. ({@link guide/expression#-event- Event object is available as `$event`})
+ *
+ * @example
+ * See {@link ng.directive:ngClick ngClick}
+ */
+
+/**
+ * @ngdoc directive
+ * @name ngBlur
+ *
+ * @description
+ * Specify custom behavior on blur event.
+ *
+ * @element window, input, select, textarea, a
+ * @priority 0
+ * @param {expression} ngBlur {@link guide/expression Expression} to evaluate upon
+ * blur. ({@link guide/expression#-event- Event object is available as `$event`})
+ *
+ * @example
+ */
+
+/**
+ * @ngdoc directive
+ * @name ngCopy
+ *
+ * @description
+ * Specify custom behavior on copy event.
+ *
+ * @element window, input, select, textarea, a
+ * @priority 0
+ * @param {expression} ngCopy {@link guide/expression Expression} to evaluate upon
+ * copy. ({@link guide/expression#-event- Event object is available as `$event`})
+ *
+ * @example
+   <example>
+    
+   </example>
+ */
+
+/**
+ * @ngdoc directive
+ * @name ngCut
+ *
+ * @description
+ * Specify custom behavior on cut event.
+ *
+ * @element window, input, select, textarea, a
+ * @priority 0
+ * @param {expression} ngCut {@link guide/expression Expression} to evaluate upon
+ * cut. ({@link guide/expression#-event- Event object is available as `$event`})
+ *
+ * @example
+   <example>
+    
+   </example>
+ */
+
+/**
+ * @ngdoc directive
+ * @name ngPaste
+ *
+ * @description
+ * Specify custom behavior on paste event.
+ *
+ * @element window, input, select, textarea, a
+ * @priority 0
+ * @param {expression} ngPaste {@link guide/expression Expression} to evaluate upon
+ * paste. ({@link guide/expression#-event- Event object is available as `$event`})
+ *
+ * @example
+   <example>
+   </example>
+ */
 
 /**
  * @ngdoc directive
@@ -3005,7 +3385,7 @@ angular.module('famous.angular')
 
             var _parsedTransforms = {};
             angular.forEach(_transformFields, function (field) {
-              var attrName = window.$famousUtils.directiveNormalize('fa-' + field);
+              var attrName = $famous.util.directiveNormalize('fa-' + field);
               attrs.$observe(attrName, function () {
                 _parsedTransforms[field] = $parse(attrs[attrName]);
               });

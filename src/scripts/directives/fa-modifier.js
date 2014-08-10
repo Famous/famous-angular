@@ -258,7 +258,7 @@ angular.module('famous.angular')
 
             var _parsedTransforms = {};
             angular.forEach(_transformFields, function (field) {
-              var attrName = window.$famousUtils.directiveNormalize('fa-' + field);
+              var attrName = $famous.util.directiveNormalize('fa-' + field);
               attrs.$observe(attrName, function () {
                 _parsedTransforms[field] = $parse(attrs[attrName]);
               });

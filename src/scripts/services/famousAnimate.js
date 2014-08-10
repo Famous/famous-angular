@@ -128,7 +128,7 @@ angular.module('famous.angular')
           // If and only if the current element represents a Famo.us Surface,
           // AND the class is not an empty string, pass through
           // the addClass and removeClass methods to the underlying renderNode.
-          if ($famous.utils.isASurface(this) && typeof className === 'string' && className.trim() !== '') {
+          if ($famous.util.isASurface(this) && typeof className === 'string' && className.trim() !== '') {
             $famous.getIsolate(this.scope()).renderNode[classManipulator](className);
           }
           return this;
@@ -143,9 +143,9 @@ angular.module('famous.angular')
         animationHandlers[classManipulator] = function(element, className, done) {
          
           $delegate[classManipulator](element, className, done);
-          if($famous.utils.isFaElement(element)){
+          if($famous.util.isFaElement(element)){
             var isolate = $famous.getIsolate(element.scope());
-            if ($famous.utils.isASurface(element)) {
+            if ($famous.util.isASurface(element)) {
 
               var surface = isolate.renderNode;
               angular.forEach(className.split(' '), function(splitClassName) {
@@ -182,7 +182,7 @@ angular.module('famous.angular')
         
         $delegate.setClass(element, add, remove, done);
 
-        if ($famous.utils.isASurface(element)) {
+        if ($famous.util.isASurface(element)) {
           var surface = $famous.getIsolate(element.scope()).renderNode;
           angular.forEach(add.split(' '), function(className) {
             surface.addClass(className);
@@ -228,7 +228,7 @@ angular.module('famous.angular')
             var scopeId = element.scope() && element.scope().$id;
 
             //hide the element on animate.leave
-            if(operation === 'leave' && $famous.utils.isFaElement(element)){
+            if(operation === 'leave' && $famous.util.isFaElement(element)){
               var isolate = $famous.getIsolate(element.scope());
               if(isolate && isolate.id) isolate.hide();
              }
