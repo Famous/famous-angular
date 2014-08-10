@@ -50,6 +50,12 @@ angular.module('famous.angular')
 
             var _children = [];
 
+            //TEMP fill children with sample surfaces
+            angular.forEach(_faceSpecs, function(spec, i){
+              var _surf = new Surface({size: spec.size, properties: {backgroundColor: _colors[i], backfaceVisibility: 'visible'}});
+              _children.push(_surf);
+            })
+
             var _resequenceChildren = function(){
 
               var sequence = [];
@@ -73,8 +79,26 @@ angular.module('famous.angular')
               });
 
               //now the sequence is in the correct order:  assign each rendernode to the _faces' rendernodes
-              
+              angular.forEach(sequence, function(child, i){
+                var spec = _faceSpecs[i];
+
+                var _mod = new Modifier({
+                  origin: function(){return spec.origin},
+                  align: function(){return [0, 0]},
+                  transform: function(){
+                    var trans = Transform.multiply(Transform.translate.apply(this, spec.translate), Transform.rotate.apply(this, spec.rotate));
+                    return trans;
+                  },
+                });
+
+                var _face = new RenderNode().add(_mod);
+                _face.add(child);
+                _faces[i].set(_face);
+
+              });
+
             }
+
 
 
             //TODO:  manage origin and align?  will this be necessary?
@@ -83,23 +107,23 @@ angular.module('famous.angular')
 
 
 
-            angular.forEach(_faceSpecs, function(spec, i){
-              var _mod = new Modifier({
-                origin: function(){return spec.origin},
-                align: function(){return [0, 0]},
-                transform: function(){
-                  var trans = Transform.multiply(Transform.translate.apply(this, spec.translate), Transform.rotate.apply(this, spec.rotate));
-                  return trans;
-                },
-              });
+            // angular.forEach(_faceSpecs, function(spec, i){
+            //   var _mod = new Modifier({
+            //     origin: function(){return spec.origin},
+            //     align: function(){return [0, 0]},
+            //     transform: function(){
+            //       var trans = Transform.multiply(Transform.translate.apply(this, spec.translate), Transform.rotate.apply(this, spec.rotate));
+            //       return trans;
+            //     },
+            //   });
 
-              var _face = new RenderNode().add(_mod);
+            //   var _face = new RenderNode().add(_mod);
 
-              //TODO:  set child content instead of surface
-              var _surf = new Surface({size: spec.size, properties: {backgroundColor: _colors[i], backfaceVisibility: 'visible'}});
-              _face.add(_surf);
-              _root.add(_face);
-            });
+            //   //TODO:  set child content instead of surface
+            //   var _surf = new Surface({size: spec.size, properties: {backgroundColor: _colors[i], backfaceVisibility: 'visible'}});
+            //   _face.add(_surf);
+            //   _root.add(_face);
+            // });
 
 
             var isolate = $famousDecorator.ensureIsolate(scope);
@@ -112,6 +136,9 @@ angular.module('famous.angular')
               isolate.renderNode.add(data.renderGate);
               isolate.children.push(data);
             });
+
+            _resequenceChildren();
+
 
           },
           post: function(scope, element, attrs){
