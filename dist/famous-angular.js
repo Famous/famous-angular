@@ -4087,12 +4087,15 @@ angular.module('famous.angular')
             if (attrs.class) {
               isolate.renderNode.setClasses(attrs['class'].split(' '));
             }
+             $famousDecorator.sequenceWith(scope, function(data) {
+              throw new Error('Cannot add FA- elements in fa-surface');
+            });
           },
           post: function(scope, element, attrs){
             var isolate = $famousDecorator.ensureIsolate(scope);
 
             var updateContent = function() {
-	            isolate.renderNode.setContent(element[0].querySelector('div.fa-surface'));
+              isolate.renderNode.setContent(element[0].querySelector('div.fa-surface'));
             };
 
             updateContent();
@@ -4110,6 +4113,8 @@ angular.module('famous.angular')
             $famousDecorator.registerChild(scope, element, isolate, function() {
               // TODO: hook into RenderController and hide this render node
             });
+
+
           }
         };
       }
