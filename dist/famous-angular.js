@@ -1865,7 +1865,7 @@ angular.module('famous.angular')
               angular.forEach(_children, function(child, i){
                 //do not include if already sequenced
                 if(sequence.indexOf(child) === -1){
-                  while(sequence[counter] !== undefined) { counter++; };
+                  while(sequence[counter] !== undefined) { counter++; }
                   sequence[counter] = child;
                 }
               });
@@ -1889,9 +1889,7 @@ angular.module('famous.angular')
 
               });
 
-            }
-
-            var isolate = $famousDecorator.ensureIsolate(scope);
+            };
 
             isolate.renderNode = _root;
             $famousDecorator.addRole('renderable',isolate);
