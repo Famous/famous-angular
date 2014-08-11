@@ -46,7 +46,7 @@ angular.module('famous.angular')
 
             var _root = new RenderNode();
             var _faces = [new RenderNode(),new RenderNode(),new RenderNode(),new RenderNode(),new RenderNode(),new RenderNode()];
-            angular.forEach(_faces, function(face){_root.add(face)});
+            angular.forEach(_faces, function(face){_root.add(face);});
 
             var _children = [];
 
@@ -67,7 +67,7 @@ angular.module('famous.angular')
               angular.forEach(_children, function(child, i){
                 //do not include if already sequenced
                 if(sequence.indexOf(child) === -1){
-                  while(sequence[counter] !== undefined) { counter++ };
+                  while(sequence[counter] !== undefined) { counter++; };
                   sequence[counter] = child;
                 }
               });
@@ -77,8 +77,8 @@ angular.module('famous.angular')
                 var spec = _faceSpecs[i];
 
                 var _mod = new Modifier({
-                  origin: function(){return spec.origin},
-                  align: function(){return [0, 0]},
+                  origin: function(){return spec.origin;},
+                  align: function(){return [0, 0];},
                   transform: function(){
                     var trans = Transform.multiply(Transform.translate.apply(this, spec.translate), Transform.rotate.apply(this, spec.rotate));
                     return trans;
