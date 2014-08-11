@@ -26,6 +26,7 @@ The following types are accepted in the commit messages:
 - test
 - chore
 - revert
+- wip
 
 But only feat/fix/docs/perf will be in the changelog.
 
