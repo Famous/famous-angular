@@ -1821,14 +1821,14 @@ angular.module('famous.angular')
         var RenderNode = $famous['famous/core/RenderNode'];
         var Transform = $famous['famous/core/Transform'];
 
-        var _colors = ["#b58900","#cb4b16","#dc322f","#6c71c4","#268bd2","#2aa198","#859900"];
-
         return {
           pre: function(scope, element, attrs){
             var isolate = $famousDecorator.ensureIsolate(scope);
 
 
+            //TODO:  manage origin and align?  will this be necessary?
             //TODO:  set up watch/observe and update everything accordingly
+
             var _dimens = scope.$eval(attrs.faDimensions);
 
             var PI_OVER_2 = Math.PI / 2;
@@ -1847,12 +1847,6 @@ angular.module('famous.angular')
             angular.forEach(_faces, function(face){_root.add(face)});
 
             var _children = [];
-
-            //TEMP fill children with sample surfaces
-            angular.forEach(_faceSpecs, function(spec, i){
-              var _surf = new Surface({size: spec.size, properties: {backgroundColor: _colors[i], backfaceVisibility: 'visible'}});
-              _children.push(_surf);
-            })
 
             var _resequenceChildren = function(){
 
@@ -1890,39 +1884,12 @@ angular.module('famous.angular')
                 });
 
                 var _face = new RenderNode().add(_mod);
-                _face.add(child);
+                _face.add(child.renderNode);
                 _faces[i].set(_face);
 
               });
 
             }
-
-
-
-            //TODO:  manage origin and align?  will this be necessary?
-
-            //Construct the cuboid
-
-
-
-            // angular.forEach(_faceSpecs, function(spec, i){
-            //   var _mod = new Modifier({
-            //     origin: function(){return spec.origin},
-            //     align: function(){return [0, 0]},
-            //     transform: function(){
-            //       var trans = Transform.multiply(Transform.translate.apply(this, spec.translate), Transform.rotate.apply(this, spec.rotate));
-            //       return trans;
-            //     },
-            //   });
-
-            //   var _face = new RenderNode().add(_mod);
-
-            //   //TODO:  set child content instead of surface
-            //   var _surf = new Surface({size: spec.size, properties: {backgroundColor: _colors[i], backfaceVisibility: 'visible'}});
-            //   _face.add(_surf);
-            //   _root.add(_face);
-            // });
-
 
             var isolate = $famousDecorator.ensureIsolate(scope);
 
@@ -1931,8 +1898,12 @@ angular.module('famous.angular')
             isolate.show();
             
             $famousDecorator.sequenceWith(scope, function(data) {
-              isolate.renderNode.add(data.renderGate);
-              isolate.children.push(data);
+              _children.push(data);
+              _resequenceChildren();
+            }, function(data){
+              var i = data.index || _children.length - 1;
+              _children.splice(i, 1);
+              _resequenceChildren();
             });
 
             _resequenceChildren();
