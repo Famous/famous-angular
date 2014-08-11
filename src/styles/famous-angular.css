@@ -15,17 +15,6 @@ fa-app, .fa-app {
     position: relative;
 }
 
-.famous-container-surface, .famous-group {
-    overflow: visible;
-    -webkit-transform-style: preserve-3d;
-    transform-style: preserve-3d;
-    -webkit-backface-visibility: visible;
-    backface-visibility: visible;
-    pointer-events: none;
-    height: 100%;
-    width: 100%;
-}
-
 .famous-angular-clipping-container {
     overflow: hidden;
     width: 100%;
@@ -40,6 +29,20 @@ fa-app, .fa-app {
     pointer-events: none;
     height: 100%;
     width: 100%;
+}
+
+.famous-container, .famous-group {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+    overflow: visible;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    -webkit-backface-visibility: visible;
+    backface-visibility: visible;
+    pointer-events: none;
 }
 
 .famous-group {
