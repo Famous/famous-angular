@@ -234,7 +234,7 @@ angular.module('famous.angular')
   angular.forEach(
   'dblclick mousedown mouseup mouseover mouseout mousemove mouseenter mouseleave keydown keyup keypress submit focus blur copy cut paste'.split(' '),
   function(name) {
-    var directiveName = $famous.util.directiveNormalize('ng-' + name) ;
+    var directiveName = window.$famousUtil.directiveNormalize('ng-' + name) ;
     
     $provide.decorator(directiveName+'Directive', function ($delegate, $famousDecorator, $parse, $famous) {
         var directive = $delegate[0];
