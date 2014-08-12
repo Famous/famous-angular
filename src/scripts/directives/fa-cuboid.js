@@ -52,42 +52,46 @@ angular.module('famous.angular')
 
             var _resequenceChildren = function(){
 
-              var sequence = [];
+              scope.$$postDigest(function(){
 
-              //first pass, populate specific indexes into their preferred spots
-              angular.forEach(_children, function(child, i){
-                if(child.index !== undefined){
-                  if(sequence[child.index] !== undefined) throw new Error("Multiple children have the same index (" + child.index + ")");
-                  sequence[child.index] = child;
-                }
-              });
+                var sequence = [];
 
-              var counter = 0;
-              //second pass, fill out the rest
-              angular.forEach(_children, function(child, i){
-                //do not include if already sequenced
-                if(sequence.indexOf(child) === -1){
-                  while(sequence[counter] !== undefined) { counter++; }
-                  sequence[counter] = child;
-                }
-              });
-
-              //now the sequence is in the correct order:  assign each rendernode to the _faces' rendernodes
-              angular.forEach(sequence, function(child, i){
-                var spec = _faceSpecs[i];
-
-                var _mod = new Modifier({
-                  origin: function(){return spec.origin;},
-                  align: function(){return [0, 0];},
-                  transform: function(){
-                    var trans = Transform.multiply(Transform.translate.apply(this, spec.translate), Transform.rotate.apply(this, spec.rotate));
-                    return trans;
-                  },
+                //first pass, populate specific indexes into their preferred spots
+                angular.forEach(_children, function(child, i){
+                  if(child.index !== undefined){
+                    if(sequence[child.index] !== undefined) throw new Error("Multiple children have the same index (" + child.index + ")");
+                    sequence[child.index] = child;
+                  }
                 });
 
-                var _face = new RenderNode().add(_mod);
-                _face.add(child.renderNode);
-                _faces[i].set(_face);
+                var counter = 0;
+                //second pass, fill out the rest
+                angular.forEach(_children, function(child, i){
+                  //do not include if already sequenced
+                  if(sequence.indexOf(child) === -1){
+                    while(sequence[counter] !== undefined) { counter++; }
+                    sequence[counter] = child;
+                  }
+                });
+
+                //now the sequence is in the correct order:  assign each rendernode to the _faces' rendernodes
+                angular.forEach(sequence, function(child, i){
+                  var spec = _faceSpecs[i];
+
+                  var _mod = new Modifier({
+                    origin: function(){return spec.origin;},
+                    align: function(){return [0, 0];},
+                    transform: function(){
+                      var trans = Transform.multiply(Transform.translate.apply(this, spec.translate), Transform.rotate.apply(this, spec.rotate));
+                      return trans;
+                    },
+                  });
+
+                  var _face = new RenderNode().add(_mod);
+                  _face.add(child.renderNode);
+                  _faces[i].set(_face);
+
+                });
 
               });
 
