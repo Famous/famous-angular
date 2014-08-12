@@ -15,6 +15,9 @@ docType: "directive"
   </a>
 </div>
 
+  <br>
+  <strong>This directive is deprecated.</strong>
+
 
 
 
