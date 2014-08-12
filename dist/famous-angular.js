@@ -4087,8 +4087,9 @@ angular.module('famous.angular')
             if (attrs.class) {
               isolate.renderNode.setClasses(attrs['class'].split(' '));
             }
-             $famousDecorator.sequenceWith(scope, function(data) {
-              throw new Error('Cannot add FA- elements in fa-surface');
+            // Throw an exception if anyother famous scene graph element is added on fa-surface.            
+            $famousDecorator.sequenceWith(scope, function(data) {
+              throw new Error('Surfaces are leaf nodes of the Famo.us render tree and cannot accept rendernode children.  To include additional Famo.us content inside of a fa-surface, that content must be enclosed in an additional fa-app.');
             });
           },
           post: function(scope, element, attrs){
