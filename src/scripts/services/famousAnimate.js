@@ -97,30 +97,11 @@ angular.module('famous.angular')
     $provide.decorator('$animate', ['$delegate', '$rootScope', '$famous', '$parse',
                             function($delegate,   $rootScope,   $famous,   $parse) {
 
-      var Surface = $famous['famous/core/Surface'];
       var Timer   = $famous['famous/utilities/Timer'];
 
       var FA_ANIMATION_ACTIVE = '$$faAnimationActive';
 
-      /**
-       * Check if the element selected has an isolate renderNode that accepts classes.
-       * @param {Array} element - derived element
-       * @return {boolean}
-       */
-      function isClassable(element) {
-        var isolate = $famous.getIsolate(element.scope());
-        return isolate && isolate.renderNode instanceof Surface;
-      }
 
-      /**
-          Check if the element selected is an fa- element
-          @param {Array} element - derived element
-          @return {boolean}
-       */
-       function isFaElement(element) {
-        var isFa = /^FA\-.*/;
-        return isFa.test(element[0].tagName );
-       }
       /**
        * Pass through $animate methods that are strictly class based.
        * These will work on Surfaces, and will be ignored elsewhere.
@@ -128,7 +109,7 @@ angular.module('famous.angular')
        * considered "enabled" which we do not need.
        */
       var animationHandlers = {
-        enabled: $delegate.enabled
+        enabled: $delegate.enabledß
       };
 
       angular.forEach(['addClass', 'removeClass'], function(classManipulator) {
@@ -147,7 +128,7 @@ angular.module('famous.angular')
           // If and only if the current element represents a Famo.us Surface,
           // AND the class is not an empty string, pass through
           // the addClass and removeClass methods to the underlying renderNode.
-          if (isClassable(this) && typeof className === 'string' && className.trim() !== '') {
+          if ($famous.util.isASurface(this) && typeof className === 'string' && className.trim() !== '') {
             $famous.getIsolate(this.scope()).renderNode[classManipulator](className);
           }
           return this;
@@ -162,9 +143,9 @@ angular.module('famous.angular')
         animationHandlers[classManipulator] = function(element, className, done) {
          
           $delegate[classManipulator](element, className, done);
-          if(isFaElement(element)){
+          if($famous.util.isFaElement(element)){
             var isolate = $famous.getIsolate(element.scope());
-            if (isClassable(element)) {
+            if ($famous.util.isASurface(element)) {
 
               var surface = isolate.renderNode;
               angular.forEach(className.split(' '), function(splitClassName) {
@@ -201,7 +182,7 @@ angular.module('famous.angular')
         
         $delegate.setClass(element, add, remove, done);
 
-        if (isClassable(element)) {
+        if ($famous.util.isASurface(element)) {
           var surface = $famous.getIsolate(element.scope()).renderNode;
           angular.forEach(add.split(' '), function(className) {
             surface.addClass(className);
@@ -247,7 +228,7 @@ angular.module('famous.angular')
             var scopeId = element.scope() && element.scope().$id;
 
             //hide the element on animate.leave
-            if(operation === 'leave' && isFaElement(element)){
+            if(operation === 'leave' && $famous.util.isFaElement(element)){
               var isolate = $famous.getIsolate(element.scope());
               if(isolate && isolate.id) isolate.hide();
              }

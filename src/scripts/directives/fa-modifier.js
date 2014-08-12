@@ -238,28 +238,6 @@ angular.module('famous.angular')
               return part.getPosition();
             };
 
-            //TODO:  make a stand-alone window-level utility
-            //       object to store stuff like this
-            /* Copied from angular.js */
-            var SPECIAL_CHARS_REGEXP = /([\:\-\_]+(.))/g;
-            var MOZ_HACK_REGEXP = /^moz([A-Z])/;
-
-            function camelCase(name) {
-              return name.
-                replace(SPECIAL_CHARS_REGEXP,function (_, separator, letter, offset) {
-                  return offset ? letter.toUpperCase() : letter;
-                }).
-                replace(MOZ_HACK_REGEXP, 'Moz$1');
-            }
-
-            var PREFIX_REGEXP = /^(x[\:\-_]|data[\:\-_])/i;
-
-            function directiveNormalize(name) {
-              return camelCase(name.replace(PREFIX_REGEXP, ''));
-            }
-
-            /* end copy from angular.js */
-
             var _transformFields = [
               "aboutOrigin",
               "perspective",
@@ -280,7 +258,7 @@ angular.module('famous.angular')
 
             var _parsedTransforms = {};
             angular.forEach(_transformFields, function (field) {
-              var attrName = directiveNormalize('fa-' + field);
+              var attrName = $famous.util.directiveNormalize('fa-' + field);
               attrs.$observe(attrName, function () {
                 _parsedTransforms[field] = $parse(attrs[attrName]);
               });
