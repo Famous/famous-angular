@@ -188,7 +188,7 @@ ngFameApp.provider('$famous', function() {
     Util functions.
   */ 
 
-  _modules.util = {
+  window.$famousUtil = _modules.util = {
     /**
    * Check if the element selected has an isolate renderNode that accepts classes.
    * @param {Array} element - derived element
