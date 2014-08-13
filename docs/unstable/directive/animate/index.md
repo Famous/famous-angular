@@ -34,7 +34,7 @@ docType: "directive"
 
 
 
-This directive is deprecated.  Prefer using the $timeline service.  This element is used to specify the animation of an element in a <a href="api/directive/faAnimation">faAnimation</a> directive
+This directive is deprecated.  Prefer using the $timeline service.  This element is used to specify the animation of an element in a <a href="../../../api/directive/faAnimation/">faAnimation</a> directive
 
 
 

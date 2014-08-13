@@ -47,7 +47,7 @@ this functionality will be lost.
 <h2 id="usage">Usage</h2>
   
 ```html
-<ANY fa-click="expression">
+<ANY ng-click="expression">
 
 </ANY>
 ```

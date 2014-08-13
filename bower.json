@@ -6,11 +6,11 @@
   "homepage": "https://github.com/Famous/famous-angular",
   "main": "dist/famous-angular.js",
   "dependencies": {
-    "angular": "1.2.21",
+    "angular": "1.2.22",
     "famous": "http://code.famo.us/famous/global/0.2.2/famous-global-0.2.2.tar.gz"
   },
   "devDependencies": {
-    "angular-mocks": "1.2.21"
+    "angular-mocks": "1.2.22"
   },
   "ignore": [
     "**/.*",

@@ -299,8 +299,8 @@ ngFameApp.provider('$famous', function() {
  *
  * The core Angular animation API is fundamentally CSS class-based. Because only Famo.us Surfaces
  * support CSS classes, core directives such as `ngClass`, `ngShow`, `ngIf`, and others should be applied
- * only with directives representing Surfaces (such as {@link api/directive/faSurface faSurface} and
- * {@link api/directive/faImageSurface faImageSurface}).
+ * only with directives representing Surfaces (such as {@link faSurface faSurface} and
+ * {@link faImageSurface faImageSurface}).
  *
  * The {@link https://docs.angularjs.org/api/ngAnimate ngAnimate} module's documentation lists the set of
  * core directives supporting $animate events. Please note that the `ngAnimate` module is *not* required
@@ -895,7 +895,7 @@ angular.module('famous.angular')
  * @module famous.angular
  * @restrict EA
  * @description
- * This directive is deprecated.  Prefer using the $timeline service.  This directive is used to animate an element in conjunction with an {@link api/directive/animate animate} directive
+ * This directive is deprecated.  Prefer using the $timeline service.  This directive is used to animate an element in conjunction with an {@link animate animate} directive
  * @deprecated true
  * @usage
  * ```html
@@ -908,7 +908,7 @@ angular.module('famous.angular')
  * 
  * The most flexible way to animate modifier properties is by creating a Transitionable object on the scope and binding the property in the html.
  * Any changes to the Transitionable object on the scope will be reflected in the view immediately via Angular's two-way data binding.
- * 
+ *
  * ```javascript
  * var Transitionable = $famous['famous/transitions/Transitionable'];
  * var Easing = $famous['famous/transitions/Easing'];
@@ -1216,7 +1216,7 @@ angular.module('famous.angular')
                * @restrict E
                * @deprecated true
                * @description
-               * This directive is deprecated.  Prefer using the $timeline service.  This element is used to specify the animation of an element in a {@link api/directive/faAnimation faAnimation} directive
+               * This directive is deprecated.  Prefer using the $timeline service.  This element is used to specify the animation of an element in a {@link faAnimation faAnimation} directive
                *
                * @usage
                * ```html
@@ -1472,7 +1472,7 @@ angular.module('famous.angular')
  * it creates a Famous context and then adds child elements
  * to that context as they get compiled.  Inside of this directive,
  * normal HTML content will not get rendered to the screen unless
- * it is inside of a {@link api/directive/faSurface fa-surface} directive.
+ * it is inside of a {@link faSurface fa-surface} directive.
  *
  * @usage
  * ```html
@@ -1774,7 +1774,7 @@ angular.module('famous.angular')
         };
       }
     };
-  }])
+  }]);
 
 /**
  * @ngdoc directive
@@ -2407,8 +2407,8 @@ angular.module('famous.angular')
  * @restrict A
  * @description
  * This directive is used to specify the rendering order of elements
- * inside of a ViewSequence-based component, such as @link api/directive/faScrollView faScrollView}
- * or @link api/directive/faGridLayout faGridLayout}.  As a special case, when elements are added to
+ * inside of a ViewSequence-based component, such as @link faScrollView faScrollView}
+ * or @link faGridLayout faGridLayout}.  As a special case, when elements are added to
  * these controls using ng-repeat, they are automatically assigned the
  * $index property exposed by ng-repeat.  When adding elements manually
  * (e.g. to a faScrollView but not using ng-repeat) or in a case where custom
@@ -2512,7 +2512,7 @@ angular.module('famous.angular')
  *
  * @usage
  * ```html
- * <ANY fa-click="expression">
+ * <ANY ng-click="expression">
  *
  * </ANY>
  * ```
@@ -2595,7 +2595,9 @@ angular.module('famous.angular')
       event.preventDefault();
 
       // Blur focused form elements
-      event.target && event.target.blur();
+      if(event.target) {
+        event.target.blur();
+      }
     }
 
 
@@ -2610,7 +2612,7 @@ angular.module('famous.angular')
       $timeout(function() {
         // Remove the allowable region.
         for (var i = 0; i < touchCoordinates.length; i += 2) {
-          if (touchCoordinates[i] == x && touchCoordinates[i+1] == y) {
+          if (touchCoordinates[i] === x && touchCoordinates[i+1] === y) {
             touchCoordinates.splice(i, i + 2);
             return;
           }
@@ -2716,7 +2718,7 @@ angular.module('famous.angular')
                 renderNode.removeClass(ACTIVE_CLASS_NAME);
               });
 
-            }, 
+            }
           };
         }
       }else {
@@ -2779,13 +2781,29 @@ angular.module('famous.angular')
  * @param {expression} ngDblclick {@link guide/expression Expression} to evaluate upon
  * a dblclick. (The Event object is available as `$event`)
  *
+ * @usage
+ * ```html
+ * <ANY ng-dblclick="expression">
+ *
+ * </ANY>
+ * ```
  * @example
    <example>
      <file name="index.html">
       <fa-surface ng-dblclick="count = count + 1" ng-init="count=0">
-        Increment (on double click)
+        Increment (on double click), count: {{count}}
       </fa-surface>
-      count: {{count}}
+     </file>
+     <file name="style.css">
+      body {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+      fa-surface {
+        cursor: pointer;
+      }
      </file>
    </example>
  */
@@ -2803,14 +2821,17 @@ angular.module('famous.angular')
  * @param {expression} ngMousedown {@link guide/expression Expression} to evaluate upon
  * mousedown. ({@link guide/expression#-event- Event object is available as `$event`})
  *
+ * @usage
+ * ```html
+ * <ANY ng-mousedown="expression">
+ *
+ * </ANY>
+ * ```
  * @example
    <example>
      <file name="index.html">
-      <fa-surface ng-mousedown="count = count + 1" ng-init="count=0">
-        Increment (on mouse down)
-      </fa-surface>
-      <fa-surface>
-        count: {{count}}
+      <fa-surface ng-mousedown="count = count + 1" ng-init="count=0" style="cursor: pointer;">
+        Increment (on mouse down), count: {{count}}
       </fa-surface>
      </file>
    </example>
@@ -2829,14 +2850,17 @@ angular.module('famous.angular')
  * @param {expression} ngMouseup {@link guide/expression Expression} to evaluate upon
  * mouseup. ({@link guide/expression#-event- Event object is available as `$event`})
  *
+ * @usage
+ * ```html
+ * <ANY ng-mouseup="expression">
+ *
+ * </ANY>
+ * ```
  * @example
   <example>
      <file name="index.html">
-      <fa-surface ng-mouseup="count = count + 1" ng-init="count=0">
-        Increment (on mouse up)
-      </fa-surface>
-      <fa-surface>
-        count: {{count}}
+      <fa-surface ng-mouseup="count = count + 1" ng-init="count=0" style="cursor: pointer;">
+        Increment (on mouse up), count: {{count}}
       </fa-surface>
      </file>
    </example>
@@ -2854,14 +2878,17 @@ angular.module('famous.angular')
  * @param {expression} ngMouseover {@link guide/expression Expression} to evaluate upon
  * mouseover. ({@link guide/expression#-event- Event object is available as `$event`})
  *
+ * @usage
+ * ```html
+ * <ANY ng-mouseover="expression">
+ *
+ * </ANY>
+ * ```
  * @example
    <example>
      <file name="index.html">
-      <fa-surface ng-mouseover="count = count + 1" ng-init="count=0">
-        Increment (when mouse is over)
-      </fa-surface>
-      <fa-surface>
-        count: {{count}}
+      <fa-surface ng-mouseover="count = count + 1" ng-init="count=0" style="cursor: pointer;">
+        Increment (when mouse is over), count: {{count}}
       </fa-surface>
      </file>
    </example>
@@ -2880,14 +2907,17 @@ angular.module('famous.angular')
  * @param {expression} ngMouseenter {@link guide/expression Expression} to evaluate upon
  * mouseenter. ({@link guide/expression#-event- Event object is available as `$event`})
  *
+ * @usage
+ * ```html
+ * <ANY ng-mouseenter="expression">
+ *
+ * </ANY>
+ * ```
  * @example
    <example>
      <file name="index.html">
-      <fa-surface ng-mouseenter="count = count + 1" ng-init="count=0">
-        Increment (when mouse enters)
-      </fa-surface>
-      <fa-surface>
-        count: {{count}}
+      <fa-surface ng-mouseenter="count = count + 1" ng-init="count=0" style="cursor: pointer;">
+        Increment (when mouse enters), count: {{count}}
       </fa-surface>
      </file>
    </example>
@@ -2906,14 +2936,17 @@ angular.module('famous.angular')
  * @param {expression} ngMouseleave {@link guide/expression Expression} to evaluate upon
  * mouseleave. ({@link guide/expression#-event- Event object is available as `$event`})
  *
+ * @usage
+ * ```html
+ * <ANY ng-mouseleave="expression">
+ *
+ * </ANY>
+ * ```
  * @example
    <example>
      <file name="index.html">
-      <fa-surface ng-mouseleave="count = count + 1" ng-init="count=0">
-        Increment (when mouse leaves)
-      </fa-surface>
-      <fa-surface>
-        count: {{count}}
+      <fa-surface ng-mouseleave="count = count + 1" ng-init="count=0" style="cursor: pointer;">
+        Increment (when mouse leaves), count: {{count}}
       </fa-surface>
      </file>
    </example>
@@ -2932,14 +2965,17 @@ angular.module('famous.angular')
  * @param {expression} ngMousemove {@link guide/expression Expression} to evaluate upon
  * mousemove. ({@link guide/expression#-event- Event object is available as `$event`})
  *
+ * @usage
+ * ```html
+ * <ANY ng-mousemove="expression">
+ *
+ * </ANY>
+ * ```
  * @example
    <example>
      <file name="index.html">
-      <fa-surface ng-mousemove="count = count + 1" ng-init="count=0">
-        Increment (when mouse moves)
-      </fa-surface>
-      <fa-surface>
-        count: {{count}}
+      <fa-surface ng-mousemove="count = count + 1" ng-init="count=0" style="cursor: pointer;">
+        Increment (when mouse moves), count: {{count}}
       </fa-surface>
      </file>
    </example>
@@ -2958,12 +2994,19 @@ angular.module('famous.angular')
  * @param {expression} ngKeydown {@link guide/expression Expression} to evaluate upon
  * keydown. (Event object is available as `$event` and can be interrogated for keyCode, altKey, etc.)
  *
+ * @usage
+ * ```html
+ * <ANY ng-keydown="expression">
+ *
+ * </ANY>
+ * ```
  * @example
    <example>
      <file name="index.html">
       <fa-surface ng-keydown="count = count + 1" ng-init="count=0">
-      key down count: {{count}}
-     </fa-surface>
+        key down count: {{count}}
+      </fa-surface>
+     </file>
    </example>
  */
 
@@ -2980,12 +3023,19 @@ angular.module('famous.angular')
  * @param {expression} ngKeyup {@link guide/expression Expression} to evaluate upon
  * keyup. (Event object is available as `$event` and can be interrogated for keyCode, altKey, etc.)
  *
+ * @usage
+ * ```html
+ * <ANY ng-keyup="expression">
+ *
+ * </ANY>
+ * ```
  * @example
    <example>
      <file name="index.html">
       <fa-surface ng-keyup="count = count + 1" ng-init="count=0">
-      key up count: {{count}}
-     </fa-surface>
+        key up count: {{count}}
+      </fa-surface>
+     </file>
    </example>
  */
 
@@ -3002,11 +3052,17 @@ angular.module('famous.angular')
  * keypress. ({@link guide/expression#-event- Event object is available as `$event`}
  * and can be interrogated for keyCode, altKey, etc.)
  *
+ * @usage
+ * ```html
+ * <ANY ng-keypress="expression">
+ *
+ * </ANY>
+ * ```
  * @example
    <example>
      <file name="index.html">
       <fa-surface ng-keypress="count = count + 1" ng-init="count=0">
-      key press count: {{count}}
+        key press count: {{count}}
       </fa-surface>
      </file>
    </example>
@@ -3036,6 +3092,12 @@ angular.module('famous.angular')
  * @param {expression} ngSubmit {@link guide/expression Expression} to eval.
  * ({@link guide/expression#-event- Event object is available as `$event`})
  *
+ * @usage
+ * ```html
+ * <ANY ng-submit="expression">
+ *
+ * </ANY>
+ * ```
  * @example
    <example module="submitExample">
    </example>
@@ -3053,8 +3115,14 @@ angular.module('famous.angular')
  * @param {expression} ngFocus {@link guide/expression Expression} to evaluate upon
  * focus. ({@link guide/expression#-event- Event object is available as `$event`})
  *
+ * @usage
+ * ```html
+ * <ANY ng-focus="expression">
+ *
+ * </ANY>
+ * ```
  * @example
- * See {@link ng.directive:ngClick ngClick}
+ * See {@link ngClick ngClick}
  */
 
 /**
@@ -3069,6 +3137,12 @@ angular.module('famous.angular')
  * @param {expression} ngBlur {@link guide/expression Expression} to evaluate upon
  * blur. ({@link guide/expression#-event- Event object is available as `$event`})
  *
+ * @usage
+ * ```html
+ * <ANY ng-blur="expression">
+ *
+ * </ANY>
+ * ```
  * @example
  */
 
@@ -3084,6 +3158,12 @@ angular.module('famous.angular')
  * @param {expression} ngCopy {@link guide/expression Expression} to evaluate upon
  * copy. ({@link guide/expression#-event- Event object is available as `$event`})
  *
+ * @usage
+ * ```html
+ * <ANY ng-copy="expression">
+ *
+ * </ANY>
+ * ```
  * @example
    <example>
     
@@ -3102,6 +3182,12 @@ angular.module('famous.angular')
  * @param {expression} ngCut {@link guide/expression Expression} to evaluate upon
  * cut. ({@link guide/expression#-event- Event object is available as `$event`})
  *
+ * @usage
+ * ```html
+ * <ANY ng-cut="expression">
+ *
+ * </ANY>
+ * ```
  * @example
    <example>
     
@@ -3120,6 +3206,12 @@ angular.module('famous.angular')
  * @param {expression} ngPaste {@link guide/expression Expression} to evaluate upon
  * paste. ({@link guide/expression#-event- Event object is available as `$event`})
  *
+ * @usage
+ * ```html
+ * <ANY ng-paste="expression">
+ *
+ * </ANY>
+ * ```
  * @example
    <example>
    </example>
@@ -3483,7 +3575,7 @@ angular.module('famous.angular')
             isolate.renderNode = new RenderNode().add(isolate.modifier);
 
             $famousDecorator.addRole('renderable',isolate);
-            isolate.show()
+            isolate.show();
             
             $famousDecorator.sequenceWith(scope, function(data) {
               isolate.renderNode.add(data.renderGate);
@@ -4366,7 +4458,7 @@ angular.module('famous.angular')
                     var _ch = [];
                     angular.forEach(_children, function(c, i) {
                       _ch[i] = c.renderGate;
-                    })
+                    });
                     return _ch;
                   }(_children)
                 };

@@ -10,7 +10,7 @@ docType: "directive"
 ---
 
 <div class="improve-docs">
-  <a href='https://github.com/Famous/famous-angular/edit/master/src/scripts/directives/fa-input.js#L400'>
+  <a href='https://github.com/Famous/famous-angular/edit/master/src/scripts/directives/fa-input.js#L430'>
     Improve this doc
   </a>
 </div>
@@ -41,13 +41,12 @@ Specify custom behavior on mouseleave event on a fa-surface.
   
 <h2 id="usage">Usage</h2>
   
-    ```html
-  <ANY
-    ng-mouseleave="">
-  ...
-  </ANY>
-  ```
-    
+```html
+<ANY ng-mouseleave="expression">
+
+</ANY>
+```
+  
   
 <h2 id="api" style="clear:both;">API</h2>
 
@@ -88,15 +87,39 @@ mouseleave. (<a href="guide/expression#-event-">Event object is available as <co
 
 
 
-<h2 id="example">Example</h2><example>
-     <file name="index.html">
-      <fa-surface ng-mouseleave="count = count + 1" ng-init="count=0">
-        Increment (when mouse leaves)
-      </fa-surface>
-      <fa-surface>
-        count: {{count}}
-      </fa-surface>
-     </file>
-   </example>
+<h2 id="example">Example</h2><p>
+
+{% assign lvl = page.url | append:'X' | split:'/' | size %}
+{% capture relative %}{% for i in (3..lvl) %}../{% endfor %}{% endcapture %}
+
+<div>
+  <a ng-click="openPlunkr('{{ relative }}examples/example-example5')" class="btn pull-right">
+    <i class="glyphicon glyphicon-edit">&nbsp;</i>
+    Edit in Plunker</a>
+  <div class="runnable-example" path="examples/example-example5"
+      
+  >
+
+   
+    <div class="runnable-example-file"
+      
+        name="index.html"
+      
+        language="html"
+      
+        type="html"
+      
+    >
+      <pre><code>&lt;fa-surface ng-mouseleave=&quot;count = count + 1&quot; ng-init=&quot;count=0&quot; style=&quot;cursor: pointer;&quot;&gt;&#13;&#10;  Increment (when mouse leaves), count: {{count}}&#13;&#10;&lt;/fa-surface&gt;&#13;</code></pre>
+    </div>
+  
+
+    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example5/index.html" name="example-example5"></iframe>
+  </div>
+</div>
+
+
+</p>
+
 
 

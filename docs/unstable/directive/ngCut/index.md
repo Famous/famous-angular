@@ -10,7 +10,7 @@ docType: "directive"
 ---
 
 <div class="improve-docs">
-  <a href='https://github.com/Famous/famous-angular/edit/master/src/scripts/directives/fa-input.js#L596'>
+  <a href='https://github.com/Famous/famous-angular/edit/master/src/scripts/directives/fa-input.js#L676'>
     Improve this doc
   </a>
 </div>
@@ -41,13 +41,12 @@ Specify custom behavior on cut event.
   
 <h2 id="usage">Usage</h2>
   
-    ```html
-  <window, input, select, textarea, a
-    ng-cut="">
-  ...
-  </window, input, select, textarea, a>
-  ```
-    
+```html
+<ANY ng-cut="expression">
+
+</ANY>
+```
+  
   
 <h2 id="api" style="clear:both;">API</h2>
 
@@ -88,8 +87,27 @@ cut. (<a href="guide/expression#-event-">Event object is available as <code>$eve
 
 
 
-<h2 id="example">Example</h2><example>
+<h2 id="example">Example</h2><p>
 
-   </example>
+{% assign lvl = page.url | append:'X' | split:'/' | size %}
+{% capture relative %}{% for i in (3..lvl) %}../{% endfor %}{% endcapture %}
+
+<div>
+  <a ng-click="openPlunkr('{{ relative }}examples/example-example12')" class="btn pull-right">
+    <i class="glyphicon glyphicon-edit">&nbsp;</i>
+    Edit in Plunker</a>
+  <div class="runnable-example" path="examples/example-example12"
+      
+  >
+
+   
+
+    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example12/index.html" name="example-example12"></iframe>
+  </div>
+</div>
+
+
+</p>
+
 
 

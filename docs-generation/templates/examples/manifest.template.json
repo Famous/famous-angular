@@ -1,0 +1,8 @@
+{
+  "name": "<$ doc.example.id $>",
+  "files": [
+    "index.html"
+    <@- for file in doc.files @>,
+    "<$ file $>"<@ endfor @>
+  ]
+}

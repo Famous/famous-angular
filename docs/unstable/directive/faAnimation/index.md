@@ -34,7 +34,7 @@ docType: "directive"
 
 
 
-This directive is deprecated.  Prefer using the $timeline service.  This directive is used to animate an element in conjunction with an <a href="api/directive/animate">animate</a> directive
+This directive is deprecated.  Prefer using the $timeline service.  This directive is used to animate an element in conjunction with an <a href="../../../api/directive/animate/">animate</a> directive
 
 
 

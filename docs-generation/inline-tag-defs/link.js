@@ -18,6 +18,12 @@ module.exports = {
 					log.warn(linkInfo.error, 'in', doc.relativePath + '#' + doc.name);
 					linkInfo.title = 'TODO:' + linkInfo.title;
 				}
+        if(linkInfo.type === 'doc') {
+          var len = doc.path.split('/').length;
+          for(var i = 1; i < len; i++) {
+            linkInfo.url = '../' + linkInfo.url;
+          }
+        }
 
 				return '<a href="' + linkInfo.url + '">' + linkInfo.title + '</a>';
 			});
