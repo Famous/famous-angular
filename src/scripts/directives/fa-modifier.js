@@ -356,7 +356,7 @@ angular.module('famous.angular')
             isolate.renderNode = new RenderNode().add(isolate.modifier);
 
             $famousDecorator.addRole('renderable',isolate);
-            isolate.show()
+            isolate.show();
             
             $famousDecorator.sequenceWith(scope, function(data) {
               isolate.renderNode.add(data.renderGate);

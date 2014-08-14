@@ -3483,7 +3483,7 @@ angular.module('famous.angular')
             isolate.renderNode = new RenderNode().add(isolate.modifier);
 
             $famousDecorator.addRole('renderable',isolate);
-            isolate.show()
+            isolate.show();
             
             $famousDecorator.sequenceWith(scope, function(data) {
               isolate.renderNode.add(data.renderGate);
@@ -4366,7 +4366,7 @@ angular.module('famous.angular')
                     var _ch = [];
                     angular.forEach(_children, function(c, i) {
                       _ch[i] = c.renderGate;
-                    })
+                    });
                     return _ch;
                   }(_children)
                 };
