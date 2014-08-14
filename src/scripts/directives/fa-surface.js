@@ -194,7 +194,22 @@ angular.module('famous.angular')
               }
               return baseProperties;
             };
-             isolate.renderNode = new Surface({
+            isolate.sizeAnimateTimeStamps = [];
+
+            attrs.$observe('faSize',function () {
+              isolate.size = scope.$eval(attrs.faSize);
+              isolate.renderNode.setSize(isolate.size);
+              isolate.sizeAnimateTimeStamps.push(new Date());
+              
+              if(isolate.sizeAnimateTimeStamps.length > 5) {
+                if((isolate.sizeAnimateTimeStamps[4]-isolate.sizeAnimateTimeStamps[0]) <= 1000 ){
+                  console.warn("Using fa-size on fa-surface to animate is significantly non-performant, prefer to use fa-size on fa-modifier on the fa-surface");
+                }
+                isolate.sizeAnimateTimeStamps.shift();
+              }
+            });
+
+            isolate.renderNode = new Surface({
               size: scope.$eval(attrs.faSize),
               properties: isolate.getProperties()
             });
