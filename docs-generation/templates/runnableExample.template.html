@@ -15,13 +15,13 @@
   >
 
    <@ for fileName, file in doc.example.files @>
-    <div class="runnable-example-file"
+    <div ng-non-bindable class="runnable-example-file"
       <@ for attrName, attrValue in file.attributes @>
         <$ attrName $>="<$ attrValue $>"
       <@ endfor @>
     >
       <@ code -@>
-        <$ file.fileContents $>
+        {% raw %}<$ file.fileContents $>{% endraw %}
       <@- endcode @>
     </div>
   <@ endfor @>

@@ -101,7 +101,7 @@ mouseover. (<a href="guide/expression#-event-">Event object is available as <cod
   >
 
    
-    <div class="runnable-example-file"
+    <div ng-non-bindable class="runnable-example-file"
       
         name="index.html"
       
@@ -110,7 +110,7 @@ mouseover. (<a href="guide/expression#-event-">Event object is available as <cod
         type="html"
       
     >
-      <pre><code>&lt;fa-surface ng-mouseover=&quot;count = count + 1&quot; ng-init=&quot;count=0&quot; style=&quot;cursor: pointer;&quot;&gt;&#13;&#10;  Increment (when mouse is over), count: {{count}}&#13;&#10;&lt;/fa-surface&gt;&#13;</code></pre>
+      <pre><code>{% raw %} &lt;fa-surface ng-mouseover=&quot;count = count + 1&quot; ng-init=&quot;count=0&quot; style=&quot;cursor: pointer;&quot;&gt;&#13;&#10;  Increment (when mouse is over), count: {{count}}&#13;&#10;&lt;/fa-surface&gt;&#13;{% endraw %}</code></pre>
     </div>
   
 

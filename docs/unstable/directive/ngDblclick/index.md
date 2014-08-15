@@ -101,7 +101,7 @@ a dblclick. (The Event object is available as <code>$event</code>)</p>
   >
 
    
-    <div class="runnable-example-file"
+    <div ng-non-bindable class="runnable-example-file"
       
         name="index.html"
       
@@ -110,10 +110,10 @@ a dblclick. (The Event object is available as <code>$event</code>)</p>
         type="html"
       
     >
-      <pre><code>&lt;fa-surface ng-dblclick=&quot;count = count + 1&quot; ng-init=&quot;count=0&quot;&gt;&#13;&#10;  Increment (on double click), count: {{count}}&#13;&#10;&lt;/fa-surface&gt;&#13;</code></pre>
+      <pre><code>{% raw %} &lt;fa-surface ng-dblclick=&quot;count = count + 1&quot; ng-init=&quot;count=0&quot;&gt;&#13;&#10;  Increment (on double click), count: {{count}}&#13;&#10;&lt;/fa-surface&gt;&#13;{% endraw %}</code></pre>
     </div>
   
-    <div class="runnable-example-file"
+    <div ng-non-bindable class="runnable-example-file"
       
         name="style.css"
       
@@ -122,7 +122,7 @@ a dblclick. (The Event object is available as <code>$event</code>)</p>
         type="css"
       
     >
-      <pre><code>body {&#13;&#10;  -webkit-user-select: none;&#13;&#10;  -moz-user-select: none;&#13;&#10;  -ms-user-select: none;&#13;&#10;  user-select: none;&#13;&#10;}&#13;&#10;fa-surface {&#13;&#10;  cursor: pointer;&#13;&#10;}&#13;</code></pre>
+      <pre><code>{% raw %} body {&#13;&#10;  -webkit-user-select: none;&#13;&#10;  -moz-user-select: none;&#13;&#10;  -ms-user-select: none;&#13;&#10;  user-select: none;&#13;&#10;}&#13;&#10;fa-surface {&#13;&#10;  cursor: pointer;&#13;&#10;}&#13;{% endraw %}</code></pre>
     </div>
   
 
