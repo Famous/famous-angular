@@ -1,3 +1,56 @@
+<a name="0.3.0"></a>
+# 0.3.0 (2014-08-15)
+
+
+## Bug Fixes
+
+- expose .util on window for non-DI use
+ ([3820b783](https://github.com/Famous/famous-angular/commit/3820b783ebabbfc50da1aa63ac1ec00bf0b81304))
+- throw exception if fa-elements are added to fa-surface
+ ([60c8fe05](https://github.com/Famous/famous-angular/commit/60c8fe05539c51e7d004c76404e473530ad42a82))
+- make famous#getIsolate correctly manage cases where scope is null
+ ([175a775a](https://github.com/Famous/famous-angular/commit/175a775a04e2bc9245ae1e8c14c7d6a2e940dedf))
+- support proper translate-z (and general 3D) behavior in Chrome
+ ([1f82bd97](https://github.com/Famous/famous-angular/commit/1f82bd97d9fb03249023b6a90f8e3ce787bb38e5))
+- add check for isFaElement for animate leave
+ ([4d009c5d](https://github.com/Famous/famous-angular/commit/4d009c5d0f34ae6cdafe5e10cbc7b54e3decd526))
+
+
+## Features
+
+- implement fa-video-surface
+ ([9a07f11d](https://github.com/Famous/famous-angular/commit/9a07f11d69016eb5b46983d7ba7da451c11d133a))
+- ngClick decorated for fa-surface with touch
+ ([3e50b871](https://github.com/Famous/famous-angular/commit/3e50b871a0f52ff90a9905917a027f5dafea95c8))
+- add all mouseEvents
+ ([cbd875bc](https://github.com/Famous/famous-angular/commit/cbd875bcfe5436fb2085e7265f4b65d147051330))
+- decorate ng-click to register on renderNode in fa-directives
+ ([968b09ac](https://github.com/Famous/famous-angular/commit/968b09ac3b85d6fe29003cdcb1844058d3419af1))
+- update famous-angular.css to support changes in Famo.us core
+ ([864bd8b8](https://github.com/Famous/famous-angular/commit/864bd8b8ca5866959e34af3f85cbc8a0108e96c2))
+- removed the requirejs dependency
+ ([c9d318f2](https://github.com/Famous/famous-angular/commit/c9d318f27bb5d5f0ecdadf0029955976b5d8eff0))
+- add hide and show functionality on renderables
+ ([767fea86](https://github.com/Famous/famous-angular/commit/767fea86397ffcc874de463bb8f630d091c27e08))
+
+
+## Performance Improvements
+
+- include the famous modules definition in $famous provider
+ ([12668f2a](https://github.com/Famous/famous-angular/commit/12668f2a287439397f2a33907bdfb835a32ed2df))
+
+
+## Documentation
+
+- fixed docs code interpreted by jekyll & angular
+ ([4993f169](https://github.com/Famous/famous-angular/commit/4993f169c1305afd922626c040fb64d16d8cbf82))
+- live demos
+ ([4b519241](https://github.com/Famous/famous-angular/commit/4b519241abb367dbb80f742833ea104abf87dfae),
+ [#158](https://github.com/Famous/famous-angular/issues/158))
+- update readme to describe how to get started without RequireJS
+ ([aa553e4c](https://github.com/Famous/famous-angular/commit/aa553e4c9e7c0df146d98670457f62310b211fbe))
+
+
 <a name="0.2.0"></a>
 # 0.2.0 (2014-08-04)
 
