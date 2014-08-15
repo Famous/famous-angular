@@ -10,7 +10,7 @@ docType: "directive"
 ---
 
 <div class="improve-docs">
-  <a href='https://github.com/Famous/famous-angular/edit/master/src/scripts/directives/fa-input.js#L563'>
+  <a href='https://github.com/Famous/famous-angular/edit/master/src/scripts/directives/fa-input.js#L631'>
     Improve this doc
   </a>
 </div>
@@ -41,13 +41,12 @@ Specify custom behavior on blur event.
   
 <h2 id="usage">Usage</h2>
   
-    ```html
-  <window, input, select, textarea, a
-    ng-blur="">
-  ...
-  </window, input, select, textarea, a>
-  ```
-    
+```html
+<ANY ng-blur="expression">
+
+</ANY>
+```
+  
   
 <h2 id="api" style="clear:both;">API</h2>
 

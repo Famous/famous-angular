@@ -4,7 +4,7 @@
  * @module famous.angular
  * @restrict EA
  * @description
- * This directive is deprecated.  Prefer using the $timeline service.  This directive is used to animate an element in conjunction with an {@link api/directive/animate animate} directive
+ * This directive is deprecated.  Prefer using the $timeline service.  This directive is used to animate an element in conjunction with an {@link animate animate} directive
  * @deprecated true
  * @usage
  * ```html
@@ -17,7 +17,7 @@
  * 
  * The most flexible way to animate modifier properties is by creating a Transitionable object on the scope and binding the property in the html.
  * Any changes to the Transitionable object on the scope will be reflected in the view immediately via Angular's two-way data binding.
- * 
+ *
  * ```javascript
  * var Transitionable = $famous['famous/transitions/Transitionable'];
  * var Easing = $famous['famous/transitions/Easing'];
@@ -325,7 +325,7 @@ angular.module('famous.angular')
                * @restrict E
                * @deprecated true
                * @description
-               * This directive is deprecated.  Prefer using the $timeline service.  This element is used to specify the animation of an element in a {@link api/directive/faAnimation faAnimation} directive
+               * This directive is deprecated.  Prefer using the $timeline service.  This element is used to specify the animation of an element in a {@link faAnimation faAnimation} directive
                *
                * @usage
                * ```html

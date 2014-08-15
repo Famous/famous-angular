@@ -81,4 +81,4 @@ angular.module('famous.angular')
         };
       }
     };
-  }])
+  }]);

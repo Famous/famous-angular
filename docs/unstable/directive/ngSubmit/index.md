@@ -10,7 +10,7 @@ docType: "directive"
 ---
 
 <div class="improve-docs">
-  <a href='https://github.com/Famous/famous-angular/edit/master/src/scripts/directives/fa-input.js#L519'>
+  <a href='https://github.com/Famous/famous-angular/edit/master/src/scripts/directives/fa-input.js#L575'>
     Improve this doc
   </a>
 </div>
@@ -52,13 +52,12 @@ for a detailed discussion of when `ngSubmit` may be triggered.
   
 <h2 id="usage">Usage</h2>
   
-    ```html
-  <form
-    ng-submit="">
-  ...
-  </form>
-  ```
-    
+```html
+<ANY ng-submit="expression">
+
+</ANY>
+```
+  
   
 <h2 id="api" style="clear:both;">API</h2>
 
@@ -99,7 +98,29 @@ for a detailed discussion of when `ngSubmit` may be triggered.
 
 
 
-<h2 id="example">Example</h2><example module="submitExample">
-   </example>
+<h2 id="example">Example</h2><p>
+
+{% assign lvl = page.url | append:'X' | split:'/' | size %}
+{% capture relative %}{% for i in (3..lvl) %}../{% endfor %}{% endcapture %}
+
+<div>
+  <a ng-click="openPlunkr('{{ relative }}examples/example-example10')" class="btn pull-right">
+    <i class="glyphicon glyphicon-edit">&nbsp;</i>
+    Edit in Plunker</a>
+  <div class="runnable-example" path="examples/example-example10"
+      
+        module="submitExample"
+      
+  >
+
+   
+
+    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example10/index.html" name="example-example10"></iframe>
+  </div>
+</div>
+
+
+</p>
+
 
 

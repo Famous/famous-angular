@@ -47,8 +47,8 @@ To inform Famo.us/Angular how to halt any in-progress animation, use the `fa-ani
 
 The core Angular animation API is fundamentally CSS class-based. Because only Famo.us Surfaces
 support CSS classes, core directives such as `ngClass`, `ngShow`, `ngIf`, and others should be applied
-only with directives representing Surfaces (such as <a href="api/directive/faSurface">faSurface</a> and
-<a href="api/directive/faImageSurface">faImageSurface</a>).
+only with directives representing Surfaces (such as <a href="../../../api/directive/faSurface/">faSurface</a> and
+<a href="../../../api/directive/faImageSurface/">faImageSurface</a>).
 
 The <a href="https://docs.angularjs.org/api/ngAnimate">ngAnimate</a> module's documentation lists the set of
 core directives supporting $animate events. Please note that the `ngAnimate` module is *not* required

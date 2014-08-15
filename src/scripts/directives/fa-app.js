@@ -8,7 +8,7 @@
  * it creates a Famous context and then adds child elements
  * to that context as they get compiled.  Inside of this directive,
  * normal HTML content will not get rendered to the screen unless
- * it is inside of a {@link api/directive/faSurface fa-surface} directive.
+ * it is inside of a {@link faSurface fa-surface} directive.
  *
  * @usage
  * ```html

@@ -10,7 +10,7 @@ docType: "directive"
 ---
 
 <div class="improve-docs">
-  <a href='https://github.com/Famous/famous-angular/edit/master/src/scripts/directives/fa-input.js#L547'>
+  <a href='https://github.com/Famous/famous-angular/edit/master/src/scripts/directives/fa-input.js#L609'>
     Improve this doc
   </a>
 </div>
@@ -41,13 +41,12 @@ Specify custom behavior on focus event.
   
 <h2 id="usage">Usage</h2>
   
-    ```html
-  <window, input, select, textarea, a
-    ng-focus="">
-  ...
-  </window, input, select, textarea, a>
-  ```
-    
+```html
+<ANY ng-focus="expression">
+
+</ANY>
+```
+  
   
 <h2 id="api" style="clear:both;">API</h2>
 
@@ -88,7 +87,7 @@ focus. (<a href="guide/expression#-event-">Event object is available as <code>$e
 
 
 
-<h2 id="example">Example</h2><p>See <a href="ng.directive:ngClick">TODO:ngClick</a></p>
+<h2 id="example">Example</h2><p>See <a href="../../../api/directive/ngClick/">ngClick</a></p>
 
 
 

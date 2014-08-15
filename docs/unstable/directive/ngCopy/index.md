@@ -10,7 +10,7 @@ docType: "directive"
 ---
 
 <div class="improve-docs">
-  <a href='https://github.com/Famous/famous-angular/edit/master/src/scripts/directives/fa-input.js#L578'>
+  <a href='https://github.com/Famous/famous-angular/edit/master/src/scripts/directives/fa-input.js#L652'>
     Improve this doc
   </a>
 </div>
@@ -41,13 +41,12 @@ Specify custom behavior on copy event.
   
 <h2 id="usage">Usage</h2>
   
-    ```html
-  <window, input, select, textarea, a
-    ng-copy="">
-  ...
-  </window, input, select, textarea, a>
-  ```
-    
+```html
+<ANY ng-copy="expression">
+
+</ANY>
+```
+  
   
 <h2 id="api" style="clear:both;">API</h2>
 
@@ -88,8 +87,27 @@ copy. (<a href="guide/expression#-event-">Event object is available as <code>$ev
 
 
 
-<h2 id="example">Example</h2><example>
+<h2 id="example">Example</h2><p>
 
-   </example>
+{% assign lvl = page.url | append:'X' | split:'/' | size %}
+{% capture relative %}{% for i in (3..lvl) %}../{% endfor %}{% endcapture %}
+
+<div>
+  <a ng-click="openPlunkr('{{ relative }}examples/example-example11')" class="btn pull-right">
+    <i class="glyphicon glyphicon-edit">&nbsp;</i>
+    Edit in Plunker</a>
+  <div class="runnable-example" path="examples/example-example11"
+      
+  >
+
+   
+
+    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example11/index.html" name="example-example11"></iframe>
+  </div>
+</div>
+
+
+</p>
+
 
 
