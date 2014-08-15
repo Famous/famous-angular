@@ -111,7 +111,7 @@ and can be interrogated for keyCode, altKey, etc.)</p>
         type="html"
       
     >
-      <pre><code>{% raw %} &lt;fa-surface ng-keypress=&quot;count = count + 1&quot; ng-init=&quot;count=0&quot;&gt;&#13;&#10;  key press count: {{count}}&#13;&#10;&lt;/fa-surface&gt;&#13;{% endraw %}</code></pre>
+      <pre><code>{% raw %} &lt;fa-surface ng-keypress=&quot;count = count + 1&quot; ng-init=&quot;count=0&quot;&gt;&#10;  key press count: {{count}}&#10;&lt;/fa-surface&gt;{% endraw %}</code></pre>
     </div>
   
 

@@ -110,7 +110,7 @@ a dblclick. (The Event object is available as <code>$event</code>)</p>
         type="html"
       
     >
-      <pre><code>{% raw %} &lt;fa-surface ng-dblclick=&quot;count = count + 1&quot; ng-init=&quot;count=0&quot;&gt;&#13;&#10;  Increment (on double click), count: {{count}}&#13;&#10;&lt;/fa-surface&gt;&#13;{% endraw %}</code></pre>
+      <pre><code>{% raw %} &lt;fa-surface ng-dblclick=&quot;count = count + 1&quot; ng-init=&quot;count=0&quot;&gt;&#10;  Increment (on double click), count: {{count}}&#10;&lt;/fa-surface&gt;{% endraw %}</code></pre>
     </div>
   
     <div ng-non-bindable class="runnable-example-file"
@@ -122,7 +122,7 @@ a dblclick. (The Event object is available as <code>$event</code>)</p>
         type="css"
       
     >
-      <pre><code>{% raw %} body {&#13;&#10;  -webkit-user-select: none;&#13;&#10;  -moz-user-select: none;&#13;&#10;  -ms-user-select: none;&#13;&#10;  user-select: none;&#13;&#10;}&#13;&#10;fa-surface {&#13;&#10;  cursor: pointer;&#13;&#10;}&#13;{% endraw %}</code></pre>
+      <pre><code>{% raw %} body {&#10;  -webkit-user-select: none;&#10;  -moz-user-select: none;&#10;  -ms-user-select: none;&#10;  user-select: none;&#10;}&#10;fa-surface {&#10;  cursor: pointer;&#10;}{% endraw %}</code></pre>
     </div>
   
 

@@ -110,7 +110,7 @@ mousedown. (<a href="guide/expression#-event-">Event object is available as <cod
         type="html"
       
     >
-      <pre><code>{% raw %} &lt;fa-surface ng-mousedown=&quot;count = count + 1&quot; ng-init=&quot;count=0&quot; style=&quot;cursor: pointer;&quot;&gt;&#13;&#10;  Increment (on mouse down), count: {{count}}&#13;&#10;&lt;/fa-surface&gt;&#13;{% endraw %}</code></pre>
+      <pre><code>{% raw %} &lt;fa-surface ng-mousedown=&quot;count = count + 1&quot; ng-init=&quot;count=0&quot; style=&quot;cursor: pointer;&quot;&gt;&#10;  Increment (on mouse down), count: {{count}}&#10;&lt;/fa-surface&gt;{% endraw %}</code></pre>
     </div>
   
 

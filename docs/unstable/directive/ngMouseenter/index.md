@@ -110,7 +110,7 @@ mouseenter. (<a href="guide/expression#-event-">Event object is available as <co
         type="html"
       
     >
-      <pre><code>{% raw %} &lt;fa-surface ng-mouseenter=&quot;count = count + 1&quot; ng-init=&quot;count=0&quot; style=&quot;cursor: pointer;&quot;&gt;&#13;&#10;  Increment (when mouse enters), count: {{count}}&#13;&#10;&lt;/fa-surface&gt;&#13;{% endraw %}</code></pre>
+      <pre><code>{% raw %} &lt;fa-surface ng-mouseenter=&quot;count = count + 1&quot; ng-init=&quot;count=0&quot; style=&quot;cursor: pointer;&quot;&gt;&#10;  Increment (when mouse enters), count: {{count}}&#10;&lt;/fa-surface&gt;{% endraw %}</code></pre>
     </div>
   
 
