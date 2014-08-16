@@ -39,6 +39,10 @@ angular.module('famous.angular')
 
             //TODO:  update fa-pipe-to and fa-pipe-from to support Modifiers instead of just RenderNodes
             //       This is a temporary hack
+            //       Can probably fix by making fa-pipe-to and
+            //       fa-pipe-from select between renderNode,
+            //       renderNode._eventOutput/Input, and renderNode._object
+            //       for their source/target
             scope.$watch(function(){
               return scope.$eval(attrs.faPipeFrom);
             }, function(newVal, oldVal){
