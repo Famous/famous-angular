@@ -25,6 +25,10 @@ describe('faPipeFrom', function() {
     pending();
   });
 
+  it('should correctly handle piping from modifiers (e.g. Draggable)', function(){
+    pending();
+  });
+
   it('should pipe events from a provided eventhandler to the specified target', function() {
 
     $scope.toEventHandler = eventHandler;

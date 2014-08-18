@@ -1877,19 +1877,6 @@ angular.module('famous.angular')
 
             isolate.modifier = new Draggable(options);
 
-            //TODO:  update fa-pipe-to and fa-pipe-from to support Modifiers instead of just RenderNodes
-            //       This is a temporary hack
-            //       Can probably fix by making fa-pipe-to and
-            //       fa-pipe-from select between renderNode,
-            //       renderNode._eventOutput/Input, and renderNode._object
-            //       for their source/target
-            scope.$watch(function(){
-              return scope.$eval(attrs.faPipeFrom);
-            }, function(newVal, oldVal){
-              if(oldVal) oldVal.unpipe(isolate.modifier);
-              if(newVal) newVal.pipe(isolate.modifier);
-            });
-
             isolate.renderNode = new RenderNode().add(isolate.modifier);
 
             $famousDecorator.addRole('renderable',isolate);
@@ -3942,7 +3929,10 @@ angular.module('famous.angular')
                 return scope.$eval(attrs.faPipeFrom);
               },
               function(newTarget, oldTarget){
-                var source = isolate.renderNode || Engine;
+                var source;
+                if(isolate.renderNode && isolate.renderNode._isModifier) source = isolate.renderNode._object;                                         
+                else if(isolate.renderNode) source = isolate.renderNode._eventInput || isolate.renderNode;
+                else source = Engine;
                 $famousPipe.unpipesFromTargets(source, oldTarget);
                 $famousPipe.pipesToTargets(source, newTarget);
               }
@@ -4198,7 +4188,10 @@ angular.module('famous.angular')
                 return scope.$eval(attrs.faPipeTo);
               },
               function(newSource, oldSource) {
-                var target = isolate.renderNode || Engine;
+                var target;
+                if(isolate.renderNode && isolate.renderNode._isModifier) target = isolate.renderNode._object;
+                else if(isolate.renderNode) target = isolate.renderNode._eventOutput || isolate.renderNode;
+                else target = Engine;
                 $famousPipe.unpipesFromTargets(oldSource, target);
                 $famousPipe.pipesToTargets(newSource, target);
               }

@@ -33,6 +33,10 @@ describe('faPipeTo', function() {
     pending();
   });
 
+  it('should correctly handle piping to modifiers (e.g. Draggable)', function(){
+    pending();
+  });
+
   it('should trigger events on a defined event listener', function() {
     var faSurface = common.compileFaSurface('fa-pipe-to="eventHandler"');
     var surface   = common.getSurface(faSurface);

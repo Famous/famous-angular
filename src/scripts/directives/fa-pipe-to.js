@@ -235,7 +235,10 @@ angular.module('famous.angular')
                 return scope.$eval(attrs.faPipeTo);
               },
               function(newSource, oldSource) {
-                var target = isolate.renderNode || Engine;
+                var target;
+                if(isolate.renderNode && isolate.renderNode._isModifier) target = isolate.renderNode._object;
+                else if(isolate.renderNode) target = isolate.renderNode._eventOutput || isolate.renderNode;
+                else target = Engine;
                 $famousPipe.unpipesFromTargets(oldSource, target);
                 $famousPipe.pipesToTargets(newSource, target);
               }

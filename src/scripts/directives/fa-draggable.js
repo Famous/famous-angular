@@ -37,19 +37,6 @@ angular.module('famous.angular')
 
             isolate.modifier = new Draggable(options);
 
-            //TODO:  update fa-pipe-to and fa-pipe-from to support Modifiers instead of just RenderNodes
-            //       This is a temporary hack
-            //       Can probably fix by making fa-pipe-to and
-            //       fa-pipe-from select between renderNode,
-            //       renderNode._eventOutput/Input, and renderNode._object
-            //       for their source/target
-            scope.$watch(function(){
-              return scope.$eval(attrs.faPipeFrom);
-            }, function(newVal, oldVal){
-              if(oldVal) oldVal.unpipe(isolate.modifier);
-              if(newVal) newVal.pipe(isolate.modifier);
-            });
-
             isolate.renderNode = new RenderNode().add(isolate.modifier);
 
             $famousDecorator.addRole('renderable',isolate);
