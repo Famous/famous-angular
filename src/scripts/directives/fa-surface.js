@@ -194,18 +194,17 @@ angular.module('famous.angular')
               }
               return baseProperties;
             };
-            isolate.sizeAnimateTimeStamps = [];
+            var _sizeAnimateTimeStamps = [];
 
             attrs.$observe('faSize',function () {
-              isolate.size = scope.$eval(attrs.faSize);
-              isolate.renderNode.setSize(isolate.size);
-              isolate.sizeAnimateTimeStamps.push(new Date());
+              isolate.renderNode.setSize(scope.$eval(attrs.faSize));
+              _sizeAnimateTimeStamps.push(new Date());
               
-              if(isolate.sizeAnimateTimeStamps.length > 5) {
-                if((isolate.sizeAnimateTimeStamps[4]-isolate.sizeAnimateTimeStamps[0]) <= 1000 ){
-                  console.warn("Using fa-size on fa-surface to animate is significantly non-performant, prefer to use fa-size on fa-modifier on the fa-surface");
+              if(_sizeAnimateTimeStamps.length > 5) {
+                if((_sizeAnimateTimeStamps[4]-_sizeAnimateTimeStamps[0]) <= 1000 ){
+                  console.warn("Using fa-size on fa-surface to animate is significantly non-performant, prefer to use fa-size on an fa-modifier surrounding a fa-surface");
                 }
-                isolate.sizeAnimateTimeStamps.shift();
+                _sizeAnimateTimeStamps.shift();
               }
             });
 

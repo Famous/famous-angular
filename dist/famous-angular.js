@@ -4892,7 +4892,21 @@ angular.module('famous.angular')
               }
               return baseProperties;
             };
-             isolate.renderNode = new Surface({
+            var _sizeAnimateTimeStamps = [];
+
+            attrs.$observe('faSize',function () {
+              isolate.renderNode.setSize(scope.$eval(attrs.faSize));
+              _sizeAnimateTimeStamps.push(new Date());
+              
+              if(_sizeAnimateTimeStamps.length > 5) {
+                if((_sizeAnimateTimeStamps[4]-_sizeAnimateTimeStamps[0]) <= 1000 ){
+                  console.warn("Using fa-size on fa-surface to animate is significantly non-performant, prefer to use fa-size on an fa-modifier surrounding a fa-surface");
+                }
+                _sizeAnimateTimeStamps.shift();
+              }
+            });
+
+            isolate.renderNode = new Surface({
               size: scope.$eval(attrs.faSize),
               properties: isolate.getProperties()
             });
