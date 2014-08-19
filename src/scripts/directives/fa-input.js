@@ -6,8 +6,8 @@
  * @restrict A
  * 
  * @description
- * This is a wrapped for tha default ngCick which allows you to specify custom behavior when an fa-surface is clicked.
- * the wrapper is also design to be be used on touchscreen devices. It matches all the features supported by ngClick on 
+ * This is a wrapped for the default ngClick which allows you to specify custom behavior when an fa-surface is clicked.
+ * the wrapper is also designed to be be used on touchscreen devices. It matches all the features supported by ngClick, 
  * including ngTouch module for all types of fa-surface. 
  * 
  * If ngTouch is requried to add touch click capabilites in non F/A elements. Add ngTouch dependence before adding famous.angular otherwise 
