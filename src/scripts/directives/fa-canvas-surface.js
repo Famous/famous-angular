@@ -23,7 +23,7 @@
  * `Fa-canvas-surface` accepts classes and faSize, the only two attributes HTML5 canvas requires is width and height.
  */
 angular.module('famous.angular')
-  .directive('faCanvasSurface', ['$famous', '$famousDecorator', function ($famous, $famousDecorator) {
+  .directive('faCanvasSurface', ['$famous', '$famousDecorator', '$interpolate', '$controller', '$compile', function ($famous, $famousDecorator, $interpolate, $controller, $compile) {
     return {
       scope: true,
       transclude: true,
@@ -41,10 +41,19 @@ angular.module('famous.angular')
             isolate.renderNode = new CanvasSurface({
               size: scope.$eval(attrs.faSize)
             });
-
+            
+            $famousDecorator.addRole('renderable',isolate);
+            isolate.show();
+            
             if (attrs.class) {
               isolate.renderNode.setClasses(attrs['class'].split(' '));
             }
+            
+            // Throw an exception if anyother famous scene graph element is added on fa-surface.            
+            $famousDecorator.sequenceWith(scope, function(data) {
+              throw new Error('Surfaces are leaf nodes of the Famo.us render tree and cannot accept rendernode children.  To include additional Famo.us content inside of a fa-surface, that content must be enclosed in an additional fa-app.');
+            });
+                        
           },
           post: function(scope, element, attrs){
             var isolate = $famousDecorator.ensureIsolate(scope);
