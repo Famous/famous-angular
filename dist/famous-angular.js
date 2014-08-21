@@ -579,7 +579,7 @@ angular.module('famous.angular')
  */
 
 angular.module('famous.angular')
-  .factory('$famousDecorator', function ($famous) {
+  .factory('$famousDecorator', ["$famous", function ($famous) {
     //TODO:  add repeated logic to these roles
     var _roles = {
       child: {
@@ -698,7 +698,7 @@ angular.module('famous.angular')
         });
       }
     };
-  });
+  }]);
 
 
 /**
@@ -2610,9 +2610,9 @@ angular.module('famous.angular')
  * 
 **/
 angular.module('famous.angular')
-.config(function  ($provide) {
+.config(["$provide", function  ($provide) {
   
-  $provide.decorator('ngClickDirective', function ($delegate, $famousDecorator, $parse, $rootElement, $famous, $timeout) {
+  $provide.decorator('ngClickDirective', ["$delegate", "$famousDecorator", "$parse", "$rootElement", "$famous", "$timeout", function ($delegate, $famousDecorator, $parse, $rootElement, $famous, $timeout) {
     var directive = $delegate[0];
 
     var compile = directive.compile;
@@ -2802,7 +2802,7 @@ angular.module('famous.angular')
       }
     };
     return $delegate; 
-  });
+  }]);
 
 
 
@@ -2843,7 +2843,7 @@ angular.module('famous.angular')
       return $delegate;
     });
   });
-});
+}]);
 
 /**
  * @ngdoc directive
