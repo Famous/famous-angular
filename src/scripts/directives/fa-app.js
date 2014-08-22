@@ -91,7 +91,7 @@ angular.module('famous.angular')
             isolate.context = Engine.createContext(element[0].querySelector('.famous-angular-container'));
             window.context = isolate.context;
 
-            scope.__resizeDisable = !scope.$eval(attrs.faAutoResizeEnable) ;
+            scope.__resizeDisable = !scope.$eval(attrs.faAutoResizeEnabled) ;
             
             var _updatePerspective = function(){
               var val = parseInt(attrs.faPerspective);
@@ -161,7 +161,7 @@ angular.module('famous.angular')
  * @restrict A
  * @description
  * This directive is an internal directive to add resize event listener on the famous-angular-container. The resize event listener can be disabled 
- * by adding an fa-auto-resize-enable = 'false' attribute on fa-app. This resize event listener concept is adapted from 
+ * by adding an fa-auto-resize-enabled = 'false' attribute on fa-app. This resize event listener concept is adapted from 
  * http://www.backalleycoder.com/2013/03/18/cross-browser-event-based-element-resize-detection/ 
  */
 angular.module('famous.angular')
