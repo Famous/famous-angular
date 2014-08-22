@@ -1538,7 +1538,10 @@ angular.module('famous.angular')
 angular.module('famous.angular')
   .directive('faApp', ["$famous", "$famousDecorator", function ($famous, $famousDecorator) {
     return {
-      template: '<div style="display: none;"><div></div></div>',
+      template: '<div style= "display: none;" ><div></div></div>'+
+                '<div fa-resize-listener class="famous-angular-clipping-container" >'+
+                  '<div class="famous-angular-container"></div>'+
+                '</div>',
       transclude: true,
       scope: true,
       restrict: 'EA',
@@ -1551,9 +1554,11 @@ angular.module('famous.angular')
             var Engine = $famous['famous/core/Engine'];
             var Transform = $famous['famous/core/Transform'];
 
-            element.append('<div class="famous-angular-clipping-container"><div class="famous-angular-container"></div></div>');
             isolate.context = Engine.createContext(element[0].querySelector('.famous-angular-container'));
             window.context = isolate.context;
+           
+            scope.resizeDisable = !!scope.$eval(attrs.faAutoResizeDisable) ;
+            
             var _updatePerspective = function(){
               var val = parseInt(attrs.faPerspective);
               if(val) isolate.context.setPerspective(val);
@@ -1615,6 +1620,89 @@ angular.module('famous.angular')
       }
     };
   }]);
+/**
+ * @ngdoc directive
+ * @name faAutoResizeEnable
+ * @module famous.angular
+ * @restrict A
+ * @description
+ * This directive is an internal directive to add resize event listener on the famous-angular-container. The resize event listener can be disabled 
+ * by adding an fa-auto-resize-disbale attribute on fa-app. This resize event listener concept is adapted from 
+ * http://www.backalleycoder.com/2013/03/18/cross-browser-event-based-element-resize-detection/ 
+ */
+angular.module('famous.angular')
+ .directive('faResizeListener',function ($parse) {
+ return  { 
+    restrict: 'A',
+    scope: false,
+    compile: function (tElement, tAttrs, transclude) {      
+      return {
+
+        pre: function (scope, element, attrs) {
+          
+          if(element[0].className !== 'famous-angular-clipping-container' || scope.resizeDisable) return;
+          var faContainer = element[0];
+          var requestFrame = (function() {
+            var raf = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame ||
+                function(fn){ return window.setTimeout(fn, 20); };
+            return function(fn){ return raf(fn); };
+          })();
+          
+          var cancelFrame = (function() {
+            var cancel = window.cancelAnimationFrame || window.mozCancelAnimationFrame || window.webkitCancelAnimationFrame ||
+                   window.clearTimeout;
+            return function(id){ return cancel(id); };
+          })();
+
+          function resetTriggers(element){
+            var triggers = element.__resizeTriggers__,
+              expand = triggers.firstElementChild,
+              contract = triggers.lastElementChild,
+              expandChild = expand.firstElementChild;
+            contract.scrollLeft = contract.scrollWidth;
+            contract.scrollTop = contract.scrollHeight;
+            expandChild.style.width = expand.offsetWidth + 1 + 'px';
+            expandChild.style.height = expand.offsetHeight + 1 + 'px';
+            expand.scrollLeft = expand.scrollWidth;
+            expand.scrollTop = expand.scrollHeight;
+          }
+
+          function checkTriggers(element){
+            return element.offsetWidth !== element.__resizeLast__.width ||
+               element.offsetHeight !== element.__resizeLast__.height;
+          }
+          function scrollListener(event){
+
+            resetTriggers(faContainer);
+            if (faContainer.__resizeRAF__) cancelFrame(faContainer.__resizeRAF__);
+            faContainer.__resizeRAF__ = requestFrame(function(){
+              if (checkTriggers(faContainer)) { 
+                faContainer.__resizeLast__.width = faContainer.offsetWidth;
+                faContainer.__resizeLast__.height = faContainer.offsetHeight;
+                var isolate = scope.isolate[scope.$id];
+                isolate.context.setSize([element.width(),element.height()]);
+                console.log(isolate.context.getSize());
+              }
+            });
+          }
+
+          if(!scope.resizeDisable) {
+            if(!element.__resizeTriggers__) {
+              if(getComputedStyle(faContainer).position === 'static' ) faContainer.style.position = 'relative';
+              faContainer.__resizeLast__ = {};
+              (faContainer.__resizeTriggers__  = document.createElement('div')).className = 'resize-triggers';
+              faContainer.__resizeTriggers__.innerHTML = '<div class="expand-trigger"><div></div></div>' +
+                                   '<div class="contract-trigger"></div>';
+              faContainer.appendChild(faContainer.__resizeTriggers__);
+              resetTriggers(faContainer);
+              faContainer.addEventListener('scroll', scrollListener, true);
+            }
+          }
+        }
+      };
+    }
+  };
+ });
 
 /**
  * @ngdoc directive
