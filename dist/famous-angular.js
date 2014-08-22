@@ -666,6 +666,8 @@ angular.module('famous.angular')
             isolate.removeMethod(isolate.id);
           }
 
+          if(isolate && isolate.hide) { isolate.hide(); }
+
           // Invoke the callback, if provided
           if(unregisterCallback) unregisterCallback();
         });
