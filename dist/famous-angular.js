@@ -692,6 +692,7 @@ angular.module('famous.angular')
           if (evt.targetScope.$id !== scope.$id) {
             addMethod(isolate);
             evt.stopPropagation();
+            console.log(evt.targetScope.$id,scope.$id);
 
             // Attach the remove method to the isolate, so it can be invoked without scope, if it is provided
             if(removeMethod) isolate.removeMethod = removeMethod;
@@ -2335,19 +2336,36 @@ angular.module('famous.angular')
               scope,
               function(data) {
                 _numberOfChildren++;
-                if (_numberOfChildren === 1) {
-                  isolate.renderNode.header.add(data.renderGate);
-                } else if (_numberOfChildren === 2){
-                  isolate.renderNode.content.add(data.renderGate);
-                } else if (_numberOfChildren === 3){
-                  isolate.renderNode.footer.add(data.renderGate);
+                if(data.index) {
+                  if(data.index === 0) {
+                    isolate.renderNode.header.add(data.renderGate);
+                  } else if (data.index === 1) {
+                    isolate.renderNode.content.add(data.renderGate);
+                  } else if (data.index === 2) {
+                    isolate.renderNode.footer.add(data.renderGate);
+                  } else if(data.index >= 3){
+                    throw new Error('fa-header-footer-layout can accept no more than 3 children');
+                  }
                 } else {
-                  throw new Error('fa-header-footer-layout can accept no more than 3 children');
+                  if (_numberOfChildren === 1 ) {
+                    isolate.renderNode.header.add(data.renderGate);
+                    console.log(isolate.renderNode.header);
+                  } else if (_numberOfChildren === 2){
+                    isolate.renderNode.content.add(data.renderGate);
+                  } else if (_numberOfChildren === 3){
+                    isolate.renderNode.footer.add(data.renderGate);
+                  } else {
+                    throw new Error('fa-header-footer-layout can accept no more than 3 children');
+                  }
+
                 }
+                
               },
               // TODO: support removing children
               function(childScopeId) {
-                throw new Error ('unimplemented: fa-header-footer-layout does not support removing children');
+                console.log(childScopeId);
+                _numberOfChildren--;
+
               }
             );
 
