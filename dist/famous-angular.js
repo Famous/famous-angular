@@ -692,7 +692,6 @@ angular.module('famous.angular')
           if (evt.targetScope.$id !== scope.$id) {
             addMethod(isolate);
             evt.stopPropagation();
-            console.log(evt.targetScope.$id,scope.$id);
 
             // Attach the remove method to the isolate, so it can be invoked without scope, if it is provided
             if(removeMethod) isolate.removeMethod = removeMethod;
@@ -2363,7 +2362,6 @@ angular.module('famous.angular')
               },
               // TODO: support removing children
               function(childScopeId) {
-                console.log(childScopeId);
                 _numberOfChildren--;
 
               }
