@@ -60,7 +60,7 @@
  *
  * // Fold items down to the right when they enter.
  * $scope.enter = function() {
- *   scope.transitionable.set(
+ *   $scope.transitionable.set(
  *     0,
  *     {
  *       method: SnapTransition,
@@ -74,7 +74,7 @@
  *
  * // Fold items up to the left when they leave.
  * $scope.leave = function(done) {
- *   scope.transitionable.set(
+ *   $scope.transitionable.set(
  *     Math.PI / 2,
  *     {
  *       method: SnapTransition,
@@ -85,9 +85,9 @@
  *   );
  * };
  *
- * scope.halt = function() {
+ * $scope.halt = function() {
  *   // Halt any active animations
- *   scope.transitionable.halt();
+ *   $scope.transitionable.halt();
  * };
  * ```
  */
