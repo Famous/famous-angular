@@ -16,7 +16,7 @@
  * </fa-container-surface>
  * ```
  */
-
+ 
 angular.module('famous.angular')
   .directive('faContainerSurface', ["$famous", "$famousDecorator", function ($famous, $famousDecorator) {
     return {
@@ -28,23 +28,45 @@ angular.module('famous.angular')
         return  {
           pre: function(scope, element, attrs){
             var isolate = $famousDecorator.ensureIsolate(scope);
-
+            
+            var _children = [];
+            
             var ContainerSurface = $famous["famous/surfaces/ContainerSurface"];
 
             var options = scope.$eval(attrs.faOptions) || {};
             isolate.renderNode = new ContainerSurface(options);
             $famousDecorator.addRole('renderable',isolate);
             isolate.show();
+            
+            var updateContainerSurface = function () {
+                var _ch = [];
+                angular.forEach(_children, function (c, i) {
+                  _ch[i] = c.renderGate;
+                });
+                return _ch;
+            };
 
             $famousDecorator.sequenceWith(
               scope,
               function(data) {
+                _children.push(data);
                 isolate.renderNode.add(data.renderGate);
+                updateContainerSurface();
               },
               function(childScopeId) {
-                throw new Error('unimplemented: fa-container-surface does not support removing children');
+                _children = function (_children) {
+                  var _ch = [];
+                  angular.forEach(_children, function (c) {
+                    if (c.id !== childScopeId) {
+                      _ch.push(c);
+                    }
+                  });
+                  return _ch;
+                }(_children);  
+                updateContainerSurface();           
               }
             );
+            
           },
           post: function(scope, element, attrs){
             var isolate = $famousDecorator.ensureIsolate(scope);
@@ -53,9 +75,10 @@ angular.module('famous.angular')
               element.find('div').append(clone);
             });
 
-            $famousDecorator.registerChild(scope, element, isolate);
+            scope.$emit('registerChild', isolate);
           }
         };
       }
     };
-  }]);
+  }]); 
+  
