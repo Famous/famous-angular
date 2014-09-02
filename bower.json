@@ -4,7 +4,10 @@
   "version": "0.3.0",
   "license": "MPL v2.0",
   "homepage": "https://github.com/Famous/famous-angular",
-  "main": "dist/famous-angular.js",
+  "main": [
+    "dist/famous-angular.js",
+    "dist/famous-angular.css"
+  ],
   "dependencies": {
     "angular": "1.2.22",
     "famous": "http://code.famo.us/famous/global/0.2.2/famous-global-0.2.2.tar.gz",
