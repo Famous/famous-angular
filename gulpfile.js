@@ -16,6 +16,7 @@ var gulp = require('gulp'),
   exec = require('gulp-exec'),
   inject = require('gulp-inject'),
   filter = require('gulp-filter'),
+  ngAnnotate = require('gulp-ng-annotate'),
   pkg = require('./package.json');
 
 // Clean
@@ -76,6 +77,7 @@ gulp.task('build', ['clean'], function(event) {
   .pipe(jshint.reporter('default'))
   .pipe(concat('famous-angular.js'))
   .pipe(header(banner, { pkg : pkg } ))
+  .pipe(ngAnnotate())
   .pipe(gulp.dest('dist/'))
   .pipe(uglify())
   .pipe(rename({suffix: '.min'}))
@@ -123,7 +125,7 @@ gulp.task('build-to-examples', ['clean', 'build'], function(event) {
   return gulp.src('src/styles/famous-angular.css')
   .pipe(gulp.dest(EXAMPLES_DIR + 'app/bower_components/famous-angular/dist/'))
   .pipe(notify({ message: 'Build task complete' }));
-  
+
 })
 
 // Watch
