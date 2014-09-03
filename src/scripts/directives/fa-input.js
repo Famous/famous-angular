@@ -37,7 +37,7 @@
  * 
 **/
 angular.module('famous.angular')
-.config(function  ($provide) {
+.config(['$provide', function  ($provide) {
   
   $provide.decorator('ngClickDirective', function ($delegate, $famousDecorator, $parse, $rootElement, $famous, $timeout) {
     var directive = $delegate[0];
@@ -270,7 +270,7 @@ angular.module('famous.angular')
       return $delegate;
     });
   });
-});
+}]);
 
 /**
  * @ngdoc directive
