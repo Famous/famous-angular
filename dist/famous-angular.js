@@ -2613,7 +2613,7 @@ angular.module('famous.angular')
 angular.module('famous.angular')
 .config(["$provide", function  ($provide) {
   
-  $provide.decorator('ngClickDirective', ["$delegate", "$famousDecorator", "$parse", "$rootElement", "$famous", "$timeout", function ($delegate, $famousDecorator, $parse, $rootElement, $famous, $timeout) {
+  $provide.decorator('ngClickDirective', ['$delegate', '$famousDecorator', '$parse', '$rootElement', '$famous', '$timeout', function ($delegate, $famousDecorator, $parse, $rootElement, $famous, $timeout) {
     var directive = $delegate[0];
 
     var compile = directive.compile;
@@ -2812,7 +2812,7 @@ angular.module('famous.angular')
   function(name) {
     var directiveName = window.$famousUtil.directiveNormalize('ng-' + name) ;
     
-    $provide.decorator(directiveName+'Directive', function ($delegate, $famousDecorator, $parse, $famous) {
+    $provide.decorator(directiveName+'Directive', ['$delegate', '$famousDecorator', '$parse', '$famous', function ($delegate, $famousDecorator, $parse, $famous) {
         var directive = $delegate[0];
 
         var compile = directive.compile;
@@ -2842,7 +2842,7 @@ angular.module('famous.angular')
           }
         };
       return $delegate;
-    });
+    }]);
   });
 }]);
 
