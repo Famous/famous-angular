@@ -27,7 +27,7 @@
  */
 
 angular.module('famous.angular')
-  .factory('$famousDecorator', function ($famous) {
+  .factory('$famousDecorator', ['$famous', function ($famous) {
     //TODO:  add repeated logic to these roles
     var _roles = {
       child: {
@@ -148,5 +148,4 @@ angular.module('famous.angular')
         });
       }
     };
-  });
-
+  }]);
