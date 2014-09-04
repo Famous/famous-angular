@@ -29,7 +29,7 @@ Contact [famous-angular@thomasstreet.com](mailto:famous-angular@thomasstreet.com
 ####Before you start, tools you will need
 * Download and install [git](http://git-scm.com/downloads)
 * Download and install [nodeJS](http://nodejs.org/download/)
-* Install bower `npm install bower`
+* Install bower `npm install -g bower`
 
 ####Inside of your app:
 * Run `bower install famous-angular`
