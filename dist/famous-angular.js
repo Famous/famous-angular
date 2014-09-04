@@ -2611,7 +2611,7 @@ angular.module('famous.angular')
  * 
 **/
 angular.module('famous.angular')
-.config(["$provide", function  ($provide) {
+.config(['$provide', function  ($provide) {
   
   $provide.decorator('ngClickDirective', ['$delegate', '$famousDecorator', '$parse', '$rootElement', '$famous', '$timeout', function ($delegate, $famousDecorator, $parse, $rootElement, $famous, $timeout) {
     var directive = $delegate[0];
