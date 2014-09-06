@@ -18,3 +18,5 @@ bower_components
 .idea/*
 *.iml
 _site
+coverage/*
+
