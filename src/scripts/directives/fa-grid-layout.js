@@ -70,12 +70,6 @@ angular.module('famous.angular')
 
             $famousDecorator.addRole('renderable',isolate);
             isolate.show();
-            //watch options and update when changed
-            scope.$watch(function(){
-              return scope.$eval(attrs.faOptions);
-            }, function(newVal, oldVal){
-              isolate.renderNode.setOptions(newVal);
-            }, true);
 
             var updateGridLayout = function () {
               scope.$$postDigest(function(){
