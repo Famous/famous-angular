@@ -57,6 +57,7 @@
     "karma-phantomjs-launcher": "^0.1.4",
     "karma-requirejs": "~0.2.1",
     "karma-spec-reporter": "0.0.13",
+    "karma-coverage": "~0.2.0",
     "lodash": "^2.4.1",
     "minimist": "0.0.8",
     "mkdirp": "^0.5.0",
