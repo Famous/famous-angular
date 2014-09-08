@@ -109,7 +109,7 @@ angular.module('famous.angular')
 
             $famousDecorator.sequenceWith(
               scope,
-              function(data) {
+              function addChild(data) {
                 _numberOfChildren++;
                 if (_numberOfChildren === 1) {
                   isolate.renderNode.header.add(data.renderGate);
@@ -121,9 +121,15 @@ angular.module('famous.angular')
                   throw new Error('fa-header-footer-layout can accept no more than 3 children');
                 }
               },
-              // TODO: support removing children
-              function(childScopeId) {
-                throw new Error ('unimplemented: fa-header-footer-layout does not support removing children');
+              function removeChild(childScopeId) {
+                if (_numberOfChildren === 1) {
+                  isolate.renderNode.header.set({});
+                } else if (_numberOfChildren === 2){
+                  isolate.renderNode.content.set({});
+                } else if (_numberOfChildren === 3){
+                  isolate.renderNode.footer.set({});
+                }
+                _numberOfChildren--;
               }
             );
 
