@@ -34,7 +34,7 @@ angular.module('famous.angular')
                             return scope.$eval(attrs.faOptions);
                         }, function () {
                             isolate.renderNode.setOptions(scope.$eval(attrs.faOptions));
-                        });
+                        }, true);
                     }
                 };
             }
