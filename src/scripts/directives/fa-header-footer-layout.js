@@ -111,6 +111,9 @@ angular.module('famous.angular')
               scope,
               function addChild(data) {
                 _numberOfChildren++;
+
+                //TODO:  investigate using header.set, content.set etc instead
+                //       of header.add [for consistency with child removal]
                 if (_numberOfChildren === 1) {
                   isolate.renderNode.header.add(data.renderGate);
                 } else if (_numberOfChildren === 2){
