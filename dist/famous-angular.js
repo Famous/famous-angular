@@ -1828,9 +1828,6 @@ angular.module('famous.angular')
               scope,
               function(data) {
                 isolate.renderNode.add(data.renderGate);
-              },
-              function(childScopeId) {
-                throw new Error('unimplemented: fa-container-surface does not support removing children');
               }
             );
           },
