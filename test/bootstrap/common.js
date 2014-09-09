@@ -33,6 +33,13 @@ window.famousAngularCommon = function($scope, $compile) {
       var scope = elem.scope();
       var isolate = scope.isolate[scope.$id];
       return isolate;
+    },
+    isEmptyObject: function(obj){
+      for(var prop in obj) {
+        if(obj.hasOwnProperty(prop))
+            return false;
+      }
+      return true;
     }
   }
 };
