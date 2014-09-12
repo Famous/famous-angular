@@ -4,6 +4,7 @@
  * @name ngClick
  * @module famous.angular
  * @restrict A
+ * @requires famous.angular
  * 
  * @description
  * This is a wrapped for tha default ngCick which allows you to specify custom behavior when an fa-surface is clicked.
@@ -20,21 +21,40 @@
  * </ANY>
  * ```
  * @example
+ <example module="faInputExampleApp">
+  <file name="index.html">
+  <fa-app ng-controller="ClickCtrl" id="app">
+      <fa-modifier fa-size="[300, 100]">
+        <fa-surface fa-background-color="'red'" ng-click="myClickHandler($event)">Click Me!  This has been clicked {{clicked}} times.</fa-surface>
+      </fa-modifier>
+    </fa-app>
+  </file>
+  <file name="style.css">
+  #app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+    fa-surface {
+      cursor: pointer;
+    }
+  </file>
+  <file name="script.js">
+  angular.module('faInputExampleApp', ['famous.angular'])
+      .controller('ClickCtrl', ['$scope', function($scope) {
+        $scope.clicked = 0;
+        $scope.myClickHandler = function($event) {
+          console.log($event);
+          $scope.clicked++;
+        }; 
+    }]);
+  </file>
+ </example>
  * ### ng-click on an fa-surface
  * `ng-click` can be used on an `fa-surface`.  Internally, a Famous Surface has a `.on()` method that binds a callback function to an event type handled by that Surface.
  *  The function expression bound to `ng-click` is bound to that `fa-surface`'s click eventHandler, and when the `fa-surface` is clicked, the function expression will be called. 
- *
- * ```html
- * <fa-modifier fa-size="[100, 100]">
- *   <fa-surface ng-click="myClickHandler($event)" fa-background-color="'red'"></fa-surface>
- * </fa-modifier>
- * ```
- * ```javascript
- * $scope.myClickHandler = function($event) {
- *   console.log("click");
- *   console.log($event);
- * };
- * 
 **/
 angular.module('famous.angular')
 .config(['$provide', function  ($provide) {

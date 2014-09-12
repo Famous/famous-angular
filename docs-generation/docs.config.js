@@ -88,9 +88,11 @@ module.exports = function(config) {
           scripts: [
             'https://code.famo.us/famous/global/0.2.2/famous.min.js',
             'https://ajax.googleapis.com/ajax/libs/angularjs/1.2.22/angular.min.js',
-            '../../bower_components/famous-angular/dist/famous-angular.min.js'
+            '../../bower_components/famous-angular/dist/famous-angular.js'
           ],
-          stylesheets: []
+          stylesheets: [
+          	'../../bower_components/famous-angular/dist/famous-angular.css'
+          ]
         }
       }
     }]

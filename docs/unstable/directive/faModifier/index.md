@@ -42,18 +42,65 @@ to values (e.g. `fa-translate="[15, 20, 1]"`, Famo.us Transitionable objects, or
   
 <h2 id="usage">Usage</h2>
   
-```html
-<fa-modifier fa-opacity=".25" fa-skew="myScopeSkewVariable" fa-translate="[25, 50, 2]" fa-scale="myScopeFunctionThatReturnsAnArray">
-  <!-- Child elements of this fa-modifier will be affected by the values above -->
-  <fa-surface>I'm translucent, skewed, rotated, and translated</fa-surface>
-</fa-modifier>
-```
-```javascript
-$scope.myScopeSkewVariable = [0,0,.3];
-$scope.myScopeFunctionThatReturnsAnArray = function() {
-  return [0.5, 0.5];
-};
-```
+
+
+{% assign lvl = page.url | append:'X' | split:'/' | size %}
+{% capture relative %}{% for i in (3..lvl) %}../{% endfor %}{% endcapture %}
+
+<div>
+  <a ng-click="openPlunkr('{{ relative }}examples/example-example25')" class="btn pull-right">
+    <i class="glyphicon glyphicon-edit">&nbsp;</i>
+    Edit in Plunker</a>
+  <div class="runnable-example" path="examples/example-example25"
+      
+        module="faModifierExampleApp"
+      
+  >
+
+   
+    <div ng-non-bindable class="runnable-example-file"
+      
+        name="index.html"
+      
+        language="html"
+      
+        type="html"
+      
+    >
+      <pre><code>{% raw %}&lt;fa-app ng-controller=&quot;ModifierCtrl&quot;&gt;&#10;  &lt;fa-modifier fa-opacity=&quot;.25&quot; fa-skew=&quot;myScopeSkewVariable&quot;&#10;               fa-translate=&quot;[25, 50, 2]&quot; &#10;               fa-scale=&quot;myScopeFunctionThatReturnsAnArray&quot;&gt;&#10;    &lt;!-- Child elements of this fa-modifier will be affected by the values above --&gt;&#10;    &lt;fa-surface&gt;I&#39;m translucent, skewed, rotated, and translated&lt;/fa-surface&gt;&#10;  &lt;/fa-modifier&gt;&#10;&lt;/fa-app&gt;{% endraw %}</code></pre>
+    </div>
+  
+    <div ng-non-bindable class="runnable-example-file"
+      
+        name="script.js"
+      
+        language="js"
+      
+        type="js"
+      
+    >
+      <pre><code>{% raw %}angular.module(&#39;faModifierExampleApp&#39;, [&#39;famous.angular&#39;])&#10;  .controller(&#39;ModifierCtrl&#39;, [&#39;$scope&#39;, function($scope) {&#10;&#10;    $scope.myScopeSkewVariable = [0,0,.3];&#10;&#10;    $scope.myScopeFunctionThatReturnsAnArray = function() {&#10;      return [1.5, 1.5];&#10;    };&#10;}]);{% endraw %}</code></pre>
+    </div>
+  
+    <div ng-non-bindable class="runnable-example-file"
+      
+        name="style.css"
+      
+        language="css"
+      
+        type="css"
+      
+    >
+      <pre><code>{% raw %}fa-app {&#10;  position: fixed;&#10;  top: 0;&#10;  right: 0;&#10;  bottom: 0;&#10;  left: 0;&#10;}{% endraw %}</code></pre>
+    </div>
+  
+
+    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example25/index.html" name="example-example25"></iframe>
+  </div>
+</div>
+
+
+
   
   
 <h2 id="api" style="clear:both;">API</h2>
@@ -318,20 +365,126 @@ $scope.myScopeFunctionThatReturnsAnArray = function() {
 <h2 id="example">Example</h2><h2 id="values-that-fa-modifier-attributes-accept">Values that fa-modifier attributes accept</h2>
 <p><code>Fa-modifier</code> properties, (such as <code>faRotate</code>, <code>faScale</code>, etc) can be bound to number/arrays, object properties defined on the scope, function references, or function expressions.
 Some properties (<code>faOpacity</code>, <code>faSize</code>, <code>faOrigin</code>, <code>faAlign</code>) can be bound to a Transitionable object directly.</p>
-<h3 id="number-array-values">Number/Array values</h3>
-<p><code>Fa-modifier</code> properties can be bound to number/array values.</p>
-<pre><code class="lang-html"> &lt;fa-modifier fa-origin=&quot;[.5,.5]&quot; fa-size=&quot;[100, 100]&quot; fa-rotate=&quot;.3&quot;&gt;
-   &lt;fa-surface fa-background-color=&quot;&#39;red&#39;&quot;&gt;&lt;/fa-surface&gt;
- &lt;/fa-modifier&gt;</code></pre>
+<p> 
+
+{% assign lvl = page.url | append:'X' | split:'/' | size %}
+{% capture relative %}{% for i in (3..lvl) %}../{% endfor %}{% endcapture %}
+
+<div>
+  <a ng-click="openPlunkr('{{ relative }}examples/example-example26')" class="btn pull-right">
+    <i class="glyphicon glyphicon-edit">&nbsp;</i>
+    Edit in Plunker</a>
+  <div class="runnable-example" path="examples/example-example26"
+      
+        module="faModifierExampleApp"
+      
+  >
+
+   
+    <div ng-non-bindable class="runnable-example-file"
+      
+        name="index.html"
+      
+        language="html"
+      
+        type="html"
+      
+    >
+      <pre><code>{% raw %}&lt;fa-app&gt;&#10;  &lt;fa-modifier fa-origin=&quot;[.5,.5]&quot; fa-size=&quot;[100, 100]&quot; fa-rotate=&quot;.3&quot;&gt;&#10;    &lt;fa-surface fa-background-color=&quot;&#39;red&#39;&quot;&gt;&lt;/fa-surface&gt;&#10;  &lt;/fa-modifier&gt;&#10;&lt;/fa-app&gt;{% endraw %}</code></pre>
+    </div>
+  
+    <div ng-non-bindable class="runnable-example-file"
+      
+        name="script.js"
+      
+        language="js"
+      
+        type="js"
+      
+    >
+      <pre><code>{% raw %}angular.module(&#39;faModifierExampleApp&#39;, [&#39;famous.angular&#39;]);{% endraw %}</code></pre>
+    </div>
+  
+    <div ng-non-bindable class="runnable-example-file"
+      
+        name="style.css"
+      
+        language="css"
+      
+        type="css"
+      
+    >
+      <pre><code>{% raw %}fa-app {&#10;  position: fixed;&#10;  top: 0;&#10;  right: 0;&#10;  bottom: 0;&#10;  left: 0;&#10;}{% endraw %}</code></pre>
+    </div>
+  
+
+    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example26/index.html" name="example-example26"></iframe>
+  </div>
+</div>
+
+
+</p>
 <h3 id="object-properties-on-the-scope">Object properties on the scope</h3>
 <p><code>Fa-modifier</code> properties can be bound to object properties defined on the scope.</p>
-<pre><code class="lang-html">&lt;fa-modifier fa-origin=&quot;boxObject.origin&quot; fa-size=&quot;boxObject.size&quot;&gt;
-   &lt;fa-surface fa-background-color=&quot;&#39;red&#39;&quot;&gt;&lt;/fa-surface&gt;
- &lt;/fa-modifier&gt;</code></pre>
-<pre><code class="lang-javascript">$scope.boxObject = {
-   origin: [.4, .4],
-   size: [50, 50]
-}</code></pre>
+<p> 
+
+{% assign lvl = page.url | append:'X' | split:'/' | size %}
+{% capture relative %}{% for i in (3..lvl) %}../{% endfor %}{% endcapture %}
+
+<div>
+  <a ng-click="openPlunkr('{{ relative }}examples/example-example27')" class="btn pull-right">
+    <i class="glyphicon glyphicon-edit">&nbsp;</i>
+    Edit in Plunker</a>
+  <div class="runnable-example" path="examples/example-example27"
+      
+        module="faModifierExampleApp"
+      
+  >
+
+   
+    <div ng-non-bindable class="runnable-example-file"
+      
+        name="index.html"
+      
+        language="html"
+      
+        type="html"
+      
+    >
+      <pre><code>{% raw %}&lt;fa-app ng-controller=&quot;ModifierCtrl&quot;&gt;&#10;  &lt;!-- These properties are bound to properties of $scope.boxObject in the contorller --&gt;&#10;  &lt;fa-modifier fa-origin=&quot;boxObject.origin&quot; fa-size=&quot;boxObject.size&quot;&gt;&#10;      &lt;fa-surface fa-background-color=&quot;&#39;red&#39;&quot;&gt;&lt;/fa-surface&gt;&#10;  &lt;/fa-modifier&gt;&#10;&lt;/fa-app&gt;{% endraw %}</code></pre>
+    </div>
+  
+    <div ng-non-bindable class="runnable-example-file"
+      
+        name="script.js"
+      
+        language="js"
+      
+        type="js"
+      
+    >
+      <pre><code>{% raw %}angular.module(&#39;faModifierExampleApp&#39;, [&#39;famous.angular&#39;])&#10;  .controller(&#39;ModifierCtrl&#39;, [&#39;$scope&#39;, function($scope) {&#10;&#10;    $scope.boxObject = {&#10;       origin: [.4, .4],&#10;       size: [50, 50]&#10;    };&#10;&#10;}]);{% endraw %}</code></pre>
+    </div>
+  
+    <div ng-non-bindable class="runnable-example-file"
+      
+        name="style.css"
+      
+        language="css"
+      
+        type="css"
+      
+    >
+      <pre><code>{% raw %}fa-app {&#10;  position: fixed;&#10;  top: 0;&#10;  right: 0;&#10;  bottom: 0;&#10;  left: 0;&#10;}{% endraw %}</code></pre>
+    </div>
+  
+
+    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example27/index.html" name="example-example27"></iframe>
+  </div>
+</div>
+
+
+</p>
 <h3 id="function-references">Function references</h3>
 <p><code>Fa-modifier</code> properties can be bound to a function reference that returns a value.</p>
 <pre><code class="lang-html">&lt;fa-modifier fa-origin=&quot;genBoxOrigin&quot;&gt;

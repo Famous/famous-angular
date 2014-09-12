@@ -10,7 +10,7 @@ docType: "directive"
 ---
 
 <div class="improve-docs">
-  <a href='https://github.com/Famous/famous-angular/edit/master/src/scripts/directives/fa-input.js#L575'>
+  <a href='https://github.com/Famous/famous-angular/edit/master/src/scripts/directives/fa-input.js#L595'>
     Improve this doc
   </a>
 </div>
@@ -104,10 +104,10 @@ for a detailed discussion of when `ngSubmit` may be triggered.
 {% capture relative %}{% for i in (3..lvl) %}../{% endfor %}{% endcapture %}
 
 <div>
-  <a ng-click="openPlunkr('{{ relative }}examples/example-example10')" class="btn pull-right">
+  <a ng-click="openPlunkr('{{ relative }}examples/example-example21')" class="btn pull-right">
     <i class="glyphicon glyphicon-edit">&nbsp;</i>
     Edit in Plunker</a>
-  <div class="runnable-example" path="examples/example-example10"
+  <div class="runnable-example" path="examples/example-example21"
       
         module="submitExample"
       
@@ -115,7 +115,7 @@ for a detailed discussion of when `ngSubmit` may be triggered.
 
    
 
-    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example10/index.html" name="example-example10"></iframe>
+    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example21/index.html" name="example-example21"></iframe>
   </div>
 </div>
 

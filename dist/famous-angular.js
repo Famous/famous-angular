@@ -1486,33 +1486,56 @@ angular.module('famous.angular')
  *
  * Declaring `fa-app` appends a div with the class of `"famous-angular-container"` to the DOM.  It then instantiates a Context via Famous' Engine `.createContext()` method, passing in a reference to the `famous-angular-container` div, resulting in a Famous context that renderables can be added to connected to Angular.  `Fa-app` can be declared as an element or as an attribute within another element.  
  *
- * ```html
- * <fa-app style="width: 320px; height: 568px;">
- *   <fa-modifier>
- *     <fa-surface>This will be shown on screen.</fa-surface>
- *   </fa-modifier>
- *   <div>This will not appear on screen because it is not inside an fa-surface.</div>
- * </fa-app>
- * ```
+<example module="faAppExampleApp">
+ <file name="index.html">
+  <fa-app>
+    <fa-modifier>
+      <fa-surface>This will be shown on screen.</fa-surface>
+    </fa-modifier>
+    <div>This will not appear on screen because it is not inside an fa-surface.</div>
+  </fa-app>
+ </file>
+ <file name="style.css">
+ fa-app {
+     position: fixed;
+     top: 0;
+     right: 0;
+     bottom: 0;
+     left: 0;
+   }
+ </file>
+ <file name="script.js">
+ angular.module('faAppExampleApp', ['famous.angular']);
+ </file>
+</example>
  * ## Common Qustions
  * ### Multiple fa-app's
  * Nesting an `fa-app` within another `fa-app` is possible, and the use case of this approach would be for css content overflow.
  *
- * In the example below, there is an `fa-surface` with an `fa-app` nested inside.  Normally, an `fa-surface` should not nest another Famous element within it because it is a leaf node that has the purpose of being a container for html content.  The exception is nesting an `fa-app` within an `fa-surface`, which creates another Famous context, in which Famous elements can be nested inside.   
+ * In the example below, there is an `fa-surface` with an `fa-app` nested inside.  Normally, an `fa-surface` should not nest another Famous element within it because it is a leaf node that has the purpose of being a container for html content.  The exception is nesting an `fa-app` within an `fa-surface`, which creates another Famous context, in which Famous elements can be nested inside.
  * 
- * ```html
- * <fa-app style="width: 500px; height: 500px;">
- *   <fa-surface>
- *     <fa-app style="width: 200px; height: 200px;">
- *       <fa-image-surface 
- *          fa-image-url="https://famo.us/assets/images/famous_logo_white.svg" 
- *          fa-size="[400, 400]">
- *       </fa-image-surface>
- *     </fa-app>
- *   </fa-surface>
- * </fa-app>
- * ```
- * 
+ <example module="faAppExampleAppA">
+  <file name="index.html">
+  <fa-app style="width: 500px; height: 500px;">
+      <fa-surface>
+        <fa-app style="width: 200px; height: 200px; overflow: hidden;">
+          <fa-image-surface 
+             fa-image-url="https://famo.us/assets/images/famous_logo_white.svg" 
+             fa-size="[400, 400]">
+          </fa-image-surface>
+        </fa-app>
+      </fa-surface>
+    </fa-app>
+  </file>
+  <file name="style.css">
+  fa-app {
+      background-color: #000;  
+    }
+  </file>
+  <file name="script.js">
+  angular.module('faAppExampleAppA', ['famous.angular']);
+  </file>
+ </example>
  * The outer `fa-app` is sized 500x500, and it contains all of the content.  The use case of this `fa-app` within another `fa-app` is to clip content using the css overflow:hidden property.  The `fa-image-surface` links to a 400x400 sized image of the Famous logo.  Its parent is the nested `fa-app`, whose size is only 200x200.  
  * 
  * The larger image content (400x400) will overflow the boundaries of its parent, the the nested `fa-app` (200x200).  Because `fa-app` has a css overflow:hidden property, it will clip the content of any of its children that is outside the 200x200 region.  Any part of the 400x400 image that reaches outside of these boundaries are ignored.  This may be useful for complex animations.  
@@ -2011,6 +2034,7 @@ angular.module('famous.angular')
  * @ngdoc directive
  * @name faFlipper
  * @module famous.angular
+ * @requires famous
  * @restrict EA
  * @description
  * This directive will create a Famo.us Flipper containing the
@@ -2030,17 +2054,41 @@ angular.module('famous.angular')
  *
  * This function attempts a DOM lookup for an isolate of an `fa-flipper` element, and calls the `.flip()` function of `fa-flipper`.
  *
- *```html
- * <fa-flipper>
- *    <fa-surface fa-background-color="'yellow'" fa-click="flipIt()"></fa-surface>
- *    <fa-surface fa-background-color="'red'" fa-click="flipIt()"></fa-surface>
- * </fa-flipper>
- *```
- *```javascript
- * $scope.flipIt = function() {
- *    $famous.find('fa-flipper')[0].flip();
- * };
- *```
+ <example module="faFlipperExampleApp">
+  <file name="index.html">
+  <fa-app ng-controller="FlipperCtrl">
+      <fa-flipper>
+        <fa-modifier fa-size="[200, 200]">
+          <fa-surface fa-background-color="'yellow'" fa-click="flipIt()">Click me to see me flip!</fa-surface>
+        </fa-modifier>  
+        <fa-modifier fa-size="[200, 200]">
+          <fa-surface fa-background-color="'red'" fa-click="flipIt()">Flip me again!</fa-surface>
+        </fa-modifier>  
+      </fa-flipper>
+    </fa-app>
+  </file>
+  <file name="style.css">
+  fa-app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+    div {
+      cursor: pointer;
+      padding: 8px 8px;
+    }
+  </file>
+  <file name="script.js">
+  angular.module('faFlipperExampleApp', ['famous.angular'])
+      .controller('FlipperCtrl', ['$scope', '$famous', function($scope, $famous) {
+        $scope.flipIt = function() {
+           $famous.find('fa-flipper')[0].flip();
+        };
+    }]);
+  </file>
+ </example>
  */
 
 angular.module('famous.angular')
@@ -2127,34 +2175,74 @@ angular.module('famous.angular')
  * @example
  * A Famous Grid Layout divides a context into evenly-sized grid cells.  Pass an option such as `dimension` by binding an object with the property to `fa-options`.
  *
- * In the example below, `fa-options` references `myGridLayoutOptions` on the scope.
+ * In the example below, `fa-options` references `myGridLayoutOptions` on the scope.  The dimensions property has a value of `[2,2]` which specifies the columns and rows.  `fa-size` is specified as `[100, 100]` on the fa-modifier, so each `fa-surface` will have these dimensions.
  *
- * ```javascript
- * $scope.myGridLayoutOptions = {
- *    dimensions: [2,2], // specifies number of columns and rows
- * };
- * ```
- *
- * In the example below, `fa-size` is specified as `[100, 100]`, so each `fa-surface` will have these dimensions.
- * ```html
- * <fa-grid-layout fa-options="myGridLayoutOptions">
- *    <fa-modifier ng-repeat="grid in grids"
- *                 fa-size="[100, 100]">
- *      <fa-surface fa-background-color="grid.bgColor"></fa-surface>
- *    </fa-modifier>
- * </fa-grid-layout>
- * ```
- * ```javascript
- * $scope.grids = [{bgColor: "orange"}, {bgColor: "red"}, {bgColor: "green"}, {bgColor: "yellow"}];
- * ```
- *
+ <example module="faGridExampleApp">
+  <file name="index.html">
+  <fa-app ng-controller="GridCtrl">
+    <fa-grid-layout fa-options="myGridLayoutOptions">
+       <fa-modifier ng-repeat="grid in grids"
+                    fa-size="[100, 100]">
+         <fa-surface fa-background-color="grid.bgColor"></fa-surface>
+       </fa-modifier>
+    </fa-grid-layout>
+    </fa-app>
+  </file>
+  <file name="script.js">
+  angular.module('faGridExampleApp', ['famous.angular'])
+      .controller('GridCtrl', ['$scope', function($scope) {
+
+        $scope.myGridLayoutOptions = {
+           dimensions: [2,2], // specifies number of columns and rows
+        };
+
+        $scope.grids = [{bgColor: "orange"}, {bgColor: "red"}, {bgColor: "green"}, {bgColor: "yellow"}];
+
+    }]);
+  </file>
+  <file name="style.css">
+  fa-app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  </file>
+ </example>
+
  * If `fa-size` is not specified, as in this example below, the fa-surface's will collectively fill the height and width of its parent modifier/context.
  *
- * ```html
- * <fa-grid-layout fa-options="myGridLayoutOptions">
- *    <fa-surface ng-repeat="grid in grids" fa-background-color="grid.bgColor"></fa-surface>
- * </fa-grid-layout>
- * ```
+ <example module="faGridExampleAppA">
+  <file name="index.html">
+  <fa-app ng-controller="GridCtrlA">
+      <fa-grid-layout fa-options="myGridLayoutOptions">
+         <fa-surface ng-repeat="grid in grids" fa-background-color="grid.bgColor"></fa-surface>
+      </fa-grid-layout>
+    </fa-app>
+  </file>
+  <file name="script.js">
+  angular.module('faGridExampleAppA', ['famous.angular'])
+      .controller('GridCtrlA', ['$scope', function($scope) {
+
+        $scope.myGridLayoutOptions = {
+           dimensions: [2,2], // specifies number of columns and rows
+        };
+
+        $scope.grids = [{bgColor: "orange"}, {bgColor: "red"}, {bgColor: "green"}, {bgColor: "yellow"}];
+
+    }]);
+  </file>
+  <file name="style.css">
+  fa-app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  </file>
+ </example>
  */
 
 angular.module('famous.angular')
@@ -2256,55 +2344,111 @@ angular.module('famous.angular')
  *
  * Since the header and footer Modifiers have fixed heights of `[undefined, 75]` (fill the parent container horizontally, 75 pixels vertically), the content will fill the remaining height of the parent modifier or context.
  *
- *```html
- * <fa-header-footer-layout fa-options="{headerSize: 75, footerSize: 75}">
- *   <!-- header -->
- *     <fa-surface fa-background-color="'red'">Header</fa-surface>
- *
- *   <!-- content -->
- *   <fa-surface fa-background-color="'blue'">Content</fa-surface>
- *
- *   <!-- footer -->
- *     <fa-surface fa-background-color="'green'">Footer</fa-surface>
- * </fa-header-footer-layout>
- *```
+ <example module="faHeaderFooterExampleApp">
+  <file name="index.html">
+  <fa-app>
+
+      <fa-header-footer-layout fa-options="{headerSize: 75, footerSize: 75}">
+
+        <!-- header -->
+        <fa-surface fa-background-color="'red'">Header</fa-surface>
+      
+        <!-- content -->
+        <fa-surface fa-background-color="'blue'">Content</fa-surface>
+      
+        <!-- footer -->
+        <fa-surface fa-background-color="'green'">Footer</fa-surface>
+
+      </fa-header-footer-layout>
+
+    </fa-app>
+  </file>
+  <file name="script.js">
+  angular.module('faHeaderFooterExampleApp', ['famous.angular'])
+  </file>
+  <file name="style.css">
+  fa-app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  </file>
+ </example>
  * 
  * Famo.us' `HeaderFooterLayout` defaults to a vertical orientation.
- * Specify a direction in the options to obtains a horizontal orientation.
+ * Specify a direction in the fa-options object to obtain a horizontal orientation.
  * 
- * ```html
- * <fa-header-footer-layout fa-options="{direction: 0, headerSize: 75, footerSize: 75}">
- *   <!-- header -->
- *     <fa-surface fa-background-color="'red'">Header</fa-surface>
- *
- *   <!-- content -->
- *   <fa-surface fa-background-color="'blue'">Content</fa-surface>
- *
- *   <!-- footer -->
- *     <fa-surface fa-background-color="'green'">Footer</fa-surface>
- * </fa-header-footer-layout>
- * ```
- *
+ <example module="faHeaderFooterExampleAppA">
+  <file name="index.html">
+  <fa-app>
+
+      <fa-header-footer-layout fa-options="{direction: 0, headerSize: 75, footerSize: 75}">
+
+        <!-- header -->
+        <fa-surface fa-background-color="'red'">Header</fa-surface>
+      
+        <!-- content -->
+        <fa-surface fa-background-color="'blue'">Content</fa-surface>
+      
+        <!-- footer -->
+        <fa-surface fa-background-color="'green'">Footer</fa-surface>
+
+      </fa-header-footer-layout>
+
+    </fa-app>
+  </file>
+  <file name="script.js">
+  angular.module('faHeaderFooterExampleAppA', ['famous.angular'])
+  </file>
+  <file name="style.css">
+  fa-app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  </file>
+ </example>
  * ## ng-repeat inside a fa-header-footer
  *
  * `Fa-header-footer` works with ng-repeat'ed renderables:
  *
- * ```html
- * <fa-header-footer-layout>
- *   <fa-modifier ng-repeat="view in views" fa-size="view.size" >
- *     <fa-surface fa-background-color="view.bgColor">
- *       {{view.text}}
- *     </fa-surface>
- *   </fa-modifier>
- * </fa-header-footer-layout>
- * ```
- * ```javascript
- * $scope.views = [
- * {bgColor: "red", text: "header", size: [undefined, 100]},
- * {bgColor: "green", text: "content", size: [undefined, undefined]},
- * {bgColor: "blue", text: "footer", size: [undefined, 100]}
- * ];
- * ```
+ <example module="faHeaderFooterExampleAppB">
+  <file name="index.html">
+  <fa-app ng-controller="HeaderFooterCtrlB">
+      <fa-header-footer-layout>
+        <fa-modifier ng-repeat="view in views" fa-size="view.size">
+          <fa-surface fa-background-color="view.bgColor">
+            {{view.text}}
+          </fa-surface>
+        </fa-modifier>
+      </fa-header-footer-layout>
+    </fa-app>
+  </file>
+  <file name="script.js">
+  angular.module('faHeaderFooterExampleAppB', ['famous.angular'])
+      .controller('HeaderFooterCtrlB', ['$scope', function($scope) {
+        $scope.views = [
+          {bgColor: "red", text: "header", size: [undefined, 100]},
+          {bgColor: "green", text: "content", size: [undefined, undefined]},
+          {bgColor: "blue", text: "footer", size: [undefined, 100]}
+        ];
+    }]);
+  </file>
+  <file name="style.css">
+  fa-app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  </file>
+ </example>
+
  * In the example above, 3 renderables are generated through an ng-repeat.  The header and footer `Modifier`s generated by the ng-repeat have defined sizes of `[undefined, 100]` (they will fill their parent container horizontally, and be 100 pixels vertically).  The content has a size of `[undefined, undefined]`, and it will fill the remaining heght and width of its container.
  *
  * Note:
@@ -2391,15 +2535,32 @@ angular.module('famous.angular')
  * ```
  @example
  * To use `fa-image-surface`, declare an `fa-image-url` attribute with a string url.
- * ```html
- * <fa-image-surface
- *            fa-image-url="img/my-image.png"
- *            class="img"
- *            fa-color="'blue'"
- *            fa-background-color="'#fff'"
- *            fa-size="[200, 300]">
- * </fa-image-surface>
- * ```
+ <example module="faImageSurfExampleApp">
+  <file name="index.html">
+  <fa-app>
+      <fa-image-surface
+                 fa-image-url="http://famo.us/integrations/angular/img/famous-angular-logos.png"
+                 class="img"
+                 fa-color="'blue'"
+                 fa-background-color="'#fff'"
+                 fa-size="[500, 200]">
+      </fa-image-surface>
+    </fa-app>
+  </file>
+  <file name="script.js">
+  angular.module('faImageSurfExampleApp', ['famous.angular']);
+  </file>
+  <file name="style.css">
+  fa-app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  </file>
+ </example>
+
  * `Fa-image-surface` accepts two css-style properties: `color` and `background color`, which may be assigned values by the `fa-color` and `fa-background-color` attributes respectively.
  *
  * `Fa-size` may also be declared as an attribute.  If void, the `fa-image-surface` will inherit the size of its parent node.
@@ -2520,43 +2681,64 @@ angular.module('famous.angular')
  * `Fa-start-index` will not affect the sequential order of the layout; the `fa-view` with the red background will be layed out first, followed by the one with the blue background.
  *  By setting `fa-start-index` to 1, the Scroll View will display the View with the index of 1, which is the View with the blue background color. 
  *
- * ```html
- *   <fa-app style="width: 320px; height: 568px;"> 
- *    <!-- The scroll View will start at the index of 1 -->
- *     <fa-scroll-view fa-pipe-from="eventHandler" fa-options="options.scrollView" fa-start-index="1">
- *       <!-- Even though this view is declared first in html, it will will be layed out 2nd -->
- *       <!-- On page load, the scroll View will scroll to this view, and display it.  -->
- *        <fa-view fa-index="1">
- *           <fa-modifier fa-size="[320, 568]">
- *              <fa-surface fa-pipe-to="eventHandler" 
- *                          fa-background-color="'blue'">
- *              </fa-surface>
- *           </fa-modifier>
- *        </fa-view>
- * 
- *        <fa-view fa-index="0">
- *           <fa-modifier fa-size="[320, 568]">
- *              <fa-surface fa-pipe-to="eventHandler" 
- *                          fa-background-color="'red'">
- *              </fa-surface>
- *           </fa-modifier>
- *        </fa-view>
- * 
- *     </fa-scroll-view>   
- *   </fa-app>   
- * ```
- *
- * ```javascript
- * var EventHandler = $famous['famous/core/EventHandler'];
- * $scope.eventHandler = new EventHandler();
- * $scope.list = [{content: "famous"}, {content: "angular"}, {content: "rocks!"}];
- *
- * $scope.options = {
- *   scrollView: {
- *     direction: 0 // displays the fa-views horizontally
- *   }
- * };
- *```
+ <example module="faIndexExampleApp">
+  <file name="index.html">
+  <fa-app ng-controller="IndexCtrl"> 
+
+     <!-- The scroll View will start at the index of 1 -->
+      <fa-scroll-view fa-pipe-from="eventHandler" fa-options="options.scrollView" fa-start-index="1">
+
+        <!-- Even though this view is declared first in html, it will will be layed out 2nd -->
+        <!-- On page load, the scroll View will scroll to this view, and display it.  -->
+
+         <fa-view fa-index="1">
+            <fa-modifier fa-size="[320, 320]">
+               <fa-surface fa-pipe-to="eventHandler" 
+                           fa-background-color="'blue'">
+                           <p>Scroll me back!</p>
+               </fa-surface>
+            </fa-modifier>
+         </fa-view>
+    
+         <fa-view fa-index="0">
+            <fa-modifier fa-size="[320, 320]">
+               <fa-surface fa-pipe-to="eventHandler" 
+                           fa-background-color="'red'">
+                           <p>Scroll me!</p>
+               </fa-surface>
+            </fa-modifier>
+         </fa-view>
+    
+      </fa-scroll-view>   
+    </fa-app>   
+  </file>
+  <file name="script.js">
+  angular.module('faIndexExampleApp', ['famous.angular'])
+      .controller('IndexCtrl', ['$scope', '$famous', function($scope, $famous) {
+
+       var EventHandler = $famous['famous/core/EventHandler'];
+       $scope.eventHandler = new EventHandler();
+       $scope.list = [{content: "famous"}, {content: "angular"}, {content: "rocks!"}];
+      
+       $scope.options = {
+         scrollView: {
+           direction: 0 // displays the fa-views horizontally
+         }
+       };
+
+    }]);
+  </file>
+  <file name="style.css">
+  fa-app {
+      width: 320px;
+      height: 320px;
+      overflow: hidden;
+    }
+    p {
+      padding: 8px 8px;
+    }
+  </file>
+ </example>
  */
 
 angular.module('famous.angular')
@@ -2588,6 +2770,7 @@ angular.module('famous.angular')
  * @name ngClick
  * @module famous.angular
  * @restrict A
+ * @requires famous.angular
  * 
  * @description
  * This is a wrapped for tha default ngCick which allows you to specify custom behavior when an fa-surface is clicked.
@@ -2604,21 +2787,40 @@ angular.module('famous.angular')
  * </ANY>
  * ```
  * @example
+ <example module="faInputExampleApp">
+  <file name="index.html">
+  <fa-app ng-controller="ClickCtrl" id="app">
+      <fa-modifier fa-size="[300, 100]">
+        <fa-surface fa-background-color="'red'" ng-click="myClickHandler($event)">Click Me!  This has been clicked {{clicked}} times.</fa-surface>
+      </fa-modifier>
+    </fa-app>
+  </file>
+  <file name="style.css">
+  #app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+    fa-surface {
+      cursor: pointer;
+    }
+  </file>
+  <file name="script.js">
+  angular.module('faInputExampleApp', ['famous.angular'])
+      .controller('ClickCtrl', ['$scope', function($scope) {
+        $scope.clicked = 0;
+        $scope.myClickHandler = function($event) {
+          console.log($event);
+          $scope.clicked++;
+        }; 
+    }]);
+  </file>
+ </example>
  * ### ng-click on an fa-surface
  * `ng-click` can be used on an `fa-surface`.  Internally, a Famous Surface has a `.on()` method that binds a callback function to an event type handled by that Surface.
  *  The function expression bound to `ng-click` is bound to that `fa-surface`'s click eventHandler, and when the `fa-surface` is clicked, the function expression will be called. 
- *
- * ```html
- * <fa-modifier fa-size="[100, 100]">
- *   <fa-surface ng-click="myClickHandler($event)" fa-background-color="'red'"></fa-surface>
- * </fa-modifier>
- * ```
- * ```javascript
- * $scope.myClickHandler = function($event) {
- *   console.log("click");
- *   console.log($event);
- * };
- * 
 **/
 angular.module('famous.angular')
 .config(['$provide', function  ($provide) {
@@ -3327,43 +3529,101 @@ angular.module('famous.angular')
  * This directive creates a Famo.us Modifier that will affect all children render nodes.  Its properties can be bound
  * to values (e.g. `fa-translate="[15, 20, 1]"`, Famo.us Transitionable objects, or to functions that return numbers.
  * @usage
- * ```html
- * <fa-modifier fa-opacity=".25" fa-skew="myScopeSkewVariable" fa-translate="[25, 50, 2]" fa-scale="myScopeFunctionThatReturnsAnArray">
- *   <!-- Child elements of this fa-modifier will be affected by the values above -->
- *   <fa-surface>I'm translucent, skewed, rotated, and translated</fa-surface>
- * </fa-modifier>
- * ```
- *```javascript
- * $scope.myScopeSkewVariable = [0,0,.3];
- * $scope.myScopeFunctionThatReturnsAnArray = function() {
- *   return [0.5, 0.5];
- * };
- *```
+ *
+ <example module="faModifierExampleApp">
+  <file name="index.html">
+  <fa-app ng-controller="ModifierCtrl">
+      <fa-modifier fa-opacity=".25" fa-skew="myScopeSkewVariable"
+                   fa-translate="[25, 50, 2]" 
+                   fa-scale="myScopeFunctionThatReturnsAnArray">
+        <!-- Child elements of this fa-modifier will be affected by the values above -->
+        <fa-surface>I'm translucent, skewed, rotated, and translated</fa-surface>
+      </fa-modifier>
+    </fa-app>
+  </file>
+  <file name="script.js">
+  angular.module('faModifierExampleApp', ['famous.angular'])
+      .controller('ModifierCtrl', ['$scope', function($scope) {
+
+        $scope.myScopeSkewVariable = [0,0,.3];
+
+        $scope.myScopeFunctionThatReturnsAnArray = function() {
+          return [1.5, 1.5];
+        };
+    }]);
+  </file>
+  <file name="style.css">
+  fa-app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  </file>
+ </example>
+ *
  * @example
  * ## Values that fa-modifier attributes accept
  * `Fa-modifier` properties, (such as `faRotate`, `faScale`, etc) can be bound to number/arrays, object properties defined on the scope, function references, or function expressions.
  * Some properties (`faOpacity`, `faSize`, `faOrigin`, `faAlign`) can be bound to a Transitionable object directly.
  *
- * ### Number/Array values
- * `Fa-modifier` properties can be bound to number/array values.
- * ```html
- *  <fa-modifier fa-origin="[.5,.5]" fa-size="[100, 100]" fa-rotate=".3">
- *    <fa-surface fa-background-color="'red'"></fa-surface>
- *  </fa-modifier>
- * ```
+ <example module="faModifierExampleApp">
+  <file name="index.html">
+  <fa-app>
+      <fa-modifier fa-origin="[.5,.5]" fa-size="[100, 100]" fa-rotate=".3">
+        <fa-surface fa-background-color="'red'"></fa-surface>
+      </fa-modifier>
+    </fa-app>
+  </file>
+  <file name="script.js">
+  angular.module('faModifierExampleApp', ['famous.angular']);
+  </file>
+  <file name="style.css">
+  fa-app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  </file>
+ </example>
+ *
  * ### Object properties on the scope
  *`Fa-modifier` properties can be bound to object properties defined on the scope.
- * ```html
- *<fa-modifier fa-origin="boxObject.origin" fa-size="boxObject.size">
- *    <fa-surface fa-background-color="'red'"></fa-surface>
- *  </fa-modifier>
- * ```
- * ```javascript
- * $scope.boxObject = {
- *    origin: [.4, .4],
- *    size: [50, 50]
- * }
- * ```
+ *
+ <example module="faModifierExampleApp">
+  <file name="index.html">
+  <fa-app ng-controller="ModifierCtrl">
+      <!-- These properties are bound to properties of $scope.boxObject in the contorller -->
+      <fa-modifier fa-origin="boxObject.origin" fa-size="boxObject.size">
+          <fa-surface fa-background-color="'red'"></fa-surface>
+      </fa-modifier>
+    </fa-app>
+  </file>
+  <file name="script.js">
+  angular.module('faModifierExampleApp', ['famous.angular'])
+      .controller('ModifierCtrl', ['$scope', function($scope) {
+
+        $scope.boxObject = {
+           origin: [.4, .4],
+           size: [50, 50]
+        };
+
+    }]);
+  </file>
+  <file name="style.css">
+  fa-app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  </file>
+ </example>
+ *
  * ### Function references
  * `Fa-modifier` properties can be bound to a function reference that returns a value.
  *
