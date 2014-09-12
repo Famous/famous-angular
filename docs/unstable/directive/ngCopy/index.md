@@ -10,7 +10,7 @@ docType: "directive"
 ---
 
 <div class="improve-docs">
-  <a href='https://github.com/Famous/famous-angular/edit/master/src/scripts/directives/fa-input.js#L652'>
+  <a href='https://github.com/Famous/famous-angular/edit/master/src/scripts/directives/fa-input.js#L672'>
     Improve this doc
   </a>
 </div>
@@ -93,16 +93,16 @@ copy. (<a href="guide/expression#-event-">Event object is available as <code>$ev
 {% capture relative %}{% for i in (3..lvl) %}../{% endfor %}{% endcapture %}
 
 <div>
-  <a ng-click="openPlunkr('{{ relative }}examples/example-example11')" class="btn pull-right">
+  <a ng-click="openPlunkr('{{ relative }}examples/example-example22')" class="btn pull-right">
     <i class="glyphicon glyphicon-edit">&nbsp;</i>
     Edit in Plunker</a>
-  <div class="runnable-example" path="examples/example-example11"
+  <div class="runnable-example" path="examples/example-example22"
       
   >
 
    
 
-    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example11/index.html" name="example-example11"></iframe>
+    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example22/index.html" name="example-example22"></iframe>
   </div>
 </div>
 

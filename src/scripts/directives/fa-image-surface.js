@@ -14,15 +14,32 @@
  * ```
  @example
  * To use `fa-image-surface`, declare an `fa-image-url` attribute with a string url.
- * ```html
- * <fa-image-surface
- *            fa-image-url="img/my-image.png"
- *            class="img"
- *            fa-color="'blue'"
- *            fa-background-color="'#fff'"
- *            fa-size="[200, 300]">
- * </fa-image-surface>
- * ```
+ <example module="faImageSurfExampleApp">
+  <file name="index.html">
+  <fa-app>
+      <fa-image-surface
+                 fa-image-url="http://famo.us/integrations/angular/img/famous-angular-logos.png"
+                 class="img"
+                 fa-color="'blue'"
+                 fa-background-color="'#fff'"
+                 fa-size="[500, 200]">
+      </fa-image-surface>
+    </fa-app>
+  </file>
+  <file name="script.js">
+  angular.module('faImageSurfExampleApp', ['famous.angular']);
+  </file>
+  <file name="style.css">
+  fa-app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  </file>
+ </example>
+
  * `Fa-image-surface` accepts two css-style properties: `color` and `background color`, which may be assigned values by the `fa-color` and `fa-background-color` attributes respectively.
  *
  * `Fa-size` may also be declared as an attribute.  If void, the `fa-image-surface` will inherit the size of its parent node.

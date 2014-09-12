@@ -21,43 +21,101 @@
  * This directive creates a Famo.us Modifier that will affect all children render nodes.  Its properties can be bound
  * to values (e.g. `fa-translate="[15, 20, 1]"`, Famo.us Transitionable objects, or to functions that return numbers.
  * @usage
- * ```html
- * <fa-modifier fa-opacity=".25" fa-skew="myScopeSkewVariable" fa-translate="[25, 50, 2]" fa-scale="myScopeFunctionThatReturnsAnArray">
- *   <!-- Child elements of this fa-modifier will be affected by the values above -->
- *   <fa-surface>I'm translucent, skewed, rotated, and translated</fa-surface>
- * </fa-modifier>
- * ```
- *```javascript
- * $scope.myScopeSkewVariable = [0,0,.3];
- * $scope.myScopeFunctionThatReturnsAnArray = function() {
- *   return [0.5, 0.5];
- * };
- *```
+ *
+ <example module="faModifierExampleApp">
+  <file name="index.html">
+  <fa-app ng-controller="ModifierCtrl">
+      <fa-modifier fa-opacity=".25" fa-skew="myScopeSkewVariable"
+                   fa-translate="[25, 50, 2]" 
+                   fa-scale="myScopeFunctionThatReturnsAnArray">
+        <!-- Child elements of this fa-modifier will be affected by the values above -->
+        <fa-surface>I'm translucent, skewed, rotated, and translated</fa-surface>
+      </fa-modifier>
+    </fa-app>
+  </file>
+  <file name="script.js">
+  angular.module('faModifierExampleApp', ['famous.angular'])
+      .controller('ModifierCtrl', ['$scope', function($scope) {
+
+        $scope.myScopeSkewVariable = [0,0,.3];
+
+        $scope.myScopeFunctionThatReturnsAnArray = function() {
+          return [1.5, 1.5];
+        };
+    }]);
+  </file>
+  <file name="style.css">
+  fa-app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  </file>
+ </example>
+ *
  * @example
  * ## Values that fa-modifier attributes accept
  * `Fa-modifier` properties, (such as `faRotate`, `faScale`, etc) can be bound to number/arrays, object properties defined on the scope, function references, or function expressions.
  * Some properties (`faOpacity`, `faSize`, `faOrigin`, `faAlign`) can be bound to a Transitionable object directly.
  *
- * ### Number/Array values
- * `Fa-modifier` properties can be bound to number/array values.
- * ```html
- *  <fa-modifier fa-origin="[.5,.5]" fa-size="[100, 100]" fa-rotate=".3">
- *    <fa-surface fa-background-color="'red'"></fa-surface>
- *  </fa-modifier>
- * ```
+ <example module="faModifierExampleApp">
+  <file name="index.html">
+  <fa-app>
+      <fa-modifier fa-origin="[.5,.5]" fa-size="[100, 100]" fa-rotate=".3">
+        <fa-surface fa-background-color="'red'"></fa-surface>
+      </fa-modifier>
+    </fa-app>
+  </file>
+  <file name="script.js">
+  angular.module('faModifierExampleApp', ['famous.angular']);
+  </file>
+  <file name="style.css">
+  fa-app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  </file>
+ </example>
+ *
  * ### Object properties on the scope
  *`Fa-modifier` properties can be bound to object properties defined on the scope.
- * ```html
- *<fa-modifier fa-origin="boxObject.origin" fa-size="boxObject.size">
- *    <fa-surface fa-background-color="'red'"></fa-surface>
- *  </fa-modifier>
- * ```
- * ```javascript
- * $scope.boxObject = {
- *    origin: [.4, .4],
- *    size: [50, 50]
- * }
- * ```
+ *
+ <example module="faModifierExampleApp">
+  <file name="index.html">
+  <fa-app ng-controller="ModifierCtrl">
+      <!-- These properties are bound to properties of $scope.boxObject in the contorller -->
+      <fa-modifier fa-origin="boxObject.origin" fa-size="boxObject.size">
+          <fa-surface fa-background-color="'red'"></fa-surface>
+      </fa-modifier>
+    </fa-app>
+  </file>
+  <file name="script.js">
+  angular.module('faModifierExampleApp', ['famous.angular'])
+      .controller('ModifierCtrl', ['$scope', function($scope) {
+
+        $scope.boxObject = {
+           origin: [.4, .4],
+           size: [50, 50]
+        };
+
+    }]);
+  </file>
+  <file name="style.css">
+  fa-app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  </file>
+ </example>
+ *
  * ### Function references
  * `Fa-modifier` properties can be bound to a function reference that returns a value.
  *

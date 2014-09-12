@@ -10,7 +10,7 @@ docType: "directive"
 ---
 
 <div class="improve-docs">
-  <a href='https://github.com/Famous/famous-angular/edit/master/src/scripts/directives/fa-input.js#L546'>
+  <a href='https://github.com/Famous/famous-angular/edit/master/src/scripts/directives/fa-input.js#L566'>
     Improve this doc
   </a>
 </div>
@@ -94,10 +94,10 @@ and can be interrogated for keyCode, altKey, etc.)</p>
 {% capture relative %}{% for i in (3..lvl) %}../{% endfor %}{% endcapture %}
 
 <div>
-  <a ng-click="openPlunkr('{{ relative }}examples/example-example9')" class="btn pull-right">
+  <a ng-click="openPlunkr('{{ relative }}examples/example-example20')" class="btn pull-right">
     <i class="glyphicon glyphicon-edit">&nbsp;</i>
     Edit in Plunker</a>
-  <div class="runnable-example" path="examples/example-example9"
+  <div class="runnable-example" path="examples/example-example20"
       
   >
 
@@ -115,7 +115,7 @@ and can be interrogated for keyCode, altKey, etc.)</p>
     </div>
   
 
-    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example9/index.html" name="example-example9"></iframe>
+    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example20/index.html" name="example-example20"></iframe>
   </div>
 </div>
 
