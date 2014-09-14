@@ -189,55 +189,6 @@
  * In the example below, the outer Scroll View contains two explictly created Views.  One of those Views contains another Scroll View with sub-views created through an ngRepeat.
  * The outer Scroll View is passed an option for its `direction` to be `horizontal (0)`, and the inner Scroll View is passed an option for a `vertical direction (1)`.
  *
- * ```html
- * <fa-app style="width: 320px; height: 568px;">
- *   <!-- outer scroll view that scrolls horizontally between "main" view and "sidebar" view-->
- *   <fa-scroll-view fa-pipe-from="eventHandler" fa-options="options.scrollViewOuter">
- *
- *     <!-- sidebar view -->
- *     <fa-view fa-index="0">
- *       <fa-modifier fa-size="[100, undefined]" id="sideBarMod">
- *           <fa-surface fa-pipe-to="eventHandler"
- *                       fa-background-color="'blue'"
- *                       fa-size="[undefined, undefined]">
- *           </fa-surface>
- *         </fa-modifier>
- *     </fa-view>
- *
- *     <!-- main view -->
- *     <fa-view fa-index="1">
- *     <!-- inner scroll view that scrolls vertically-->
- *       <fa-scroll-view fa-pipe-from="eventHandler" fa-options="options.scrollViewInner">
- *         <fa-view ng-repeat="item in list">
- *           <fa-surface fa-pipe-to="eventHandler"
- *                       fa-size="[undefined, undefined]"
- *                       fa-background-color="'red'">
- *           </fa-surface>
- *         </fa-view>
- *       </fa-scroll-view>
- *     </fa-view>
- *
- *   </fa-scroll-view>
- * </fa-app>
- *
- *  ```
- * ```javascript
- * var EventHandler = $famous['famous/core/EventHandler'];
- * $scope.eventHandler = new EventHandler();
- * $scope.list = [{content: "famous"}, {content: "angular"}, {content: "rocks!"}];
- *
- * $scope.options = {
- *   scrollViewOuter: {
- *     direction: 0,
- *     paginated: true
- *   },
- *   scrollViewInner :{
- *     direction: 1
- *   }
- * };
- * ```
- *
- *
  <example module="faScrollViewExampleApp">
   <file name="index.html">
   <fa-app ng-controller="ScrollCtrl" style="width: 100%; height: 568px;">
@@ -250,7 +201,7 @@
               <fa-surface fa-pipe-to="eventHandler"
                           fa-background-color="'blue'"
                           fa-size="[undefined, undefined]">
-                Sidebar
+                Sidebar (scroll horizontally to hide)
               </fa-surface>
             </fa-modifier>
         </fa-view>
@@ -278,7 +229,14 @@
             
             var EventHandler = $famous['famous/core/EventHandler'];
             $scope.eventHandler = new EventHandler();
-            $scope.list = [{content: "Awesome content"}, {content: "Scroll to see more awesome content"}, {content: "Famo.us/angular rocks!"}];
+            $scope.list = [{
+              content: "Awesome content"
+            },{
+              content: "Scroll vertically to see more awesome content"
+            },{
+              content: "Famo.us/angular rocks!"
+              }
+            ];
             
             $scope.options = {
               scrollViewOuter: {

@@ -21,40 +21,50 @@
  *
  * @example
  * An `fa-surface` can use an ng-include to compile an external HTML fragment:
- *  ```html
- * <fa-modifier fa-size="[960, undefined]">
- *    <fa-surface fa-size="[undefined, undefined]">
- *      <div ng-include src=" 'views/animations.html' "></div>
- *    </fa-surface>
- *  </fa-modifier>
- *  ```
  *
- * A simple ng-repeat of surfaces can be implemented like this:
- * ```html
- * <fa-modifier ng-repeat="item in list" fa-size="[100, 100]" fa-translate="[0, $index * 75, 0]">
- *     <fa-surface fa-size="[undefined, undefined]">
- *       {{item.content}}
- *     </fa-surface>
- * </fa-modifier>
- * ```
- *
- * ```javascript
- * $scope.list = [{content: "famous"}, {content: "angular"}, {content: "rocks!"}];
- * ```
+ <example module="faScrollViewExampleApp">
+  <file name="index.html">
+  <fa-app>
+      <fa-modifier fa-size="[960, undefined]">
+         <fa-surface fa-size="[undefined, undefined]">
+           <div ng-include src=" 'helloWorld.html' "></div>
+         </fa-surface>
+       </fa-modifier>
+    </fa-app>
+  </file>
+  <file name="helloWorld.html">
+  <p>This is compiled from an external HTML fragment in helloWorld.html!</p>
+  </file>
+  <file name="script.js">
+  angular.module('faScrollViewExampleApp', ['famous.angular']);
+  </file>
+  <file name="style.css">
+  fa-app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  </file>
+ </example>
  *
  * ##Common Confusions
  *  ### A Surface is a leaf node
  *  An fa-surface is a leaf node; this means that there should not be Famous-Angular elements nested within an fa-surface.
  *
- *  This followin will NOT work correctly:
+ *  This following example will NOT work correctly:
  *  ```html
  *  <fa-surface>
- *     <!-- the contents of a Surface must be standard HTML, so Famo.us components will not get rendered correctly. -->
+ *     <!-- the contents of a Surface must be standard HTML. -->
+ *     <!-- If a Famo.us component is on a surface, it will not get rendered correctly. -->
  *     <fa-modifier>
- *       <fa-surface></fa-surface>
+ *       <fa-surface>This will not work correctly.</fa-surface>
  *     </fa-modifier>
  *  </fa-surface>
  * ```
+ *
+ It will throw this error: "Error: Surfaces are leaf nodes of the Famo.us render tree and cannot accept rendernode children.  To include additional Famo.us content inside of a fa-surface, that content must be enclosed in an additional fa-app."
  *
  *  The purpose of an fa-surface is to contain viewable HTML content:
  * ```html
@@ -68,10 +78,26 @@
  * ### Properties on surfaces vs modifiers
  * With Famous, properties related to layout and visibility belong on a Modifier.  A Surface should be added below a Modifier on the Render Tree, as Modifiers affect everything below them.
  *
- * You may be tempted to set the `fa-origin` or another layout property on an fa-surface, and discover that it does not work:
- * ```html
- * <fa-surface fa-origin="[.5, 0]">This will not change the origin.</fa-surface>
- * ```
+ <example module="faScrollViewExampleApp">
+  <file name="index.html">
+  <fa-app>
+      <fa-surface fa-origin="[.5, 0]">This will not change the origin.</fa-surface>
+    </fa-app>
+  </file>
+  <file name="script.js">
+  angular.module('faScrollViewExampleApp', ['famous.angular']);
+  </file>
+  <file name="style.css">
+  fa-app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  </file>
+ </example>
+ *
  *
  * While you can specify `fa-size` on surfaces themselves, it is not recommended.
  * This is not best practice:
@@ -102,36 +128,99 @@
  * };
  * ```
  * To reiterate, the best practice to animate or set any layout/visibilty properties of a surface is to do so on a modifier that affects the Surface.  The purpose of a Surface is to contain HTML content, whether rendered from a template, or data-bound.
- * <fa-modifier fa-size="[100, 100]">
- *   <fa-surface fa-background-color="'red'"></fa-surface>
- * </fa-modifier>
+ *
+ <example module="faScrollViewExampleApp">
+  <file name="index.html">
+  <fa-app ng-controller="ScrollCtrl">
+      <fa-modifier fa-size="sizeForBoxFunction">
+        <fa-surface fa-background-color="'red'"></fa-surface>
+      </fa-modifier>
+    </fa-app>
+
+    <script>
+      angular.module('faScrollViewExampleApp', ['famous.angular'])
+        .controller('ScrollCtrl', ['$scope', '$famous', function($scope, $famous) {
+            
+            $scope.sizeForBoxFunction = function() {
+               return [75, 75];
+            };
+
+        }]);
+    </script>
+  </file>
+  <file name="style.css">
+  fa-app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  </file>
+ </example>
  *
  * ### fa-color & fa-background-color
  * The exceptions of not setting layout/visibility properties on an `fa-surface` are `fa-color` and `fa-background-color`: these two properties are passed through the `.setProperties()` method available on Famous Surfaces.
  * Take note that they accept a string in the html view.  If you do not enclose them in quotation marks, Angular will evaluate it as an object on the scope, but surrounding it with quotation marks will specify it as a string expression.
- * ```html
- * <fa-modifier fa-size="[200, 50]">
- *   <fa-surface fa-background-color="'orange'" fa-color="'#fff'">
- *       This text should be white.
- *   </fa-surface>
- * </fa-modifier>
- * ```
+ *
+ <example module="faScrollViewExampleApp">
+  <file name="index.html">
+  <fa-app>
+      <fa-modifier fa-size="[200, 50]">
+        <fa-surface fa-background-color="'orange'" fa-color="'#fff'">
+            This text should be white on an orange background.
+        </fa-surface>
+      </fa-modifier>
+    </fa-app>
+  </file>
+  <file name="script.js">
+  angular.module('faScrollViewExampleApp', ['famous.angular']);
+  </file>
+  <file name="style.css">
+  fa-app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  </file>
+ </example>
  *
  * ### ng-class
  * Ng-Class works on `fa-surface`s:
- * ```html
- * <fa-modifier fa-size="[150, 50]">
- *   <fa-surface fa-background-color="'blue'" ng-class="{strike: applyStrike}">
- *     Strikethrough!
- *     <input type="checkbox" ng-model="applyStrike"></input>
- *   </fa-surface>
- * </fa-modifier>
- * ```
- * ```css
- * .strike {
- *   text-decoration: line-through;
- * }
- * ```
+ *
+ <example module="faScrollViewExampleApp">
+  <file name="index.html">
+  <fa-app ng-controller="ScrollCtrl">
+      <fa-modifier fa-size="[300, 50]">
+        <fa-surface ng-class="{strike: applyStrike}">
+          Check box to apply strikethrough!
+          <input type="checkbox" ng-model="applyStrike"></input>
+        </fa-surface>
+      </fa-modifier>
+    </fa-app>
+  </file>
+  <file name="style.css">
+  fa-app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+    .strike {
+      text-decoration: line-through;
+    }
+  </file>
+  <file name="script.js">
+    angular.module('faScrollViewExampleApp', ['famous.angular'])
+        .controller('ScrollCtrl', ['$scope', '$famous', function($scope, $famous) {
+      }]);
+  </file>
+ </example>
+ *
+ *
  */
 
 angular.module('famous.angular')

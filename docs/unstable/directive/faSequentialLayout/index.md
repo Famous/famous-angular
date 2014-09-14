@@ -59,17 +59,53 @@ constructor.  See [https://famo.us/docs/views/SequentialLayout]
 <h2 id="example">Example</h2><p><code>Fa-sequential-layout</code> is a Famous View that arranges a collection of renderables sequentially in a specified direction.  Pass options (such as <code>direction</code>) by binding an object with the property to <code>fa-options</code>.</p>
 <p>In the example below, an ng-repeat is used on an <code>fa-view</code> and the elements nested below it.  The size of each <code>fa-surface</code> is <code>[undefined, 100]</code>, specifying that the width will fill the parent container, and the height will be 100 pixels.</p>
 <p>There are no positioning properties (such as <code>fa-translate</code>) specified on the <code>fa-modifier</code>, but these <code>fa-surface</code>s will translate automatically in the specified direction as not to overlap each other.</p>
-<pre><code class="lang-html">&lt;fa-sequential-layout fa-options=&quot;seqOptions&quot;&gt;
- &lt;fa-view ng-repeat=&quot;view in seq&quot;&gt;
-   &lt;fa-modifier fa-size=&quot;[undefined, 100]&quot;&gt;
-     &lt;fa-surface fa-background-color=&quot;view.bgColor&quot;&gt;&lt;/fa-surface&gt;
-   &lt;/fa-modifier&gt;
- &lt;/fa-view&gt;
-&lt;/fa-sequential-layout&gt;</code></pre>
-<pre><code class="lang-javascript">$scope.seqOptions = {
-  direction: 1, // vertical = 1 (default), horizontal = 0
-};
-$scope.seq = [{bgColor: &quot;orange&quot;}, {bgColor: &quot;red&quot;}, {bgColor: &quot;green&quot;}, {bgColor: &quot;yellow&quot;}];</code></pre>
+<p> 
+
+{% assign lvl = page.url | append:'X' | split:'/' | size %}
+{% capture relative %}{% for i in (3..lvl) %}../{% endfor %}{% endcapture %}
+
+<div>
+  <a ng-click="openPlunkr('{{ relative }}examples/example-example45')" class="btn pull-right">
+    <i class="glyphicon glyphicon-edit">&nbsp;</i>
+    Edit in Plunker</a>
+  <div class="runnable-example" path="examples/example-example45"
+      
+        module="faSequentialExampleApp"
+      
+  >
+
+   
+    <div ng-non-bindable class="runnable-example-file"
+      
+        name="index.html"
+      
+        language="html"
+      
+        type="html"
+      
+    >
+      <pre><code>{% raw %}&lt;fa-app ng-controller=&quot;SequentialCtrl&quot;&gt;&#10;  &lt;fa-sequential-layout fa-options=&quot;sequentialOptions&quot;&gt;&#10;   &lt;fa-view ng-repeat=&quot;view in sequence&quot;&gt;&#10;     &lt;fa-modifier fa-size=&quot;[undefined, 100]&quot;&gt;&#10;       &lt;fa-surface fa-background-color=&quot;view.bgColor&quot;&gt;&lt;/fa-surface&gt;&#10;     &lt;/fa-modifier&gt;&#10;   &lt;/fa-view&gt;&#10;  &lt;/fa-sequential-layout&gt;&#10;&lt;/fa-app&gt;&#10;&#10;&lt;script&gt;&#10;  angular.module(&#39;faSequentialExampleApp&#39;, [&#39;famous.angular&#39;])&#10;      .controller(&#39;SequentialCtrl&#39;, [&#39;$scope&#39;, &#39;$famous&#39;, function($scope, $famous) {&#10;        &#10;        $scope.sequentialOptions = {&#10;          direction: 1, // vertical = 1 (default), horizontal = 0&#10;        };&#10;&#10;        $scope.sequence = [{bgColor: &quot;orange&quot;}, {bgColor: &quot;red&quot;}, {bgColor: &quot;green&quot;}, {bgColor: &quot;yellow&quot;}];&#10;&#10;    }]);&#10;&lt;/script&gt;{% endraw %}</code></pre>
+    </div>
+  
+    <div ng-non-bindable class="runnable-example-file"
+      
+        name="style.css"
+      
+        language="css"
+      
+        type="css"
+      
+    >
+      <pre><code>{% raw %}fa-app {&#10;  position: fixed;&#10;  top: 0;&#10;  right: 0;&#10;  bottom: 0;&#10;  left: 0;&#10;}{% endraw %}</code></pre>
+    </div>
+  
+
+    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example45/index.html" name="example-example45"></iframe>
+  </div>
+</div>
+
+
+</p>
 
 
 

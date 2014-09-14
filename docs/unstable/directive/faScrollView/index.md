@@ -210,48 +210,6 @@ By setting <code>fa-start-index</code> to 1, the Scroll View will display the Vi
 A Scroll View is a Famous widget that displays a collection of views sequentially; it is agnostic about the Views that are inside of it; it only requires that events are piped from Surfaces to the ScrollView.</p>
 <p>In the example below, the outer Scroll View contains two explictly created Views.  One of those Views contains another Scroll View with sub-views created through an ngRepeat.
 The outer Scroll View is passed an option for its <code>direction</code> to be <code>horizontal (0)</code>, and the inner Scroll View is passed an option for a <code>vertical direction (1)</code>.</p>
-<pre><code class="lang-html">&lt;fa-app style=&quot;width: 320px; height: 568px;&quot;&gt;
-  &lt;!-- outer scroll view that scrolls horizontally between &quot;main&quot; view and &quot;sidebar&quot; view--&gt;
-  &lt;fa-scroll-view fa-pipe-from=&quot;eventHandler&quot; fa-options=&quot;options.scrollViewOuter&quot;&gt;
-
-    &lt;!-- sidebar view --&gt;
-    &lt;fa-view fa-index=&quot;0&quot;&gt;
-      &lt;fa-modifier fa-size=&quot;[100, undefined]&quot; id=&quot;sideBarMod&quot;&gt;
-          &lt;fa-surface fa-pipe-to=&quot;eventHandler&quot;
-                      fa-background-color=&quot;&#39;blue&#39;&quot;
-                      fa-size=&quot;[undefined, undefined]&quot;&gt;
-          &lt;/fa-surface&gt;
-        &lt;/fa-modifier&gt;
-    &lt;/fa-view&gt;
-
-    &lt;!-- main view --&gt;
-    &lt;fa-view fa-index=&quot;1&quot;&gt;
-    &lt;!-- inner scroll view that scrolls vertically--&gt;
-      &lt;fa-scroll-view fa-pipe-from=&quot;eventHandler&quot; fa-options=&quot;options.scrollViewInner&quot;&gt;
-        &lt;fa-view ng-repeat=&quot;item in list&quot;&gt;
-          &lt;fa-surface fa-pipe-to=&quot;eventHandler&quot;
-                      fa-size=&quot;[undefined, undefined]&quot;
-                      fa-background-color=&quot;&#39;red&#39;&quot;&gt;
-          &lt;/fa-surface&gt;
-        &lt;/fa-view&gt;
-      &lt;/fa-scroll-view&gt;
-    &lt;/fa-view&gt;
-
-  &lt;/fa-scroll-view&gt;
-&lt;/fa-app&gt;</code></pre>
-<pre><code class="lang-javascript">var EventHandler = $famous[&#39;famous/core/EventHandler&#39;];
-$scope.eventHandler = new EventHandler();
-$scope.list = [{content: &quot;famous&quot;}, {content: &quot;angular&quot;}, {content: &quot;rocks!&quot;}];
-
-$scope.options = {
-  scrollViewOuter: {
-    direction: 0,
-    paginated: true
-  },
-  scrollViewInner :{
-    direction: 1
-  }
-};</code></pre>
 <p> 
 
 {% assign lvl = page.url | append:'X' | split:'/' | size %}
@@ -277,7 +235,7 @@ $scope.options = {
         type="html"
       
     >
-      <pre><code>{% raw %}&lt;fa-app ng-controller=&quot;ScrollCtrl&quot; style=&quot;width: 100%; height: 568px;&quot;&gt;&#10;  &lt;!-- outer scroll view that scrolls horizontally between &quot;main&quot; view and &quot;sidebar&quot; view--&gt;&#10;  &lt;fa-scroll-view fa-pipe-from=&quot;eventHandler&quot; fa-options=&quot;options.scrollViewOuter&quot;&gt;&#10;&#10;    &lt;!-- sidebar view --&gt;&#10;    &lt;fa-view fa-index=&quot;0&quot;&gt;&#10;      &lt;fa-modifier fa-size=&quot;[200, undefined]&quot; id=&quot;sideBarMod&quot;&gt;&#10;          &lt;fa-surface fa-pipe-to=&quot;eventHandler&quot;&#10;                      fa-background-color=&quot;&#39;blue&#39;&quot;&#10;                      fa-size=&quot;[undefined, undefined]&quot;&gt;&#10;            Sidebar&#10;          &lt;/fa-surface&gt;&#10;        &lt;/fa-modifier&gt;&#10;    &lt;/fa-view&gt;&#10;&#10;    &lt;!-- main view --&gt;&#10;    &lt;fa-view fa-index=&quot;1&quot;&gt;&#10;    &lt;!-- inner scroll view that scrolls vertically--&gt;&#10;      &lt;fa-scroll-view fa-pipe-from=&quot;eventHandler&quot; fa-options=&quot;options.scrollViewInner&quot;&gt;&#10;        &lt;fa-view ng-repeat=&quot;item in list&quot;&gt;&#10;          &lt;fa-surface fa-pipe-to=&quot;eventHandler&quot;&#10;                      fa-size=&quot;[undefined, 200]&quot;&#10;                      fa-background-color=&quot;&#39;red&#39;&quot;&gt;&#10;            {{item.content}}&#10;          &lt;/fa-surface&gt;&#10;        &lt;/fa-view&gt;&#10;      &lt;/fa-scroll-view&gt;&#10;    &lt;/fa-view&gt;&#10;&#10;  &lt;/fa-scroll-view&gt;&#10;&lt;/fa-app&gt;&#10;&#10;&lt;script&gt;&#10;  angular.module(&#39;faScrollViewExampleApp&#39;, [&#39;famous.angular&#39;])&#10;      .controller(&#39;ScrollCtrl&#39;, [&#39;$scope&#39;, &#39;$famous&#39;, function($scope, $famous) {&#10;        &#10;        var EventHandler = $famous[&#39;famous/core/EventHandler&#39;];&#10;        $scope.eventHandler = new EventHandler();&#10;        $scope.list = [{content: &quot;Awesome content&quot;}, {content: &quot;Scroll to see more awesome content&quot;}, {content: &quot;Famo.us/angular rocks!&quot;}];&#10;        &#10;        $scope.options = {&#10;          scrollViewOuter: {&#10;            direction: 0,&#10;            paginated: true&#10;          },&#10;          scrollViewInner :{&#10;            direction: 1&#10;          }&#10;        };&#10;&#10;    }]);&#10;&lt;/script&gt;{% endraw %}</code></pre>
+      <pre><code>{% raw %}&lt;fa-app ng-controller=&quot;ScrollCtrl&quot; style=&quot;width: 100%; height: 568px;&quot;&gt;&#10;  &lt;!-- outer scroll view that scrolls horizontally between &quot;main&quot; view and &quot;sidebar&quot; view--&gt;&#10;  &lt;fa-scroll-view fa-pipe-from=&quot;eventHandler&quot; fa-options=&quot;options.scrollViewOuter&quot;&gt;&#10;&#10;    &lt;!-- sidebar view --&gt;&#10;    &lt;fa-view fa-index=&quot;0&quot;&gt;&#10;      &lt;fa-modifier fa-size=&quot;[200, undefined]&quot; id=&quot;sideBarMod&quot;&gt;&#10;          &lt;fa-surface fa-pipe-to=&quot;eventHandler&quot;&#10;                      fa-background-color=&quot;&#39;blue&#39;&quot;&#10;                      fa-size=&quot;[undefined, undefined]&quot;&gt;&#10;            Sidebar (scroll horizontally to hide)&#10;          &lt;/fa-surface&gt;&#10;        &lt;/fa-modifier&gt;&#10;    &lt;/fa-view&gt;&#10;&#10;    &lt;!-- main view --&gt;&#10;    &lt;fa-view fa-index=&quot;1&quot;&gt;&#10;    &lt;!-- inner scroll view that scrolls vertically--&gt;&#10;      &lt;fa-scroll-view fa-pipe-from=&quot;eventHandler&quot; fa-options=&quot;options.scrollViewInner&quot;&gt;&#10;        &lt;fa-view ng-repeat=&quot;item in list&quot;&gt;&#10;          &lt;fa-surface fa-pipe-to=&quot;eventHandler&quot;&#10;                      fa-size=&quot;[undefined, 200]&quot;&#10;                      fa-background-color=&quot;&#39;red&#39;&quot;&gt;&#10;            {{item.content}}&#10;          &lt;/fa-surface&gt;&#10;        &lt;/fa-view&gt;&#10;      &lt;/fa-scroll-view&gt;&#10;    &lt;/fa-view&gt;&#10;&#10;  &lt;/fa-scroll-view&gt;&#10;&lt;/fa-app&gt;&#10;&#10;&lt;script&gt;&#10;  angular.module(&#39;faScrollViewExampleApp&#39;, [&#39;famous.angular&#39;])&#10;      .controller(&#39;ScrollCtrl&#39;, [&#39;$scope&#39;, &#39;$famous&#39;, function($scope, $famous) {&#10;        &#10;        var EventHandler = $famous[&#39;famous/core/EventHandler&#39;];&#10;        $scope.eventHandler = new EventHandler();&#10;        $scope.list = [{&#10;          content: &quot;Awesome content&quot;&#10;        },{&#10;          content: &quot;Scroll vertically to see more awesome content&quot;&#10;        },{&#10;          content: &quot;Famo.us/angular rocks!&quot;&#10;          }&#10;        ];&#10;        &#10;        $scope.options = {&#10;          scrollViewOuter: {&#10;            direction: 0,&#10;            paginated: true&#10;          },&#10;          scrollViewInner :{&#10;            direction: 1&#10;          }&#10;        };&#10;&#10;    }]);&#10;&lt;/script&gt;{% endraw %}</code></pre>
     </div>
   
 
