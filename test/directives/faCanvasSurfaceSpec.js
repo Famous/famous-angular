@@ -23,9 +23,8 @@ describe('faCanvasSurface', function() {
 
 
   it("should throw an exception if any child content is added", function(){
-    pending();
     expect(function(){
-      var faCanvasSurface = $compile('<fa-canvas-surface>illegal content</fa-canvas-surface>')($scope);
+      var faCanvasSurface = $compile('<fa-canvas-surface><fa-view id="illegal"></fa-view></fa-canvas-surface>')($scope);
     }).toThrow();
   });
 
