@@ -95,34 +95,105 @@ The rate of which touchmove events fire is implementation-defined by browser and
 <h3 id="fa-touchmove-on-an-fa-surface">Fa-touchmove on an fa-surface</h3>
 <p><code>Fa-touchmove</code>can be used on an <code>fa-surface</code>.  Internally, a Famous Surface has a <code>.on()</code> method that binds a callback function to an event type handled by that Surface.
  The function expression bound to <code>fa-touchmove</code> is bound to that <code>fa-surface</code>&#39;s touchmove eventHandler, and when touchmove fires, the function expression will be called. </p>
-<pre><code class="lang-html">&lt;fa-modifier fa-size=&quot;[100, 100]&quot;&gt;
-  &lt;fa-surface fa-touchmove=&quot;touchMove($event)&quot; fa-background-color=&quot;&#39;red&#39;&quot;&gt;&lt;/fa-surface&gt;
-&lt;/fa-modifier&gt;</code></pre>
-<pre><code class="lang-javascript">var touchMoveCounter = 0;
-$scope.touchMove = function($event) {
-  touchMoveCounter++;
-  console.log($event);
-  console.log(&quot;touchMove: &quot; + touchMoveCounter);
-};</code></pre>
+<p> 
+
+{% assign lvl = page.url | append:'X' | split:'/' | size %}
+{% capture relative %}{% for i in (3..lvl) %}../{% endfor %}{% endcapture %}
+
+<div>
+  <a ng-click="openPlunkr('{{ relative }}examples/example-example55')" class="btn pull-right">
+    <i class="glyphicon glyphicon-edit">&nbsp;</i>
+    Edit in Plunker</a>
+  <div class="runnable-example" path="examples/example-example55"
+      
+        module="faTouchMoveExampleApp"
+      
+  >
+
+   
+    <div ng-non-bindable class="runnable-example-file"
+      
+        name="index.html"
+      
+        language="html"
+      
+        type="html"
+      
+    >
+      <pre><code>{% raw %}&lt;fa-app ng-controller=&quot;TouchMoveCtrl&quot;&gt;&#10;  &lt;fa-modifier fa-size=&quot;[200, 100]&quot;&gt;&#10;    &lt;fa-surface fa-touchmove=&quot;touchMove($event)&quot;&#10;                fa-background-color=&quot;&#39;red&#39;&quot;&gt;&#10;      Touch move count: {{touchMoveCount}}&#10;    &lt;/fa-surface&gt;&#10;  &lt;/fa-modifier&gt;&#10;&lt;/fa-app&gt;&#10;&#10;&lt;script&gt;&#10;  angular.module(&#39;faTouchMoveExampleApp&#39;, [&#39;famous.angular&#39;])&#10;    .controller(&#39;TouchMoveCtrl&#39;, [&#39;$scope&#39;, &#39;$famous&#39;, function($scope, $famous) {&#10;        &#10;        $scope.touchMoveCount = 0;&#10;&#10;        $scope.touchMove = function($event) {&#10;          console.log($event);&#10;          $scope.touchMoveCount++;&#10;        };&#10;&#10;    }]);&#10;&lt;/script&gt;{% endraw %}</code></pre>
+    </div>
+  
+    <div ng-non-bindable class="runnable-example-file"
+      
+        name="style.css"
+      
+        language="css"
+      
+        type="css"
+      
+    >
+      <pre><code>{% raw %}fa-app {&#10;  position: fixed;&#10;  top: 0;&#10;  right: 0;&#10;  bottom: 0;&#10;  left: 0;&#10;}{% endraw %}</code></pre>
+    </div>
+  
+
+    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example55/index.html" name="example-example55"></iframe>
+  </div>
+</div>
+
+
+</p>
 <h3 id="fa-touchmove-on-an-fa-view">Fa-touchmove on an fa-view</h3>
 <p><code>Fa-touchmove</code> may be used on an <code>fa-view</code>.  The function expression bound to <code>fa-touchmove</code> will be bound to the <code>fa-view</code>&#39;s internal <code>_eventInput</code>, the aggregation point of all events received by the <code>fa-view</code>.  When it receives a <code>touchmove</code> event, it will call the function expression bound to <code>fa-touchmove</code>.</p>
 <p>In the example below, the <code>fa-surface</code> pipes its Surface events to an instantied Famous Event Handler called <code>myEvents</code>.
 <code>Fa-view</code> pipes from <code>myEvents</code>, receiving all events piped by the <code>fa-surface</code>.</p>
 <p>When a touchmove event occurs on the <code>fa-surface</code>, it is piped to the <code>fa-view</code>.<br><code>fa-touchmove</code> defines a callback function in which to handle touchmove events, and when it receives a touchmove event, it calls <code>touchMove()</code>. </p>
-<pre><code class="lang-html">&lt;fa-view fa-touchmove=&quot;touchMove($event)&quot; fa-pipe-from=&quot;myEvents&quot;&gt;
-  &lt;fa-modifier fa-size=&quot;[100, 100]&quot;&gt;
-    &lt;fa-surface fa-pipe-to=&quot;myEvents&quot;
-                fa-background-color=&quot;&#39;orange&#39;&quot;&gt;
-    &lt;/fa-surface&gt;
-  &lt;/fa-modifier&gt;
-&lt;/fa-view&gt;</code></pre>
-<pre><code class="lang-javascript">var EventHandler = $famous[&#39;famous/core/EventHandler&#39;];
-$scope.myEvents = new EventHandler();
+<p> 
 
-$scope.touchMove = function($event) {
-  console.log($event);
-  console.log(&quot;fa-view receives the touchmove event from the fa-surface, and calls $scope.touchMove bound to fa-touchmove&quot;);
-};</code></pre>
+{% assign lvl = page.url | append:'X' | split:'/' | size %}
+{% capture relative %}{% for i in (3..lvl) %}../{% endfor %}{% endcapture %}
+
+<div>
+  <a ng-click="openPlunkr('{{ relative }}examples/example-example56')" class="btn pull-right">
+    <i class="glyphicon glyphicon-edit">&nbsp;</i>
+    Edit in Plunker</a>
+  <div class="runnable-example" path="examples/example-example56"
+      
+        module="faTouchMoveExampleApp"
+      
+  >
+
+   
+    <div ng-non-bindable class="runnable-example-file"
+      
+        name="index.html"
+      
+        language="html"
+      
+        type="html"
+      
+    >
+      <pre><code>{% raw %}&lt;fa-app ng-controller=&quot;TouchMoveCtrl&quot;&gt;&#10;&#10;  &lt;!-- The fa-view receives the touchmove event from the fa-surface, and calls $scope.touchMove, which is bound to fa-touchmove on the fa-view. --&gt;&#10;&#10;  &lt;fa-view fa-touchmove=&quot;touchMove($event)&quot; fa-pipe-from=&quot;myEvents&quot;&gt;&#10;    &lt;fa-modifier fa-size=&quot;[200, 100]&quot;&gt;&#10;      &lt;fa-surface fa-pipe-to=&quot;myEvents&quot;&#10;                  fa-background-color=&quot;&#39;orange&#39;&quot;&gt;&#10;        Touch move count: {{touchMoveCount}}&#10;      &lt;/fa-surface&gt;&#10;    &lt;/fa-modifier&gt;&#10;  &lt;/fa-view&gt;&#10;&lt;/fa-app&gt;&#10;&#10;&lt;script&gt;&#10;  angular.module(&#39;faTouchMoveExampleApp&#39;, [&#39;famous.angular&#39;])&#10;    .controller(&#39;TouchMoveCtrl&#39;, [&#39;$scope&#39;, &#39;$famous&#39;, function($scope, $famous) {&#10;        &#10;        var EventHandler = $famous[&#39;famous/core/EventHandler&#39;];&#10;        $scope.myEvents = new EventHandler();&#10;&#10;        $scope.touchMoveCount = 0;&#10;        &#10;        $scope.touchMove = function($event) {&#10;          console.log($event);&#10;          $scope.touchMoveCount++;&#10;        };&#10;&#10;    }]);&#10;&lt;/script&gt;{% endraw %}</code></pre>
+    </div>
+  
+    <div ng-non-bindable class="runnable-example-file"
+      
+        name="style.css"
+      
+        language="css"
+      
+        type="css"
+      
+    >
+      <pre><code>{% raw %}fa-app {&#10;  position: fixed;&#10;  top: 0;&#10;  right: 0;&#10;  bottom: 0;&#10;  left: 0;&#10;}{% endraw %}</code></pre>
+    </div>
+  
+
+    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example56/index.html" name="example-example56"></iframe>
+  </div>
+</div>
+
+
+</p>
 
 
 

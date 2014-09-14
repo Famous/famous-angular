@@ -5450,7 +5450,7 @@ angular.module('famous.angular')
  * @example
  * An `fa-surface` can use an ng-include to compile an external HTML fragment:
  *
- <example module="faScrollViewExampleApp">
+ <example module="faSurfaceExampleApp">
   <file name="index.html">
   <fa-app>
       <fa-modifier fa-size="[960, undefined]">
@@ -5464,7 +5464,7 @@ angular.module('famous.angular')
   <p>This is compiled from an external HTML fragment in helloWorld.html!</p>
   </file>
   <file name="script.js">
-  angular.module('faScrollViewExampleApp', ['famous.angular']);
+  angular.module('faSurfaceExampleApp', ['famous.angular']);
   </file>
   <file name="style.css">
   fa-app {
@@ -5506,14 +5506,14 @@ angular.module('famous.angular')
  * ### Properties on surfaces vs modifiers
  * With Famous, properties related to layout and visibility belong on a Modifier.  A Surface should be added below a Modifier on the Render Tree, as Modifiers affect everything below them.
  *
- <example module="faScrollViewExampleApp">
+ <example module="faSurfaceExampleApp">
   <file name="index.html">
   <fa-app>
       <fa-surface fa-origin="[.5, 0]">This will not change the origin.</fa-surface>
     </fa-app>
   </file>
   <file name="script.js">
-  angular.module('faScrollViewExampleApp', ['famous.angular']);
+  angular.module('faSurfaceExampleApp', ['famous.angular']);
   </file>
   <file name="style.css">
   fa-app {
@@ -5557,17 +5557,17 @@ angular.module('famous.angular')
  * ```
  * To reiterate, the best practice to animate or set any layout/visibilty properties of a surface is to do so on a modifier that affects the Surface.  The purpose of a Surface is to contain HTML content, whether rendered from a template, or data-bound.
  *
- <example module="faScrollViewExampleApp">
+ <example module="faSurfaceExampleApp">
   <file name="index.html">
-  <fa-app ng-controller="ScrollCtrl">
+  <fa-app ng-controller="SurfaceCtrl">
       <fa-modifier fa-size="sizeForBoxFunction">
         <fa-surface fa-background-color="'red'"></fa-surface>
       </fa-modifier>
     </fa-app>
 
     <script>
-      angular.module('faScrollViewExampleApp', ['famous.angular'])
-        .controller('ScrollCtrl', ['$scope', '$famous', function($scope, $famous) {
+      angular.module('faSurfaceExampleApp', ['famous.angular'])
+        .controller('SurfaceCtrl', ['$scope', '$famous', function($scope, $famous) {
             
             $scope.sizeForBoxFunction = function() {
                return [75, 75];
@@ -5591,7 +5591,7 @@ angular.module('famous.angular')
  * The exceptions of not setting layout/visibility properties on an `fa-surface` are `fa-color` and `fa-background-color`: these two properties are passed through the `.setProperties()` method available on Famous Surfaces.
  * Take note that they accept a string in the html view.  If you do not enclose them in quotation marks, Angular will evaluate it as an object on the scope, but surrounding it with quotation marks will specify it as a string expression.
  *
- <example module="faScrollViewExampleApp">
+ <example module="faSurfaceExampleApp">
   <file name="index.html">
   <fa-app>
       <fa-modifier fa-size="[200, 50]">
@@ -5602,7 +5602,7 @@ angular.module('famous.angular')
     </fa-app>
   </file>
   <file name="script.js">
-  angular.module('faScrollViewExampleApp', ['famous.angular']);
+  angular.module('faSurfaceExampleApp', ['famous.angular']);
   </file>
   <file name="style.css">
   fa-app {
@@ -5618,9 +5618,9 @@ angular.module('famous.angular')
  * ### ng-class
  * Ng-Class works on `fa-surface`s:
  *
- <example module="faScrollViewExampleApp">
+ <example module="faSurfaceExampleApp">
   <file name="index.html">
-  <fa-app ng-controller="ScrollCtrl">
+  <fa-app ng-controller="SurfaceCtrl">
       <fa-modifier fa-size="[300, 50]">
         <fa-surface ng-class="{strike: applyStrike}">
           Check box to apply strikethrough!
@@ -5642,8 +5642,8 @@ angular.module('famous.angular')
     }
   </file>
   <file name="script.js">
-    angular.module('faScrollViewExampleApp', ['famous.angular'])
-        .controller('ScrollCtrl', ['$scope', '$famous', function($scope, $famous) {
+  angular.module('faSurfaceExampleApp', ['famous.angular'])
+        .controller('SurfaceCtrl', ['$scope', '$famous', function($scope, $famous) {
       }]);
   </file>
  </example>
@@ -5788,20 +5788,96 @@ angular.module('famous.angular')
  * @example
  * Note: For testing purposes during development, enable mobile emulation: https://developer.chrome.com/devtools/docs/mobile-emulation
  * 
- * `Fa-tap` checks if a touchmove event fires between a touchstart and touchend event.  If the touchmove event fired, (the user "dragged" their finger), a `fa-tap` event will not fire.  If the user did not "drag" their finger on touch, when releasing their finger, a touchend event will fire, and fa-tap will fire.
+ * `Fa-tap` checks if a touchmove event fires between a touchstart and tap event.  If the touchmove event fired, (the user "dragged" their finger), a `fa-tap` event will not fire.  If the user did not "drag" their finger on touch, when releasing their finger, a tap event will fire, and fa-tap will fire.
+ *
+ <example module="faTapExampleApp">
+  <file name="index.html">
+  <fa-app ng-controller="TapCtrl">
+      <fa-modifier fa-size="[100, 100]">
+        <fa-surface fa-tap="tapHandler($event)"
+                    fa-background-color="'red'">
+          Tap count: {{tapCount}}
+        </fa-surface>
+      </fa-modifier>
+    </fa-app>
+
+    <script>
+      angular.module('faTapExampleApp', ['famous.angular'])
+        .controller('TapCtrl', ['$scope', '$famous', function($scope, $famous) {
+            
+            $scope.tapCount = 0;
+
+            $scope.tapHandler = function($event) {
+              console.log($event);
+              $scope.tapCount++;
+            };
+
+        }]);
+    </script>
+  </file>
+  <file name="style.css">
+  fa-app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  </file>
+ </example>
+ *
+ * ### Fa-tap on an fa-view
+ * `Fa-tap` may be used on an `fa-view`.  The function expression bound to `fa-tap` will be bound to the `fa-view`'s internal `_eventInput`, the aggregation point of all events received by the `fa-view`.  When it receives a `tap` event, it will call the function expression bound to `fa-tap`.
+ *  
+ * In the example below, the `fa-surface` pipes its Surface events to an instantied Famous Event Handler called `myEvents`.
+ * `Fa-view` pipes from `myEvents`, receiving all events piped by the `fa-surface`.
  * 
- * ```html
- * <fa-modifier fa-size="[100, 100]">
- * <fa-surface fa-tap="tapHandler($event)" fa-background-color="'red'"></fa-surface>
- * </fa-modifier>
- * ```
- * 
- * ```javascript
- * $scope.tapHandler = function($event) {
- *   console.log($event);
- *   console.log("tap");
- * };
- * ```
+ * When a tap event occurs on the `fa-surface`, it is piped to the `fa-view`.  
+ * `fa-tap` defines a callback function in which to handle tap events, and when it receives a tap event, it calls `tap()`. 
+ *
+ <example module="faTapExampleApp">
+  <file name="index.html">
+  <fa-app ng-controller="TapCtrl">
+
+      <!-- The fa-view receives the tap event from the fa-surface, and calls $scope.tap, which is bound to fa-tap on the fa-view. -->
+
+      <fa-view fa-tap="tap($event)" fa-pipe-from="myEvents">
+        <fa-modifier fa-size="[100, 100]">
+          <fa-surface fa-pipe-to="myEvents"
+                      fa-background-color="'orange'">
+            Tap count: {{tapCount}}
+          </fa-surface>
+        </fa-modifier>
+      </fa-view>
+    </fa-app>
+
+    <script>
+      angular.module('faTapExampleApp', ['famous.angular'])
+        .controller('TapCtrl', ['$scope', '$famous', function($scope, $famous) {
+            
+            var EventHandler = $famous['famous/core/EventHandler'];
+            $scope.myEvents = new EventHandler();
+
+            $scope.tapCount = 0;
+            
+            $scope.tap = function($event) {
+              console.log($event);
+              $scope.tapCount++;
+            };
+
+        }]);
+    </script>
+  </file>
+  <file name="style.css">
+  fa-app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  </file>
+ </example>
  */
 
 angular.module('famous.angular')
@@ -5823,7 +5899,7 @@ angular.module('famous.angular')
                 return data;
               });
 
-              renderNode.on("touchend", function(data) {
+              renderNode.on("tap", function(data) {
                 if (!_dragging){
                   var fn = $parse(attrs.faTap);
                   fn(scope, {$event:data});
@@ -5865,20 +5941,42 @@ angular.module('famous.angular')
  * ### Fa-touchend on an fa-surface
  * `Fa-touchend` can be used on an `fa-surface`.  Internally, a Famous Surface has a `.on()` method that binds a callback function to an event type handled by that Surface.
  * The function expression bound to `fa-touchend` is bound to that `fa-surface`'s touchend eventHandler, and when touchend fires, the function expression will be called. 
- * 
- * ```html
- * <fa-modifier fa-size="[100, 100]">
- *   <fa-surface fa-touchend="touchEnd($event)" fa-background-color="'red'"></fa-surface>
- * </fa-modifier>
- * ```
- * ```javascript
- * var touchEndCounter = 0;
- * $scope.touchEnd = function($event) {
- *   touchEndCounter++;
- *   console.log($event);
- *   console.log("touchEnd: " + touchEndCounter);
- * };
- * ```
+ *
+ <example module="faTouchEndExampleApp">
+  <file name="index.html">
+  <fa-app ng-controller="TouchEndCtrl">
+      <fa-modifier fa-size="[200, 100]">
+        <fa-surface fa-touchend="touchEnd($event)"
+                    fa-background-color="'red'">
+          Touch-end count: {{touchEndCount}}
+        </fa-surface>
+      </fa-modifier>
+    </fa-app>
+
+    <script>
+      angular.module('faTouchEndExampleApp', ['famous.angular'])
+        .controller('TouchEndCtrl', ['$scope', '$famous', function($scope, $famous) {
+            
+            $scope.touchEndCount = 0;
+
+            $scope.touchEnd = function($event) {
+              console.log($event);
+              $scope.touchEndCount++;
+            };
+
+        }]);
+    </script>
+  </file>
+  <file name="style.css">
+  fa-app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  </file>
+ </example>
  *
  * ### Fa-touchend on an fa-view
  * `Fa-touchend` may be used on an `fa-view`.  The function expression bound to `fa-touchend` will be bound to the `fa-view`'s internal `_eventInput`, the aggregation point of all events received by the `fa-view`.  When it receives a `touchend` event, it will call the function expression bound to `fa-touchend`.
@@ -5888,24 +5986,52 @@ angular.module('famous.angular')
  * 
  * When a touchend event occurs on the `fa-surface`, it is piped to the `fa-view`.  
  * `fa-touchend` defines a callback function in which to handle touchend events, and when it receives a touchend event, it calls `touchEnd()`. 
- * ```html
- * <fa-view fa-touchend="touchEnd($event)" fa-pipe-from="myEvents">
- *   <fa-modifier fa-size="[100, 100]">
- *     <fa-surface fa-pipe-to="myEvents"
- *                 fa-background-color="'orange'">
- *     </fa-surface>
- *   </fa-modifier>
- * </fa-view>
- * ```
- * ```javascript
- * var EventHandler = $famous['famous/core/EventHandler'];
- * $scope.myEvents = new EventHandler();
- * 
- * $scope.touchEnd = function($event) {
- *   console.log($event);
- *   console.log("fa-view receives the touchend event from the fa-surface, and calls $scope.touchEnd bound to fa-touchend");
- * };
- * ```
+ *
+ <example module="faTouchEndExampleApp">
+  <file name="index.html">
+  <fa-app ng-controller="TouchEndCtrl">
+
+      <!-- The fa-view receives the touchend event from the fa-surface, and calls $scope.touchEnd, which is bound to fa-touchend on the fa-view. -->
+
+      <fa-view fa-touchend="touchEnd($event)" fa-pipe-from="myEvents">
+        <fa-modifier fa-size="[100, 100]">
+          <fa-surface fa-pipe-to="myEvents"
+                      fa-background-color="'orange'">
+            Touch-end count: {{touchEndCount}}
+          </fa-surface>
+        </fa-modifier>
+      </fa-view>
+    </fa-app>
+
+    <script>
+      angular.module('faTouchEndExampleApp', ['famous.angular'])
+        .controller('TouchEndCtrl', ['$scope', '$famous', function($scope, $famous) {
+            
+            var EventHandler = $famous['famous/core/EventHandler'];
+            $scope.myEvents = new EventHandler();
+
+            $scope.touchEndCount = 0;
+            
+            $scope.touchEnd = function($event) {
+              console.log($event);
+              $scope.touchEndCount++;
+            };
+
+        }]);
+    </script>
+  </file>
+  <file name="style.css">
+  fa-app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  </file>
+ </example>
+ *
+ *
  */
 
 angular.module('famous.angular')
@@ -5963,20 +6089,43 @@ angular.module('famous.angular')
  * ### Fa-touchmove on an fa-surface
  * `Fa-touchmove`can be used on an `fa-surface`.  Internally, a Famous Surface has a `.on()` method that binds a callback function to an event type handled by that Surface.
  *  The function expression bound to `fa-touchmove` is bound to that `fa-surface`'s touchmove eventHandler, and when touchmove fires, the function expression will be called. 
- *  
- * ```html
- * <fa-modifier fa-size="[100, 100]">
- *   <fa-surface fa-touchmove="touchMove($event)" fa-background-color="'red'"></fa-surface>
- * </fa-modifier>
- * ```
- * ```javascript
- * var touchMoveCounter = 0;
- * $scope.touchMove = function($event) {
- *   touchMoveCounter++;
- *   console.log($event);
- *   console.log("touchMove: " + touchMoveCounter);
- * };
- * ```
+ *
+ <example module="faTouchMoveExampleApp">
+  <file name="index.html">
+  <fa-app ng-controller="TouchMoveCtrl">
+      <fa-modifier fa-size="[200, 100]">
+        <fa-surface fa-touchmove="touchMove($event)"
+                    fa-background-color="'red'">
+          Touch move count: {{touchMoveCount}}
+        </fa-surface>
+      </fa-modifier>
+    </fa-app>
+
+    <script>
+      angular.module('faTouchMoveExampleApp', ['famous.angular'])
+        .controller('TouchMoveCtrl', ['$scope', '$famous', function($scope, $famous) {
+            
+            $scope.touchMoveCount = 0;
+
+            $scope.touchMove = function($event) {
+              console.log($event);
+              $scope.touchMoveCount++;
+            };
+
+        }]);
+    </script>
+  </file>
+  <file name="style.css">
+  fa-app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  </file>
+ </example>
+ *
  *
  * ### Fa-touchmove on an fa-view
  * `Fa-touchmove` may be used on an `fa-view`.  The function expression bound to `fa-touchmove` will be bound to the `fa-view`'s internal `_eventInput`, the aggregation point of all events received by the `fa-view`.  When it receives a `touchmove` event, it will call the function expression bound to `fa-touchmove`.
@@ -5987,24 +6136,50 @@ angular.module('famous.angular')
  * When a touchmove event occurs on the `fa-surface`, it is piped to the `fa-view`.  
  * `fa-touchmove` defines a callback function in which to handle touchmove events, and when it receives a touchmove event, it calls `touchMove()`. 
  *
- * ```html
- * <fa-view fa-touchmove="touchMove($event)" fa-pipe-from="myEvents">
- *   <fa-modifier fa-size="[100, 100]">
- *     <fa-surface fa-pipe-to="myEvents"
- *                 fa-background-color="'orange'">
- *     </fa-surface>
- *   </fa-modifier>
- * </fa-view>
- * ```
- * ```javascript
- * var EventHandler = $famous['famous/core/EventHandler'];
- * $scope.myEvents = new EventHandler();
- * 
- * $scope.touchMove = function($event) {
- *   console.log($event);
- *   console.log("fa-view receives the touchmove event from the fa-surface, and calls $scope.touchMove bound to fa-touchmove");
- * };
- * ```
+ <example module="faTouchMoveExampleApp">
+  <file name="index.html">
+  <fa-app ng-controller="TouchMoveCtrl">
+
+      <!-- The fa-view receives the touchmove event from the fa-surface, and calls $scope.touchMove, which is bound to fa-touchmove on the fa-view. -->
+
+      <fa-view fa-touchmove="touchMove($event)" fa-pipe-from="myEvents">
+        <fa-modifier fa-size="[200, 100]">
+          <fa-surface fa-pipe-to="myEvents"
+                      fa-background-color="'orange'">
+            Touch move count: {{touchMoveCount}}
+          </fa-surface>
+        </fa-modifier>
+      </fa-view>
+    </fa-app>
+
+    <script>
+      angular.module('faTouchMoveExampleApp', ['famous.angular'])
+        .controller('TouchMoveCtrl', ['$scope', '$famous', function($scope, $famous) {
+            
+            var EventHandler = $famous['famous/core/EventHandler'];
+            $scope.myEvents = new EventHandler();
+
+            $scope.touchMoveCount = 0;
+            
+            $scope.touchMove = function($event) {
+              console.log($event);
+              $scope.touchMoveCount++;
+            };
+
+        }]);
+    </script>
+  </file>
+  <file name="style.css">
+  fa-app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  </file>
+ </example>
+ *
  */
 
 angular.module('famous.angular')
@@ -6061,20 +6236,43 @@ angular.module('famous.angular')
  * ### Fa-touchstart on an fa-surface
  * `Fa-touchstart` can be used on an `fa-surface`.  Internally, a Famous Surface has a `.on()` method that binds a callback function to an event type handled by that Surface.
  *  The function expression bound to `fa-touchstart` is bound to that `fa-surface`'s touchstart eventHandler, and when touchstart fires, the function expression will be called. 
- * 
- * ```html
- * <fa-modifier fa-size="[100, 100]">
- *   <fa-surface fa-touchstart="touchStart($event)" fa-background-color="'red'"></fa-surface>
- * </fa-modifier>
- * ```
- * ```javascript
- *   var touchStartCounter = 0;
- *   $scope.touchStart = function($event) {
- *     touchStartCounter++;
- *     console.log($event);
- *     console.log("touchStart: " + touchStartCounter);
- *   };
- * ```
+ *
+ <example module="faTouchStartExampleApp">
+  <file name="index.html">
+  <fa-app ng-controller="TouchStartCtrl">
+      <fa-modifier fa-size="[200, 100]">
+        <fa-surface fa-touchstart="touchStart($event)"
+                    fa-background-color="'red'">
+          Touch start count: {{touchStartCount}}
+        </fa-surface>
+      </fa-modifier>
+    </fa-app>
+
+    <script>
+      angular.module('faTouchStartExampleApp', ['famous.angular'])
+        .controller('TouchStartCtrl', ['$scope', '$famous', function($scope, $famous) {
+            
+            $scope.touchStartCount = 0;
+
+            $scope.touchStart = function($event) {
+              console.log($event);
+              $scope.touchStartCount++;
+            };
+
+        }]);
+    </script>
+  </file>
+  <file name="style.css">
+  fa-app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  </file>
+ </example>
+ *
  *
  * ### Fa-touchstart on an fa-view
  * `Fa-touchstart` may be used on an `fa-view`.  The function expression bound to `fa-touchstart` will be bound to the `fa-view`'s internal `_eventInput`, the aggregation point of all events received by the `fa-view`.  When it receives a `touchstart` event, it will call the function expression bound to `fa-touchstart`.
@@ -6084,24 +6282,51 @@ angular.module('famous.angular')
  * 
  * When a touchstart event occurs on the `fa-surface`, it is piped to the `fa-view`.  
  * `fa-touchstart` defines a callback function in which to handle touchstart events, and when it receives a touchstart event, it calls `touchStart()`. 
- * ```html
- * <fa-view fa-touchstart="touchStart($event)" fa-pipe-from="myEvents">
- *   <fa-modifier fa-size="[100, 100]">
- *     <fa-surface fa-pipe-to="myEvents"
- *                 fa-background-color="'orange'">
- *     </fa-surface>
- *   </fa-modifier>
- * </fa-view>
- * ```
- * ```javascript
- * var EventHandler = $famous['famous/core/EventHandler'];
- * $scope.myEvents = new EventHandler();
- * 
- * $scope.touchStart = function($event) {
- *   console.log($event);
- *   console.log("fa-view receives the touchstart event from the fa-surface, and calls $scope.touchStart bound to fa-touchstart");
- * };
- * ```
+ *
+ <example module="faTouchStartExampleApp">
+  <file name="index.html">
+  <fa-app ng-controller="TouchStartCtrl">
+
+      <!-- The fa-view receives the touchstart event from the fa-surface, and calls $scope.touchStart, bound to fa-touchstart on the fa-view. -->
+
+      <fa-view fa-touchstart="touchStart($event)" fa-pipe-from="myEvents">
+        <fa-modifier fa-size="[200, 100]">
+          <fa-surface fa-pipe-to="myEvents"
+                      fa-background-color="'orange'">
+            Touch start count: {{touchStartCount}}
+          </fa-surface>
+        </fa-modifier>
+      </fa-view>
+    </fa-app>
+
+    <script>
+      angular.module('faTouchStartExampleApp', ['famous.angular'])
+        .controller('TouchStartCtrl', ['$scope', '$famous', function($scope, $famous) {
+            
+            var EventHandler = $famous['famous/core/EventHandler'];
+            $scope.myEvents = new EventHandler();
+
+            $scope.touchStartCount = 0;
+            
+            $scope.touchStart = function($event) {
+              console.log($event);
+              $scope.touchStartCount++;
+            };
+
+        }]);
+    </script>
+  </file>
+  <file name="style.css">
+  fa-app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  </file>
+ </example>
+ *
  */
 
 angular.module('famous.angular')

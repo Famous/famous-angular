@@ -71,7 +71,7 @@ ngIncludes or custom (vanilla Angular) directives.
     Edit in Plunker</a>
   <div class="runnable-example" path="examples/example-example46"
       
-        module="faScrollViewExampleApp"
+        module="faSurfaceExampleApp"
       
   >
 
@@ -109,7 +109,7 @@ ngIncludes or custom (vanilla Angular) directives.
         type="js"
       
     >
-      <pre><code>{% raw %}angular.module(&#39;faScrollViewExampleApp&#39;, [&#39;famous.angular&#39;]);{% endraw %}</code></pre>
+      <pre><code>{% raw %}angular.module(&#39;faSurfaceExampleApp&#39;, [&#39;famous.angular&#39;]);{% endraw %}</code></pre>
     </div>
   
     <div ng-non-bindable class="runnable-example-file"
@@ -162,7 +162,7 @@ ngIncludes or custom (vanilla Angular) directives.
     Edit in Plunker</a>
   <div class="runnable-example" path="examples/example-example47"
       
-        module="faScrollViewExampleApp"
+        module="faSurfaceExampleApp"
       
   >
 
@@ -188,7 +188,7 @@ ngIncludes or custom (vanilla Angular) directives.
         type="js"
       
     >
-      <pre><code>{% raw %}angular.module(&#39;faScrollViewExampleApp&#39;, [&#39;famous.angular&#39;]);{% endraw %}</code></pre>
+      <pre><code>{% raw %}angular.module(&#39;faSurfaceExampleApp&#39;, [&#39;famous.angular&#39;]);{% endraw %}</code></pre>
     </div>
   
     <div ng-non-bindable class="runnable-example-file"
@@ -238,7 +238,7 @@ For example, this will not work:</p>
     Edit in Plunker</a>
   <div class="runnable-example" path="examples/example-example48"
       
-        module="faScrollViewExampleApp"
+        module="faSurfaceExampleApp"
       
   >
 
@@ -252,7 +252,7 @@ For example, this will not work:</p>
         type="html"
       
     >
-      <pre><code>{% raw %}&lt;fa-app ng-controller=&quot;ScrollCtrl&quot;&gt;&#10;  &lt;fa-modifier fa-size=&quot;sizeForBoxFunction&quot;&gt;&#10;    &lt;fa-surface fa-background-color=&quot;&#39;red&#39;&quot;&gt;&lt;/fa-surface&gt;&#10;  &lt;/fa-modifier&gt;&#10;&lt;/fa-app&gt;&#10;&#10;&lt;script&gt;&#10;  angular.module(&#39;faScrollViewExampleApp&#39;, [&#39;famous.angular&#39;])&#10;    .controller(&#39;ScrollCtrl&#39;, [&#39;$scope&#39;, &#39;$famous&#39;, function($scope, $famous) {&#10;        &#10;        $scope.sizeForBoxFunction = function() {&#10;           return [75, 75];&#10;        };&#10;&#10;    }]);&#10;&lt;/script&gt;{% endraw %}</code></pre>
+      <pre><code>{% raw %}&lt;fa-app ng-controller=&quot;SurfaceCtrl&quot;&gt;&#10;  &lt;fa-modifier fa-size=&quot;sizeForBoxFunction&quot;&gt;&#10;    &lt;fa-surface fa-background-color=&quot;&#39;red&#39;&quot;&gt;&lt;/fa-surface&gt;&#10;  &lt;/fa-modifier&gt;&#10;&lt;/fa-app&gt;&#10;&#10;&lt;script&gt;&#10;  angular.module(&#39;faSurfaceExampleApp&#39;, [&#39;famous.angular&#39;])&#10;    .controller(&#39;SurfaceCtrl&#39;, [&#39;$scope&#39;, &#39;$famous&#39;, function($scope, $famous) {&#10;        &#10;        $scope.sizeForBoxFunction = function() {&#10;           return [75, 75];&#10;        };&#10;&#10;    }]);&#10;&lt;/script&gt;{% endraw %}</code></pre>
     </div>
   
     <div ng-non-bindable class="runnable-example-file"
@@ -288,7 +288,7 @@ Take note that they accept a string in the html view.  If you do not enclose the
     Edit in Plunker</a>
   <div class="runnable-example" path="examples/example-example49"
       
-        module="faScrollViewExampleApp"
+        module="faSurfaceExampleApp"
       
   >
 
@@ -314,7 +314,7 @@ Take note that they accept a string in the html view.  If you do not enclose the
         type="js"
       
     >
-      <pre><code>{% raw %}angular.module(&#39;faScrollViewExampleApp&#39;, [&#39;famous.angular&#39;]);{% endraw %}</code></pre>
+      <pre><code>{% raw %}angular.module(&#39;faSurfaceExampleApp&#39;, [&#39;famous.angular&#39;]);{% endraw %}</code></pre>
     </div>
   
     <div ng-non-bindable class="runnable-example-file"
@@ -349,7 +349,7 @@ Take note that they accept a string in the html view.  If you do not enclose the
     Edit in Plunker</a>
   <div class="runnable-example" path="examples/example-example50"
       
-        module="faScrollViewExampleApp"
+        module="faSurfaceExampleApp"
       
   >
 
@@ -363,7 +363,7 @@ Take note that they accept a string in the html view.  If you do not enclose the
         type="html"
       
     >
-      <pre><code>{% raw %}&lt;fa-app ng-controller=&quot;ScrollCtrl&quot;&gt;&#10;  &lt;fa-modifier fa-size=&quot;[300, 50]&quot;&gt;&#10;    &lt;fa-surface ng-class=&quot;{strike: applyStrike}&quot;&gt;&#10;      Check box to apply strikethrough!&#10;      &lt;input type=&quot;checkbox&quot; ng-model=&quot;applyStrike&quot;&gt;&lt;/input&gt;&#10;    &lt;/fa-surface&gt;&#10;  &lt;/fa-modifier&gt;&#10;&lt;/fa-app&gt;{% endraw %}</code></pre>
+      <pre><code>{% raw %}&lt;fa-app ng-controller=&quot;SurfaceCtrl&quot;&gt;&#10;  &lt;fa-modifier fa-size=&quot;[300, 50]&quot;&gt;&#10;    &lt;fa-surface ng-class=&quot;{strike: applyStrike}&quot;&gt;&#10;      Check box to apply strikethrough!&#10;      &lt;input type=&quot;checkbox&quot; ng-model=&quot;applyStrike&quot;&gt;&lt;/input&gt;&#10;    &lt;/fa-surface&gt;&#10;  &lt;/fa-modifier&gt;&#10;&lt;/fa-app&gt;{% endraw %}</code></pre>
     </div>
   
     <div ng-non-bindable class="runnable-example-file"
@@ -387,7 +387,7 @@ Take note that they accept a string in the html view.  If you do not enclose the
         type="js"
       
     >
-      <pre><code>{% raw %}  angular.module(&#39;faScrollViewExampleApp&#39;, [&#39;famous.angular&#39;])&#10;  .controller(&#39;ScrollCtrl&#39;, [&#39;$scope&#39;, &#39;$famous&#39;, function($scope, $famous) {&#10;}]);{% endraw %}</code></pre>
+      <pre><code>{% raw %}angular.module(&#39;faSurfaceExampleApp&#39;, [&#39;famous.angular&#39;])&#10;  .controller(&#39;SurfaceCtrl&#39;, [&#39;$scope&#39;, &#39;$famous&#39;, function($scope, $famous) {&#10;}]);{% endraw %}</code></pre>
     </div>
   
 
