@@ -24,31 +24,50 @@
  *
  * In the html view, an `fa-render-node` is declared, with an `fa-node` attribute bound to the newly-created View on the scope, resulting in our custom View appearing on the page.
  *
- * ```javascript
- * var View = $famous['famous/core/View'];
- * var Modifier = $famous['famous/core/Modifier'];
- * var Surface = $famous['famous/core/Surface'];
- * var Transform = $famous['famous/core/Transform'];
+ <example module="faRenderNodeExampleApp">
+  <file name="index.html">
+  <fa-app ng-controller="RenderCtrl">
+      <fa-render-node fa-node="masterView" id="render"></fa-render-node>
+    </fa-app>
+
+    <script>
+      angular.module('faRenderNodeExampleApp', ['famous.angular'])
+          .controller('RenderCtrl', ['$scope', '$famous',function($scope, $famous) {
+
+            var View = $famous['famous/core/View'];
+            var Modifier = $famous['famous/core/Modifier'];
+            var Surface = $famous['famous/core/Surface'];
+            var Transform = $famous['famous/core/Transform'];
+            
+            $scope.masterView = new View();
+            
+            var _surf = new Surface({properties: {backgroundColor: 'red'}});
+            _surf.setContent("I'm a surface");
+            
+            var _mod = new Modifier();
+            
+            var _width = 320;
+            var _height = 568;
+            _mod.transformFrom(function(){
+              return Transform.translate(Math.random() * _width, 0, 1);
+            });
+            
+            $scope.masterView.add(_mod).add(_surf);
+
+        }]);
+    </script>
+  </file>
+  <file name="style.css">
+  fa-app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  </file>
+ </example>
  *
- * $scope.masterView = new View();
- *
- * var _surf = new Surface({properties: {backgroundColor: 'red'}});
- * _surf.setContent("I'm a surface");
- *
- * var _mod = new Modifier();
- *
- * var _width = 320;
- * var _height = 568;
- * _mod.transformFrom(function(){
- *   return Transform.translate(Math.random() * _width, 0, 1);
- * });
- *
- * $scope.masterView.add(_mod).add(_surf);
- * ```
- *
- * ```html
- * <fa-render-node fa-node="masterView" id="render"></fa-render-node>
- * ```
  */
 
 angular.module('famous.angular')

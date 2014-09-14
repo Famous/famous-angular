@@ -4247,23 +4247,46 @@ angular.module('famous.angular')
  * In the example below, events from the `fa-surface` are piped to `myEventHandler`, a source event handler, via `fa-pipe-to`. `Fa-scroll-view` receives events from `myEventHandler`, its target event handler, via `fa-pipe-from`. 
  * `myEventHandler` refers to an instantiated Famous EventHandler declared on the scope.  Using pipes allows events to propagate between `fa-surface`s and the `fa-scroll-view`.
  *
- * ```html
- * <!-- fa-scroll-view receives all events from $scope.myEventHandler, and decides how to handle them -->
- * <fa-scroll-view fa-pipe-from="myEventHandler">
- *     <fa-view ng-repeat="view in views">
- *       <fa-modifier fa-size="[320, 320]">
- *       <!-- All events on fa-surfaces (click, mousewheel) are piped to $scope.myEventHandler -->
- *          <fa-surface fa-background-color="'blue'"
- *                       fa-pipe-to="myEventHandler">
- *          </fa-surface>
- *         </fa-modifier>
- *     </fa-view>
- * </fa-scroll-view>
- * ```
- * ```javascript
- * var EventHandler = $famous['famous/core/EventHandler'];
- * $scope.myEventHandler = new EventHandler();
- * ```
+ *
+ <example module="faPipeExampleApp">
+  <file name="index.html">
+  <fa-app ng-controller="PipeCtrl">
+      <!-- fa-scroll-view receives all events from $scope.myEventHandler, and decides how to handle them -->
+      <fa-scroll-view fa-pipe-from="myEventHandler">
+          <fa-view ng-repeat="view in views">
+            <fa-modifier fa-size="[undefined, 160]">
+            <!-- All events on fa-surfaces (click, mousewheel) are piped to $scope.myEventHandler -->
+               <fa-surface fa-background-color="view.color"
+                            fa-pipe-to="myEventHandler">
+               </fa-surface>
+              </fa-modifier>
+          </fa-view>
+      </fa-scroll-view>
+    </fa-app>
+
+    <script>
+      angular.module('faPipeExampleApp', ['famous.angular'])
+          .controller('PipeCtrl', ['$scope', '$famous', function($scope, $famous) {
+            
+            var EventHandler = $famous['famous/core/EventHandler'];
+
+            $scope.views = [{color: 'red'}, {color: 'blue'}, {color: 'green'}, {color: 'yellow'}, {color: 'orange'}];
+
+            $scope.myEventHandler = new EventHandler();
+
+        }]);
+    </script>
+  </file>
+  <file name="style.css">
+  fa-app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  </file>
+ </example>
  *
  * ##Event Handlers on the Controller
  * 
@@ -4310,7 +4333,64 @@ angular.module('famous.angular')
  *   $scope.redTrans.set([0, 200, 0], {duration: 2000, curve: 'easeInOut'})
  * });
  * ```
- * 
+ *
+ <example module="faPipeExampleApp">
+  <file name="index.html">
+  <fa-app ng-controller="PipeCtrl">
+      <fa-view>
+        <fa-modifier fa-size="[100, 100]">
+            <fa-surface class="blue-surface" fa-background-color="'blue'" fa-click="surfaceClick()">Click me!</fa-surface>
+          </fa-modifier>
+      </fa-view>
+      <fa-view fa-pipe-from="eventHandlerB">
+        <fa-modifier fa-size="[100, 100]" fa-translate="redTrans.get()">
+            <fa-surface fa-background-color="'red'"></fa-surface>
+        </fa-modifier>
+      </fa-view>
+    </fa-app>
+
+    <script>
+      angular.module('faPipeExampleApp', ['famous.angular'])
+          .controller('PipeCtrl', ['$scope', '$famous', function($scope, $famous) {
+            
+            var EventHandler = $famous['famous/core/EventHandler'];
+            $scope.eventHandlerA = new EventHandler();
+            $scope.eventHandlerB = new EventHandler();
+            $scope.eventHandlerA.pipe($scope.eventHandlerB); 
+            // all events received by eventHandlerA wil be piped to eventHandlerB
+            
+            var Transitionable = $famous['famous/transitions/Transitionable'];
+            $scope.redTrans = new Transitionable([0, 100, 0]);
+            
+            // eventHandlerA emits 'myEvent' on click
+            $scope.surfaceClick = function() {
+              $scope.eventHandlerA.emit('myEvent');
+            };
+            
+            // eventHandlerA pipes all events it receives to eventHandlerB
+            // This is an event handler defined on eventHandlerB for handling 'myEvent'
+            $scope.eventHandlerB.on('myEvent', function() {
+              $scope.redTrans.set([0, 200, 0], {duration: 2000, curve: 'easeInOut'})
+            });
+
+        }]);
+    </script>
+  </file>
+  <file name="style.css">
+  fa-app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+    .blue-surface {
+      cursor: pointer;
+      color: #fff;
+    }
+  </file>
+ </example> 
+ *
  * ##Switching Pipes
  * 
  * Another feature of `fa-pipe-to` and `fa-pipe-from` is the ability to switch pipes.
@@ -4332,54 +4412,6 @@ angular.module('famous.angular')
  * 
  * In the second view containing 3 Scroll Views, each Scroll View pipes from `emptyPipe` by default, another instantiated EventHandler that has no events piped to it.  
  *  
- * ```html
- * <!-- directional pad view -->
- * <fa-view>
- *   <!-- scroll view used as a directional pad input, receives events from mainPipe-->
- *   <fa-scroll-view fa-pipe-from="mainPipe">
- *     <fa-modifier fa-translate="[0, 0, 15]" fa-size="[320, 50]">
- *       <fa-view>
- *         <fa-modifier>
- *           <!-- mousewheel events will be piped to mainPipe -->
- *           <fa-surface fa-background-color="'orange'" fa-pipe-to="mainPipe">
- *             <div>Directional pad</div>
- *               <span ng-repeat="input in inputList">
- *                 <label>{{input.letter}}</label>
- *                 <!-- checkboxes -->
- *                 <input type="checkbox"
- *                        ng-model="input.model" 
- *                        name="scrollPipeTo" 
- *                        ng-change="checkBoxChange(input.letter, input.model)"
- *                        ng-true-value="true"
- *                        ng-false-value="false">
- *               </span>
- *           </fa-surface>
- *         </fa-modifier>
- *       </fa-view>
- *     </fa-modifier>
- *   </fa-scroll-view>
- * </fa-view>
- * 
- * <!-- view with 3 Scroll Views -->
- * <fa-view>
- *   <!-- ng-repeat creating 3 different scroll Views -->
- *   <fa-modifier ng-repeat="view in scrollViews"
- *                fa-translate="[100 * $index, 50, 0]">
- *     <fa-view>
- *       <!-- each Scroll View conditionally receives events from mainPipe or emptyPipe, default is emptyPipe -->
- *       <fa-scroll-view fa-pipe-from="{{view.pipe}}" fa-options="options.scrollViewTwo">
- *         <fa-view ng-repeat="items in list">
- *           <fa-modifier fa-size="[100, 100]">
- *               <fa-surface fa-background-color="view.bgColor">
- *                 Index: {{$index}}
- *               </fa-surface>
- *             </fa-modifier>
- *         </fa-view>
- *        </fa-scroll-view>   
- *     </fa-view>
- *   </fa-modifier>
- * </fa-view>
- * ```
  *
  * The directional pad has a list of input checkboxes created by an ng-repeated list from `$scope.inputList`.
  * If a checkbox is checked, it calls `checkBoxChange()`, passing the letter (such as `'A'`) and and the model (such as `'checkBox.A'`) of the respective checkbox.
@@ -4389,40 +4421,106 @@ angular.module('famous.angular')
  * If the checkbox is checked, it assigns the respective Scroll View (A, B, or C) to pipe from `$scope.mainPipe`, and if unchecked, it will continue to pipe from `$scope.emptyPipe`.
  * In short, the checkboxes act as switches to change piping events.
  *
- * ```javascript
- * // Event Handlers
- * var EventHandler = $famous['famous/core/EventHandler'];
- * $scope.mainPipe = new EventHandler();
- * $scope.emptyPipe = new EventHandler();
- * 
- * // items in ng-repeated list in each of the 3 Scroll Views
- * $scope.list = [];
- * for (var i = 0; i < 10; i++) {
- *   $scope.list.push({});
- * };
- * 
- * // 3 inputs in the directional pad corresponding to the 3 scroll views
- * $scope.inputList = [{model: "checkBox.A", letter: "A"},{model: "checkBox.B", letter: "B"}, {model: "checkBox.C", letter: "C"}];
- * 
- * // 3 scrollviews
- * $scope.scrollViews = [{pipe: "pipes.A", bgColor: "blue"}, {pipe: "pipes.B", bgColor: "red"}, {pipe: "pipes.C", bgColor: "green"}];
- * 
- * // pipes that each of the 3 scroll views is binded to through fa-pipe-from
- * $scope.pipes = {
- *   A: $scope.emptyPipe,
- *   B: $scope.emptyPipe,
- *   C: $scope.emptyPipe
- * };
- * 
- * // function that is called whenever a checkbox is checked/unchecked that assigns the fa-pipe-from
- * $scope.checkBoxChange = function(model, value) {
- *   if (value !== "false") {
- *     $scope.pipes[model] = $scope.mainPipe;
- *   } else {
- *     $scope.pipes[model] = $scope.emptyPipe;
- *   };
- * };
- * ```
+ <example module="faPipeExampleApp">
+  <file name="index.html">
+  <fa-app ng-controller="PipeCtrl">
+      <!-- directional pad view -->
+      <fa-view>
+        <!-- scroll view used as a directional pad input, receives events from mainPipe-->
+        <fa-scroll-view fa-pipe-from="mainPipe">
+          <fa-modifier fa-translate="[0, 0, 15]" fa-size="[320, 50]">
+            <fa-view>
+              <fa-modifier>
+                <!-- mousewheel events will be piped to mainPipe -->
+                <fa-surface fa-background-color="'orange'" fa-pipe-to="mainPipe">
+                  <div>Directional pad</div>
+                    <span ng-repeat="input in inputList">
+                      <label>{{input.letter}}</label>
+                      <!-- checkboxes -->
+                      <input type="checkbox"
+                             ng-model="input.model" 
+                             name="scrollPipeTo" 
+                             ng-change="checkBoxChange(input.letter, input.model)"
+                             ng-true-value="true"
+                             ng-false-value="false">
+                    </span>
+                </fa-surface>
+              </fa-modifier>
+            </fa-view>
+          </fa-modifier>
+        </fa-scroll-view>
+      </fa-view>
+      
+      <!-- view with 3 Scroll Views -->
+      <fa-view>
+        <!-- ng-repeat creating 3 different scroll Views -->
+        <fa-modifier ng-repeat="view in scrollViews"
+                     fa-translate="[100 * $index, 50, 0]">
+          <fa-view>
+            <!-- each Scroll View conditionally receives events from mainPipe or emptyPipe, default is emptyPipe -->
+            <fa-scroll-view fa-pipe-from="view.pipe" fa-options="options.scrollViewTwo">
+              <fa-view ng-repeat="items in list">
+                <fa-modifier fa-size="[100, 100]">
+                    <fa-surface fa-background-color="view.bgColor">
+                      Index: {{$index}}
+                    </fa-surface>
+                  </fa-modifier>
+              </fa-view>
+             </fa-scroll-view>   
+          </fa-view>
+        </fa-modifier>
+      </fa-view>
+    </fa-app>
+  </file>
+  <file name="script.js">
+  angular.module('faPipeExampleApp', ['famous.angular'])
+      .controller('PipeCtrl', ['$scope', '$famous', function($scope, $famous) {
+
+        // Event Handlers
+        var EventHandler = $famous['famous/core/EventHandler'];
+        $scope.mainPipe = new EventHandler();
+        $scope.emptyPipe = new EventHandler();
+        
+        // items in ng-repeated list in each of the 3 Scroll Views
+        $scope.list = [];
+        for (var i = 0; i < 10; i++) {
+          $scope.list.push({});
+        };
+        
+        // 3 inputs in the directional pad corresponding to the 3 scroll views
+        $scope.inputList = [{model: "checkBox.A", letter: "A"},{model: "checkBox.B", letter: "B"}, {model: "checkBox.C", letter: "C"}];
+        
+        // 3 scrollviews
+        $scope.scrollViews = [{pipe: "pipes.A", bgColor: "blue"}, {pipe: "pipes.B", bgColor: "red"}, {pipe: "pipes.C", bgColor: "green"}];
+        
+        // pipes that each of the 3 scroll views is binded to through fa-pipe-from
+        $scope.pipes = {
+          A: $scope.emptyPipe,
+          B: $scope.emptyPipe,
+          C: $scope.emptyPipe
+        };
+        
+        // function that is called whenever a checkbox is checked/unchecked that assigns the fa-pipe-from
+        $scope.checkBoxChange = function(model, value) {
+          if (value !== "false") {
+            $scope.pipes[model] = $scope.mainPipe;
+          } else {
+            $scope.pipes[model] = $scope.emptyPipe;
+          };
+        };
+    }]);
+  </file>
+  <file name="style.css">
+  fa-app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  </file>
+ </example>
+ *
  */
 
 angular.module('famous.angular')
@@ -4749,31 +4847,50 @@ angular.module('famous.angular')
  *
  * In the html view, an `fa-render-node` is declared, with an `fa-node` attribute bound to the newly-created View on the scope, resulting in our custom View appearing on the page.
  *
- * ```javascript
- * var View = $famous['famous/core/View'];
- * var Modifier = $famous['famous/core/Modifier'];
- * var Surface = $famous['famous/core/Surface'];
- * var Transform = $famous['famous/core/Transform'];
+ <example module="faRenderNodeExampleApp">
+  <file name="index.html">
+  <fa-app ng-controller="RenderCtrl">
+      <fa-render-node fa-node="masterView" id="render"></fa-render-node>
+    </fa-app>
+
+    <script>
+      angular.module('faRenderNodeExampleApp', ['famous.angular'])
+          .controller('RenderCtrl', ['$scope', '$famous',function($scope, $famous) {
+
+            var View = $famous['famous/core/View'];
+            var Modifier = $famous['famous/core/Modifier'];
+            var Surface = $famous['famous/core/Surface'];
+            var Transform = $famous['famous/core/Transform'];
+            
+            $scope.masterView = new View();
+            
+            var _surf = new Surface({properties: {backgroundColor: 'red'}});
+            _surf.setContent("I'm a surface");
+            
+            var _mod = new Modifier();
+            
+            var _width = 320;
+            var _height = 568;
+            _mod.transformFrom(function(){
+              return Transform.translate(Math.random() * _width, 0, 1);
+            });
+            
+            $scope.masterView.add(_mod).add(_surf);
+
+        }]);
+    </script>
+  </file>
+  <file name="style.css">
+  fa-app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  </file>
+ </example>
  *
- * $scope.masterView = new View();
- *
- * var _surf = new Surface({properties: {backgroundColor: 'red'}});
- * _surf.setContent("I'm a surface");
- *
- * var _mod = new Modifier();
- *
- * var _width = 320;
- * var _height = 568;
- * _mod.transformFrom(function(){
- *   return Transform.translate(Math.random() * _width, 0, 1);
- * });
- *
- * $scope.masterView.add(_mod).add(_surf);
- * ```
- *
- * ```html
- * <fa-render-node fa-node="masterView" id="render"></fa-render-node>
- * ```
  */
 
 angular.module('famous.angular')
@@ -4859,45 +4976,96 @@ angular.module('famous.angular')
  * Input events (like click or mousewheel) are captured on Surfaces, and piping must be used to specify where the events will broadcast and be received.
  * This will enable scrolling by connecting input events from the `fa-surface`s to the `fa-scroll-view`, otherwise the Scroll View will not receive mousewheel events.
  *
- * ```javascript
- * var EventHandler = $famous['famous/core/EventHandler'];
- * $scope.eventHandler = new EventHandler();
- *
- * $scope.list = [{content: "famous"}, {content: "angular"}, {content: "rocks!"}];
- * ```
- * ```html
- * <!-- fa-scroll-view receives all events from $scope.eventHandler, and decides how to handle them -->
- * <fa-scroll-view fa-pipe-from="eventHandler" fa-options="options.myScrollView">
- *     <fa-view ng-repeat="item in list">
- *        <fa-modifier id="{{'listItem' + $index}}" fa-translate="[0, 0, 0]" fa-size="[300, 300]">
- *          <!-- All events on fa-surfaces (click, mousewheel) are piped to $scope.eventHandler -->
- *          <fa-surface fa-pipe-to="eventHandler"
- *                      fa-size="[undefined, undefined]"
- *                      fa-background-color="'red'">
- *          </fa-surface>
- *        </fa-modifier>
- *     </fa-view>
- * </fa-scroll-view>
- * ```
+ <example module="faScrollViewExampleApp">
+  <file name="index.html">
+  <fa-app ng-controller="ScrollCtrl">
+      <!-- fa-scroll-view receives all events from $scope.myEventHandler, and decides how to handle them -->
+      <fa-scroll-view fa-pipe-from="myEventHandler">
+          <fa-view ng-repeat="view in views">
+            <fa-modifier fa-size="[undefined, 160]">
+            <!-- All events on fa-surfaces (click, mousewheel) are piped to $scope.myEventHandler -->
+               <fa-surface fa-background-color="view.color"
+                            fa-pipe-to="myEventHandler">
+               </fa-surface>
+              </fa-modifier>
+          </fa-view>
+      </fa-scroll-view>
+    </fa-app>
+
+    <script>
+      angular.module('faScrollViewExampleApp', ['famous.angular'])
+          .controller('ScrollCtrl', ['$scope', '$famous', function($scope, $famous) {
+            
+            var EventHandler = $famous['famous/core/EventHandler'];
+
+            $scope.views = [{color: 'red'}, {color: 'blue'}, {color: 'green'}, {color: 'yellow'}, {color: 'orange'}];
+
+            $scope.myEventHandler = new EventHandler();
+
+        }]);
+    </script>
+  </file>
+  <file name="style.css">
+  fa-app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  </file>
+ </example>
  *
  * To specify (optional) configurable options for the Scroll View, bind an object on the scope to the `fa-options` attribute on `fa-scroll-view`.
  * Notable options include `clipSize`, which specifies the size of the area in pixels to display content in, and `direction`, which specifies whether the nested views will scroll horizontally or vertically (1 is vertical, 0 is horizontal).
  * A full list of configurable options for Scroll View may be found at https://famo.us/docs/0.2.0/views/Scrollview/.
  *
- * ```javascript
- * var EventHandler = $famous['famous/core/EventHandler'];
- * $scope.eventHandler = new EventHandler();
- * $scope.list = [{content: "famous"}, {content: "angular"}, {content: "rocks!"}];
+ <example module="faScrollViewExampleApp">
+  <file name="index.html">
+  <fa-app ng-controller="ScrollCtrl">
+      <fa-scroll-view fa-pipe-from="myEventHandler" fa-options="options.myScrollView">
+          <fa-view ng-repeat="view in list">
+            <fa-modifier fa-size="[500, 320]">
+               <fa-surface fa-background-color="view.color"
+                            fa-pipe-to="myEventHandler">
+                  {{view.content}}
+               </fa-surface>
+              </fa-modifier>
+          </fa-view>
+      </fa-scroll-view>
+    </fa-app>
+
+    <script>
+      angular.module('faScrollViewExampleApp', ['famous.angular'])
+          .controller('ScrollCtrl', ['$scope', '$famous', function($scope, $famous) {
+            
+            var EventHandler = $famous['famous/core/EventHandler'];
+            $scope.myEventHandler = new EventHandler();
+            $scope.list = [{content: "Scroll", color: "red"}, {content: "horizontally", color: "blue"}, {content: "yay!", color: "green"}, {content: "woo!", color: "yellow"}];
+            
+            $scope.options = {
+              myScrollView: {
+                clipSize: 100,
+                paginated: false,
+                speedLimit: 5,
+                direction: 0,
+              }
+            };
+
+        }]);
+    </script>
+  </file>
+  <file name="style.css">
+  fa-app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  </file>
+ </example>
  *
- * $scope.options = {
- *   myScrollView: {
- *     clipSize: 568,
- *     paginated: true,
- *     speedLimit: 5,
- *     direction: 1,
- *   }
- * };
- * ```
  *
  * ### Scroll View with explicitly created views
  * `Fa-index` determines the order of which the surfaces appear in the sequential view.
@@ -4911,42 +5079,54 @@ angular.module('famous.angular')
  * `Fa-start-index` will not affect the sequential order of the layout; the `fa-view` with the red background will be layed out first, followed by the one with the blue background.
  * By setting `fa-start-index` to 1, the Scroll View will display the View with the index of 1 by default, "starting" at the index of 1, which is the View with the blue background color.
  *
- * ```html
- * fa-app style="width: 320px; height: 568px;">
- * <!-- The scroll View will start at the index of 1 -->
- *  <fa-scroll-view fa-pipe-from="eventHandler" fa-options="options.scrollViewTwo" fa-start-index="1">
- *    <!-- Even though this view is declared first in html, it will will be layed out 2nd -->
- *    <!-- On page load, the scroll View will scroll to this view, and display it.  -->
- *     <fa-view fa-index="1">
- *        <fa-modifier fa-size="[320, 568]">
- *           <fa-surface fa-pipe-to="eventHandler"
- *                       fa-background-color="'blue'">
- *           </fa-surface>
- *        </fa-modifier>
- *     </fa-view>
+ <example module="faScrollViewExampleApp">
+  <file name="index.html">
+  <fa-app ng-controller="ScrollCtrl" style="width: 100%; height: 320px; overflow: hidden;">
+      <!-- The scroll View will start at the index of 1 -->
+       <fa-scroll-view fa-pipe-from="eventHandler" fa-options="options.scrollViewTwo" fa-start-index="1">
+         <!-- Even though this view is declared first in html, it will will be layed out 2nd -->
+         <!-- On page load, the scroll View will scroll to this view, and display it.  -->
+          <fa-view fa-index="1">
+             <fa-modifier fa-size="[undefined, 320]">
+                <fa-surface fa-pipe-to="eventHandler"
+                            fa-background-color="'blue'">
+                  I am first in html, but displayed second!
+                </fa-surface>
+             </fa-modifier>
+          </fa-view>
 
- *     <fa-view fa-index="0">
- *        <fa-modifier fa-size="[320, 568]">
- *           <fa-surface fa-pipe-to="eventHandler"
- *                       fa-background-color="'red'">
- *           </fa-surface>
- *        </fa-modifier>
- *     </fa-view>
+          <fa-view fa-index="0">
+             <fa-modifier fa-size="[undefined, 320]">
+                <fa-surface fa-pipe-to="eventHandler"
+                            fa-background-color="'red'">
+                  I am second in html, but displayed first!  Scroll horizontally!
+                </fa-surface>
+             </fa-modifier>
+          </fa-view>
 
- *  </fa-scroll-view>
- * </fa-app>
- * ```
- * ```javascript
- * var EventHandler = $famous['famous/core/EventHandler'];
- * $scope.eventHandler = new EventHandler();
- * $scope.list = [{content: "famous"}, {content: "angular"}, {content: "rocks!"}];
+       </fa-scroll-view>
+    </fa-app>
+
+    <script>
+      angular.module('faScrollViewExampleApp', ['famous.angular'])
+          .controller('ScrollCtrl', ['$scope', '$famous', function($scope, $famous) {
+            
+            var EventHandler = $famous['famous/core/EventHandler'];
+            $scope.eventHandler = new EventHandler();
+            $scope.list = [{content: "famous"}, {content: "angular"}, {content: "rocks!"}];
+            
+            $scope.options = {
+              scrollViewTwo: {
+                direction: 0,
+                paginated: true
+              }
+            };
+
+        }]);
+    </script>
+  </file>
+ </example>
  *
- * $scope.options = {
- *   scrollViewTwo: {
- *     direction: 0
- *   }
- * };
- * ```
  *
  * ### Combining multiple Scroll Views
  *
@@ -5003,6 +5183,65 @@ angular.module('famous.angular')
  *   }
  * };
  * ```
+ *
+ *
+ <example module="faScrollViewExampleApp">
+  <file name="index.html">
+  <fa-app ng-controller="ScrollCtrl" style="width: 100%; height: 568px;">
+      <!-- outer scroll view that scrolls horizontally between "main" view and "sidebar" view-->
+      <fa-scroll-view fa-pipe-from="eventHandler" fa-options="options.scrollViewOuter">
+    
+        <!-- sidebar view -->
+        <fa-view fa-index="0">
+          <fa-modifier fa-size="[200, undefined]" id="sideBarMod">
+              <fa-surface fa-pipe-to="eventHandler"
+                          fa-background-color="'blue'"
+                          fa-size="[undefined, undefined]">
+                Sidebar
+              </fa-surface>
+            </fa-modifier>
+        </fa-view>
+    
+        <!-- main view -->
+        <fa-view fa-index="1">
+        <!-- inner scroll view that scrolls vertically-->
+          <fa-scroll-view fa-pipe-from="eventHandler" fa-options="options.scrollViewInner">
+            <fa-view ng-repeat="item in list">
+              <fa-surface fa-pipe-to="eventHandler"
+                          fa-size="[undefined, 200]"
+                          fa-background-color="'red'">
+                {{item.content}}
+              </fa-surface>
+            </fa-view>
+          </fa-scroll-view>
+        </fa-view>
+    
+      </fa-scroll-view>
+    </fa-app>
+
+    <script>
+      angular.module('faScrollViewExampleApp', ['famous.angular'])
+          .controller('ScrollCtrl', ['$scope', '$famous', function($scope, $famous) {
+            
+            var EventHandler = $famous['famous/core/EventHandler'];
+            $scope.eventHandler = new EventHandler();
+            $scope.list = [{content: "Awesome content"}, {content: "Scroll to see more awesome content"}, {content: "Famo.us/angular rocks!"}];
+            
+            $scope.options = {
+              scrollViewOuter: {
+                direction: 0,
+                paginated: true
+              },
+              scrollViewInner :{
+                direction: 1
+              }
+            };
+
+        }]);
+    </script>
+  </file>
+ </example>
+ *
  */
 
 angular.module('famous.angular')
