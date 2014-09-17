@@ -3543,7 +3543,7 @@ angular.module('famous.angular')
                    fa-translate="[25, 50, 2]" 
                    fa-scale="myScopeFunctionThatReturnsAnArray">
         <!-- Child elements of this fa-modifier will be affected by the values above -->
-        <fa-surface>I'm translucent, skewed, rotated, and translated</fa-surface>
+        <fa-surface>I'm translucent, skewed, and translated</fa-surface>
       </fa-modifier>
     </fa-app>
   </file>
