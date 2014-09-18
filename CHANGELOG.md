@@ -1,3 +1,57 @@
+<a name="0.4.0"></a>
+# 0.4.0 (2014-09-18)
+
+
+## Bug Fixes
+
+- deep-watch fa-options to support inline options declarations without digest errors
+ ([d6067018](https://github.com/Famous/famous-angular/commit/d6067018b7721899adf121247fbd2e4d333a57f0))
+- remove unnecessary exception when fa-container-surface's children are removed
+ ([422576a5](https://github.com/Famous/famous-angular/commit/422576a573d5bd42ddb4d9a23f49bdff377e7006))
+- invoke isolate.hide() when elements are destroyed (fixes, e.g. clean-up when transitioning states with ui-router)
+ ([269c6d64](https://github.com/Famous/famous-angular/commit/269c6d646f008ada50c6acead77da7f9cd1ae153))
+- minification process
+ ([1a88a6b0](https://github.com/Famous/famous-angular/commit/1a88a6b0af5200699d2f9ed06f76fd60975b62cd))
+- Updated canvas and video surfaces to support new  methods
+ ([b7c81aae](https://github.com/Famous/famous-angular/commit/b7c81aae64ce5a640ecfac33dc16f57a3759cc67))
+
+
+## Features
+
+- support removing children from fa-header-footer-layout
+ ([01fefee2](https://github.com/Famous/famous-angular/commit/01fefee23f7eb9e55cda72405b040e27aeaa84ec))
+- add fa-option directive
+ ([221cf4e3](https://github.com/Famous/famous-angular/commit/221cf4e34bdc92a9efc8f11a78d6c3fbb5545185),
+ [#193](https://github.com/Famous/famous-angular/issues/193))
+- support piping to/from Modifiers (e.g. Draggable) with fa-pipe-to and fa-pipe-from
+ ([070bf026](https://github.com/Famous/famous-angular/commit/070bf026644f1e49ce259144f1851bac606dee0d))
+- implement fa-draggable
+ ([a11c12dc](https://github.com/Famous/famous-angular/commit/a11c12dc927225ca0b1a4b1b0b4187760c08fe5a))
+- add observe on faSize of faSurface
+ ([b621ff53](https://github.com/Famous/famous-angular/commit/b621ff5398aa606ef52d3126b76615356fa5febd))
+
+
+## Documentation
+
+- add live examples for surface, tap, touchend, touchmove, touchstart
+ ([d27595eb](https://github.com/Famous/famous-angular/commit/d27595ebe3adbc2d8b574a3861824ed8df7167c0))
+- modified scrollview live examples, add sequential + surface live examples
+ ([66b8d3e3](https://github.com/Famous/famous-angular/commit/66b8d3e34c1c1ece1b6bf98df6213adb381af5eb))
+- add live examples for pipefrom, rendernode, scrollview
+ ([8bb10f87](https://github.com/Famous/famous-angular/commit/8bb10f8746672b7b8c29189b7a2dcfeeff393796))
+- add modifier live examples
+ ([21533a5c](https://github.com/Famous/famous-angular/commit/21533a5cca45612f93f175c872c9838353acde4a))
+- add live examples for app flipper grid header image index modifier
+ ([5783027a](https://github.com/Famous/famous-angular/commit/5783027af3ad457626917e542d7e90c8a34cab7e))
+- fix scope => $scope typos in famousAnimate.js
+ ([bb291703](https://github.com/Famous/famous-angular/commit/bb29170313ead2da18ed17e08346490b7521cd07))
+- correct the documentation for sizing elements in a fa-header-footer-layout
+ ([7d0becbe](https://github.com/Famous/famous-angular/commit/7d0becbeb5b1223bf2a1d17a6ddbfeefd20dc8d6),
+ [#196](https://github.com/Famous/famous-angular/issues/196))
+- clarify global installation of bower in readme
+ ([d40a893b](https://github.com/Famous/famous-angular/commit/d40a893b342e07160264cd3d4c5dc29c77ab4669))
+
+
 <a name="0.3.0"></a>
 # 0.3.0 (2014-08-15)
 

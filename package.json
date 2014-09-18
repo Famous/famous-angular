@@ -1,7 +1,7 @@
 {
   "name": "famous-angular",
   "description": "Bring structure to your Famo.us apps with the power of AngularJS. Famo.us/Angular integrates seamlessly with existing Angular and Famo.us apps.",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "license": "MPL v2.0",
   "homepage": "https://github.com/Famous/famous-angular",
   "repository": {
