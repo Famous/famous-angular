@@ -661,12 +661,24 @@ angular.module('famous.angular')
       registerChild: function(scope, element, isolate, unregisterCallback) {
         scope.$emit('registerChild', isolate);
 
+        scope.$on('$destroy', function(){
+          //TODO: this logic should probably
+          //      be consolidated in the element $destroy
+          //      along with the rest of the clean-up.
+          //      There's an apparent bug in the animation
+          //      logic that will cause element $destroy events
+          //      to be broadcast inconsistently.  Reproducible with:
+          //      https://github.com/zackbrown/famous-angular-ui-router-demo/commit/89b37bb69ea8242e726170583be2953f0ab32f80 
+          //      Only happens when BOTH fa-animate-enter AND fa-animate-leave are on the same ui-view element,
+          //      and only on every other route change.
+          //      Temporary fix is to invoke isolate.hide() on $scope destruction, which fires consistently.
+          if(isolate && isolate.hide) { isolate.hide(); }
+        });
+
         element.one('$destroy', function() {
           if ('removeMethod' in isolate) {
             isolate.removeMethod(isolate.id);
           }
-
-          if(isolate && isolate.hide) { isolate.hide(); }
 
           // Invoke the callback, if provided
           if(unregisterCallback) unregisterCallback();
