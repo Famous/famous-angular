@@ -849,7 +849,8 @@ angular.module('famous.angular')
     return function(points) {
         //
         // Takes a list of points, with the curve to follow to the next point.
-        // Any curve value on the last point is ignored.
+        // Any curve value on the last point is ignored. If no curve function is
+        // provided, a linear (identity) function is used.
         //
         //  e.g., [[0, 100, Easings.inOutQuad], [1, 500]]
         //
@@ -868,13 +869,15 @@ angular.module('famous.angular')
         //         \ last x,         otherwise
         //
 
+        var linear = function(x) { return x; };
+
         return function(x) {
           if (x < points[0][0]) {
             return points[0][1];
           }
           for (var i = 0; i < points.length - 1; i++) {
             if (points[i][0] <= x && x < points[i+1][0]) {
-              var f = scale(points[i][2],
+              var f = scale(points[i][2] || linear,
                             points[i][0],
                             points[i+1][0],
                             points[i][1],

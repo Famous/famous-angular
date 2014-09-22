@@ -81,6 +81,19 @@ describe('$timeline', function() {
 
       });
 
+
+      describe('easing function', function() {
+
+        var points = [[0, 0], [1, 10]];
+
+        it('should default to linear if no easing is provided', function() {
+          var f = $timeline(points);
+          expect(f(0.5)).toEqual(5);
+          expect(f(0.9)).toEqual(9);
+        });
+
+      });
+
     });
 
 
