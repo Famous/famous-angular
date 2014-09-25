@@ -65,7 +65,9 @@ To get started even faster, try the [famous-angular-starter](https://github.com/
 
 
 ####Thereafter:
-Install the frontend dependencies inside of your example folder.
+Clone the submodules and install the frontend dependencies inside of your example folder.
+
+`git submodule update --init --recursive`
 
 `cd famous-angular-examples`
 
