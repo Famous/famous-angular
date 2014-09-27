@@ -388,7 +388,7 @@ angular.module('famous.angular')
        * considered "enabled" which we do not need.
        */
       var animationHandlers = {
-        enabled: $delegate.enabledß
+        enabled: $delegate.enabled
       };
 
       angular.forEach(['addClass', 'removeClass'], function(classManipulator) {

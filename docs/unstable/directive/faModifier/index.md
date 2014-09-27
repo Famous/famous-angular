@@ -67,7 +67,7 @@ to values (e.g. `fa-translate="[15, 20, 1]"`, Famo.us Transitionable objects, or
         type="html"
       
     >
-      <pre><code>{% raw %}&lt;fa-app ng-controller=&quot;ModifierCtrl&quot;&gt;&#10;  &lt;fa-modifier fa-opacity=&quot;.25&quot; fa-skew=&quot;myScopeSkewVariable&quot;&#10;               fa-translate=&quot;[25, 50, 2]&quot; &#10;               fa-scale=&quot;myScopeFunctionThatReturnsAnArray&quot;&gt;&#10;    &lt;!-- Child elements of this fa-modifier will be affected by the values above --&gt;&#10;    &lt;fa-surface&gt;I&#39;m translucent, skewed, rotated, and translated&lt;/fa-surface&gt;&#10;  &lt;/fa-modifier&gt;&#10;&lt;/fa-app&gt;{% endraw %}</code></pre>
+      <pre><code>{% raw %}&lt;fa-app ng-controller=&quot;ModifierCtrl&quot;&gt;&#10;  &lt;fa-modifier fa-opacity=&quot;.25&quot; fa-skew=&quot;myScopeSkewVariable&quot;&#10;               fa-translate=&quot;[25, 50, 2]&quot; &#10;               fa-scale=&quot;myScopeFunctionThatReturnsAnArray&quot;&gt;&#10;    &lt;!-- Child elements of this fa-modifier will be affected by the values above --&gt;&#10;    &lt;fa-surface&gt;I&#39;m translucent, skewed, and translated&lt;/fa-surface&gt;&#10;  &lt;/fa-modifier&gt;&#10;&lt;/fa-app&gt;{% endraw %}</code></pre>
     </div>
   
     <div ng-non-bindable class="runnable-example-file"

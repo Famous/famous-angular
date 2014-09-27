@@ -31,11 +31,11 @@ docType: "directive"
 
 
 
-This is a wrapped for tha default ngCick which allows you to specify custom behavior when an fa-surface is clicked.
-the wrapper is also design to be be used on touchscreen devices. It matches all the features supported by ngClick on 
-including ngTouch module for all types of fa-surface. 
+This is a wrapped for the default ngClick which allows you to specify custom behavior when an fa-surface is clicked.
+the wrapper is also designed to be be used on touchscreen devices. It matches all the features supported by ngClick,
+including ngTouch module for all types of fa-surface.
 
-If ngTouch is requried to add touch click capabilites in non F/A elements. Add ngTouch dependence before adding famous.angular otherwise 
+If ngTouch is requried to add touch click capabilites in non F/A elements. Add ngTouch dependence before adding famous.angular otherwise
 this functionality will be lost.
 
 
@@ -112,7 +112,7 @@ this functionality will be lost.
         type="js"
       
     >
-      <pre><code>{% raw %}angular.module(&#39;faInputExampleApp&#39;, [&#39;famous.angular&#39;])&#10;  .controller(&#39;ClickCtrl&#39;, [&#39;$scope&#39;, function($scope) {&#10;    $scope.clicked = 0;&#10;    $scope.myClickHandler = function($event) {&#10;      console.log($event);&#10;      $scope.clicked++;&#10;    }; &#10;}]);{% endraw %}</code></pre>
+      <pre><code>{% raw %}angular.module(&#39;faInputExampleApp&#39;, [&#39;famous.angular&#39;])&#10;  .controller(&#39;ClickCtrl&#39;, [&#39;$scope&#39;, function($scope) {&#10;    $scope.clicked = 0;&#10;    $scope.myClickHandler = function($event) {&#10;      console.log($event);&#10;      $scope.clicked++;&#10;    };&#10;}]);{% endraw %}</code></pre>
     </div>
   
 
