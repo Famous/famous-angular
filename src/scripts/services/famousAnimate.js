@@ -206,10 +206,14 @@ angular.module('famous.angular')
        * complete and allow Angular to continue manipulating elements and classes.
        */
       angular.forEach(['enter', 'leave', 'move'], function(operation) {
+        var capitalizedOperation = operation[0].toUpperCase() + operation.slice(1);
         animationHandlers[operation] = function(element) {
           var self = this;
           var selfArgs = arguments;
           var delegateFirst = (operation === 'enter');
+
+          var isolate = $famous.getIsolate(element.scope());
+
 
           if (delegateFirst === true) {
              $delegate[operation].apply(this, arguments);
@@ -245,15 +249,21 @@ angular.module('famous.angular')
           };
 
           $rootScope.$$postDigest(function() {
-            var animationExpression = element.attr('fa-animate-' + operation);
+            var animationHandler;
 
-            // If no animation has been specified, delegate the animation event and return
-            if (animationExpression === undefined) {
+            //handle $$animateEnterHandler, $$animateLeaveHandler, and $$animateHaltHandler
+            if(isolate) { animationHandler = isolate["$$animate" + capitalizedOperation + "Handler"]; }
+
+            // If no animation has been specified [including if this isn't
+            // an fa-element] delegate the animation event and return
+            if (animationHandler === undefined) {
               doneCallback();
               return;
             }
 
-            var animationDuration = $parse(animationExpression)(
+            //expects a $parse'd function or a function that
+            //responds to the same API fn(scope, {locals})
+            var animationDuration = animationHandler(
               element.scope(),
               {
                 $done: doneCallback
