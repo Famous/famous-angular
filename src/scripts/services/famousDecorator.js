@@ -50,6 +50,8 @@ angular.module('famous.angular')
       
     };
 
+    var _isolateStore = {};
+
     return {
       //TODO:  patch into _roles and assign the
       // appropriate role to the given scope
@@ -86,7 +88,19 @@ angular.module('famous.angular')
         var i = scope.$eval("$index");
         if(i && i !== '$index' && !isolate.index) isolate.index = i;
 
+        _isolateStore[isolate.id] = isolate;
+
         return isolate;
+      },
+
+      //relies on an 'alternate source of truth' vs the static .isolate
+      //member shared by the fa-element child scopes.  Unideal, but should be OK
+      //based on the assumption that a single Angular app will create a unique ID for
+      //every new scope.
+      //surface area for a memory leak (TODO: clean up upon element destruction--BUT, make sure
+      //it doesn't break leave animations on ui-view and ng-include animations, e.g. <ui-view fa-edge-swapper></ui-view>)
+      $$getIsolateById: function(id){
+        return _isolateStore[id];
       },
 
       /**
@@ -138,6 +152,13 @@ angular.module('famous.angular')
       sequenceWith: function(scope, addMethod, removeMethod, updateMethod) {
         scope.$on('registerChild', function(evt, isolate) {
           if (evt.targetScope.$id !== scope.$id) {
+            //add reference to parent isolate
+            var parentIsolate = $famous.getIsolate(scope);
+            isolate.$parent = parentIsolate;
+
+            parentIsolate.$children = parentIsolate.$children || [];
+            parentIsolate.$children.push(isolate);
+
             addMethod(isolate);
             evt.stopPropagation();
 

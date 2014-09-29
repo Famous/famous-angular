@@ -205,6 +205,7 @@ ngFameApp.provider('$famous', function() {
    * @return {boolean}
    */
     isASurface : function (element) {
+
       return IS_A_SURFACE.test(element[0].tagName);
     },
 
@@ -214,7 +215,15 @@ ngFameApp.provider('$famous', function() {
       @return {boolean}
     */
     isFaElement : function (element) {
-      return IS_FA.test(element[0].tagName);
+      //short-circuit most common case
+      if(IS_FA.test(element[0].tagName)) return true;
+
+      //otherwise loop through attributes
+      var ret = false;
+      angular.forEach(element[0].attributes, function(attr){
+        ret = ret || IS_FA.test(attr);
+      });
+      return ret;
     },
     /**
      * Converts snake_case to camelCase.
@@ -373,13 +382,21 @@ ngFameApp.provider('$famous', function() {
 angular.module('famous.angular')
   .config(['$provide', function($provide) {
     // Hook into the animation system to emit ng-class syncers to surfaces
-    $provide.decorator('$animate', ['$delegate', '$rootScope', '$famous', '$parse',
-                            function($delegate,   $rootScope,   $famous,   $parse) {
+    $provide.decorator('$animate', ['$delegate', '$rootScope', '$famous', '$parse', '$famousDecorator',
+                            function($delegate,   $rootScope,   $famous,   $parse,   $famousDecorator) {
 
       var Timer   = $famous['famous/utilities/Timer'];
 
       var FA_ANIMATION_ACTIVE = '$$faAnimationActive';
 
+
+      //pretty hacky
+      var _lastKnownParent = {};
+      var _getIsolate = function(scope){
+        var isolate = $famous.getIsolate(scope);
+        if(!isolate && scope) {isolate = $famousDecorator.$$getIsolateById(_lastKnownParent[scope.$id]);}
+        return isolate;
+      };
 
       /**
        * Pass through $animate methods that are strictly class based.
@@ -408,7 +425,7 @@ angular.module('famous.angular')
           // AND the class is not an empty string, pass through
           // the addClass and removeClass methods to the underlying renderNode.
           if ($famous.util.isASurface(this) && typeof className === 'string' && className.trim() !== '') {
-            $famous.getIsolate(this.scope()).renderNode[classManipulator](className);
+            _getIsolate(this.scope()).renderNode[classManipulator](className);
           }
           return this;
         };
@@ -423,7 +440,7 @@ angular.module('famous.angular')
          
           $delegate[classManipulator](element, className, done);
           if($famous.util.isFaElement(element)){
-            var isolate = $famous.getIsolate(element.scope());
+            var isolate = _getIsolate(element.scope());
             if ($famous.util.isASurface(element)) {
 
               var surface = isolate.renderNode;
@@ -462,7 +479,7 @@ angular.module('famous.angular')
         $delegate.setClass(element, add, remove, done);
 
         if ($famous.util.isASurface(element)) {
-          var surface = $famous.getIsolate(element.scope()).renderNode;
+          var surface = _getIsolate(element.scope()).renderNode;
           angular.forEach(add.split(' '), function(className) {
             surface.addClass(className);
           });
@@ -486,13 +503,19 @@ angular.module('famous.angular')
        */
       angular.forEach(['enter', 'leave', 'move'], function(operation) {
         var capitalizedOperation = operation[0].toUpperCase() + operation.slice(1);
-        animationHandlers[operation] = function(element) {
+        animationHandlers[operation] = function(element, parent, nonCloneElement) {
           var self = this;
           var selfArgs = arguments;
           var delegateFirst = (operation === 'enter');
 
-          var isolate = $famous.getIsolate(element.scope());
 
+          var elemScope = element.scope();
+
+          //such hack:  keep a hash of last-known parents so that we can access a scope's parent
+          //            after that scope has been destroyed.  useful for e.g. ui-view and ng-include
+          if(elemScope && elemScope.$parent) {_lastKnownParent[elemScope.$id] = elemScope.$parent.$id;}
+
+          var isolate = _getIsolate(elemScope);
 
           if (delegateFirst === true) {
              $delegate[operation].apply(this, arguments);
@@ -500,7 +523,7 @@ angular.module('famous.angular')
 
            // Detect if an animation is currently running
           if (element.data(FA_ANIMATION_ACTIVE) === true) {
-            if(isolate && isolate.$$animateHaltHandler) { isolate.$$animateHaltHandler(element.scope())};
+            if(isolate && isolate.$$animateHaltHandler) { isolate.$$animateHaltHandler(element.scope()); }
           }
 
           // Indicate an animation is currently running
@@ -508,13 +531,14 @@ angular.module('famous.angular')
 
           var doneCallback = function() {
 
-            var scopeId = element.scope() && element.scope().$id;
+            var scopeId = elemScope && elemScope.$id;
 
             //hide the element on animate.leave
             if(operation === 'leave' && $famous.util.isFaElement(element)){
-              var isolate = $famous.getIsolate(element.scope());
+              var isolate = _getIsolate(elemScope);
               if(isolate && isolate.id) isolate.hide();
-             }
+            }
+
             // Abort if the done callback has already been invoked
             if (element.data(FA_ANIMATION_ACTIVE) === false) {
               return;
@@ -528,12 +552,16 @@ angular.module('famous.angular')
           };
 
           $rootScope.$$postDigest(function() {
-            //if this was an enter event, isolate would not have
-            //existed on the first invocation above
-            isolate = $famous.getIsolate(element.scope());
-            var animationHandler;
 
+            //if this was an enter event, isolate and scope would not have
+            //existed on the first invocation above
+            var elemScope = element.scope();
+
+            var isolate = _getIsolate(elemScope);
+
+            var animationHandler;
             //handle $$animateEnterHandler, $$animateLeaveHandler, and $$animateHaltHandler
+
             if(isolate) { animationHandler = isolate["$$animate" + capitalizedOperation + "Handler"]; }
 
             // If no animation has been specified [including if this isn't
@@ -547,7 +575,7 @@ angular.module('famous.angular')
             //expects a $parse'd function or a function that
             //responds to the same API fn(scope, {locals})
             var animationDuration = animationHandler(
-              element.scope(),
+              elemScope,
               {
                 $done: doneCallback
               }
@@ -616,6 +644,8 @@ angular.module('famous.angular')
       
     };
 
+    var _isolateStore = {};
+
     return {
       //TODO:  patch into _roles and assign the
       // appropriate role to the given scope
@@ -652,7 +682,19 @@ angular.module('famous.angular')
         var i = scope.$eval("$index");
         if(i && i !== '$index' && !isolate.index) isolate.index = i;
 
+        _isolateStore[isolate.id] = isolate;
+
         return isolate;
+      },
+
+      //relies on an 'alternate source of truth' vs the static .isolate
+      //member shared by the fa-element child scopes.  Unideal, but should be OK
+      //based on the assumption that a single Angular app will create a unique ID for
+      //every new scope.
+      //surface area for a memory leak (TODO: clean up upon element destruction--BUT, make sure
+      //it doesn't break leave animations on ui-view and ng-include animations, e.g. <ui-view fa-edge-swapper></ui-view>)
+      $$getIsolateById: function(id){
+        return _isolateStore[id];
       },
 
       /**
@@ -704,6 +746,13 @@ angular.module('famous.angular')
       sequenceWith: function(scope, addMethod, removeMethod, updateMethod) {
         scope.$on('registerChild', function(evt, isolate) {
           if (evt.targetScope.$id !== scope.$id) {
+            //add reference to parent isolate
+            var parentIsolate = $famous.getIsolate(scope);
+            isolate.$parent = parentIsolate;
+
+            parentIsolate.$children = parentIsolate.$children || [];
+            parentIsolate.$children.push(isolate);
+
             addMethod(isolate);
             evt.stopPropagation();
 
@@ -2038,6 +2087,76 @@ angular.module('famous.angular')
             // Trigger a $digest loop to make sure that callbacks for the
             // $observe listeners are executed in the compilation phase.
             if(!scope.$$phase && !$rootScope.$$phase) scope.$apply();
+          }
+        };
+      }
+    };
+  }]);
+
+
+//TODO:  DOCUMENT
+//TODO:  TEST
+
+angular.module('famous.angular')
+  .directive('faEdgeSwapper', ["$famous", "$famousDecorator", function ($famous, $famousDecorator) {
+    return {
+      scope: true,
+      restrict: 'A',
+      priority: 512, //higher than ui-view and ng-include, because if it's lower it will
+                     //get recompiled every time those templates change
+
+      compile: function(tElement, tAttrs, transclude){
+        var EdgeSwapper = $famous['famous/views/EdgeSwapper'];
+        return {
+          pre: function(scope, element, attrs){
+            var isolate = $famousDecorator.ensureIsolate(scope);
+
+            //'register' for the next child to be picked up by the animateEnterHandler
+            var _nextChild;
+
+            //add animateEnter handler for new content
+            isolate.$$animateEnterHandler = function(scope, locals){
+
+              isolate.renderNode.show(_nextChild, function(){
+                if(isolate.$$leaveDoneCallback){
+                  isolate.$$leaveDoneCallback();
+                }
+                locals.$done();
+              });
+            };
+
+            isolate.$$animateLeaveHandler = function(scope, locals){
+              //just drops the $done callback into a spot where the
+              //enter handler can access it.
+
+              //relies on the assumption that this assignment will
+              //always occur before the next enter handler's animation
+              //is complete
+
+              //maybe good enough
+              isolate.$$leaveDoneCallback = locals.$done;
+            };
+
+            var initialOptions = scope.$eval(attrs.faOptions);
+            isolate.renderNode = new EdgeSwapper(initialOptions);
+
+            $famousDecorator.addRole('renderable',isolate);
+
+            isolate.show();
+            
+            $famousDecorator.sequenceWith(
+              scope,
+              function(data) {
+                //child received
+                _nextChild = data.renderGate;
+              }
+              //don't need to handle child removal?
+            );
+
+          },
+          post: function(scope, element, attrs){
+            var isolate = $famousDecorator.ensureIsolate(scope);
+            $famousDecorator.registerChild(scope, element, isolate);
           }
         };
       }
