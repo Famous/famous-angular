@@ -65,10 +65,10 @@ constructor.  See [https://famo.us/docs/views/SequentialLayout]
 {% capture relative %}{% for i in (3..lvl) %}../{% endfor %}{% endcapture %}
 
 <div>
-  <a ng-click="openPlunkr('{{ relative }}examples/example-example45')" class="btn pull-right">
+  <a ng-click="openPlunkr('{{ relative }}examples/example-example48')" class="btn pull-right">
     <i class="glyphicon glyphicon-edit">&nbsp;</i>
     Edit in Plunker</a>
-  <div class="runnable-example" path="examples/example-example45"
+  <div class="runnable-example" path="examples/example-example48"
       
         module="faSequentialExampleApp"
       
@@ -100,7 +100,7 @@ constructor.  See [https://famo.us/docs/views/SequentialLayout]
     </div>
   
 
-    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example45/index.html" name="example-example45"></iframe>
+    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example48/index.html" name="example-example48"></iframe>
   </div>
 </div>
 

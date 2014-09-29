@@ -207,114 +207,118 @@
  *  
  *
  * The directional pad has a list of input checkboxes created by an ng-repeated list from `$scope.inputList`.
- * If a checkbox is checked, it calls `checkBoxChange()`, passing the letter (such as `'A'`) and and the model (such as `'checkBox.A'`) of the respective checkbox.
- * If the checkbox is checked, the model (`checkBox.A`) is assigned the value of "true", and if it is unchecked, it is asigned the value of "false".
+ * If a checkbox is checked, it calls `checkBoxChange()`, passing the index of the object within the ng-repeat, the letter (such as `'A'`), and the model (such as `'checkBox.A'`) of the respective checkbox.
+ * If the checkbox is checked, the model (`checkBox.A`) is assigned the value of "true", and if it is unchecked, it is assigned the value of "false".
  * 
  * In the controller, `$scope.checkBoxChange()` changes the value of the pipe of the respective Scroll View (A, B, or C) that corresponds to the checkBox.
  * If the checkbox is checked, it assigns the respective Scroll View (A, B, or C) to pipe from `$scope.mainPipe`, and if unchecked, it will continue to pipe from `$scope.emptyPipe`.
  * In short, the checkboxes act as switches to change piping events.
  *
- <example module="faPipeExampleApp">
-  <file name="index.html">
-  <fa-app ng-controller="PipeCtrl">
-      <!-- directional pad view -->
-      <fa-view>
-        <!-- scroll view used as a directional pad input, receives events from mainPipe-->
-        <fa-scroll-view fa-pipe-from="mainPipe">
-          <fa-modifier fa-translate="[0, 0, 15]" fa-size="[320, 50]">
-            <fa-view>
-              <fa-modifier>
-                <!-- mousewheel events will be piped to mainPipe -->
-                <fa-surface fa-background-color="'orange'" fa-pipe-to="mainPipe">
-                  <div>Directional pad</div>
-                    <span ng-repeat="input in inputList">
-                      <label>{{input.letter}}</label>
-                      <!-- checkboxes -->
-                      <input type="checkbox"
-                             ng-model="input.model" 
-                             name="scrollPipeTo" 
-                             ng-change="checkBoxChange(input.letter, input.model)"
-                             ng-true-value="true"
-                             ng-false-value="false">
-                    </span>
-                </fa-surface>
-              </fa-modifier>
-            </fa-view>
-          </fa-modifier>
-        </fa-scroll-view>
-      </fa-view>
-      
-      <!-- view with 3 Scroll Views -->
-      <fa-view>
-        <!-- ng-repeat creating 3 different scroll Views -->
-        <fa-modifier ng-repeat="view in scrollViews"
-                     fa-translate="[100 * $index, 50, 0]">
-          <fa-view>
-            <!-- each Scroll View conditionally receives events from mainPipe or emptyPipe, default is emptyPipe -->
-            <fa-scroll-view fa-pipe-from="view.pipe" fa-options="options.scrollViewTwo">
-              <fa-view ng-repeat="items in list">
-                <fa-modifier fa-size="[100, 100]">
-                    <fa-surface fa-background-color="view.bgColor">
-                      Index: {{$index}}
-                    </fa-surface>
-                  </fa-modifier>
-              </fa-view>
-             </fa-scroll-view>   
-          </fa-view>
-        </fa-modifier>
-      </fa-view>
-    </fa-app>
-  </file>
-  <file name="script.js">
-  angular.module('faPipeExampleApp', ['famous.angular'])
-      .controller('PipeCtrl', ['$scope', '$famous', function($scope, $famous) {
+<example module="faPipeExampleApp">
+ <file name="index.html">
+ <fa-app ng-controller="PipeCtrl">
+     <!-- directional pad view -->
+     <fa-view>
+       <!-- scroll view used as a directional pad input, receives events from mainPipe-->
+       <fa-scroll-view fa-pipe-from="mainPipe">
+         <fa-modifier fa-translate="[0, 0, 15]" fa-size="[300, 50]">
+           <fa-view>
+             <fa-modifier>
+               <!-- mousewheel events will be piped to mainPipe -->
+               <fa-surface fa-background-color="'orange'" fa-pipe-to="mainPipe">
+                 <div>Directional pad</div>
+                   <span ng-repeat="input in inputList">
+                     <label>{{input.letter}}</label>
+                     <!-- checkboxes -->
+                     <input type="checkbox"
+                            ng-model="input.model" 
+                            name="scrollPipeTo" 
+                            ng-change="checkBoxChange($index, input.letter, input.model)"
+                            ng-true-value="true"
+                            ng-false-value="false">
+                   </span>
+               </fa-surface>
+             </fa-modifier>
+           </fa-view>
+         </fa-modifier>
+       </fa-scroll-view>
+     </fa-view>
+     
+     <!-- view with 3 Scroll Views -->
+     <fa-view>
+       <!-- ng-repeat creating 3 different scroll Views -->
+       <fa-modifier ng-repeat="view in scrollViews"
+                    fa-translate="[100 * $index, 50, 0]">
+         <fa-view>
+           <!-- each Scroll View conditionally receives events from mainPipe or emptyPipe, default is emptyPipe -->
+           <fa-scroll-view fa-pipe-from="view.pipe" fa-options="options.scrollViewTwo">
+             <fa-view ng-repeat="items in list">
+               <fa-modifier fa-size="[100, 100]">
+                   <fa-surface fa-background-color="view.bgColor">
+                     Index: {{$index}}
+                   </fa-surface>
+                 </fa-modifier>
+             </fa-view>
+            </fa-scroll-view>   
+         </fa-view>
+       </fa-modifier>
+     </fa-view>
+   </fa-app>
+ </file>
+ <file name="script.js">
+ angular.module('faPipeExampleApp', ['famous.angular'])
+     .controller('PipeCtrl', ['$scope', '$famous', function($scope, $famous) {
 
-        // Event Handlers
-        var EventHandler = $famous['famous/core/EventHandler'];
-        $scope.mainPipe = new EventHandler();
-        $scope.emptyPipe = new EventHandler();
-        
-        // items in ng-repeated list in each of the 3 Scroll Views
-        $scope.list = [];
-        for (var i = 0; i < 10; i++) {
-          $scope.list.push({});
-        };
-        
-        // 3 inputs in the directional pad corresponding to the 3 scroll views
-        $scope.inputList = [{model: "checkBox.A", letter: "A"},{model: "checkBox.B", letter: "B"}, {model: "checkBox.C", letter: "C"}];
-        
-        // 3 scrollviews
-        $scope.scrollViews = [{pipe: "pipes.A", bgColor: "blue"}, {pipe: "pipes.B", bgColor: "red"}, {pipe: "pipes.C", bgColor: "green"}];
-        
-        // pipes that each of the 3 scroll views is binded to through fa-pipe-from
-        $scope.pipes = {
-          A: $scope.emptyPipe,
-          B: $scope.emptyPipe,
-          C: $scope.emptyPipe
-        };
-        
-        // function that is called whenever a checkbox is checked/unchecked that assigns the fa-pipe-from
-        $scope.checkBoxChange = function(model, value) {
-          if (value !== "false") {
-            $scope.pipes[model] = $scope.mainPipe;
-          } else {
-            $scope.pipes[model] = $scope.emptyPipe;
-          };
-        };
-    }]);
-  </file>
-  <file name="style.css">
-  fa-app {
-      position: fixed;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-    }
-  </file>
- </example>
- *
- */
+       // Event Handlers
+       var EventHandler = $famous['famous/core/EventHandler'];
+       
+       $scope.mainPipe = new EventHandler();
+       $scope.emptyPipe = new EventHandler();
+       
+       // items in ng-repeated list in each of the 3 Scroll Views
+       $scope.list = [];
+       for (var i = 0; i < 10; i++) {
+         $scope.list.push({});
+       };
+       
+       // 3 inputs in the directional pad corresponding to the 3 scroll views
+       $scope.inputList = [{model: "checkBox.A", letter: "A"},{model: "checkBox.B", letter: "B"}, {model: "checkBox.C", letter: "C"}];
+       
+       // pipes that each of the 3 scroll views is binded to through fa-pipe-from
+       $scope.pipes = {
+         A: $scope.emptyPipe,
+         B: $scope.emptyPipe,
+         C: $scope.emptyPipe
+       };
+
+       // 3 scrollviews
+       $scope.scrollViews = [{pipe: $scope.pipes.A, bgColor: "blue"}, {pipe: $scope.pipes.B, bgColor: "red"}, {pipe: $scope.pipes.C, bgColor: "green"}];
+       
+       // function that is called whenever a checkbox is checked/unchecked that assigns the fa-pipe-from
+       $scope.checkBoxChange = function(index, model, value) {
+         if (value == 'true') {
+           console.log($scope.pipes[model], + " is now pointing to mainPipe");
+           $scope.scrollViews[index].pipe = $scope.mainPipe;
+         
+         } else {
+           console.log($scope.pipes[model] + " is now pointing to emptyPipe");
+           $scope.scrollViews[index].pipe = $scope.emptyPipe;
+         }
+       };
+   }]);
+ </file>
+ <file name="style.css">
+ fa-app {
+     position: fixed;
+     top: 0;
+     right: 0;
+     bottom: 0;
+     left: 0;
+   }
+ </file>
+</example>
+*
+*/
 
 angular.module('famous.angular')
   .directive('faPipeFrom', ['$famous', '$famousDecorator', '$famousPipe', function ($famous, $famousDecorator, $famousPipe) {

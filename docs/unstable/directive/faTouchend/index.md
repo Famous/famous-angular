@@ -99,10 +99,10 @@ The function expression bound to <code>fa-touchend</code> is bound to that <code
 {% capture relative %}{% for i in (3..lvl) %}../{% endfor %}{% endcapture %}
 
 <div>
-  <a ng-click="openPlunkr('{{ relative }}examples/example-example53')" class="btn pull-right">
+  <a ng-click="openPlunkr('{{ relative }}examples/example-example56')" class="btn pull-right">
     <i class="glyphicon glyphicon-edit">&nbsp;</i>
     Edit in Plunker</a>
-  <div class="runnable-example" path="examples/example-example53"
+  <div class="runnable-example" path="examples/example-example56"
       
         module="faTouchEndExampleApp"
       
@@ -134,7 +134,7 @@ The function expression bound to <code>fa-touchend</code> is bound to that <code
     </div>
   
 
-    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example53/index.html" name="example-example53"></iframe>
+    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example56/index.html" name="example-example56"></iframe>
   </div>
 </div>
 
@@ -151,10 +151,10 @@ The function expression bound to <code>fa-touchend</code> is bound to that <code
 {% capture relative %}{% for i in (3..lvl) %}../{% endfor %}{% endcapture %}
 
 <div>
-  <a ng-click="openPlunkr('{{ relative }}examples/example-example54')" class="btn pull-right">
+  <a ng-click="openPlunkr('{{ relative }}examples/example-example57')" class="btn pull-right">
     <i class="glyphicon glyphicon-edit">&nbsp;</i>
     Edit in Plunker</a>
-  <div class="runnable-example" path="examples/example-example54"
+  <div class="runnable-example" path="examples/example-example57"
       
         module="faTouchEndExampleApp"
       
@@ -186,7 +186,7 @@ The function expression bound to <code>fa-touchend</code> is bound to that <code
     </div>
   
 
-    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example54/index.html" name="example-example54"></iframe>
+    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example57/index.html" name="example-example57"></iframe>
   </div>
 </div>
 
