@@ -128,7 +128,7 @@ angular.module('famous.angular')
           // If and only if the current element represents a Famo.us Surface,
           // AND the class is not an empty string, pass through
           // the addClass and removeClass methods to the underlying renderNode.
-          if ($famous.util.isASurface(this) && typeof className === 'string' && className.trim() !== '') {
+          if (this[0] && $famous.util.isASurface(this) && typeof className === 'string' && className.trim() !== '') {
             $famous.getIsolate(this.scope()).renderNode[classManipulator](className);
           }
           return this;
