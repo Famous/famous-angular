@@ -2,7 +2,7 @@
 //TODO:  DOCUMENT
 
 angular.module('famous.angular')
-  .directive('faAnimateEnter', ["$parse", "$famousDecorator", function ($parse, $famousDecorator) {
+  .directive('faAnimateHalt', ["$parse", "$famousDecorator", function ($parse, $famousDecorator) {
     return {
       restrict: 'A',
       scope: false,
@@ -11,10 +11,10 @@ angular.module('famous.angular')
         return {
           post: function (scope, element, attrs) {
             var isolate = $famousDecorator.ensureIsolate(scope);
-            isolate.$$animateEnterHandler = $parse(attrs.faAnimateEnter);
+            isolate.$$animateHaltHandler = $parse(attrs.faAnimateHalt);
 
-            attrs.$observe('faAnimateEnter', function () {
-              isolate.$$animateEnterHandler = $parse(attrs.faAnimateEnter);
+            attrs.$observe('faAnimateHalt', function () {
+              isolate.$$animateHaltHandler = $parse(attrs.faAnimateHalt);
             });
           }
         };

@@ -500,7 +500,7 @@ angular.module('famous.angular')
 
            // Detect if an animation is currently running
           if (element.data(FA_ANIMATION_ACTIVE) === true) {
-            $parse(element.attr('fa-animate-halt'))(element.scope());
+            if(isolate && isolate.$$animateHaltHandler) { isolate.$$animateHaltHandler(element.scope())};
           }
 
           // Indicate an animation is currently running
@@ -528,6 +528,9 @@ angular.module('famous.angular')
           };
 
           $rootScope.$$postDigest(function() {
+            //if this was an enter event, isolate would not have
+            //existed on the first invocation above
+            isolate = $famous.getIsolate(element.scope());
             var animationHandler;
 
             //handle $$animateEnterHandler, $$animateLeaveHandler, and $$animateHaltHandler
@@ -535,6 +538,7 @@ angular.module('famous.angular')
 
             // If no animation has been specified [including if this isn't
             // an fa-element] delegate the animation event and return
+
             if (animationHandler === undefined) {
               doneCallback();
               return;
@@ -918,11 +922,31 @@ angular.module('famous.angular')
             var isolate = $famousDecorator.ensureIsolate(scope);
             isolate.$$animateEnterHandler = $parse(attrs.faAnimateEnter);
 
-            scope.$watch(function () {
-              return scope.$eval(attrs.faAnimateEnter);
-            }, function () {
+            attrs.$observe('faAnimateEnter', function () {
               isolate.$$animateEnterHandler = $parse(attrs.faAnimateEnter);
-              if(isolate.updateMethod) isolate.updateMethod();
+            });
+          }
+        };
+      }
+    };
+  }]);
+
+//TODO:  DOCUMENT
+
+angular.module('famous.angular')
+  .directive('faAnimateHalt', ["$parse", "$famousDecorator", function ($parse, $famousDecorator) {
+    return {
+      restrict: 'A',
+      scope: false,
+      priority: 16,
+      compile: function () {
+        return {
+          post: function (scope, element, attrs) {
+            var isolate = $famousDecorator.ensureIsolate(scope);
+            isolate.$$animateHaltHandler = $parse(attrs.faAnimateHalt);
+
+            attrs.$observe('faAnimateHalt', function () {
+              isolate.$$animateHaltHandler = $parse(attrs.faAnimateHalt);
             });
           }
         };
@@ -944,11 +968,8 @@ angular.module('famous.angular')
             var isolate = $famousDecorator.ensureIsolate(scope);
             isolate.$$animateLeaveHandler = $parse(attrs.faAnimateLeave);
 
-            scope.$watch(function () {
-              return scope.$eval(attrs.faAnimateLeave);
-            }, function () {
+            attrs.$observe('faAnimateLeave', function () {
               isolate.$$animateLeaveHandler = $parse(attrs.faAnimateLeave);
-              if(isolate.updateMethod) isolate.updateMethod();
             });
           }
         };
@@ -970,11 +991,8 @@ angular.module('famous.angular')
             var isolate = $famousDecorator.ensureIsolate(scope);
             isolate.$$animateMoveHandler = $parse(attrs.faAnimateMove);
 
-            scope.$watch(function () {
-              return scope.$eval(attrs.faAnimateMove);
-            }, function () {
+            attrs.$observe('faAnimateMove', function () {
               isolate.$$animateMoveHandler = $parse(attrs.faAnimateMove);
-              if(isolate.updateMethod) isolate.updateMethod();
             });
           }
         };

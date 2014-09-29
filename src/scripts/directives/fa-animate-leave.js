@@ -13,11 +13,8 @@ angular.module('famous.angular')
             var isolate = $famousDecorator.ensureIsolate(scope);
             isolate.$$animateLeaveHandler = $parse(attrs.faAnimateLeave);
 
-            scope.$watch(function () {
-              return scope.$eval(attrs.faAnimateLeave);
-            }, function () {
+            attrs.$observe('faAnimateLeave', function () {
               isolate.$$animateLeaveHandler = $parse(attrs.faAnimateLeave);
-              if(isolate.updateMethod) isolate.updateMethod();
             });
           }
         };

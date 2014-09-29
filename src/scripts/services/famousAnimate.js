@@ -221,7 +221,7 @@ angular.module('famous.angular')
 
            // Detect if an animation is currently running
           if (element.data(FA_ANIMATION_ACTIVE) === true) {
-            $parse(element.attr('fa-animate-halt'))(element.scope());
+            if(isolate && isolate.$$animateHaltHandler) { isolate.$$animateHaltHandler(element.scope())};
           }
 
           // Indicate an animation is currently running
@@ -249,6 +249,9 @@ angular.module('famous.angular')
           };
 
           $rootScope.$$postDigest(function() {
+            //if this was an enter event, isolate would not have
+            //existed on the first invocation above
+            isolate = $famous.getIsolate(element.scope());
             var animationHandler;
 
             //handle $$animateEnterHandler, $$animateLeaveHandler, and $$animateHaltHandler
@@ -256,6 +259,7 @@ angular.module('famous.angular')
 
             // If no animation has been specified [including if this isn't
             // an fa-element] delegate the animation event and return
+
             if (animationHandler === undefined) {
               doneCallback();
               return;
