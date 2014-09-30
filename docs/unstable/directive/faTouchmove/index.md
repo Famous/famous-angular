@@ -101,10 +101,10 @@ The rate of which touchmove events fire is implementation-defined by browser and
 {% capture relative %}{% for i in (3..lvl) %}../{% endfor %}{% endcapture %}
 
 <div>
-  <a ng-click="openPlunkr('{{ relative }}examples/example-example55')" class="btn pull-right">
+  <a ng-click="openPlunkr('{{ relative }}examples/example-example58')" class="btn pull-right">
     <i class="glyphicon glyphicon-edit">&nbsp;</i>
     Edit in Plunker</a>
-  <div class="runnable-example" path="examples/example-example55"
+  <div class="runnable-example" path="examples/example-example58"
       
         module="faTouchMoveExampleApp"
       
@@ -136,7 +136,7 @@ The rate of which touchmove events fire is implementation-defined by browser and
     </div>
   
 
-    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example55/index.html" name="example-example55"></iframe>
+    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example58/index.html" name="example-example58"></iframe>
   </div>
 </div>
 
@@ -153,10 +153,10 @@ The rate of which touchmove events fire is implementation-defined by browser and
 {% capture relative %}{% for i in (3..lvl) %}../{% endfor %}{% endcapture %}
 
 <div>
-  <a ng-click="openPlunkr('{{ relative }}examples/example-example56')" class="btn pull-right">
+  <a ng-click="openPlunkr('{{ relative }}examples/example-example59')" class="btn pull-right">
     <i class="glyphicon glyphicon-edit">&nbsp;</i>
     Edit in Plunker</a>
-  <div class="runnable-example" path="examples/example-example56"
+  <div class="runnable-example" path="examples/example-example59"
       
         module="faTouchMoveExampleApp"
       
@@ -188,7 +188,7 @@ The rate of which touchmove events fire is implementation-defined by browser and
     </div>
   
 
-    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example56/index.html" name="example-example56"></iframe>
+    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example59/index.html" name="example-example59"></iframe>
   </div>
 </div>
 

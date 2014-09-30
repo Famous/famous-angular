@@ -66,10 +66,10 @@ ngIncludes or custom (vanilla Angular) directives.
 {% capture relative %}{% for i in (3..lvl) %}../{% endfor %}{% endcapture %}
 
 <div>
-  <a ng-click="openPlunkr('{{ relative }}examples/example-example46')" class="btn pull-right">
+  <a ng-click="openPlunkr('{{ relative }}examples/example-example49')" class="btn pull-right">
     <i class="glyphicon glyphicon-edit">&nbsp;</i>
     Edit in Plunker</a>
-  <div class="runnable-example" path="examples/example-example46"
+  <div class="runnable-example" path="examples/example-example49"
       
         module="faSurfaceExampleApp"
       
@@ -125,7 +125,7 @@ ngIncludes or custom (vanilla Angular) directives.
     </div>
   
 
-    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example46/index.html" name="example-example46"></iframe>
+    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example49/index.html" name="example-example49"></iframe>
   </div>
 </div>
 
@@ -157,10 +157,10 @@ ngIncludes or custom (vanilla Angular) directives.
 {% capture relative %}{% for i in (3..lvl) %}../{% endfor %}{% endcapture %}
 
 <div>
-  <a ng-click="openPlunkr('{{ relative }}examples/example-example47')" class="btn pull-right">
+  <a ng-click="openPlunkr('{{ relative }}examples/example-example50')" class="btn pull-right">
     <i class="glyphicon glyphicon-edit">&nbsp;</i>
     Edit in Plunker</a>
-  <div class="runnable-example" path="examples/example-example47"
+  <div class="runnable-example" path="examples/example-example50"
       
         module="faSurfaceExampleApp"
       
@@ -204,7 +204,7 @@ ngIncludes or custom (vanilla Angular) directives.
     </div>
   
 
-    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example47/index.html" name="example-example47"></iframe>
+    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example50/index.html" name="example-example50"></iframe>
   </div>
 </div>
 
@@ -233,10 +233,10 @@ For example, this will not work:</p>
 {% capture relative %}{% for i in (3..lvl) %}../{% endfor %}{% endcapture %}
 
 <div>
-  <a ng-click="openPlunkr('{{ relative }}examples/example-example48')" class="btn pull-right">
+  <a ng-click="openPlunkr('{{ relative }}examples/example-example51')" class="btn pull-right">
     <i class="glyphicon glyphicon-edit">&nbsp;</i>
     Edit in Plunker</a>
-  <div class="runnable-example" path="examples/example-example48"
+  <div class="runnable-example" path="examples/example-example51"
       
         module="faSurfaceExampleApp"
       
@@ -268,7 +268,7 @@ For example, this will not work:</p>
     </div>
   
 
-    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example48/index.html" name="example-example48"></iframe>
+    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example51/index.html" name="example-example51"></iframe>
   </div>
 </div>
 
@@ -283,10 +283,10 @@ Take note that they accept a string in the html view.  If you do not enclose the
 {% capture relative %}{% for i in (3..lvl) %}../{% endfor %}{% endcapture %}
 
 <div>
-  <a ng-click="openPlunkr('{{ relative }}examples/example-example49')" class="btn pull-right">
+  <a ng-click="openPlunkr('{{ relative }}examples/example-example52')" class="btn pull-right">
     <i class="glyphicon glyphicon-edit">&nbsp;</i>
     Edit in Plunker</a>
-  <div class="runnable-example" path="examples/example-example49"
+  <div class="runnable-example" path="examples/example-example52"
       
         module="faSurfaceExampleApp"
       
@@ -330,7 +330,7 @@ Take note that they accept a string in the html view.  If you do not enclose the
     </div>
   
 
-    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example49/index.html" name="example-example49"></iframe>
+    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example52/index.html" name="example-example52"></iframe>
   </div>
 </div>
 
@@ -344,10 +344,10 @@ Take note that they accept a string in the html view.  If you do not enclose the
 {% capture relative %}{% for i in (3..lvl) %}../{% endfor %}{% endcapture %}
 
 <div>
-  <a ng-click="openPlunkr('{{ relative }}examples/example-example50')" class="btn pull-right">
+  <a ng-click="openPlunkr('{{ relative }}examples/example-example53')" class="btn pull-right">
     <i class="glyphicon glyphicon-edit">&nbsp;</i>
     Edit in Plunker</a>
-  <div class="runnable-example" path="examples/example-example50"
+  <div class="runnable-example" path="examples/example-example53"
       
         module="faSurfaceExampleApp"
       
@@ -391,7 +391,7 @@ Take note that they accept a string in the html view.  If you do not enclose the
     </div>
   
 
-    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example50/index.html" name="example-example50"></iframe>
+    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example53/index.html" name="example-example53"></iframe>
   </div>
 </div>
 

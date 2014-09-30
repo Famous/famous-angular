@@ -67,10 +67,10 @@ This approach of creating a View and adding renderables to it with the <code>.ad
 {% capture relative %}{% for i in (3..lvl) %}../{% endfor %}{% endcapture %}
 
 <div>
-  <a ng-click="openPlunkr('{{ relative }}examples/example-example40')" class="btn pull-right">
+  <a ng-click="openPlunkr('{{ relative }}examples/example-example43')" class="btn pull-right">
     <i class="glyphicon glyphicon-edit">&nbsp;</i>
     Edit in Plunker</a>
-  <div class="runnable-example" path="examples/example-example40"
+  <div class="runnable-example" path="examples/example-example43"
       
         module="faRenderNodeExampleApp"
       
@@ -102,7 +102,7 @@ This approach of creating a View and adding renderables to it with the <code>.ad
     </div>
   
 
-    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example40/index.html" name="example-example40"></iframe>
+    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example43/index.html" name="example-example43"></iframe>
   </div>
 </div>
 

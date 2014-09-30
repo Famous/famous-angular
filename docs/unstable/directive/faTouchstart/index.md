@@ -101,10 +101,10 @@ If the touch point is placed upon the touch surface again, it will fire another 
 {% capture relative %}{% for i in (3..lvl) %}../{% endfor %}{% endcapture %}
 
 <div>
-  <a ng-click="openPlunkr('{{ relative }}examples/example-example57')" class="btn pull-right">
+  <a ng-click="openPlunkr('{{ relative }}examples/example-example60')" class="btn pull-right">
     <i class="glyphicon glyphicon-edit">&nbsp;</i>
     Edit in Plunker</a>
-  <div class="runnable-example" path="examples/example-example57"
+  <div class="runnable-example" path="examples/example-example60"
       
         module="faTouchStartExampleApp"
       
@@ -136,7 +136,7 @@ If the touch point is placed upon the touch surface again, it will fire another 
     </div>
   
 
-    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example57/index.html" name="example-example57"></iframe>
+    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example60/index.html" name="example-example60"></iframe>
   </div>
 </div>
 
@@ -153,10 +153,10 @@ If the touch point is placed upon the touch surface again, it will fire another 
 {% capture relative %}{% for i in (3..lvl) %}../{% endfor %}{% endcapture %}
 
 <div>
-  <a ng-click="openPlunkr('{{ relative }}examples/example-example58')" class="btn pull-right">
+  <a ng-click="openPlunkr('{{ relative }}examples/example-example61')" class="btn pull-right">
     <i class="glyphicon glyphicon-edit">&nbsp;</i>
     Edit in Plunker</a>
-  <div class="runnable-example" path="examples/example-example58"
+  <div class="runnable-example" path="examples/example-example61"
       
         module="faTouchStartExampleApp"
       
@@ -188,7 +188,7 @@ If the touch point is placed upon the touch surface again, it will fire another 
     </div>
   
 
-    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example58/index.html" name="example-example58"></iframe>
+    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example61/index.html" name="example-example61"></iframe>
   </div>
 </div>
 
