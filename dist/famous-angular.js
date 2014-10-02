@@ -668,8 +668,24 @@ angular.module('famous.angular')
        *
        * @param {String} scope - the scope to ensure that the isolate property
        * exists on
+       * @param {Object} element (optional) - the DOM element associated with the target scope
        */
-      ensureIsolate: function(scope) {
+      ensureIsolate: function(scope, element) {
+
+
+        //handle special-case directives that don't follow a (DOM hierarchy <=> Scope hierarchy) relationship
+        if(element){
+          var SPECIAL_CASE_LIST = ['fa-edge-swapper', 'fa-render-controller', 'fa-deck', 'fa-light-box'];
+          var special = false;
+          angular.forEach(SPECIAL_CASE_LIST, function(specialCase){
+            if(specialCase.toUpperCase() === element[0].tagName) { special = true; return; }
+            if(element[0].attributes[specialCase] !== undefined) { special = true; return; }
+          });
+          if(special){
+            scope = scope.$parent;
+          }
+        }
+
         scope.isolate = scope.isolate || {};
         scope.isolate[scope.$id] = scope.isolate[scope.$id] || {};
 
@@ -3001,7 +3017,7 @@ angular.module('famous.angular')
       compile: function () {
         return {
           post: function (scope, element, attrs) {
-            var isolate = $famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope, element);
             isolate.index = scope.$eval(attrs.faIndex);
 
             scope.$watch(function () {
@@ -4439,7 +4455,7 @@ angular.module('famous.angular')
             compile: function () {
                 return {
                     post: function (scope, element, attrs) {
-                        var isolate = $famousDecorator.ensureIsolate(scope);
+                        var isolate = $famousDecorator.ensureIsolate(scope, element);
                         scope.$watch(function () {
                             return scope.$eval(attrs.faOptions);
                         }, function () {

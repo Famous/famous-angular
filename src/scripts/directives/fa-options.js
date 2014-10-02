@@ -29,7 +29,7 @@ angular.module('famous.angular')
             compile: function () {
                 return {
                     post: function (scope, element, attrs) {
-                        var isolate = $famousDecorator.ensureIsolate(scope);
+                        var isolate = $famousDecorator.ensureIsolate(scope, element);
                         scope.$watch(function () {
                             return scope.$eval(attrs.faOptions);
                         }, function () {

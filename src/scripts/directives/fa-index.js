@@ -100,7 +100,7 @@ angular.module('famous.angular')
       compile: function () {
         return {
           post: function (scope, element, attrs) {
-            var isolate = $famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope, element);
             isolate.index = scope.$eval(attrs.faIndex);
 
             scope.$watch(function () {
