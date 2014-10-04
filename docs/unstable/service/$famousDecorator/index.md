@@ -67,7 +67,7 @@ $famousDecorator.sequenceWith(
 
 <div id="ensureIsolate"></div>
 <h2>
-  <code>ensureIsolate(scope)</code>
+  <code>ensureIsolate(scope, element)</code>
 
 </h2>
 
@@ -102,6 +102,23 @@ the default ng-repeat index onto the scope.
       <td>
         <p>the scope to ensure that the isolate property
 exists on</p>
+
+        
+      </td>
+    </tr>
+    
+    <tr>
+      <td>
+        element
+        
+        
+      </td>
+      <td>
+        
+  <code>Object</code>
+      </td>
+      <td>
+        <p>(optional) - the DOM element associated with the target scope</p>
 
         
       </td>
