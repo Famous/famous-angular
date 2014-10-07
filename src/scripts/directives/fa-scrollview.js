@@ -319,9 +319,7 @@ angular.module('famous.angular')
                   });
                   return _ch;
                 }(_children);
-                scope.$$postDigest(function(){
-                  isolate.renderNode.viewSeq.length = _children.length;
-                });
+                isolate.renderNode.viewSeq.length = _children.length;
               },
               updateScrollview
             );
