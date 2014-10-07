@@ -279,7 +279,7 @@ angular.module('famous.angular')
             $famousDecorator.addRole('renderable',isolate);
             isolate.show();
             
-            isolate.renderNode.viewSeq = [];
+            isolate.renderNode.viewSeq = new ViewSequence();
             isolate.renderNode.sequenceFrom(isolate.renderNode.viewSeq);
 
             var updateScrollview = function(init){
@@ -292,12 +292,16 @@ angular.module('famous.angular')
                 });
                 
                 angular.forEach(_children, function(c, i) {
-                  if (!isolate.renderNode.viewSeq[i] || isolate.renderNode.viewSeq[i] !== c.renderGate) {
-                    isolate.renderNode.viewSeq[i] = c.renderGate;
+                  if (!isolate.renderNode.viewSeq._.array[i] || isolate.renderNode.viewSeq._.array[i] !== c.renderGate) {
+                    isolate.renderNode.viewSeq._.array[i] = c.renderGate;
                   }
                 });
                 
-                isolate.renderNode.viewSeq.length = _children.length;
+                isolate.renderNode.viewSeq._.array.length = _children.length;
+                //set the first page on the scrollview if
+                //specified
+                if(init)
+                  isolate.renderNode.viewSeq.index = scope.$eval(attrs.faStartIndex) || 0;
               });
             };
 
@@ -310,7 +314,7 @@ angular.module('famous.angular')
               function(childScopeId) {
                 _children = function(_children) {
                   var _ch = [];
-                  angular.forEach(_children, function(c) {
+                  angular.forEach(_children, function(c, i) {
                     if (c.id !== childScopeId) {
                       _ch.push(c);
                     } else {

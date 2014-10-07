@@ -5592,7 +5592,9 @@ angular.module('famous.angular')
 
             $famousDecorator.addRole('renderable',isolate);
             isolate.show();
-
+            
+            isolate.renderNode.viewSeq = [];
+            isolate.renderNode.sequenceFrom(isolate.renderNode.viewSeq);
 
             var updateScrollview = function(init){
               // Synchronize the update on the next digest cycle
@@ -5602,23 +5604,14 @@ angular.module('famous.angular')
                 _children.sort(function(a, b){
                   return a.index - b.index;
                 });
-
-                var options = {
-                  array: function(_children) {
-                    var _ch = [];
-                    angular.forEach(_children, function(c, i) {
-                      _ch[i] = c.renderGate;
-                    });
-                    return _ch;
-                  }(_children)
-                };
-                //set the first page on the scrollview if
-                //specified
-                if(init)
-                  options.index = scope.$eval(attrs.faStartIndex);
-
-                var viewSeq = new ViewSequence(options);
-                isolate.renderNode.sequenceFrom(viewSeq);
+                
+                angular.forEach(_children, function(c, i) {
+                  if (!isolate.renderNode.viewSeq[i] || isolate.renderNode.viewSeq[i] !== c.renderGate) {
+                    isolate.renderNode.viewSeq[i] = c.renderGate;
+                  }
+                });
+                
+                isolate.renderNode.viewSeq.length = _children.length;
               });
             };
 
@@ -5634,11 +5627,13 @@ angular.module('famous.angular')
                   angular.forEach(_children, function(c) {
                     if (c.id !== childScopeId) {
                       _ch.push(c);
+                    } else {
+                      isolate.renderNode.viewSeq.splice(i, 1);
                     }
                   });
                   return _ch;
                 }(_children);
-                updateScrollview();
+                isolate.renderNode.viewSeq.length = _children.length;
               },
               updateScrollview
             );

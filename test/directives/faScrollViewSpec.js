@@ -54,7 +54,6 @@ describe('faScrollView', function() {
     var scrollView = $famous.find('fa-scroll-view')[0].renderNode;
 
     // The watcher resolves view sequencing
-    expect(scrollView._node).toBeNull();
     $scope.$apply();
     expect(scrollView._node.index).toBe(0);
 
