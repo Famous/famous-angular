@@ -576,6 +576,18 @@ angular.module('famous.angular')
               else return ret;
             };
 
+            var _proportionsFn = angular.noop;
+            attrs.$observe('faProperties', function () {
+              _proportionsFn = $parse(attrs.faProperties);
+            });
+            isolate.getProportions = function () {
+              var ret = _proportionsFn(scope);
+              if(ret instanceof Function) return ret();
+              else if(ret instanceof Object && ret.get !== undefined) return ret.get();
+              else if(ret instanceof Particle) return _unwrapParticle(ret);
+              else return ret;
+            };
+
             var _originFn = angular.noop;
             attrs.$observe('faOrigin', function () {
               _originFn = $parse(attrs.faOrigin);
@@ -591,6 +603,7 @@ angular.module('famous.angular')
             isolate.modifier = new Modifier({
               transform: isolate.getTransform,
               size: isolate.getSize,
+              proportions: isolate.getProportions,
               opacity: isolate.getOpacity,
               origin: isolate.getOrigin,
               align: isolate.getAlign
