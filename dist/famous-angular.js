@@ -4353,7 +4353,7 @@ angular.module('famous.angular')
 
             var _proportionsFn = angular.noop;
             attrs.$observe('faProportions', function () {
-              _proportionsFn = $parse(attrs.faProperties);
+              _proportionsFn = $parse(attrs.faProportions);
             });
             isolate.getProportions = function () {
               var ret = _proportionsFn(scope);
