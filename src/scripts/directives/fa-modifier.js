@@ -577,7 +577,7 @@ angular.module('famous.angular')
             };
 
             var _proportionsFn = angular.noop;
-            attrs.$observe('faProperties', function () {
+            attrs.$observe('faProportions', function () {
               _proportionsFn = $parse(attrs.faProperties);
             });
             isolate.getProportions = function () {
