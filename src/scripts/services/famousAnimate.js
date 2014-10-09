@@ -287,7 +287,7 @@ angular.module('famous.angular')
 
             if (animationHandler === undefined) {
               doneCallback();
-              return promise;
+              return;
             }
 
             //expects a $parse'd function or a function that
