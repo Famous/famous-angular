@@ -1009,7 +1009,21 @@ angular.module('famous.angular')
     };
   }]);
 
-//TODO:  DOCUMENT
+/**
+ * @ngdoc directive
+ * @name faAnimateHalt
+ * @module famous.angular
+ * @restrict EA
+ * @description Will execute the passed function/expression when an ngAnimate event on the given element is halted before finishing.
+ * Useful when you want to manage clean-up (e.g. Transitionable `.halt()`ing).
+ * 
+ * @usage
+ * ```html
+ * <fa-view ng-repeat="view in views" fa-animate-halt="cleanupFunction()">
+ * </fa-view>
+ * ```
+ */
+
 
 angular.module('famous.angular')
   .directive('faAnimateHalt', ["$parse", "$famousDecorator", function ($parse, $famousDecorator) {
@@ -1032,7 +1046,20 @@ angular.module('famous.angular')
     };
   }]);
 
-//TODO:  DOCUMENT
+/**
+ * @ngdoc directive
+ * @name faAnimateLeave
+ * @module famous.angular
+ * @restrict EA
+ * @description Attaches the passed function/expression to Angular ngAnimate "leave" events on the given element.
+ * Useful when you want to manage animations in Famo.us that are tied into Angular's data-driven events, e.g. on directives like ng-repeat, ui-view, and ng-if.
+ * 
+ * @usage
+ * ```html
+ * <fa-view ng-repeat="view in views" fa-animate-leave="myAnimationFunction($done)">
+ * </fa-view>
+ * ```
+ */
 
 angular.module('famous.angular')
   .directive('faAnimateLeave', ["$parse", "$famousDecorator", function ($parse, $famousDecorator) {
@@ -1055,7 +1082,20 @@ angular.module('famous.angular')
     };
   }]);
 
-//TODO:  DOCUMENT
+/**
+ * @ngdoc directive
+ * @name faAnimateMove
+ * @module famous.angular
+ * @restrict EA
+ * @description Attaches the passed function/expression to Angular ngAnimate "move" events on the given element.
+ * Useful when you want to manage animations in Famo.us that are tied into Angular's data-driven events, e.g. on directives like ng-repeat, ui-view, and ng-if.
+ * 
+ * @usage
+ * ```html
+ * <fa-view ng-repeat="view in views" fa-animate-move="myAnimationFunction($done)">
+ * </fa-view>
+ * ```
+ */
 
 angular.module('famous.angular')
   .directive('faAnimateMove', ["$parse", "$famousDecorator", function ($parse, $famousDecorator) {
