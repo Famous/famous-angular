@@ -40,7 +40,7 @@ describe('faPipeFrom', function() {
       '</fa-view>'
     );
 
-    var toHandler   = $famous.find('#pipe-to')[0].renderNode.eventHandler;
+    var toHandler   = $famous.find('#pipe-to')[0].renderNode._eventOutput;
     var fromHandler = $famous.find('#pipe-from')[0].renderNode._eventInput;
 
     // The view changes the listenerValue to true when it receives a testevent

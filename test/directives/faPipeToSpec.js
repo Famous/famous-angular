@@ -43,13 +43,13 @@ describe('faPipeTo', function() {
     faSurface.scope().eventHandler = eventHandler;
     faSurface.scope().$apply();
 
-    surface.eventHandler.trigger('start');
+    surface._eventOutput.trigger('start');
     expect(listenerValue).toBe('started');
 
-    surface.eventHandler.trigger('update');
+    surface._eventOutput.trigger('update');
     expect(listenerValue).toBe('updated');
 
-    surface.eventHandler.trigger('end');
+    surface._eventOutput.trigger('end');
     expect(listenerValue).toBe('ended');
   });
  });
