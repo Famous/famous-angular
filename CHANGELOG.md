@@ -1,3 +1,66 @@
+<a name="0.5.0"></a>
+# 0.5.0 (2014-10-10)
+
+
+## Bug Fixes
+
+- typo
+ ([96f6e383](https://github.com/Famous/famous-angular/commit/96f6e3834965473973194755566957a0c97388ff))
+- compare attr.disabled with a string to disable click on surface
+ ([4714e383](https://github.com/Famous/famous-angular/commit/4714e383be78071089321a4c35cf04894ea6ed22))
+- add .bowerrc that specifies installation directory (fixes inconsistent bower version behaviors)
+ ([7c31c9d4](https://github.com/Famous/famous-angular/commit/7c31c9d424b1d5bb3d700157785ae91e9ac0e9cb))
+- handle DOM clean-up more effectively when both fa-animate-enter and fa-animate-leave are present on one element
+ ([4e34a22f](https://github.com/Famous/famous-angular/commit/4e34a22fdc1a8f8a1a64be7ef5f2c81c1e4c21c1))
+
+
+## Features
+
+- track famo.us 0.3.0
+ ([624091e7](https://github.com/Famous/famous-angular/commit/624091e7d4203d342a8762c50f6b4563374bc005))
+- support fa-options and fa-index with fa-edge-swapper
+ ([024a37e3](https://github.com/Famous/famous-angular/commit/024a37e3048df69eb66caa51d18ec8d29f9dd187))
+- implement fa-edge-swapper
+ ([5ec55132](https://github.com/Famous/famous-angular/commit/5ec551327f44f1d6188860d816b247b149f9a9cd))
+- default to linear easing in $timeline step
+ ([8ea7d8b2](https://github.com/Famous/famous-angular/commit/8ea7d8b263d442e8b045e62cfaa44e77ae859f9f))
+
+
+## Documentation
+
+- add documentation for fa-animate-leave, fa-animate-halt, fa-animate-move
+ ([f74ef7b9](https://github.com/Famous/famous-angular/commit/f74ef7b91b14ebeff0ccebf07f7d88c7db1d8081))
+- add basic fa-animate-enter documentation
+ ([48b4b386](https://github.com/Famous/famous-angular/commit/48b4b386ee92c78d2ae01a48d87a53fbf3a5acb4))
+- add documentation for fa-edge-swapper
+ ([8b3ae339](https://github.com/Famous/famous-angular/commit/8b3ae3394a00967b6d367bf4efd8f305ed509a11))
+- modify multi piping example to work
+ ([3f3403bc](https://github.com/Famous/famous-angular/commit/3f3403bc3dddb46dec5382788fa76a6e8b808952))
+- clarify submodule init step for library development in README
+ ([5d54a015](https://github.com/Famous/famous-angular/commit/5d54a0154ad7ee204db13507b6bf609d7f478d63))
+
+
+## Breaking Changes
+
+- due to [624091e7](https://github.com/Famous/famous-angular/commit/624091e7d4203d342a8762c50f6b4563374bc005),
+ 
+
+Famo.us 0.3.0 introduces some breaking changes.
+
+* Boilerplate:
+  * Must change src of famous-global from:
+    "bower_components/famous/famous-global.js"
+      to
+    "bower_components/famous/dist/famous-global.js"
+
+  * May need to perform a `bower cache clean` before updating your bower packages.  Verify that "bower_components/famous/CHANGELOG.md" mentions 0.3.0 to ensure that the update was successful.
+
+* Application code:
+  * Famo.us 0.3.0 defaults `align` to [0,0] instead of defaulting to any provided value of `origin`.  In cases where `origin` is defined but `align` is not, element alignment will be broken.  Simplest fix for existing code is to add an `fa-align` attribute that matches `fa-origin` on any element where `fa-origin` is defined and `fa-align` is not.
+  * Vanilla Famo.us Surfaces' `eventHandler` member has been renamed to `_eventOutput`.
+  * See the [Famo.us CHANGELOG](https://github.com/Famous/famous/blob/v0.3.0/CHANGELOG.md) for more details.
+
+
 <a name="0.4.0"></a>
 # 0.4.0 (2014-09-18)
 
