@@ -280,11 +280,19 @@ angular.module('famous.angular')
             isolate.show();
 
 
+            var _postDigestScheduled = false;
+
             var updateScrollview = function(init){
+
+              //perf: don't both updating if we've already
+              //scheduled an update for the end of this digest
+              if(_postDigestScheduled === true) return;
+
               // Synchronize the update on the next digest cycle
               // (if this isn't done, $index will not be up-to-date
               // and sort order will be incorrect.)
               scope.$$postDigest(function(){
+                _postDigestScheduled = false;
                 _children.sort(function(a, b){
                   return a.index - b.index;
                 });
@@ -306,6 +314,8 @@ angular.module('famous.angular')
                 var viewSeq = new ViewSequence(options);
                 isolate.renderNode.sequenceFrom(viewSeq);
               });
+
+              _postDigestScheduled = true;
             };
 
             $famousDecorator.sequenceWith(
