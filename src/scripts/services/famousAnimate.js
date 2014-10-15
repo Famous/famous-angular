@@ -94,8 +94,8 @@
 angular.module('famous.angular')
   .config(['$provide', function($provide) {
     // Hook into the animation system to emit ng-class syncers to surfaces
-    $provide.decorator('$animate', ['$delegate', '$rootScope', '$famous', '$parse', '$famousDecorator',
-                            function($delegate,   $rootScope,   $famous,   $parse,   $famousDecorator) {
+    $provide.decorator('$animate', ['$delegate', '$rootScope', '$famous', '$parse', '$famousDecorator', '$q',
+                            function($delegate,   $rootScope,   $famous,   $parse,   $famousDecorator, $q) {
 
       var Timer   = $famous['famous/utilities/Timer'];
 
@@ -149,7 +149,7 @@ angular.module('famous.angular')
          * directively to their Surfaces whenever possible.
          */
         animationHandlers[classManipulator] = function(element, className, done) {
-         
+
           $delegate[classManipulator](element, className, done);
           if($famous.util.isFaElement(element)){
             var isolate = _getIsolate(element.scope());
@@ -187,7 +187,7 @@ angular.module('famous.angular')
       // because Angular has already negotiated the list of items to add
       // and items to remove. Manually loop through both lists.
       animationHandlers.setClass = function(element, add, remove, done) {
-        
+
         $delegate.setClass(element, add, remove, done);
 
         if ($famous.util.isASurface(element)) {
@@ -219,7 +219,7 @@ angular.module('famous.angular')
           var self = this;
           var selfArgs = arguments;
           var delegateFirst = (operation === 'enter');
-
+          var promise;
 
           var elemScope = element.scope();
 
@@ -230,7 +230,13 @@ angular.module('famous.angular')
           var isolate = _getIsolate(elemScope);
 
           if (delegateFirst === true) {
-             $delegate[operation].apply(this, arguments);
+            promise = $delegate[operation].apply(this, arguments);
+          } else {
+            var defer = $q.defer();
+            Timer.setTimeout(function() {
+              defer.resolve();
+            }, 0);
+            promise = defer.promise;
           }
 
            // Detect if an animation is currently running
@@ -297,6 +303,8 @@ angular.module('famous.angular')
               Timer.setTimeout(doneCallback, animationDuration);
             }
           });
+
+          return promise;
         };
       });
 
