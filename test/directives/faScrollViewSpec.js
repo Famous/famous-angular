@@ -33,7 +33,7 @@ describe('faScrollView', function() {
     // We are testing the widget event pipeline, not the rendering behavior of the widget.
     // Emitting a mock mousewheel event on the surface should affect the Scrollview's private _touchCount.
     expect(scrollView._touchCount).toBe(0);
-    surface.eventHandler.emit('mousewheel', common.mockEvent({count: 1}));
+    surface._eventOutput.emit('mousewheel', common.mockEvent({count: 1}));
     expect(scrollView._touchCount).toBe(1);
 
     common.destroyApp(app);

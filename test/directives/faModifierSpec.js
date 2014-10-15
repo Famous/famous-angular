@@ -391,6 +391,28 @@ describe('$faModifier', function() {
     });
 
 
+    describe('fa-proportions should accept', function() {
+      beforeEach(function() {
+        $scope.fn = function() {
+          return [.25, .75];
+        };
+        $scope.transitionable = {
+          get: function() { return [.25, .75]; }
+        }
+      });
+      generateModifierTests(
+        // Attribute
+        'fa-proportions',
+        // Modifier method expected to be called
+        'proportions',
+        // Acceptable values
+        ['arrays', 'functions', 'expressions', 'transitionables'],
+        // Expected output
+        [.25, .75]
+      );
+    });
+
+
     describe('fa-opacity should accept', function() {
       beforeEach(function() {
         $scope.fn = function() {

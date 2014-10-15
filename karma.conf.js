@@ -17,7 +17,7 @@ module.exports = function (config) {
             'test/phantomjs-polyfills.js',
             'bower_components/angular/angular.js',
             'bower_components/angular-mocks/angular-mocks.js',
-            'bower_components/famous/famous-global.js',
+            'bower_components/famous/dist/famous-global.js',
             'src/scripts/module.js',
             'src/scripts/services/**/*.js',
             'src/scripts/directives/**/*.js',

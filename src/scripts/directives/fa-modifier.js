@@ -13,6 +13,7 @@
  * @param {Number|Function|Particle} faPerspective  -  Number or array returning a number to which this modifier's perspective (focusZ) should be bound.
  * @param {Transform} faTransform - Manually created Famo.us Transform object (an array) that can be passed to the modifier.  *Will override all other transform attributes.*
  * @param {Number|Function|Transitionable|Particle} faOpacity  -  Number or function returning a number to which this Modifier's opacity should be bound
+ * @param {Array|Function|Transitionable|Particle} faProportions  -  Two element array of [percent of width, percent of height] or function returning an array of numbers to which this Modifier's proportions should be bound
  * @param {Array|Function|Transitionable|Particle} faSize  -  Array of numbers (e.g. [100, 500] for the x- and y-sizes) or function returning an array of numbers to which this Modifier's size should be bound
  * @param {Array|Function|Transitionable|Particle} faOrigin  -  Array of numbers (e.g. [.5, 0] for the x- and y-origins) or function returning an array of numbers to which this Modifier's origin should be bound
  * @param {Array|Function|Transitionable|Particle} faAlign  -  Array of numbers (e.g. [.5, 0] for the x- and y-aligns) or function returning an array of numbers to which this Modifier's align should be bound
@@ -576,6 +577,18 @@ angular.module('famous.angular')
               else return ret;
             };
 
+            var _proportionsFn = angular.noop;
+            attrs.$observe('faProportions', function () {
+              _proportionsFn = $parse(attrs.faProportions);
+            });
+            isolate.getProportions = function () {
+              var ret = _proportionsFn(scope);
+              if(ret instanceof Function) return ret();
+              else if(ret instanceof Object && ret.get !== undefined) return ret.get();
+              else if(ret instanceof Particle) return _unwrapParticle(ret);
+              else return ret;
+            };
+
             var _originFn = angular.noop;
             attrs.$observe('faOrigin', function () {
               _originFn = $parse(attrs.faOrigin);
@@ -591,6 +604,7 @@ angular.module('famous.angular')
             isolate.modifier = new Modifier({
               transform: isolate.getTransform,
               size: isolate.getSize,
+              proportions: isolate.getProportions,
               opacity: isolate.getOpacity,
               origin: isolate.getOrigin,
               align: isolate.getAlign

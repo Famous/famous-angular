@@ -287,6 +287,23 @@ to values (e.g. `fa-translate="[15, 20, 1]"`, Famo.us Transitionable objects, or
     
     <tr>
       <td>
+        faProportions
+        
+        
+      </td>
+      <td>
+        
+  <code>Array</code>|<code>function()</code>|<code>Transitionable</code>|<code>Particle</code>
+      </td>
+      <td>
+        <p>Two element array of [percent of width, percent of height] or function returning an array of numbers to which this Modifier&#39;s proportions should be bound</p>
+
+        
+      </td>
+    </tr>
+    
+    <tr>
+      <td>
         faSize
         
         
