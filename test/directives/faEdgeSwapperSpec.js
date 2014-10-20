@@ -17,21 +17,23 @@ describe('faEdgeSwapper', function() {
   }));
 
   it("should create an instance of Famo.us EdgeSwapper on top of an ng-include", function() {
-    var faEdgeSwapper = $compile('<ng-include fa-edge-swapper></ng-include>')($scope);
-    var edgeSwapper = common.getIsolateFromElement(faEdgeSwapper).renderNode;
+    var faEdgeSwapper = $compile('<div ng-include src="\'404.html\'" fa-edge-swapper></div>')($scope);
+    console.log('edgeSwapper', faEdgeSwapper);
+    console.log('edgeSwapperScope', faEdgeSwapper.scope());
+    var edgeSwapper = common.getIsolateFromElement(angular.element(faEdgeSwapper[0])).renderNode;
     expect(typeof edgeSwapper).toBe('object');
     expect(edgeSwapper instanceof EdgeSwapper).toBe(true);
   });
 
 
   it("should create a $$animateEnterHandler function on its isolate", function() {
-    var faEdgeSwapper = $compile('<ng-include fa-edge-swapper></ng-include>')($scope);
+    var faEdgeSwapper = $compile('<ng-include src="\'404.html\'" fa-edge-swapper></ng-include>')($scope);
     var edgeSwapper = common.getIsolateFromElement(faEdgeSwapper);
     expect(edgeSwapper.$$animateEnterHandler instanceof Function).toBe(true);
   });
 
   it("should create a $$animateLeaveHandler function on its isolate", function() {
-    var faEdgeSwapper = $compile('<ng-include fa-edge-swapper></ng-include>')($scope);
+    var faEdgeSwapper = $compile('<ng-include src="\'404.html\'" fa-edge-swapper></ng-include>')($scope);
     var edgeSwapper = common.getIsolateFromElement(faEdgeSwapper);
     expect(edgeSwapper.$$animateLeaveHandler instanceof Function).toBe(true);
   });
