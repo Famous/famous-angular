@@ -33,7 +33,13 @@ angular.module('famous.angular')
                         scope.$watch(function () {
                             return scope.$eval(attrs.faOptions);
                         }, function () {
-                            isolate.renderNode.setOptions(scope.$eval(attrs.faOptions));
+                            if(isolate.renderNode.setOptions){
+                                isolate.renderNode.setOptions(scope.$eval(attrs.faOptions));
+                            }else if(isolate.modifier && isolate.modifier.setOptions){
+                                isolate.modifier.setOptions(scope.$eval(attrs.faOptions));
+                            }else{
+                                throw new Error("fa-options is not supported on " + element[0].tagName);
+                            }
                         }, true);
                     }
                 };
