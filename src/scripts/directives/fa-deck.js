@@ -11,41 +11,62 @@
  *
  * @usage
  * ```html
- * <fa-sequential-layout fa-options="scopeOptionsObject">
+ * <fa-deck fa-options="scopeOptionsObject" fa-open="scopeOpenVariable">
  *   <!-- zero or more render nodes -->
- * </fa-sequential-layout>
+ * </fa-deck>
  * ```
  * @example
- * `Fa-sequential-layout` is a Famous View that arranges a collection of renderables sequentially in a specified direction.  Pass options (such as `direction`) by binding an object with the property to `fa-options`.
+ * `Fa-deck` is a Famous SequentialLayout View that can be opened and closed with a transition.  Pass options (such as `direction` and `transition`) by binding an object with the property to `fa-options`.
  *
- * In the example below, an ng-repeat is used on an `fa-view` and the elements nested below it.  The size of each `fa-surface` is `[undefined, 100]`, specifying that the width will fill the parent container, and the height will be 100 pixels.
+ * In the example below, an `fa-surface` and an `fa-view` are added to the deck. ng-repeat is used on an `fa-view` and the elements nested below it.  The size of each `fa-surface` is `[250, 50]`.
  *
- * There are no positioning properties (such as `fa-translate`) specified on the `fa-modifier`, but these `fa-surface`s will translate automatically in the specified direction as not to overlap each other.
+ * The modifier applied to the `fa-deck` positions it 0.5 across in the X direction and 0.25 down in the Y direction.
+ *
+ * A clickHandler() is bound to ng-click on the first surface, which toggles the `fa-deck` open and close actions.
  *
  <example module="faSequentialExampleApp">
   <file name="index.html">
-  <fa-app ng-controller="SequentialCtrl">
-      <fa-sequential-layout fa-options="sequentialOptions">
-       <fa-view ng-repeat="view in sequence">
-         <fa-modifier fa-size="[undefined, 100]">
-           <fa-surface fa-background-color="view.bgColor"></fa-surface>
-         </fa-modifier>
-       </fa-view>
-      </fa-sequential-layout>
-    </fa-app>
+  <fa-app ng-controller="DeckCtrl">
+    <fa-modifier fa-origin="[0.5, 0]" fa-align="[0.5, 0.25]">
+      <fa-deck fa-options="deckOptions" fa-open="deckOpen">
+        <fa-modifier fa-size="[250, 50]">
+          <fa-surface ng-click="clickHandler()" fa-properties="firstSurfaceProperties">Click Me</fa-surface>
+        </fa-modifier>
+          <fa-view ng-repeat="item in sequence">
+            <fa-modifier fa-size="[250, 50]">
+              <fa-surface fa-background-color="item.bgColor">{{ $index }}</fa-surface>
+            </fa-modifier>
+          </fa-view>
+      </fa-deck>
+    </fa-modifier>
+  </fa-app>
 
-    <script>
-      angular.module('faSequentialExampleApp', ['famous.angular'])
-          .controller('SequentialCtrl', ['$scope', '$famous', function($scope, $famous) {
+  <script>
+    angular.module('faDeckExampleApp', ['famous.angular'])
+        .controller('DeckCtrl', ['$scope', '$famous', function($scope, $famous) {
+          $scope.deckOpen = false;
 
-            $scope.sequentialOptions = {
-              direction: 1, // vertical = 1 (default), horizontal = 0
-            };
+          $scope.clickHandler = function() {
+            $scope.deckOpen = !$scope.deckOpen;
+          };
 
-            $scope.sequence = [{bgColor: "orange"}, {bgColor: "red"}, {bgColor: "green"}, {bgColor: "yellow"}];
+          $scope.deckOptions = {
+            direction: 1, // vertical = 1 (default), horizontal = 0
+            itemSpacing: 0,
+            transition: {duration: 200, curve: 'easeInOut'},
+          };
 
-        }]);
-    </script>
+          $scope.firstSurfaceProperties = {
+            color: 'blue',
+            backgroundColor: 'white',
+            border: '1px solid black',
+            textAlign: 'center'
+          };
+
+          $scope.sequence = [{bgColor: "orange"}, {bgColor: "red"}, {bgColor: "green"}, {bgColor: "yellow"}];
+
+      }]);
+  </script>
   </file>
   <file name="style.css">
   fa-app {
