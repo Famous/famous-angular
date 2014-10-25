@@ -84,17 +84,28 @@ angular.module('famous.angular')
             $famousDecorator.addRole('renderable',isolate);
             isolate.show();
 
+            var _postDigestScheduled = false;
+
             var _updateSequentialLayout = function() {
-              _children.sort(function(a, b) {
-                return a.index - b.index;
-              });
-              isolate.renderNode.sequenceFrom(function(_children) {
-                var _ch = [];
-                angular.forEach(_children, function(c, i) {
-                  _ch[i] = c.renderGate;
+              //perf: don't both updating if we've already
+              //scheduled an update for the end of this digest
+              if(_postDigestScheduled === true) return;
+
+              scope.$$postDigest(function(){
+                _postDigestScheduled = false;
+                _children.sort(function(a, b) {
+                  return a.index - b.index;
                 });
-                return _ch;
-              }(_children));
+                isolate.renderNode.sequenceFrom(function(_children) {
+                  var _ch = [];
+                  angular.forEach(_children, function(c, i) {
+                    _ch[i] = c.renderGate;
+                  });
+                  return _ch;
+                }(_children));
+              });
+
+              _postDigestScheduled = true;
             };
 
             $famousDecorator.sequenceWith(
