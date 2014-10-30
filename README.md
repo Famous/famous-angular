@@ -35,7 +35,7 @@ Contact [famous-angular@thomasstreet.com](mailto:famous-angular@thomasstreet.com
 * Run `bower install famous-angular`
 * Add the following to your index.html
 ```html
-  <script src="bower_components/famous/famous-global.js"></script>
+  <script src="bower_components/famous/dist/famous-global.js"></script>
   <script src="bower_components/famous-angular/dist/famous-angular.js"></script>
 ```
 * Add`<link rel="stylesheet" href="bower_components/famous-angular/dist/famous-angular.css">` to the `<head>` of your index.html
