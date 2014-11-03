@@ -4534,7 +4534,13 @@ angular.module('famous.angular')
                         scope.$watch(function () {
                             return scope.$eval(attrs.faOptions);
                         }, function () {
-                            isolate.renderNode.setOptions(scope.$eval(attrs.faOptions));
+                            if(isolate.renderNode.setOptions){
+                                isolate.renderNode.setOptions(scope.$eval(attrs.faOptions));
+                            }else if(isolate.modifier && isolate.modifier.setOptions){
+                                isolate.modifier.setOptions(scope.$eval(attrs.faOptions));
+                            }else{
+                                throw new Error("fa-options is not supported on " + element[0].tagName);
+                            }
                         }, true);
                     }
                 };
@@ -5830,17 +5836,28 @@ angular.module('famous.angular')
             $famousDecorator.addRole('renderable',isolate);
             isolate.show();
 
+            var _postDigestScheduled = false;
+
             var _updateSequentialLayout = function() {
-              _children.sort(function(a, b) {
-                return a.index - b.index;
-              });
-              isolate.renderNode.sequenceFrom(function(_children) {
-                var _ch = [];
-                angular.forEach(_children, function(c, i) {
-                  _ch[i] = c.renderGate;
+              //perf: don't both updating if we've already
+              //scheduled an update for the end of this digest
+              if(_postDigestScheduled === true) return;
+
+              scope.$$postDigest(function(){
+                _postDigestScheduled = false;
+                _children.sort(function(a, b) {
+                  return a.index - b.index;
                 });
-                return _ch;
-              }(_children));
+                isolate.renderNode.sequenceFrom(function(_children) {
+                  var _ch = [];
+                  angular.forEach(_children, function(c, i) {
+                    _ch[i] = c.renderGate;
+                  });
+                  return _ch;
+                }(_children));
+              });
+
+              _postDigestScheduled = true;
             };
 
             $famousDecorator.sequenceWith(
