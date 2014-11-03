@@ -25,7 +25,7 @@ angular.module('famous.angular')
 
       for (var i = 0; i < pipes.length; i++) {
         for (var j = 0; j < targets.length; j++) {
-          if (targets[j] !== undefined && pipes[i] !== undefined) {
+          if (targets[j] !== undefined && !targets[j]._object && pipes[i] !== undefined) {
             targets[j][method](pipes[i]);
           }
         }
