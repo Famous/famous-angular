@@ -33,7 +33,8 @@ angular.module('famous.angular')
                         scope.$watch(function () {
                             return scope.$eval(attrs.faOptions);
                         }, function () {
-                            if(isolate.renderNode.setOptions){
+                            if(isolate.context) return;
+                            if(isolate.renderNode && isolate.renderNode.setOptions){
                                 isolate.renderNode.setOptions(scope.$eval(attrs.faOptions));
                             }else if(isolate.modifier && isolate.modifier.setOptions){
                                 isolate.modifier.setOptions(scope.$eval(attrs.faOptions));
