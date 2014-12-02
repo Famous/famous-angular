@@ -9,12 +9,12 @@
     "dist/famous-angular.css"
   ],
   "dependencies": {
-    "angular": "1.3.0",
+    "angular": "1.3.5",
     "famous": "0.3.0",
     "famous-angular-bower": "https://code.famo.us/famous-angular/bower/famous-angular-bower.tar.gz?version=0.5.0"
   },
   "devDependencies": {
-    "angular-mocks": "1.3"
+    "angular-mocks": "1.3.5"
   },
   "ignore": [
     "**/.*",
