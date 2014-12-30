@@ -228,7 +228,7 @@ angular.module('famous.angular')
               });
 
               renderNode.on('click', function(event, touchend) {
-                scope.$apply(function() {
+                scope.$evalAsync(function() {
                   clickHandler(scope, {$event: (touchend || event)});
                 });
               });
