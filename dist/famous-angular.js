@@ -868,7 +868,7 @@ angular.module('famous.angular')
  * @example
  * ```html
  * <fa-modifier
- *   fa-rotate-y="rRotation(t.get())"
+ *   fa-rotate-y="yRotation(t.get())"
  *   fa-translate="translation(t.get())"
  * >
  *   ...
@@ -3870,7 +3870,7 @@ angular.module('famous.angular')
   <file name="index.html">
   <fa-app ng-controller="ModifierCtrl">
       <fa-modifier fa-opacity=".25" fa-skew="myScopeSkewVariable"
-                   fa-translate="[25, 50, 2]" 
+                   fa-translate="[25, 50, 2]"
                    fa-scale="myScopeFunctionThatReturnsAnArray">
         <!-- Child elements of this fa-modifier will be affected by the values above -->
         <fa-surface>I'm translucent, skewed, and translated</fa-surface>
@@ -4190,7 +4190,7 @@ angular.module('famous.angular')
     <script>
       angular.module('faModifierExampleApp', ['famous.angular'])
           .controller('ModifierCtrl', ['$scope', '$famous', function($scope, $famous) {
-            
+
             var Transform = $famous['famous/core/Transform'];
 
             $scope.skewFunc = function() {
@@ -4240,7 +4240,7 @@ angular.module('famous.angular')
                    fa-size="[100, 100]">
         <fa-surface fa-background-color="'red'"></fa-surface>
       </fa-modifier>
-      
+
       <fa-modifier fa-transform-order="['rotateZ', 'translate']"
                    fa-rotate-z="0.3"
                    fa-translate="[100, 0, 0]"
@@ -4274,7 +4274,7 @@ angular.module('famous.angular')
            <fa-surface fa-background-color="'red'"></fa-surface>
          </fa-modifier>
       </fa-modifier>
-      
+
        <fa-modifier fa-rotate-z=".6">
          <fa-modifier fa-translate="[100, 100]" fa-size="[100, 100]">
            <fa-surface fa-background-color="'blue'"></fa-surface>
@@ -4380,7 +4380,7 @@ angular.module('famous.angular')
 
               if(!transforms.length) return undefined;
               else if (transforms.length === 1) return transforms[0];
-              else return Transform.multiply.apply(this, transforms);
+              else return transforms.reduce(Transform.multiply);
             };
 
             var _alignFn = angular.noop;
@@ -4457,7 +4457,7 @@ angular.module('famous.angular')
 
             $famousDecorator.addRole('renderable',isolate);
             isolate.show();
-            
+
             $famousDecorator.sequenceWith(scope, function(data) {
               isolate.renderNode.add(data.renderGate);
             });
