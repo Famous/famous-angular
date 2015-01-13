@@ -32,7 +32,7 @@ Using F/A, you can:
 ####Before you start, tools you will need:
 * Download and install [git](http://git-scm.com/downloads)
 * Download and install [nodeJS](http://nodejs.org/download/)
-* Install bower `npm install -g bower`
+* Install bower `npm install -g bower`git
 
 ####Inside of your app:
 * Run `bower install famous-angular`
@@ -45,6 +45,19 @@ Using F/A, you can:
 * Add the `famous.angular` module to your Angular module list (e.g. in a main app.js file: `angular.module('yourMainModule', ['famous.angular'])`)
 * And add an `<fa-app style="height: 200px"><fa-surface fa-background-color="'red'">Hello world</fa-surface></fa-app>` in one of your templates.  If you see 'Hello world' on a red background, you should be good to go.
 **Note: currently, the element that the `<fa-app>` is on must be display: block (like a `<div fa-app>` or a `<p fa-app>`, or just `<fa-app>`) and must have a defined height (like `style="height: 200px"` in this example.)**
+
+
+## CDN Dependencies
+Here are a few CDN URLs for Famo.us and Famous-angular specific dependencies just in case you are not able to use bower or node for tooling in the app.  You will still need to ensure that you have Angular 1.2.26 in your project as it is a dependency for Famous-Angular.
+
+Famo.us:
+* http://code.famo.us/famous/latest/famous-global.js
+* http://code.famo.us/famous/latest/famous.js
+* http://code.famo.us/famous/latest/famous.css
+
+Famous-Angular:
+* http://code.famo.us/famous-angular/latest/famous-angular.js
+* http://code.famo.us/famous-angular/latest/famous-angular.css
 
 
 ##Support
