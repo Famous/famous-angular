@@ -9,7 +9,7 @@
  * @example
  * ```html
  * <fa-modifier
- *   fa-rotate-y="rRotation(t.get())"
+ *   fa-rotate-y="yRotation(t.get())"
  *   fa-translate="translation(t.get())"
  * >
  *   ...
