@@ -62,7 +62,9 @@ Famous-Angular:
 
 ##Support
 
-Please submit issues as Github issues or reach out for support on the Famous IRC channel on Freenode.  Pleae create a CodePen forked from [this pen](http://codepen.io/zackbrown/pen/yyVQje) for all of your code support issues.  
+* Feel free reach out for support on the Famous IRC channel on Freenode.  
+* Please submit issues as Github issues.  
+* Please create a CodePen forked from [this pen](http://codepen.io/zackbrown/pen/yyVQje) for all of you code issues.
 
 
 ##Contributing
