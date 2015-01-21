@@ -76,4 +76,4 @@ See [CONTRIBUTING.md](https://github.com/Famous/famous-angular/blob/master/CONTR
 
 As mentioned above, please direct support questions to GitHub Issues so that community members can help answer questions as well as benefit from answers.
 
-For anything else, email zack@famo.us or tweet at @befamous and @zackaboo.  
+For anything else, email jordan@famo.us or tweet at @befamous.  
