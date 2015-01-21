@@ -12,7 +12,6 @@
     "node": ">=0.8.0"
   },
   "scripts": {
-    "install": "bower install",
     "postinstall": "git submodule update --init --recursive",
     "start": "gulp dev",
     "test": "karma start --single-run"
