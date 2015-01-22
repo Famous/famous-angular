@@ -1,6 +1,3 @@
-var EXAMPLES_DIR = 'famous-angular-examples/';
-var EXPRESS_PORT = 4000;
-
 // Load plugins
 var gulp = require('gulp'),
   autoprefixer = require('gulp-autoprefixer'),
@@ -111,8 +108,11 @@ gulp.task('docs', ['build'], function(done) {
 
 
 /***********************************************************************
- * Watch task for developing with the famous-angular-examples submodule
+ * Tasks for the Famous-Angular-Examples submodule
  ***********************************************************************/
+var EXAMPLES_DIR  = 'famous-angular-examples/';
+var EXAMPLES_PORT  = 4000;
+
 gulp.task('build-to-examples', ['clean', 'build'], function(event) {
   gulp.src([
     'src/scripts/module.js',
@@ -125,8 +125,7 @@ gulp.task('build-to-examples', ['clean', 'build'], function(event) {
   return gulp.src('src/styles/famous-angular.css')
   .pipe(gulp.dest(EXAMPLES_DIR + 'app/bower_components/famous-angular/dist/'))
   .pipe(notify({ message: 'Build task complete' }));
-
-})
+});
 
 // Watch
 gulp.task('watch-examples', function(event) {
@@ -174,7 +173,7 @@ var promptBump = function(callback) {
         return;
       }
     }));
-}
+};
 
 var makeChangelog = function(newVer) {
   var streamqueue = require('streamqueue');
@@ -186,7 +185,7 @@ var makeChangelog = function(newVer) {
   return stream.done()
     .pipe(concat('CHANGELOG.md'))
     .pipe(gulp.dest('./'));
-}
+};
 
 // Make changelog
 gulp.task('changelog', function(event) {
@@ -194,7 +193,7 @@ gulp.task('changelog', function(event) {
   var semver = require('semver');
 
   return promptBump(makeChangelog);
-})
+});
 
 gulp.task('release', ['docs'], function() { // docs task includes build task
   var jeditor = require("gulp-json-editor");
@@ -245,14 +244,14 @@ gulp.task('release', ['docs'], function() { // docs task includes build task
 
     return stream.done();
   });
-})
+});
 
 gulp.task('jasmine', function() {
   var jasmine = require('gulp-jasmine');
 
   return gulp.src('test/**/*Test.js')
     .pipe(jasmine());
-})
+});
 
 // Default task
 gulp.task('dev', ['build-to-examples'], function() {
@@ -260,6 +259,40 @@ gulp.task('dev', ['build-to-examples'], function() {
   var app = express();
   app.use(require('connect-livereload')());
   app.use(express.static(EXAMPLES_DIR + 'app/'));
-  app.listen(EXPRESS_PORT);
+  app.listen(EXAMPLES_PORT);
   gulp.start('watch-examples');
+});
+
+gulp.task('serve-examples', ['build-to-examples'], function() {
+  var express = require('express');
+  var app = express();
+  app.use(express.static(EXAMPLES_DIR + 'app/'));
+  console.log('FA-Examples listening at port: ', gutil.colors.cyan('http://localhost:' + EXAMPLES_PORT));
+  app.listen(EXAMPLES_PORT);
+});
+
+
+
+
+/***********************************************************************
+ * Tasks for the famous-angular-docs submodule
+ ***********************************************************************/
+var DOCS_PORT     = 4001;
+var DOCS_DIR      = 'famous-angular-docs/';
+
+gulp.task('serve-docs', ['build-to-docs'], function() {
+  var express = require('express');
+  var app = express();
+  app.use(express.static(DOCS_DIR + '_site'));
+  console.log('FA-DOCS listening at port: ', gutil.colors.cyan('http://localhost:' + DOCS_PORT));
+  app.listen(DOCS_PORT);
+});
+
+// ThHis does not run all the compilation files
+gulp.task('build-to-docs', [], function(event) {
+  var jekyllCommand = 'jekyll build --source ' + DOCS_DIR + ' --destination ' + DOCS_DIR + '_site/';
+  // gulp-exec bugfix:
+  // Need to call gulp.src('') exactly, before using .pipe(exec())
+  return gulp.src('')
+    .pipe(exec(jekyllCommand));
 });
