@@ -2,6 +2,7 @@
  * @ngdoc directive
  * @name faFlipper
  * @module famous.angular
+ * @requires famous
  * @restrict EA
  * @description
  * This directive will create a Famo.us Flipper containing the
@@ -21,17 +22,41 @@
  *
  * This function attempts a DOM lookup for an isolate of an `fa-flipper` element, and calls the `.flip()` function of `fa-flipper`.
  *
- *```html
- * <fa-flipper>
- *    <fa-surface fa-background-color="'yellow'" fa-click="flipIt()"></fa-surface>
- *    <fa-surface fa-background-color="'red'" fa-click="flipIt()"></fa-surface>
- * </fa-flipper>
- *```
- *```javascript
- * $scope.flipIt = function() {
- *    $famous.find('fa-flipper')[0].flip();
- * };
- *```
+ <example module="faFlipperExampleApp">
+  <file name="index.html">
+  <fa-app ng-controller="FlipperCtrl">
+      <fa-flipper>
+        <fa-modifier fa-size="[200, 200]">
+          <fa-surface fa-background-color="'yellow'" fa-click="flipIt()">Click me to see me flip!</fa-surface>
+        </fa-modifier>  
+        <fa-modifier fa-size="[200, 200]">
+          <fa-surface fa-background-color="'red'" fa-click="flipIt()">Flip me again!</fa-surface>
+        </fa-modifier>  
+      </fa-flipper>
+    </fa-app>
+  </file>
+  <file name="style.css">
+  fa-app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+    div {
+      cursor: pointer;
+      padding: 8px 8px;
+    }
+  </file>
+  <file name="script.js">
+  angular.module('faFlipperExampleApp', ['famous.angular'])
+      .controller('FlipperCtrl', ['$scope', '$famous', function($scope, $famous) {
+        $scope.flipIt = function() {
+           $famous.find('fa-flipper')[0].flip();
+        };
+    }]);
+  </file>
+ </example>
  */
 
 angular.module('famous.angular')

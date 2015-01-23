@@ -21,33 +21,56 @@
  *
  * Declaring `fa-app` appends a div with the class of `"famous-angular-container"` to the DOM.  It then instantiates a Context via Famous' Engine `.createContext()` method, passing in a reference to the `famous-angular-container` div, resulting in a Famous context that renderables can be added to connected to Angular.  `Fa-app` can be declared as an element or as an attribute within another element.  
  *
- * ```html
- * <fa-app style="width: 320px; height: 568px;">
- *   <fa-modifier>
- *     <fa-surface>This will be shown on screen.</fa-surface>
- *   </fa-modifier>
- *   <div>This will not appear on screen because it is not inside an fa-surface.</div>
- * </fa-app>
- * ```
+<example module="faAppExampleApp">
+ <file name="index.html">
+  <fa-app>
+    <fa-modifier>
+      <fa-surface>This will be shown on screen.</fa-surface>
+    </fa-modifier>
+    <div>This will not appear on screen because it is not inside an fa-surface.</div>
+  </fa-app>
+ </file>
+ <file name="style.css">
+ fa-app {
+     position: fixed;
+     top: 0;
+     right: 0;
+     bottom: 0;
+     left: 0;
+   }
+ </file>
+ <file name="script.js">
+ angular.module('faAppExampleApp', ['famous.angular']);
+ </file>
+</example>
  * ## Common Qustions
  * ### Multiple fa-app's
  * Nesting an `fa-app` within another `fa-app` is possible, and the use case of this approach would be for css content overflow.
  *
- * In the example below, there is an `fa-surface` with an `fa-app` nested inside.  Normally, an `fa-surface` should not nest another Famous element within it because it is a leaf node that has the purpose of being a container for html content.  The exception is nesting an `fa-app` within an `fa-surface`, which creates another Famous context, in which Famous elements can be nested inside.   
+ * In the example below, there is an `fa-surface` with an `fa-app` nested inside.  Normally, an `fa-surface` should not nest another Famous element within it because it is a leaf node that has the purpose of being a container for html content.  The exception is nesting an `fa-app` within an `fa-surface`, which creates another Famous context, in which Famous elements can be nested inside.
  * 
- * ```html
- * <fa-app style="width: 500px; height: 500px;">
- *   <fa-surface>
- *     <fa-app style="width: 200px; height: 200px;">
- *       <fa-image-surface 
- *          fa-image-url="https://famo.us/assets/images/famous_logo_white.svg" 
- *          fa-size="[400, 400]">
- *       </fa-image-surface>
- *     </fa-app>
- *   </fa-surface>
- * </fa-app>
- * ```
- * 
+ <example module="faAppExampleAppA">
+  <file name="index.html">
+  <fa-app style="width: 500px; height: 500px;">
+      <fa-surface>
+        <fa-app style="width: 200px; height: 200px; overflow: hidden;">
+          <fa-image-surface 
+             fa-image-url="https://famo.us/assets/images/famous_logo_white.svg" 
+             fa-size="[400, 400]">
+          </fa-image-surface>
+        </fa-app>
+      </fa-surface>
+    </fa-app>
+  </file>
+  <file name="style.css">
+  fa-app {
+      background-color: #000;  
+    }
+  </file>
+  <file name="script.js">
+  angular.module('faAppExampleAppA', ['famous.angular']);
+  </file>
+ </example>
  * The outer `fa-app` is sized 500x500, and it contains all of the content.  The use case of this `fa-app` within another `fa-app` is to clip content using the css overflow:hidden property.  The `fa-image-surface` links to a 400x400 sized image of the Famous logo.  Its parent is the nested `fa-app`, whose size is only 200x200.  
  * 
  * The larger image content (400x400) will overflow the boundaries of its parent, the the nested `fa-app` (200x200).  Because `fa-app` has a css overflow:hidden property, it will clip the content of any of its children that is outside the 200x200 region.  Any part of the 400x400 image that reaches outside of these boundaries are ignored.  This may be useful for complex animations.  

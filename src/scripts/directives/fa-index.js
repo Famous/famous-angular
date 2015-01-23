@@ -31,43 +31,64 @@
  * `Fa-start-index` will not affect the sequential order of the layout; the `fa-view` with the red background will be layed out first, followed by the one with the blue background.
  *  By setting `fa-start-index` to 1, the Scroll View will display the View with the index of 1, which is the View with the blue background color. 
  *
- * ```html
- *   <fa-app style="width: 320px; height: 568px;"> 
- *    <!-- The scroll View will start at the index of 1 -->
- *     <fa-scroll-view fa-pipe-from="eventHandler" fa-options="options.scrollView" fa-start-index="1">
- *       <!-- Even though this view is declared first in html, it will will be layed out 2nd -->
- *       <!-- On page load, the scroll View will scroll to this view, and display it.  -->
- *        <fa-view fa-index="1">
- *           <fa-modifier fa-size="[320, 568]">
- *              <fa-surface fa-pipe-to="eventHandler" 
- *                          fa-background-color="'blue'">
- *              </fa-surface>
- *           </fa-modifier>
- *        </fa-view>
- * 
- *        <fa-view fa-index="0">
- *           <fa-modifier fa-size="[320, 568]">
- *              <fa-surface fa-pipe-to="eventHandler" 
- *                          fa-background-color="'red'">
- *              </fa-surface>
- *           </fa-modifier>
- *        </fa-view>
- * 
- *     </fa-scroll-view>   
- *   </fa-app>   
- * ```
- *
- * ```javascript
- * var EventHandler = $famous['famous/core/EventHandler'];
- * $scope.eventHandler = new EventHandler();
- * $scope.list = [{content: "famous"}, {content: "angular"}, {content: "rocks!"}];
- *
- * $scope.options = {
- *   scrollView: {
- *     direction: 0 // displays the fa-views horizontally
- *   }
- * };
- *```
+ <example module="faIndexExampleApp">
+  <file name="index.html">
+  <fa-app ng-controller="IndexCtrl"> 
+
+     <!-- The scroll View will start at the index of 1 -->
+      <fa-scroll-view fa-pipe-from="eventHandler" fa-options="options.scrollView" fa-start-index="1">
+
+        <!-- Even though this view is declared first in html, it will will be layed out 2nd -->
+        <!-- On page load, the scroll View will scroll to this view, and display it.  -->
+
+         <fa-view fa-index="1">
+            <fa-modifier fa-size="[320, 320]">
+               <fa-surface fa-pipe-to="eventHandler" 
+                           fa-background-color="'blue'">
+                           <p>Scroll me back!</p>
+               </fa-surface>
+            </fa-modifier>
+         </fa-view>
+    
+         <fa-view fa-index="0">
+            <fa-modifier fa-size="[320, 320]">
+               <fa-surface fa-pipe-to="eventHandler" 
+                           fa-background-color="'red'">
+                           <p>Scroll me!</p>
+               </fa-surface>
+            </fa-modifier>
+         </fa-view>
+    
+      </fa-scroll-view>   
+    </fa-app>   
+  </file>
+  <file name="script.js">
+  angular.module('faIndexExampleApp', ['famous.angular'])
+      .controller('IndexCtrl', ['$scope', '$famous', function($scope, $famous) {
+
+       var EventHandler = $famous['famous/core/EventHandler'];
+       $scope.eventHandler = new EventHandler();
+       $scope.list = [{content: "famous"}, {content: "angular"}, {content: "rocks!"}];
+      
+       $scope.options = {
+         scrollView: {
+           direction: 0 // displays the fa-views horizontally
+         }
+       };
+
+    }]);
+  </file>
+  <file name="style.css">
+  fa-app {
+      width: 320px;
+      height: 320px;
+      overflow: hidden;
+    }
+    p {
+      padding: 8px 8px;
+    }
+  </file>
+ </example>
  */
 
 angular.module('famous.angular')
@@ -79,7 +100,7 @@ angular.module('famous.angular')
       compile: function () {
         return {
           post: function (scope, element, attrs) {
-            var isolate = $famousDecorator.ensureIsolate(scope);
+            var isolate = $famousDecorator.ensureIsolate(scope, element);
             isolate.index = scope.$eval(attrs.faIndex);
 
             scope.$watch(function () {

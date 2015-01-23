@@ -186,7 +186,7 @@ ngFameApp.provider('$famous', function() {
   var IS_FA = /^FA\-.*/;
   /**
     Util functions.
-  */ 
+  */
 
   window.$famousUtil = _modules.util = {
     /**
@@ -195,6 +195,8 @@ ngFameApp.provider('$famous', function() {
    * @return {boolean}
    */
     isASurface : function (element) {
+      if(!element[0]) return false;
+
       return IS_A_SURFACE.test(element[0].tagName);
     },
 
@@ -204,7 +206,17 @@ ngFameApp.provider('$famous', function() {
       @return {boolean}
     */
     isFaElement : function (element) {
-      return IS_FA.test(element[0].tagName);
+      if(!element[0]) return false;
+
+      //short-circuit most common case
+      if(IS_FA.test(element[0].tagName)) return true;
+
+      //otherwise loop through attributes
+      var ret = false;
+      angular.forEach(element[0].attributes, function(attr){
+        ret = ret || IS_FA.test(attr);
+      });
+      return ret;
     },
     /**
      * Converts snake_case to camelCase.
@@ -235,7 +247,7 @@ ngFameApp.provider('$famous', function() {
         return _modules.util.camelCase(name.replace(PREFIX_REGEXP, ''));
     }
   };
-  
+
   this.$get = function() {
 
     /**
@@ -265,4 +277,3 @@ ngFameApp.provider('$famous', function() {
     return _modules;
   };
 });
-

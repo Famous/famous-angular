@@ -18,34 +18,74 @@
  * @example
  * A Famous Grid Layout divides a context into evenly-sized grid cells.  Pass an option such as `dimension` by binding an object with the property to `fa-options`.
  *
- * In the example below, `fa-options` references `myGridLayoutOptions` on the scope.
+ * In the example below, `fa-options` references `myGridLayoutOptions` on the scope.  The dimensions property has a value of `[2,2]` which specifies the columns and rows.  `fa-size` is specified as `[100, 100]` on the fa-modifier, so each `fa-surface` will have these dimensions.
  *
- * ```javascript
- * $scope.myGridLayoutOptions = {
- *    dimensions: [2,2], // specifies number of columns and rows
- * };
- * ```
- *
- * In the example below, `fa-size` is specified as `[100, 100]`, so each `fa-surface` will have these dimensions.
- * ```html
- * <fa-grid-layout fa-options="myGridLayoutOptions">
- *    <fa-modifier ng-repeat="grid in grids"
- *                 fa-size="[100, 100]">
- *      <fa-surface fa-background-color="grid.bgColor"></fa-surface>
- *    </fa-modifier>
- * </fa-grid-layout>
- * ```
- * ```javascript
- * $scope.grids = [{bgColor: "orange"}, {bgColor: "red"}, {bgColor: "green"}, {bgColor: "yellow"}];
- * ```
- *
+ <example module="faGridExampleApp">
+  <file name="index.html">
+  <fa-app ng-controller="GridCtrl">
+    <fa-grid-layout fa-options="myGridLayoutOptions">
+       <fa-modifier ng-repeat="grid in grids"
+                    fa-size="[100, 100]">
+         <fa-surface fa-background-color="grid.bgColor"></fa-surface>
+       </fa-modifier>
+    </fa-grid-layout>
+    </fa-app>
+  </file>
+  <file name="script.js">
+  angular.module('faGridExampleApp', ['famous.angular'])
+      .controller('GridCtrl', ['$scope', function($scope) {
+
+        $scope.myGridLayoutOptions = {
+           dimensions: [2,2], // specifies number of columns and rows
+        };
+
+        $scope.grids = [{bgColor: "orange"}, {bgColor: "red"}, {bgColor: "green"}, {bgColor: "yellow"}];
+
+    }]);
+  </file>
+  <file name="style.css">
+  fa-app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  </file>
+ </example>
+
  * If `fa-size` is not specified, as in this example below, the fa-surface's will collectively fill the height and width of its parent modifier/context.
  *
- * ```html
- * <fa-grid-layout fa-options="myGridLayoutOptions">
- *    <fa-surface ng-repeat="grid in grids" fa-background-color="grid.bgColor"></fa-surface>
- * </fa-grid-layout>
- * ```
+ <example module="faGridExampleAppA">
+  <file name="index.html">
+  <fa-app ng-controller="GridCtrlA">
+      <fa-grid-layout fa-options="myGridLayoutOptions">
+         <fa-surface ng-repeat="grid in grids" fa-background-color="grid.bgColor"></fa-surface>
+      </fa-grid-layout>
+    </fa-app>
+  </file>
+  <file name="script.js">
+  angular.module('faGridExampleAppA', ['famous.angular'])
+      .controller('GridCtrlA', ['$scope', function($scope) {
+
+        $scope.myGridLayoutOptions = {
+           dimensions: [2,2], // specifies number of columns and rows
+        };
+
+        $scope.grids = [{bgColor: "orange"}, {bgColor: "red"}, {bgColor: "green"}, {bgColor: "yellow"}];
+
+    }]);
+  </file>
+  <file name="style.css">
+  fa-app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  </file>
+ </example>
  */
 
 angular.module('famous.angular')
@@ -70,12 +110,6 @@ angular.module('famous.angular')
 
             $famousDecorator.addRole('renderable',isolate);
             isolate.show();
-            //watch options and update when changed
-            scope.$watch(function(){
-              return scope.$eval(attrs.faOptions);
-            }, function(newVal, oldVal){
-              isolate.renderNode.setOptions(newVal);
-            }, true);
 
             var updateGridLayout = function () {
               scope.$$postDigest(function(){

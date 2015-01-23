@@ -16,4 +16,7 @@ npm-debug.log
 .sass-cache
 bower_components
 .idea/*
+*.iml
 _site
+coverage/*
+

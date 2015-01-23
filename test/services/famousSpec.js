@@ -63,5 +63,42 @@ describe('$famous', function() {
     });
   });
 
-  
+  describe('util', function(){
+    describe('isASurface', function() {
+      it('should return true if element is a surface', function() {
+        var element = angular.element("<fa-surface></fa-surface>");
+        expect($famous.util.isASurface(element)).toBe(true);
+      });
+
+      it('should return false if element is not a surface', function() {
+        var element = angular.element("<div></div>");
+        expect($famous.util.isASurface(element)).toBe(false);
+      });
+
+      it('should return false without an error if element count is 0', function() {
+        var element = [];
+        expect($famous.util.isASurface(element)).toBe(false);
+      });
+
+    });
+
+    describe('isFaElement', function() {
+      it('should return true if element is a famous angular element', function() {
+        var element = angular.element("<fa-modifier></fa-modifier>");
+        expect($famous.util.isFaElement(element)).toBe(true);
+      });
+
+      it('should return false if element is not a surface', function() {
+        var element = angular.element("<div></div>");
+        expect($famous.util.isFaElement(element)).toBe(false);
+      });
+
+      it('should return false without an error if element count is 0', function() {
+        var element = [];
+        expect($famous.util.isFaElement(element)).toBe(false);
+      });
+
+    });
+  });
+
 });

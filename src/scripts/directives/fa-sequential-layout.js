@@ -22,21 +22,41 @@
  *
  * There are no positioning properties (such as `fa-translate`) specified on the `fa-modifier`, but these `fa-surface`s will translate automatically in the specified direction as not to overlap each other.
  *
- * ```html
- * <fa-sequential-layout fa-options="seqOptions">
- *  <fa-view ng-repeat="view in seq">
- *    <fa-modifier fa-size="[undefined, 100]">
- *      <fa-surface fa-background-color="view.bgColor"></fa-surface>
- *    </fa-modifier>
- *  </fa-view>
- * </fa-sequential-layout>
- * ```
- * ```javascript
- * $scope.seqOptions = {
- *   direction: 1, // vertical = 1 (default), horizontal = 0
- * };
- * $scope.seq = [{bgColor: "orange"}, {bgColor: "red"}, {bgColor: "green"}, {bgColor: "yellow"}];
- * ```
+ <example module="faSequentialExampleApp">
+  <file name="index.html">
+  <fa-app ng-controller="SequentialCtrl">
+      <fa-sequential-layout fa-options="sequentialOptions">
+       <fa-view ng-repeat="view in sequence">
+         <fa-modifier fa-size="[undefined, 100]">
+           <fa-surface fa-background-color="view.bgColor"></fa-surface>
+         </fa-modifier>
+       </fa-view>
+      </fa-sequential-layout>
+    </fa-app>
+
+    <script>
+      angular.module('faSequentialExampleApp', ['famous.angular'])
+          .controller('SequentialCtrl', ['$scope', '$famous', function($scope, $famous) {
+            
+            $scope.sequentialOptions = {
+              direction: 1, // vertical = 1 (default), horizontal = 0
+            };
+
+            $scope.sequence = [{bgColor: "orange"}, {bgColor: "red"}, {bgColor: "green"}, {bgColor: "yellow"}];
+
+        }]);
+    </script>
+  </file>
+  <file name="style.css">
+  fa-app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  </file>
+ </example>
  */
 
 angular.module('famous.angular')
@@ -64,17 +84,28 @@ angular.module('famous.angular')
             $famousDecorator.addRole('renderable',isolate);
             isolate.show();
 
+            var _postDigestScheduled = false;
+
             var _updateSequentialLayout = function() {
-              _children.sort(function(a, b) {
-                return a.index - b.index;
-              });
-              isolate.renderNode.sequenceFrom(function(_children) {
-                var _ch = [];
-                angular.forEach(_children, function(c, i) {
-                  _ch[i] = c.renderGate;
+              //perf: don't both updating if we've already
+              //scheduled an update for the end of this digest
+              if(_postDigestScheduled === true) return;
+
+              scope.$$postDigest(function(){
+                _postDigestScheduled = false;
+                _children.sort(function(a, b) {
+                  return a.index - b.index;
                 });
-                return _ch;
-              }(_children));
+                isolate.renderNode.sequenceFrom(function(_children) {
+                  var _ch = [];
+                  angular.forEach(_children, function(c, i) {
+                    _ch[i] = c.renderGate;
+                  });
+                  return _ch;
+                }(_children));
+              });
+
+              _postDigestScheduled = true;
             };
 
             $famousDecorator.sequenceWith(

@@ -27,7 +27,7 @@
  */
 
 angular.module('famous.angular')
-  .factory('$famousDecorator', function ($famous) {
+  .factory('$famousDecorator', ['$famous', function ($famous) {
     //TODO:  add repeated logic to these roles
     var _roles = {
       child: {
@@ -49,6 +49,8 @@ angular.module('famous.angular')
       }
       
     };
+
+    var _isolateStore = {};
 
     return {
       //TODO:  patch into _roles and assign the
@@ -72,8 +74,24 @@ angular.module('famous.angular')
        *
        * @param {String} scope - the scope to ensure that the isolate property
        * exists on
+       * @param {Object} element (optional) - the DOM element associated with the target scope
        */
-      ensureIsolate: function(scope) {
+      ensureIsolate: function(scope, element) {
+
+
+        //handle special-case directives that don't follow a (DOM hierarchy <=> Scope hierarchy) relationship
+        if(element){
+          var SPECIAL_CASE_LIST = ['fa-edge-swapper', 'fa-render-controller', 'fa-deck', 'fa-light-box'];
+          var special = false;
+          angular.forEach(SPECIAL_CASE_LIST, function(specialCase){
+            if(specialCase.toUpperCase() === element[0].tagName) { special = true; return; }
+            if(element[0].attributes[specialCase] !== undefined) { special = true; return; }
+          });
+          if(special){
+            scope = scope.$parent;
+          }
+        }
+
         scope.isolate = scope.isolate || {};
         scope.isolate[scope.$id] = scope.isolate[scope.$id] || {};
 
@@ -86,7 +104,19 @@ angular.module('famous.angular')
         var i = scope.$eval("$index");
         if(i && i !== '$index' && !isolate.index) isolate.index = i;
 
+        _isolateStore[isolate.id] = isolate;
+
         return isolate;
+      },
+
+      //relies on an 'alternate source of truth' vs the static .isolate
+      //member shared by the fa-element child scopes.  Unideal, but should be OK
+      //based on the assumption that a single Angular app will create a unique ID for
+      //every new scope.
+      //surface area for a memory leak (TODO: clean up upon element destruction--BUT, make sure
+      //it doesn't break leave animations on ui-view and ng-include animations, e.g. <ui-view fa-edge-swapper></ui-view>)
+      $$getIsolateById: function(id){
+        return _isolateStore[id];
       },
 
       /**
@@ -138,6 +168,13 @@ angular.module('famous.angular')
       sequenceWith: function(scope, addMethod, removeMethod, updateMethod) {
         scope.$on('registerChild', function(evt, isolate) {
           if (evt.targetScope.$id !== scope.$id) {
+            //add reference to parent isolate
+            var parentIsolate = $famous.getIsolate(scope);
+            isolate.$parent = parentIsolate;
+
+            parentIsolate.$children = parentIsolate.$children || [];
+            parentIsolate.$children.push(isolate);
+
             addMethod(isolate);
             evt.stopPropagation();
 
@@ -148,5 +185,4 @@ angular.module('famous.angular')
         });
       }
     };
-  });
-
+  }]);

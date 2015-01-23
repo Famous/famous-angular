@@ -116,5 +116,9 @@ describe('$animate', function() {
       }, duration / 2);
 
     });
+
+    it('supports referencing the parent isolate for animation handlers in the case where a scope is already destroyed, specifically to handle cases like ng-include and ui-view', function(){
+      pending();
+    })
   });
 });

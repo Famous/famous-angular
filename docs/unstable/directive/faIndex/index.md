@@ -68,38 +68,65 @@ The <code>fa-view</code> with the blue background color appears after the one wi
 <p><code>fa-scroll-view</code> accepts another directive called <code>fa-start-index</code> as an attribute, which determines which <code>fa-view</code> the Scroll View displays by default.
 <code>Fa-start-index</code> will not affect the sequential order of the layout; the <code>fa-view</code> with the red background will be layed out first, followed by the one with the blue background.
  By setting <code>fa-start-index</code> to 1, the Scroll View will display the View with the index of 1, which is the View with the blue background color. </p>
-<pre><code class="lang-html">  &lt;fa-app style=&quot;width: 320px; height: 568px;&quot;&gt; 
-   &lt;!-- The scroll View will start at the index of 1 --&gt;
-    &lt;fa-scroll-view fa-pipe-from=&quot;eventHandler&quot; fa-options=&quot;options.scrollView&quot; fa-start-index=&quot;1&quot;&gt;
-      &lt;!-- Even though this view is declared first in html, it will will be layed out 2nd --&gt;
-      &lt;!-- On page load, the scroll View will scroll to this view, and display it.  --&gt;
-       &lt;fa-view fa-index=&quot;1&quot;&gt;
-          &lt;fa-modifier fa-size=&quot;[320, 568]&quot;&gt;
-             &lt;fa-surface fa-pipe-to=&quot;eventHandler&quot; 
-                         fa-background-color=&quot;&#39;blue&#39;&quot;&gt;
-             &lt;/fa-surface&gt;
-          &lt;/fa-modifier&gt;
-       &lt;/fa-view&gt;
+<p> 
 
-       &lt;fa-view fa-index=&quot;0&quot;&gt;
-          &lt;fa-modifier fa-size=&quot;[320, 568]&quot;&gt;
-             &lt;fa-surface fa-pipe-to=&quot;eventHandler&quot; 
-                         fa-background-color=&quot;&#39;red&#39;&quot;&gt;
-             &lt;/fa-surface&gt;
-          &lt;/fa-modifier&gt;
-       &lt;/fa-view&gt;
+{% assign lvl = page.url | append:'X' | split:'/' | size %}
+{% capture relative %}{% for i in (3..lvl) %}../{% endfor %}{% endcapture %}
 
-    &lt;/fa-scroll-view&gt;   
-  &lt;/fa-app&gt;</code></pre>
-<pre><code class="lang-javascript">var EventHandler = $famous[&#39;famous/core/EventHandler&#39;];
-$scope.eventHandler = new EventHandler();
-$scope.list = [{content: &quot;famous&quot;}, {content: &quot;angular&quot;}, {content: &quot;rocks!&quot;}];
+<div>
+  <a ng-click="openPlunkr('{{ relative }}examples/example-example9')" class="btn pull-right">
+    <i class="glyphicon glyphicon-edit">&nbsp;</i>
+    Edit in Plunker</a>
+  <div class="runnable-example" path="examples/example-example9"
+      
+        module="faIndexExampleApp"
+      
+  >
 
-$scope.options = {
-  scrollView: {
-    direction: 0 // displays the fa-views horizontally
-  }
-};</code></pre>
+   
+    <div ng-non-bindable class="runnable-example-file"
+      
+        name="index.html"
+      
+        language="html"
+      
+        type="html"
+      
+    >
+      <pre><code>{% raw %}&lt;fa-app ng-controller=&quot;IndexCtrl&quot;&gt; &#10;&#10; &lt;!-- The scroll View will start at the index of 1 --&gt;&#10;  &lt;fa-scroll-view fa-pipe-from=&quot;eventHandler&quot; fa-options=&quot;options.scrollView&quot; fa-start-index=&quot;1&quot;&gt;&#10;&#10;    &lt;!-- Even though this view is declared first in html, it will will be layed out 2nd --&gt;&#10;    &lt;!-- On page load, the scroll View will scroll to this view, and display it.  --&gt;&#10;&#10;     &lt;fa-view fa-index=&quot;1&quot;&gt;&#10;        &lt;fa-modifier fa-size=&quot;[320, 320]&quot;&gt;&#10;           &lt;fa-surface fa-pipe-to=&quot;eventHandler&quot; &#10;                       fa-background-color=&quot;&#39;blue&#39;&quot;&gt;&#10;                       &lt;p&gt;Scroll me back!&lt;/p&gt;&#10;           &lt;/fa-surface&gt;&#10;        &lt;/fa-modifier&gt;&#10;     &lt;/fa-view&gt;&#10;&#10;     &lt;fa-view fa-index=&quot;0&quot;&gt;&#10;        &lt;fa-modifier fa-size=&quot;[320, 320]&quot;&gt;&#10;           &lt;fa-surface fa-pipe-to=&quot;eventHandler&quot; &#10;                       fa-background-color=&quot;&#39;red&#39;&quot;&gt;&#10;                       &lt;p&gt;Scroll me!&lt;/p&gt;&#10;           &lt;/fa-surface&gt;&#10;        &lt;/fa-modifier&gt;&#10;     &lt;/fa-view&gt;&#10;&#10;  &lt;/fa-scroll-view&gt;   &#10;&lt;/fa-app&gt;   {% endraw %}</code></pre>
+    </div>
+  
+    <div ng-non-bindable class="runnable-example-file"
+      
+        name="script.js"
+      
+        language="js"
+      
+        type="js"
+      
+    >
+      <pre><code>{% raw %}angular.module(&#39;faIndexExampleApp&#39;, [&#39;famous.angular&#39;])&#10;  .controller(&#39;IndexCtrl&#39;, [&#39;$scope&#39;, &#39;$famous&#39;, function($scope, $famous) {&#10;&#10;   var EventHandler = $famous[&#39;famous/core/EventHandler&#39;];&#10;   $scope.eventHandler = new EventHandler();&#10;   $scope.list = [{content: &quot;famous&quot;}, {content: &quot;angular&quot;}, {content: &quot;rocks!&quot;}];&#10;  &#10;   $scope.options = {&#10;     scrollView: {&#10;       direction: 0 // displays the fa-views horizontally&#10;     }&#10;   };&#10;&#10;}]);{% endraw %}</code></pre>
+    </div>
+  
+    <div ng-non-bindable class="runnable-example-file"
+      
+        name="style.css"
+      
+        language="css"
+      
+        type="css"
+      
+    >
+      <pre><code>{% raw %}fa-app {&#10;  width: 320px;&#10;  height: 320px;&#10;  overflow: hidden;&#10;}&#10;p {&#10;  padding: 8px 8px;&#10;}{% endraw %}</code></pre>
+    </div>
+  
+
+    <iframe class="runnable-example-frame" src="{{ relative }}examples/example-example9/index.html" name="example-example9"></iframe>
+  </div>
+</div>
+
+
+</p>
 
 
 

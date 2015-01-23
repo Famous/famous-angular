@@ -51,10 +51,26 @@ describe('faHeaderFooterLayout', function() {
 
 
   it('should unregister children when their scopes are destroyed', function() {
-    //Not yet implemented in lib
-    pending();
+    var app = common.createApp(
+      '<fa-header-footer-layout>' +
+        '<fa-surface ng-repeat="view in views" fa-size="[undefined, 100]">{{view}}</fa-surface>' +
+      '</fa-header-footer-layout>'
+    );
 
+    $scope.views = ["header", "content", "footer"];
+    $scope.$apply();
+    var headerFooterLayout = $famous.find('fa-header-footer-layout')[0].renderNode;
+    
+    expect(common.isEmptyObject(headerFooterLayout.footer._child)).toBe(false);
+
+    $scope.views.pop();
+
+    $scope.$apply();
+    expect(common.isEmptyObject(headerFooterLayout.footer._object)).toBe(true);
+
+    common.destroyApp(app);
   });
+
   describe("hide and show", function() {
 
     it("hide and show properties on the headerFooterLayout", function() {

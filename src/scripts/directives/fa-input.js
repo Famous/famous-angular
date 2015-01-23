@@ -4,13 +4,14 @@
  * @name ngClick
  * @module famous.angular
  * @restrict A
- * 
+ * @requires famous.angular
+ *
  * @description
- * This is a wrapped for tha default ngCick which allows you to specify custom behavior when an fa-surface is clicked.
- * the wrapper is also design to be be used on touchscreen devices. It matches all the features supported by ngClick on 
- * including ngTouch module for all types of fa-surface. 
- * 
- * If ngTouch is requried to add touch click capabilites in non F/A elements. Add ngTouch dependence before adding famous.angular otherwise 
+ * This is a wrapped for the default ngClick which allows you to specify custom behavior when an fa-surface is clicked.
+ * the wrapper is also designed to be be used on touchscreen devices. It matches all the features supported by ngClick,
+ * including ngTouch module for all types of fa-surface.
+ *
+ * If ngTouch is requried to add touch click capabilites in non F/A elements. Add ngTouch dependence before adding famous.angular otherwise
  * this functionality will be lost.
  *
  * @usage
@@ -20,30 +21,49 @@
  * </ANY>
  * ```
  * @example
+ <example module="faInputExampleApp">
+  <file name="index.html">
+  <fa-app ng-controller="ClickCtrl" id="app">
+      <fa-modifier fa-size="[300, 100]">
+        <fa-surface fa-background-color="'red'" ng-click="myClickHandler($event)">Click Me!  This has been clicked {{clicked}} times.</fa-surface>
+      </fa-modifier>
+    </fa-app>
+  </file>
+  <file name="style.css">
+  #app {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+    fa-surface {
+      cursor: pointer;
+    }
+  </file>
+  <file name="script.js">
+  angular.module('faInputExampleApp', ['famous.angular'])
+      .controller('ClickCtrl', ['$scope', function($scope) {
+        $scope.clicked = 0;
+        $scope.myClickHandler = function($event) {
+          console.log($event);
+          $scope.clicked++;
+        };
+    }]);
+  </file>
+ </example>
  * ### ng-click on an fa-surface
  * `ng-click` can be used on an `fa-surface`.  Internally, a Famous Surface has a `.on()` method that binds a callback function to an event type handled by that Surface.
- *  The function expression bound to `ng-click` is bound to that `fa-surface`'s click eventHandler, and when the `fa-surface` is clicked, the function expression will be called. 
- *
- * ```html
- * <fa-modifier fa-size="[100, 100]">
- *   <fa-surface ng-click="myClickHandler($event)" fa-background-color="'red'"></fa-surface>
- * </fa-modifier>
- * ```
- * ```javascript
- * $scope.myClickHandler = function($event) {
- *   console.log("click");
- *   console.log($event);
- * };
- * 
+ *  The function expression bound to `ng-click` is bound to that `fa-surface`'s click eventHandler, and when the `fa-surface` is clicked, the function expression will be called.
 **/
 angular.module('famous.angular')
-.config(function  ($provide) {
-  
-  $provide.decorator('ngClickDirective', function ($delegate, $famousDecorator, $parse, $rootElement, $famous, $timeout) {
+.config(['$provide', function  ($provide) {
+
+  $provide.decorator('ngClickDirective', ['$delegate', '$famousDecorator', '$parse', '$rootElement', '$famous', '$timeout', function ($delegate, $famousDecorator, $parse, $rootElement, $famous, $timeout) {
     var directive = $delegate[0];
 
     var compile = directive.compile;
-    
+
     var TAP_DURATION = 750; // Shorter than 750ms is a tap, longer is a taphold or drag.
     var MOVE_TOLERANCE = 12; // 12px seems to work in most mobile browsers.
     var PREVENT_DURATION = 2500; // 2.5 seconds maximum from preventGhostClick call to click
@@ -84,7 +104,7 @@ angular.module('famous.angular')
       var touches = event.touches && event.touches.length ? event.touches : [event];
       var x = touches[0].clientX;
       var y = touches[0].clientY;
-     
+
 
       // Look for an allowable region containing this click.
       // If we find one, that means it was created by touchstart and not removed by
@@ -153,7 +173,7 @@ angular.module('famous.angular')
 
               function resetState() {
                 tapping = false;
-                
+
                 // TODO: renderNode.
 
                 renderNode.removeClass(ACTIVE_CLASS_NAME);
@@ -199,7 +219,7 @@ angular.module('famous.angular')
                   // Call preventGhostClick so the clickbuster will catch the corresponding click.
                   preventGhostClick(x, y);
 
-                  if (!angular.isDefined(attr.disabled) || attr.disabled === false) {
+                  if (!angular.isDefined(attr.disabled) || attr.disabled === 'false') {
                     renderNode.emit('click', [event]);
                   }
                 }
@@ -208,7 +228,7 @@ angular.module('famous.angular')
               });
 
               renderNode.on('click', function(event, touchend) {
-                scope.$apply(function() {
+                scope.$evalAsync(function() {
                   clickHandler(scope, {$event: (touchend || event)});
                 });
               });
@@ -228,8 +248,8 @@ angular.module('famous.angular')
         return compile(element, attrs, transclude);
       }
     };
-    return $delegate; 
-  });
+    return $delegate;
+  }]);
 
 
 
@@ -237,8 +257,8 @@ angular.module('famous.angular')
   'dblclick mousedown mouseup mouseover mouseout mousemove mouseenter mouseleave keydown keyup keypress submit focus blur copy cut paste'.split(' '),
   function(name) {
     var directiveName = window.$famousUtil.directiveNormalize('ng-' + name) ;
-    
-    $provide.decorator(directiveName+'Directive', function ($delegate, $famousDecorator, $parse, $famous) {
+
+    $provide.decorator(directiveName+'Directive', ['$delegate', '$famousDecorator', '$parse', '$famous', function ($delegate, $famousDecorator, $parse, $famous) {
         var directive = $delegate[0];
 
         var compile = directive.compile;
@@ -268,9 +288,9 @@ angular.module('famous.angular')
           }
         };
       return $delegate;
-    });
+    }]);
   });
-});
+}]);
 
 /**
  * @ngdoc directive
@@ -669,7 +689,7 @@ angular.module('famous.angular')
  * ```
  * @example
    <example>
-    
+
    </example>
  */
 
@@ -693,7 +713,7 @@ angular.module('famous.angular')
  * ```
  * @example
    <example>
-    
+
    </example>
  */
 
