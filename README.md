@@ -32,7 +32,7 @@ Using F/A, you can:
 ####Before you start, tools you will need:
 * Download and install [git](http://git-scm.com/downloads)
 * Download and install [nodeJS](http://nodejs.org/download/)
-* Install bower `npm install -g bower`git
+* Install bower `npm install -g bower`
 
 ####Inside of your app:
 * Run `bower install famous-angular`
