@@ -230,7 +230,7 @@ angular.module('famous.angular')
       transclude: true,
       template: '<div class="fa-surface"></div>',
       restrict: 'EA',
-      compile: function(tElem, tAttrs, transclude){
+      compile: function(tElem, tAttrs){
         return {
           pre: function(scope, element, attrs){
 
@@ -320,7 +320,7 @@ angular.module('famous.angular')
               throw new Error('Surfaces are leaf nodes of the Famo.us render tree and cannot accept rendernode children.  To include additional Famo.us content inside of a fa-surface, that content must be enclosed in an additional fa-app.');
             });
           },
-          post: function(scope, element, attrs){
+          post: function(scope, element, attrs, ctrl, transclude){
             var isolate = $famousDecorator.ensureIsolate(scope);
 
             var updateContent = function() {
