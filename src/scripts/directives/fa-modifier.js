@@ -463,9 +463,9 @@ angular.module('famous.angular')
       restrict: 'EA',
       priority: 2,
       scope: true,
-      compile: function (tElement, tAttrs, transclude) {
+      compile: function (tElement, tAttrs) {
         return {
-          post: function (scope, element, attrs) {
+          post: function (scope, element, attrs, ctrl, transclude) {
             var isolate = $famousDecorator.ensureIsolate(scope);
 
             var RenderNode = $famous['famous/core/RenderNode'];
