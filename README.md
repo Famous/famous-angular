@@ -1,4 +1,4 @@
-# Famo.us/Angular [![Build Status](https://travis-ci.org/Famous/famous-angular.svg?branch=master)](https://travis-ci.org/Famous/famous-angular)
+# Famo.us/Angular [![Build Status](https://travis-ci.org/Famous/famous-angular.svg?branch=master)](https://travis-ci.org/Famous/famous-angular) [![Bower version](https://badge.fury.io/bo/famous-angular.svg)](http://badge.fury.io/bo/famous-angular)
 
 Add Famo.us interactions and animations to any AngularJS application and build Famo.us applications with AngularJS.
 
