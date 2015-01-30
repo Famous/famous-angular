@@ -193,7 +193,7 @@
  *     restrict: 'A',
  *     scope: false,
  *     priority: 16,
- *     compile: function(tElement, tAttrs, transclude) {
+ *     compile: function(tElement, tAttrs) {
  *       var Transitionable = $famous['famous/transitions/Transitionable'];
  *       return {
  *         pre: function(scope, element, attrs) {
@@ -250,7 +250,7 @@ angular.module('famous.angular')
     return {
       restrict: 'EA',
       scope: true,
-      compile: function (tElement, tAttrs, transclude) {
+      compile: function (tElement, tAttrs) {
         var Transform = $famous['famous/core/Transform'];
         var Transitionable = $famous['famous/transitions/Transitionable'];
         var Easing = $famous['famous/transitions/Easing'];

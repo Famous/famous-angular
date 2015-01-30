@@ -51,7 +51,7 @@ angular.module('famous.angular')
       scope: true,
       template: '<div class="fa-image-surface"></div>',
       restrict: 'EA',
-      compile: function (tElem, tAttrs, transclude) {
+      compile: function (tElem, tAttrs) {
         return {
           pre: function (scope, element, attrs) {
             var isolate = $famousDecorator.ensureIsolate(scope);

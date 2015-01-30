@@ -42,7 +42,7 @@ angular.module('famous.angular')
           transclude: true,
           template: '<div class="fa-video-surface"></div>',
           restrict: 'EA',
-          compile: function (tElem, tAttrs, transclude) {
+          compile: function (tElem, tAttrs) {
             return {
               pre: function (scope, element, attrs) {
                 var isolate = $famousDecorator.ensureIsolate(scope);

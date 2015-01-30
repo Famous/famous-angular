@@ -99,7 +99,7 @@ angular.module('famous.angular')
       transclude: true,
       scope: true,
       restrict: 'EA',
-      compile: function (tElement, tAttrs, transclude) {
+      compile: function (tElement, tAttrs) {
         return {
           pre: function (scope, element, attrs) {
             var isolate = $famousDecorator.ensureIsolate(scope);
@@ -160,7 +160,7 @@ angular.module('famous.angular')
               evt.stopPropagation();
             });
           },
-          post: function (scope, element, attrs) {
+          post: function (scope, element, attrs, ctrl, transclude) {
 
             var isolate = $famousDecorator.ensureIsolate(scope);
             transclude(scope, function (clone) {

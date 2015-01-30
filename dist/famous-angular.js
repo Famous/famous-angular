@@ -1329,7 +1329,7 @@ angular.module('famous.angular')
  *     restrict: 'A',
  *     scope: false,
  *     priority: 16,
- *     compile: function(tElement, tAttrs, transclude) {
+ *     compile: function(tElement, tAttrs) {
  *       var Transitionable = $famous['famous/transitions/Transitionable'];
  *       return {
  *         pre: function(scope, element, attrs) {
@@ -1386,7 +1386,7 @@ angular.module('famous.angular')
     return {
       restrict: 'EA',
       scope: true,
-      compile: function (tElement, tAttrs, transclude) {
+      compile: function (tElement, tAttrs) {
         var Transform = $famous['famous/core/Transform'];
         var Transitionable = $famous['famous/transitions/Transitionable'];
         var Easing = $famous['famous/transitions/Easing'];
@@ -1808,7 +1808,7 @@ angular.module('famous.angular')
       transclude: true,
       scope: true,
       restrict: 'EA',
-      compile: function (tElement, tAttrs, transclude) {
+      compile: function (tElement, tAttrs) {
         return {
           pre: function (scope, element, attrs) {
             var isolate = $famousDecorator.ensureIsolate(scope);
@@ -1869,7 +1869,7 @@ angular.module('famous.angular')
               evt.stopPropagation();
             });
           },
-          post: function (scope, element, attrs) {
+          post: function (scope, element, attrs, ctrl, transclude) {
 
             var isolate = $famousDecorator.ensureIsolate(scope);
             transclude(scope, function (clone) {
@@ -1913,7 +1913,7 @@ angular.module('famous.angular')
       transclude: true,
       template: '<canvas class="fa-canvas-surface"></canvas>',
       restrict: 'EA',
-      compile: function(tElem, tAttrs, transclude){
+      compile: function(tElem, tAttrs){
         return {
           pre: function(scope, element, attrs){
             var isolate = $famousDecorator.ensureIsolate(scope);
@@ -1939,7 +1939,7 @@ angular.module('famous.angular')
             });
                         
           },
-          post: function(scope, element, attrs){
+          post: function(scope, element, attrs, ctrl, transclude){
             var isolate = $famousDecorator.ensureIsolate(scope);
 
             var updateContent = function() {
@@ -2079,7 +2079,7 @@ angular.module('famous.angular')
       restrict: 'E',
       transclude: true,
       scope: true,
-      compile: function(tElem, tAttrs, transclude){
+      compile: function(tElem, tAttrs){
         return  {
           pre: function(scope, element, attrs){
             var isolate = $famousDecorator.ensureIsolate(scope);
@@ -2098,7 +2098,7 @@ angular.module('famous.angular')
               }
             );
           },
-          post: function(scope, element, attrs){
+          post: function(scope, element, attrs, ctrl, transclude){
             var isolate = $famousDecorator.ensureIsolate(scope);
 
             transclude(scope, function(clone) {
@@ -2129,9 +2129,9 @@ angular.module('famous.angular')
       restrict: 'EA',
       priority: 2,
       scope: true,
-      compile: function (tElement, tAttrs, transclude) {
+      compile: function (tElement, tAttrs) {
         return {
-          post: function (scope, element, attrs) {
+          post: function (scope, element, attrs, ctrl, transclude) {
             var isolate = $famousDecorator.ensureIsolate(scope);
 
             var RenderNode = $famous['famous/core/RenderNode'];
@@ -2208,7 +2208,7 @@ angular.module('famous.angular')
       priority: 512, //higher than ui-view and ng-include, because if it's lower it will
                      //get recompiled every time those templates change
 
-      compile: function(tElement, tAttrs, transclude){
+      compile: function(tElement, tAttrs){
         var EdgeSwapper = $famous['famous/views/EdgeSwapper'];
         return {
           pre: function(scope, element, attrs){
@@ -2291,7 +2291,7 @@ angular.module('famous.angular')
       restrict: 'E',
       transclude: true,
       scope: true,
-      compile: function (tElem, tAttrs, transclude) {
+      compile: function (tElem, tAttrs) {
         return {
           pre: function (scope, element, attrs) {
             var isolate = $famousDecorator.ensureIsolate(scope);
@@ -2344,7 +2344,7 @@ angular.module('famous.angular')
             );
 
           },
-          post: function (scope, element, attrs) {
+          post: function (scope, element, attrs, ctrl, transclude) {
             var isolate = $famousDecorator.ensureIsolate(scope);
 
             transclude(scope, function (clone) {
@@ -2427,7 +2427,7 @@ angular.module('famous.angular')
         restrict: 'E',
         transclude: true,
         scope: true,
-        compile: function (tElem, tAttrs, transclude) {
+        compile: function (tElem, tAttrs) {
           return {
             pre: function (scope, element, attrs) {
               var isolate = $famousDecorator.ensureIsolate(scope);
@@ -2471,7 +2471,7 @@ angular.module('famous.angular')
                 }
               );
             },
-            post: function (scope, element, attrs) {
+            post: function (scope, element, attrs, ctrl, transclude) {
               var isolate = $famousDecorator.ensureIsolate(scope);
               transclude(scope, function (clone) {
                 element.find('div').append(clone);
@@ -2580,7 +2580,7 @@ angular.module('famous.angular')
       restrict: 'E',
       transclude: true,
       scope: true,
-      compile: function (tElem, tAttrs, transclude) {
+      compile: function (tElem, tAttrs) {
         return  {
           pre: function (scope, element, attrs) {
             var isolate = $famousDecorator.ensureIsolate(scope);
@@ -2633,7 +2633,7 @@ angular.module('famous.angular')
             );
 
           },
-          post: function (scope, element, attrs) {
+          post: function (scope, element, attrs, ctrl, transclude) {
             var isolate = $famousDecorator.ensureIsolate(scope);
 
             transclude(scope, function(clone) {
@@ -2794,7 +2794,7 @@ angular.module('famous.angular')
       restrict: 'E',
       transclude: true,
       scope: true,
-      compile: function (tElem, tAttrs, transclude) {
+      compile: function (tElem, tAttrs) {
         var HeaderFooterLayout = $famous["famous/views/HeaderFooterLayout"];
         var RenderNode = $famous["famous/core/RenderNode"];
         return {
@@ -2842,7 +2842,7 @@ angular.module('famous.angular')
             );
 
           },
-          post: function (scope, element, attrs) {
+          post: function (scope, element, attrs, ctrl, transclude) {
             var isolate = $famousDecorator.ensureIsolate(scope);
 
             transclude(scope, function (clone) {
@@ -2909,7 +2909,7 @@ angular.module('famous.angular')
       scope: true,
       template: '<div class="fa-image-surface"></div>',
       restrict: 'EA',
-      compile: function (tElem, tAttrs, transclude) {
+      compile: function (tElem, tAttrs) {
         return {
           pre: function (scope, element, attrs) {
             var isolate = $famousDecorator.ensureIsolate(scope);
@@ -4308,9 +4308,9 @@ angular.module('famous.angular')
       restrict: 'EA',
       priority: 2,
       scope: true,
-      compile: function (tElement, tAttrs, transclude) {
+      compile: function (tElement, tAttrs) {
         return {
-          post: function (scope, element, attrs) {
+          post: function (scope, element, attrs, ctrl, transclude) {
             var isolate = $famousDecorator.ensureIsolate(scope);
 
             var RenderNode = $famous['famous/core/RenderNode'];
@@ -5357,7 +5357,7 @@ angular.module('famous.angular')
       transclude: true,
       scope: true,
       restrict: 'EA',
-      compile: function(tElement, tAttrs, transclude){
+      compile: function(tElement, tAttrs){
         return {
           pre: function(scope, element, attrs){
             var isolate = $famousDecorator.ensureIsolate(scope);
@@ -5388,7 +5388,7 @@ angular.module('famous.angular')
             });
 
           },
-          post: function(scope, element, attrs){
+          post: function(scope, element, attrs, ctrl, transclude){
             var isolate = $famousDecorator.ensureIsolate(scope);
 
             transclude(scope, function(clone) {
@@ -5666,7 +5666,7 @@ angular.module('famous.angular')
       restrict: 'E',
       transclude: true,
       scope: true,
-      compile: function(tElem, tAttrs, transclude){
+      compile: function(tElem, tAttrs){
         return  {
           pre: function(scope, element, attrs){
             var isolate = $famousDecorator.ensureIsolate(scope);
@@ -5744,7 +5744,7 @@ angular.module('famous.angular')
             );
 
           },
-          post: function(scope, element, attrs){
+          post: function(scope, element, attrs, ctrl, transclude){
             var isolate = $famousDecorator.ensureIsolate(scope);
 
             transclude(scope, function(clone) {
@@ -5827,7 +5827,7 @@ angular.module('famous.angular')
       restrict: 'E',
       transclude: true,
       scope: true,
-      compile: function (tElem, tAttrs, transclude) {
+      compile: function (tElem, tAttrs) {
         window.$f = $famous;
         return {
           pre: function (scope, element, attrs) {
@@ -5890,7 +5890,7 @@ angular.module('famous.angular')
             );
 
           },
-          post: function (scope, element, attrs) {
+          post: function (scope, element, attrs, ctrl, transclude) {
             var isolate = $famousDecorator.ensureIsolate(scope);
 
             transclude(scope, function (clone) {
@@ -6136,7 +6136,7 @@ angular.module('famous.angular')
       transclude: true,
       template: '<div class="fa-surface"></div>',
       restrict: 'EA',
-      compile: function(tElem, tAttrs, transclude){
+      compile: function(tElem, tAttrs){
         return {
           pre: function(scope, element, attrs){
 
@@ -6226,7 +6226,7 @@ angular.module('famous.angular')
               throw new Error('Surfaces are leaf nodes of the Famo.us render tree and cannot accept rendernode children.  To include additional Famo.us content inside of a fa-surface, that content must be enclosed in an additional fa-app.');
             });
           },
-          post: function(scope, element, attrs){
+          post: function(scope, element, attrs, ctrl, transclude){
             var isolate = $famousDecorator.ensureIsolate(scope);
 
             var updateContent = function() {
@@ -6885,7 +6885,7 @@ angular.module('famous.angular')
           transclude: true,
           template: '<div class="fa-video-surface"></div>',
           restrict: 'EA',
-          compile: function (tElem, tAttrs, transclude) {
+          compile: function (tElem, tAttrs) {
             return {
               pre: function (scope, element, attrs) {
                 var isolate = $famousDecorator.ensureIsolate(scope);
@@ -6989,7 +6989,7 @@ angular.module('famous.angular')
       transclude: true,
       scope: true,
       restrict: 'EA',
-      compile: function(tElement, tAttrs, transclude){
+      compile: function(tElement, tAttrs){
         var View = $famous['famous/core/View'];
 
         return {
@@ -7010,7 +7010,7 @@ angular.module('famous.angular')
             });
 
           },
-          post: function(scope, element, attrs){
+          post: function(scope, element, attrs, ctrl, transclude){
             var isolate = $famousDecorator.ensureIsolate(scope);
 
             transclude(scope, function(clone) {

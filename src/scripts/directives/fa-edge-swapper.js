@@ -27,7 +27,7 @@ angular.module('famous.angular')
       priority: 512, //higher than ui-view and ng-include, because if it's lower it will
                      //get recompiled every time those templates change
 
-      compile: function(tElement, tAttrs, transclude){
+      compile: function(tElement, tAttrs){
         var EdgeSwapper = $famous['famous/views/EdgeSwapper'];
         return {
           pre: function(scope, element, attrs){
