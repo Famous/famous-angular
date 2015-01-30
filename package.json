@@ -50,14 +50,15 @@
     "karma": "^0.12.19",
     "karma-chrome-launcher": "~0.1.3",
     "karma-cli": "0.0.4",
+    "karma-coverage": "~0.2.0",
     "karma-firefox-launcher": "~0.1.3",
     "karma-jasmine": "~0.2.1",
+    "karma-mocha-reporter": "^0.3.1",
     "karma-ng-html2js-preprocessor": "^0.1.0",
     "karma-ng-scenario": "^0.1.0",
     "karma-phantomjs-launcher": "^0.1.4",
     "karma-requirejs": "~0.2.1",
     "karma-spec-reporter": "0.0.13",
-    "karma-coverage": "~0.2.0",
     "lodash": "^2.4.1",
     "minimist": "0.0.8",
     "mkdirp": "^0.5.0",
@@ -68,7 +69,7 @@
     "winston": "^0.7.3"
   },
   "jspm": {
-    "directories" : {
+    "directories": {
       "lib": "dist"
     },
     "main": "famous-angular",
@@ -79,7 +80,9 @@
     },
     "shim": {
       "famous-angular": {
-        "deps": ["./famous-angular.css!"]
+        "deps": [
+          "./famous-angular.css!"
+        ]
       }
     }
   }
