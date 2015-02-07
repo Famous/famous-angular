@@ -1,21 +1,19 @@
 /**
  * @ngdoc directive
- * @name faEdgeSwapper
+ * @name faLightbox
  * @module famous.angular
  * @restrict EA
  * @description
- * This directive is used to hook a Famo.us EdgeSwapper into AngularJS ngAnimate events.  For example, you can apply an fa-edge-swapper directive
- * to a `<ui-view>` or an `<ng-include>` in order to quickly and easily add EdgeSwapper transitions to template changes in those directives.
+ * This directive is used to hook a Famo.us Lightbox into AngularJS ngAnimate events.  For example, you can apply an fa-lightbox directive
+ * to a `<ui-view>` or an `<ng-include>` in order to quickly and easily add Lightbox transitions to template changes in those directives.
  * Supports the `fa-options` directive for setting options.  Does NOT support sitting on the same element as another fa- element
  *
  * @usage
  * ```html
- * <ui-view fa-edge-swapper></ui-view>
- * <ng-include src='getSrc()' fa-edge-swapper></ng-include>
+ * <ui-view fa-lightbox></ui-view>
+ * <ng-include src='getSrc()' fa-lightbox></ng-include>
  * ```
  */
-
-
 
 //TODO:  TEST
 
