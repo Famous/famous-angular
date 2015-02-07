@@ -67,6 +67,7 @@ ngFameApp.provider('$famous', function() {
     "famous/utilities/Timer": famous.utilities.Timer,
     "famous/utilities/Utility": famous.utilities.Utility,
     "famous/views/Deck": famous.views.Deck,
+    "famous/views/DrawerLayout": famous.views.DrawerLayout,
     "famous/views/EdgeSwapper": famous.views.EdgeSwapper,
     "famous/views/FlexibleLayout": famous.views.FlexibleLayout,
     "famous/views/Flipper": famous.views.Flipper,
