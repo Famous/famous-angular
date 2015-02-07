@@ -39,7 +39,7 @@ angular.module('famous.angular')
 
         isolate.renderGate = new RenderNode();
         isolate.emptyNode = new RenderNode();
-          
+
         isolate.show = function() {
           if(isolate.renderGate) isolate.renderGate.set(isolate.renderNode);
         };
@@ -47,7 +47,7 @@ angular.module('famous.angular')
           isolate.renderGate.set(isolate.emptyNode);
         };
       }
-      
+
     };
 
     var _isolateStore = {};
@@ -81,7 +81,7 @@ angular.module('famous.angular')
 
         //handle special-case directives that don't follow a (DOM hierarchy <=> Scope hierarchy) relationship
         if(element){
-          var SPECIAL_CASE_LIST = ['fa-edge-swapper', 'fa-render-controller', 'fa-deck', 'fa-light-box'];
+          var SPECIAL_CASE_LIST = ['fa-edge-swapper', 'fa-render-controller', 'fa-deck', 'fa-lightbox'];
           var special = false;
           angular.forEach(SPECIAL_CASE_LIST, function(specialCase){
             if(specialCase.toUpperCase() === element[0].tagName) { special = true; return; }
