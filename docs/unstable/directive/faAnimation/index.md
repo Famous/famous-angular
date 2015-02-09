@@ -182,7 +182,7 @@ With Angular, it is best to do DOM manipulation (including look-ups) in a direct
     restrict: &#39;A&#39;,
     scope: false,
     priority: 16,
-    compile: function(tElement, tAttrs, transclude) {
+    compile: function(tElement, tAttrs) {
       var Transitionable = $famous[&#39;famous/transitions/Transitionable&#39;];
       return {
         pre: function(scope, element, attrs) {

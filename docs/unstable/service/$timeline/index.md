@@ -50,7 +50,7 @@ The timeline service provides support for mapping timeline functions to differen
 
 
 <h2 id="example">Example</h2><pre><code class="lang-html">&lt;fa-modifier
-  fa-rotate-y=&quot;rRotation(t.get())&quot;
+  fa-rotate-y=&quot;yRotation(t.get())&quot;
   fa-translate=&quot;translation(t.get())&quot;
 &gt;
   ...

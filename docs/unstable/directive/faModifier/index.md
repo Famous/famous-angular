@@ -67,7 +67,7 @@ to values (e.g. `fa-translate="[15, 20, 1]"`, Famo.us Transitionable objects, or
         type="html"
       
     >
-      <pre><code>{% raw %}&lt;fa-app ng-controller=&quot;ModifierCtrl&quot;&gt;&#10;  &lt;fa-modifier fa-opacity=&quot;.25&quot; fa-skew=&quot;myScopeSkewVariable&quot;&#10;               fa-translate=&quot;[25, 50, 2]&quot; &#10;               fa-scale=&quot;myScopeFunctionThatReturnsAnArray&quot;&gt;&#10;    &lt;!-- Child elements of this fa-modifier will be affected by the values above --&gt;&#10;    &lt;fa-surface&gt;I&#39;m translucent, skewed, and translated&lt;/fa-surface&gt;&#10;  &lt;/fa-modifier&gt;&#10;&lt;/fa-app&gt;{% endraw %}</code></pre>
+      <pre><code>{% raw %}&lt;fa-app ng-controller=&quot;ModifierCtrl&quot;&gt;&#10;  &lt;fa-modifier fa-opacity=&quot;.25&quot; fa-skew=&quot;myScopeSkewVariable&quot;&#10;               fa-translate=&quot;[25, 50, 2]&quot;&#10;               fa-scale=&quot;myScopeFunctionThatReturnsAnArray&quot;&gt;&#10;    &lt;!-- Child elements of this fa-modifier will be affected by the values above --&gt;&#10;    &lt;fa-surface&gt;I&#39;m translucent, skewed, and translated&lt;/fa-surface&gt;&#10;  &lt;/fa-modifier&gt;&#10;&lt;/fa-app&gt;{% endraw %}</code></pre>
     </div>
   
     <div ng-non-bindable class="runnable-example-file"
@@ -831,7 +831,7 @@ A <code>.get()</code> function of a Transitionable returns an interpolated value
         type="html"
       
     >
-      <pre><code>{% raw %}&lt;fa-app ng-controller=&quot;ModifierCtrl&quot;&gt;&#10;  &lt;fa-modifier fa-transform=&quot;skewFunc&quot;&#10;               fa-translate=&quot;[100, 100, 0]&quot;&#10;               fa-size=&quot;[100, 100]&quot;&gt;&#10;    &lt;fa-surface fa-background-color=&quot;&#39;red&#39;&quot;&gt;&lt;/fa-surface&gt;&#10;  &lt;/fa-modifier&gt;&#10;&lt;/fa-app&gt;&#10;&#10;&lt;script&gt;&#10;  angular.module(&#39;faModifierExampleApp&#39;, [&#39;famous.angular&#39;])&#10;      .controller(&#39;ModifierCtrl&#39;, [&#39;$scope&#39;, &#39;$famous&#39;, function($scope, $famous) {&#10;        &#10;        var Transform = $famous[&#39;famous/core/Transform&#39;];&#10;&#10;        $scope.skewFunc = function() {&#10;          return Transform.skew(0, 0, 0.3);&#10;        };&#10;&#10;    }]);&#10;&lt;/script&gt;{% endraw %}</code></pre>
+      <pre><code>{% raw %}&lt;fa-app ng-controller=&quot;ModifierCtrl&quot;&gt;&#10;  &lt;fa-modifier fa-transform=&quot;skewFunc&quot;&#10;               fa-translate=&quot;[100, 100, 0]&quot;&#10;               fa-size=&quot;[100, 100]&quot;&gt;&#10;    &lt;fa-surface fa-background-color=&quot;&#39;red&#39;&quot;&gt;&lt;/fa-surface&gt;&#10;  &lt;/fa-modifier&gt;&#10;&lt;/fa-app&gt;&#10;&#10;&lt;script&gt;&#10;  angular.module(&#39;faModifierExampleApp&#39;, [&#39;famous.angular&#39;])&#10;      .controller(&#39;ModifierCtrl&#39;, [&#39;$scope&#39;, &#39;$famous&#39;, function($scope, $famous) {&#10;&#10;        var Transform = $famous[&#39;famous/core/Transform&#39;];&#10;&#10;        $scope.skewFunc = function() {&#10;          return Transform.skew(0, 0, 0.3);&#10;        };&#10;&#10;    }]);&#10;&lt;/script&gt;{% endraw %}</code></pre>
     </div>
   
     <div ng-non-bindable class="runnable-example-file"
@@ -891,7 +891,7 @@ In the second example, the rotation happens first, and then the translation is c
         type="html"
       
     >
-      <pre><code>{% raw %}&lt;fa-app&gt;&#10;  &lt;fa-modifier fa-transform-order=&quot;[&#39;translate&#39;, &#39;rotateZ&#39;]&quot;&#10;               fa-rotate-z=&quot;0.3&quot;&#10;               fa-translate=&quot;[100, 0, 0]&quot;&#10;               fa-size=&quot;[100, 100]&quot;&gt;&#10;    &lt;fa-surface fa-background-color=&quot;&#39;red&#39;&quot;&gt;&lt;/fa-surface&gt;&#10;  &lt;/fa-modifier&gt;&#10;  &#10;  &lt;fa-modifier fa-transform-order=&quot;[&#39;rotateZ&#39;, &#39;translate&#39;]&quot;&#10;               fa-rotate-z=&quot;0.3&quot;&#10;               fa-translate=&quot;[100, 0, 0]&quot;&#10;               fa-size=&quot;[100, 100]&quot;&gt;&#10;    &lt;fa-surface fa-background-color=&quot;&#39;blue&#39;&quot;&gt;&lt;/fa-surface&gt;&#10;  &lt;/fa-modifier&gt;&#10;&lt;/fa-app&gt;{% endraw %}</code></pre>
+      <pre><code>{% raw %}&lt;fa-app&gt;&#10;  &lt;fa-modifier fa-transform-order=&quot;[&#39;translate&#39;, &#39;rotateZ&#39;]&quot;&#10;               fa-rotate-z=&quot;0.3&quot;&#10;               fa-translate=&quot;[100, 0, 0]&quot;&#10;               fa-size=&quot;[100, 100]&quot;&gt;&#10;    &lt;fa-surface fa-background-color=&quot;&#39;red&#39;&quot;&gt;&lt;/fa-surface&gt;&#10;  &lt;/fa-modifier&gt;&#10;&#10;  &lt;fa-modifier fa-transform-order=&quot;[&#39;rotateZ&#39;, &#39;translate&#39;]&quot;&#10;               fa-rotate-z=&quot;0.3&quot;&#10;               fa-translate=&quot;[100, 0, 0]&quot;&#10;               fa-size=&quot;[100, 100]&quot;&gt;&#10;    &lt;fa-surface fa-background-color=&quot;&#39;blue&#39;&quot;&gt;&lt;/fa-surface&gt;&#10;  &lt;/fa-modifier&gt;&#10;&lt;/fa-app&gt;{% endraw %}</code></pre>
     </div>
   
     <div ng-non-bindable class="runnable-example-file"
@@ -952,7 +952,7 @@ In the second example, the rotation happens first, and then the translation is c
         type="html"
       
     >
-      <pre><code>{% raw %}&lt;fa-app&gt;&#10;  &lt;fa-modifier fa-translate=&quot;[100, 100]&quot;&gt;&#10;     &lt;fa-modifier fa-rotate-z=&quot;.6&quot; fa-size=&quot;[100, 100]&quot;&gt;&#10;       &lt;fa-surface fa-background-color=&quot;&#39;red&#39;&quot;&gt;&lt;/fa-surface&gt;&#10;     &lt;/fa-modifier&gt;&#10;  &lt;/fa-modifier&gt;&#10;  &#10;   &lt;fa-modifier fa-rotate-z=&quot;.6&quot;&gt;&#10;     &lt;fa-modifier fa-translate=&quot;[100, 100]&quot; fa-size=&quot;[100, 100]&quot;&gt;&#10;       &lt;fa-surface fa-background-color=&quot;&#39;blue&#39;&quot;&gt;&lt;/fa-surface&gt;&#10;     &lt;/fa-modifier&gt;&#10;   &lt;/fa-modifier&gt;&#10;&lt;/fa-app&gt;{% endraw %}</code></pre>
+      <pre><code>{% raw %}&lt;fa-app&gt;&#10;  &lt;fa-modifier fa-translate=&quot;[100, 100]&quot;&gt;&#10;     &lt;fa-modifier fa-rotate-z=&quot;.6&quot; fa-size=&quot;[100, 100]&quot;&gt;&#10;       &lt;fa-surface fa-background-color=&quot;&#39;red&#39;&quot;&gt;&lt;/fa-surface&gt;&#10;     &lt;/fa-modifier&gt;&#10;  &lt;/fa-modifier&gt;&#10;&#10;   &lt;fa-modifier fa-rotate-z=&quot;.6&quot;&gt;&#10;     &lt;fa-modifier fa-translate=&quot;[100, 100]&quot; fa-size=&quot;[100, 100]&quot;&gt;&#10;       &lt;fa-surface fa-background-color=&quot;&#39;blue&#39;&quot;&gt;&lt;/fa-surface&gt;&#10;     &lt;/fa-modifier&gt;&#10;   &lt;/fa-modifier&gt;&#10;&lt;/fa-app&gt;{% endraw %}</code></pre>
     </div>
   
     <div ng-non-bindable class="runnable-example-file"
