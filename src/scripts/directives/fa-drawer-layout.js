@@ -38,11 +38,11 @@ angular.module('famous.angular')
 
             var options = scope.$eval(attrs.faOptions) || {};
 
-            if (options.drawerLength == null) {
+            if (!options.drawerLength) {
               options.drawerLength = scope.$eval(attrs.faDrawerLength);
             }
 
-            if (options.side == null) {
+            if (!options.side) {
               options.side = scope.$eval(attrs.faSide);
             }
             switch (options.side) {
