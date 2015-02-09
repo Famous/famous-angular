@@ -1,6 +1,6 @@
 /**
  * famous-angular - Bring structure to your Famo.us apps with the power of AngularJS. Famo.us/Angular integrates seamlessly with existing Angular and Famo.us apps.
- * @version v0.5.0
+ * @version v0.5.2
  * @link https://github.com/Famous/famous-angular
  * @license MPL v2.0
  */
