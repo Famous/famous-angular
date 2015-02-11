@@ -444,7 +444,7 @@ angular.module('famous.angular')
          */
         animationHandlers[classManipulator] = function(element, className, done) {
 
-          $delegate[classManipulator](element, className, done);
+          var promise = $delegate[classManipulator](element, className, done);
           if($famous.util.isFaElement(element)){
             var isolate = _getIsolate(element.scope());
             if ($famous.util.isASurface(element)) {
@@ -474,6 +474,7 @@ angular.module('famous.angular')
               });
             }
           }
+          return promise;
          };
       });
 
@@ -482,7 +483,7 @@ angular.module('famous.angular')
       // and items to remove. Manually loop through both lists.
       animationHandlers.setClass = function(element, add, remove, done) {
 
-        $delegate.setClass(element, add, remove, done);
+        var promise = $delegate.setClass(element, add, remove, done);
 
         if ($famous.util.isASurface(element)) {
           var surface = _getIsolate(element.scope()).renderNode;
@@ -494,6 +495,7 @@ angular.module('famous.angular')
             surface.removeClass(className);
           });
         }
+        return promise;
       };
 
       /**
@@ -647,7 +649,7 @@ angular.module('famous.angular')
 
         isolate.renderGate = new RenderNode();
         isolate.emptyNode = new RenderNode();
-          
+
         isolate.show = function() {
           if(isolate.renderGate) isolate.renderGate.set(isolate.renderNode);
         };
@@ -655,7 +657,7 @@ angular.module('famous.angular')
           isolate.renderGate.set(isolate.emptyNode);
         };
       }
-      
+
     };
 
     var _isolateStore = {};
@@ -998,7 +1000,7 @@ angular.module('famous.angular')
  * @restrict EA
  * @description Attaches the passed function/expression to Angular ngAnimate "enter" events on the given element.
  * Useful when you want to manage animations in Famo.us that are tied into Angular's data-driven events, e.g. on directives like ng-repeat, ui-view, and ng-if.
- * 
+ *
  * @usage
  * ```html
  * <fa-view ng-repeat="view in views" fa-animate-enter="myAnimationFunction($done)">
@@ -1034,7 +1036,7 @@ angular.module('famous.angular')
  * @restrict EA
  * @description Will execute the passed function/expression when an ngAnimate event on the given element is halted before finishing.
  * Useful when you want to manage clean-up (e.g. Transitionable `.halt()`ing).
- * 
+ *
  * @usage
  * ```html
  * <fa-view ng-repeat="view in views" fa-animate-halt="cleanupFunction()">
@@ -1071,7 +1073,7 @@ angular.module('famous.angular')
  * @restrict EA
  * @description Attaches the passed function/expression to Angular ngAnimate "leave" events on the given element.
  * Useful when you want to manage animations in Famo.us that are tied into Angular's data-driven events, e.g. on directives like ng-repeat, ui-view, and ng-if.
- * 
+ *
  * @usage
  * ```html
  * <fa-view ng-repeat="view in views" fa-animate-leave="myAnimationFunction($done)">
@@ -1107,7 +1109,7 @@ angular.module('famous.angular')
  * @restrict EA
  * @description Attaches the passed function/expression to Angular ngAnimate "move" events on the given element.
  * Useful when you want to manage animations in Famo.us that are tied into Angular's data-driven events, e.g. on directives like ng-repeat, ui-view, and ng-if.
- * 
+ *
  * @usage
  * ```html
  * <fa-view ng-repeat="view in views" fa-animate-move="myAnimationFunction($done)">
@@ -1151,16 +1153,16 @@ angular.module('famous.angular')
  * ```
  * @example
  * ### Animating with Transitionables
- * 
+ *
  * The most flexible way to animate modifier properties is by creating a Transitionable object on the scope and binding the property in the html.
  * Any changes to the Transitionable object on the scope will be reflected in the view immediately via Angular's two-way data binding.
  *
  * ```javascript
  * var Transitionable = $famous['famous/transitions/Transitionable'];
  * var Easing = $famous['famous/transitions/Easing'];
- * 
+ *
  * $scope.boxTransitionable = new Transitionable([0, 0, 0]);
- * 
+ *
  * $scope.animate = function() {
  *   $scope.boxTransitionable.set([200, 300, 0], {duration: 2000, curve: Easing.inOutBack});
  * };
@@ -1173,12 +1175,12 @@ angular.module('famous.angular')
  * ```
  * In the html, `fa-translate` is passed `boxTransitionable.get()`, a function expression that will return a value of [0,0,0] initially.
  * All transitionables have a `.get()` method that returns the interpolated state of the transition at the current time of invocation, returning either a number/array or an object.
- * 
+ *
  * This means that during this transition, calls to `.get()` provide the interpolated state along the way, perhaps [100, 150], [150, 185], and so on, until it reaches [200, 300].
- * 
+ *
  * When the user clicks the `fa-surface`, it will trigger the `animate()` function defined on the scope.  In turn, this calls the `.set()` method on the `boxTransitionable`,
  * which is passed the end state and a transition.
- * 
+ *
  * ### Passing Transitionables & values
  *
  * One may also choose to pass an array, with one or more of its values a function expression or a number.
@@ -1190,7 +1192,7 @@ angular.module('famous.angular')
  * ```
  * ```javascript
  * $scope.yTrans = new Transitionable(0);
- * 
+ *
  * $scope.animateY = function() {
  *   $scope.yTrans.set(200, {duration: 2000, curve: 'easeInOut'})
  * };
@@ -1200,13 +1202,13 @@ angular.module('famous.angular')
  *
  * ### Transitionables & .get()
  *   A point of possible confusion is the fact that some modifier properties (`faOpacity`, `faSize`, `faOrigin`, `faAlign`) can be bound to a Transitionable object directly, without needing to be passed a `.get()` function expression, unlike the example above.
- *   In the example below, we create transitionable objects that will perform transitions on opacity (which accepts a Transitionable object directly) and translate (which does not accept a transitionable object directly). 
- *   
+ *   In the example below, we create transitionable objects that will perform transitions on opacity (which accepts a Transitionable object directly) and translate (which does not accept a transitionable object directly).
+ *
  *   The value of `fa-opacity` is bound to a Transitionable directly, `box.opacity`.
  *   Whereas `fa-translate` is bound to a method of a Transitionable, `box.translate.get()`, that returns an interpolated value.
- *   
+ *
  *   Clicking the fa-surface invokes `animateBox()` on the scope, in turn, executing the `.set()` methods of each prospective Transitionable from initial state to end state.
- *   
+ *
  * ```html
  * <fa-modifier fa-translate="box.translate.get()" fa-opacity="box.opacity" fa-size="[100, 100]">
  *     <fa-surface fa-click="animateBox()" fa-background-color="'red'"></fa-surface>
@@ -1223,28 +1225,28 @@ angular.module('famous.angular')
  *     $scope.box.opacity.set(1, {duration: 500, curve: 'easeInOut'});
  *   };
  * ```
- * #### Why the difference?  
+ * #### Why the difference?
  *
  * `FaTranslate` (along with `faRotate`, `faTranslate`, `faScale`, `faSkew`, & more) pass through a Famous Transform function (`Transform.translate()`), whereas `faOpacity`, `faSize`, `faOrigin`, and `faAlign` are passed through a Famous Modifier.
- * 
+ *
  * A Famous `Transform.translate()` function does not accept a Transitionable object, but only an array.
  * A `.get()` function of a Transitionable returns an interpolated value of a current transition, therefore in the case of a `faTranslate`, it can return an array that a `Transform.translate()` can accept.
- * 
- * `faOpacity` passes through a Famous Modifier, which has an `.opacityFrom()` method that can accept a Transitionable object directly.  
- * 
+ *
+ * `faOpacity` passes through a Famous Modifier, which has an `.opacityFrom()` method that can accept a Transitionable object directly.
+ *
  * As a design principle, Famous-Angular attempts to pass values directly to Famous as much as possible, and these differences are due to the core Famous library.
- * 
+ *
  * ### Callbacks at Transition completion
- * 
+ *
  * The `.set()` method of a Transitionable can accept 3 arguments: an endState, a transition, and an optional callback to be called upon observed completion of the transition.
- * In the example below, when the first transition completes, with the element translated to [200, 300, 0], the callback function is called, and the element begins the transition to [100, 100, 0]. 
+ * In the example below, when the first transition completes, with the element translated to [200, 300, 0], the callback function is called, and the element begins the transition to [100, 100, 0].
  * ```javascript
  * var Transitionable = $famous['famous/transitions/Transitionable'];
- * 
+ *
  * $scope.boxTrans = new Transitionable([0, 0, 0]);
- * 
+ *
  * $scope.animateWithCallback = function() {
- *   $scope.boxTrans.set([200, 300, 0], {duration: 1000, curve: 'easeInOut'}, 
+ *   $scope.boxTrans.set([200, 300, 0], {duration: 1000, curve: 'easeInOut'},
  *     function() {
  *       $scope.boxTrans.set([100, 100, 0], {duration: 1000, curve: 'easeInOut'});
  *     }
@@ -1257,15 +1259,15 @@ angular.module('famous.angular')
  *   </fa-surface>
  * </fa-modifier>
  * ```
- * 
+ *
  * ### Nesting modifiers & animations
- * 
+ *
  * Famous Modifiers affect all renderable child nodes (Modifiers & Surfaces) below them on the Render Tree.
  * In this example, two properties will be animated: the outermost Modifier's `fa-scale` property and innermost Modifier's `fa-rotate-Z` property.
- * 
+ *
  * Because Famous Modifiers affect all child nodes nested within them, when the outermost Modifier's scale property changes, it affects the scale of every modifier and surface below it.
- * The innermost Modifier with the `fa-rotate-Z` property affects the innermost surface only.  
- * 
+ * The innermost Modifier with the `fa-rotate-Z` property affects the innermost surface only.
+ *
  * ```html
  * <fa-modifier fa-scale="boxes.outer.scale.get()">
  *   <fa-modifier fa-size="[100, 100]">
@@ -1273,10 +1275,10 @@ angular.module('famous.angular')
  *     <fa-modifier fa-size="[50, 50]" fa-origin="[.5, .5]" fa-rotate-z="boxes.inner.rotateZ.get()">
  *       <fa-surface fa-background-color="'blue'" fa-click="animateBoxes()"></fa-surface>
  *     </fa-modifier>
- *   </fa-modifier> 
+ *   </fa-modifier>
  * </fa-modifier>
  * ```
- * 
+ *
  * ```javascript
  * var Transitionable = $famous['famous/transitions/Transitionable'];
  * $scope.boxes = {
@@ -1287,21 +1289,21 @@ angular.module('famous.angular')
  *     rotateZ: new Transitionable(0)
  *   }
  * };
- * 
+ *
  * $scope.animateBoxes = function() {
  *   $scope.boxes.outer.scale.set([1, 1], {duration: 2000, curve: 'easeInOut'});
  *   $scope.boxes.inner.rotateZ.set(.8, {duration: 1000, curve: 'easeInOut'});
  * };
  * ```
- * 
+ *
  * ### $famous.find()
  *
  * `$famous.find()` is a method that can be used to perform a DOM look-up to retrieve the Famous isolate (node) of the appropriate object.
  * It accepts one argument, a string css selector (e.g. an #id or a .class,) and returns an array of elements matching the query.
- * 
+ *
  * It is useful for manipulation of Famous objects after they have been declared in the DOM.
  * With Angular, it is best to do DOM manipulation (including look-ups) in a directive's post-link function; Famous-Angular is no exception.
- * 
+ *
  * ```html
  * <fa-modifier id="myBox">
  *   <fa-surface></fa-surface>
@@ -1313,18 +1315,18 @@ angular.module('famous.angular')
  * // myBox[0].modifier is a reference to the Famo.us modifier corresponding to that element.
  * ```
  * If this is done outside of a directive's post-link function, there is no guarantee that `$famous.find()` will return anything, because the element may not have compiled yet.
- * 
+ *
  * ##Animating with directives
  * Below is an example of a custom directive called `fade-in` used to animate an element by transitioning its opacity from the values of `fa-opacity` to `opacity-end`, with the duration of `duration`.  Note: `opacity-end` and `duration` are NOT Famous-Angular attributes; they are custom to this particular example.
- * 
+ *
  * ```html
  * <fa-modifier fade-in fa-opacity="0.2" opacity-end="1" duration="500">
  *   <fa-surface fa-background-color="'red'"></fa-surface>
  * </fa-modifier>
  * ```
  * ```javascript
- * .directive('fadeIn', 
- *   ['$famous', '$famousDecorator', '$timeout', 
+ * .directive('fadeIn',
+ *   ['$famous', '$famousDecorator', '$timeout',
  *   function ($famous, $famousDecorator, $timeout) {
  *   return {
  *     restrict: 'A',
@@ -1337,7 +1339,7 @@ angular.module('famous.angular')
  *         },
  *         post: function(scope, element, attrs) {
  *           $famousDecorator.ensureIsolate(scope)
- *       
+ *
  *           $timeout(function() {
  *             var opacityStartValue = attrs.faOpacity;
  *             var opacityEndValue = attrs.opacityEnd;
@@ -1351,34 +1353,34 @@ angular.module('famous.angular')
  *
  *             opacityTransitionable.set(opacityEndValue, {duration: duration, curve: 'easeInOut'});
  *           });
- *       
+ *
  *         }
  *       }
  *     }
  *   }
  * }]);
  * ```
- *   
- * In the compile function, load up the AMD module for a Famous Transitionable, which will be used for the animation.  
- * 
- * The `fade-in` directive's priority is 16, higher than the priority of an `fa-modifier` (4) to ensure that the `fa-modifier` will be compiled first.  Therefore the post-link function of `fade-in` allows access to the `scope` of `fa-modifier`.  
- * 
+ *
+ * In the compile function, load up the AMD module for a Famous Transitionable, which will be used for the animation.
+ *
+ * The `fade-in` directive's priority is 16, higher than the priority of an `fa-modifier` (4) to ensure that the `fa-modifier` will be compiled first.  Therefore the post-link function of `fade-in` allows access to the `scope` of `fa-modifier`.
+ *
  * `$famousDecorator.ensureIsolate(scope)` checks the passed in scope for an existing isolate;  if `scope.isolate` does not exist, it creates one.
- * 
+ *
  * Below, the rest of the directive is wrapped in a $timeout function to ensure that the animation will call on the next Famous engine tick.
- * 
+ *
  * `opacityStartValue`, `opacityEndValue`, and `duration` are convenience variables that access the `fa-opacity`, `opacity-end`, and `duration` attributes from the html.
- * 
+ *
  * A transitionable called `OpacityTransitionable` is instantiated with `startOpacity` (value of 0.2 in this example).
- * 
+ *
  * `scope.isolate` is a reference to the Famous-Angular `isolate` object that stores properties available to each particular Famous-Angular element.  The `isolate` object may look like this: {004: {Context Object} 005: {Modifier Object} 006: {Surface Object}}.
- * 
- * A particular element's "isolate" is accessed from the isolate object by key, with the unique $id property of the element, like so: `scope.isolate[scope.$id]`.  (The `fa-modifier`'s unique `$id` property might be 005, for example)  
- * 
+ *
+ * A particular element's "isolate" is accessed from the isolate object by key, with the unique $id property of the element, like so: `scope.isolate[scope.$id]`.  (The `fa-modifier`'s unique `$id` property might be 005, for example)
+ *
  * Accessing the reference of the Famous Modifier that corresponds to the element, (`scope.isolate[scope.$id].modifier`), use the `.opacityFrom()` method (available to Famous Modifiers), and pass it a callback function that will return `opacityTransitionable.get()`.  In this particular example, we passed the value of `opacityStartValue (0.2)` into the constructor of opacityTransitionable earlier.  Therefore, at this point, `opacityTransitionable.get()` will return `0.2`.
- * 
+ *
  * The transition begins when `opacityTransitionable.set()` is called, which passes in the `opacityEndValue` and a transition object.
- *  
+ *
  */
 
 
@@ -1558,7 +1560,7 @@ angular.module('famous.angular')
                           for (var k = 0; k < j; k++) {
                             if (lower < segments[k].upperBound) {
                               throw new Error("Animate segments have overlapping" +
-                                "domains for the same field (" + field + ")." + 
+                                "domains for the same field (" + field + ")." +
                                 "At any point in the timeline, only one <animate>" +
                                 "can affect a given field on the same modifier.");
                             }
@@ -1573,7 +1575,7 @@ angular.module('famous.angular')
                         //     |          |                       |          |
                         //     |          |                       |          |
                         //     |          |                       |          |
-                        //     |          |                       |          |           
+                        //     |          |                       |          |
                         //     |  (ease)  |                       |  (ease)  |
                         //     |        -/|-----------------------|-\        |
                         //     |      -/  |                       |  -\      |
@@ -1727,9 +1729,9 @@ angular.module('famous.angular')
  * </fa-app>
  * ```
  * @example
- * `Fa-app` creates a Famous Context, the root of the Render Tree.  Renderables (such as `fa-modifier`'s & `fa-surface`'s) nested within an `fa-app` are added to this root context.  
+ * `Fa-app` creates a Famous Context, the root of the Render Tree.  Renderables (such as `fa-modifier`'s & `fa-surface`'s) nested within an `fa-app` are added to this root context.
  *
- * Declaring `fa-app` appends a div with the class of `"famous-angular-container"` to the DOM.  It then instantiates a Context via Famous' Engine `.createContext()` method, passing in a reference to the `famous-angular-container` div, resulting in a Famous context that renderables can be added to connected to Angular.  `Fa-app` can be declared as an element or as an attribute within another element.  
+ * Declaring `fa-app` appends a div with the class of `"famous-angular-container"` to the DOM.  It then instantiates a Context via Famous' Engine `.createContext()` method, passing in a reference to the `famous-angular-container` div, resulting in a Famous context that renderables can be added to connected to Angular.  `Fa-app` can be declared as an element or as an attribute within another element.
  *
 <example module="faAppExampleApp">
  <file name="index.html">
@@ -1758,14 +1760,14 @@ angular.module('famous.angular')
  * Nesting an `fa-app` within another `fa-app` is possible, and the use case of this approach would be for css content overflow.
  *
  * In the example below, there is an `fa-surface` with an `fa-app` nested inside.  Normally, an `fa-surface` should not nest another Famous element within it because it is a leaf node that has the purpose of being a container for html content.  The exception is nesting an `fa-app` within an `fa-surface`, which creates another Famous context, in which Famous elements can be nested inside.
- * 
+ *
  <example module="faAppExampleAppA">
   <file name="index.html">
   <fa-app style="width: 500px; height: 500px;">
       <fa-surface>
         <fa-app style="width: 200px; height: 200px; overflow: hidden;">
-          <fa-image-surface 
-             fa-image-url="https://famo.us/assets/images/famous_logo_white.svg" 
+          <fa-image-surface
+             fa-image-url="https://famo.us/assets/images/famous_logo_white.svg"
              fa-size="[400, 400]">
           </fa-image-surface>
         </fa-app>
@@ -1774,19 +1776,19 @@ angular.module('famous.angular')
   </file>
   <file name="style.css">
   fa-app {
-      background-color: #000;  
+      background-color: #000;
     }
   </file>
   <file name="script.js">
   angular.module('faAppExampleAppA', ['famous.angular']);
   </file>
  </example>
- * The outer `fa-app` is sized 500x500, and it contains all of the content.  The use case of this `fa-app` within another `fa-app` is to clip content using the css overflow:hidden property.  The `fa-image-surface` links to a 400x400 sized image of the Famous logo.  Its parent is the nested `fa-app`, whose size is only 200x200.  
- * 
- * The larger image content (400x400) will overflow the boundaries of its parent, the the nested `fa-app` (200x200).  Because `fa-app` has a css overflow:hidden property, it will clip the content of any of its children that is outside the 200x200 region.  Any part of the 400x400 image that reaches outside of these boundaries are ignored.  This may be useful for complex animations.  
- *  
- * Take note: declaring multiple `fa-app`s within a page is permitted, but each new one incurs a penalty for performance.  `fa-app` is similar to a Famo.us ContainerSurface, in that it creates an additional Context that the Famo.us Engine must manage.  
- * 
+ * The outer `fa-app` is sized 500x500, and it contains all of the content.  The use case of this `fa-app` within another `fa-app` is to clip content using the css overflow:hidden property.  The `fa-image-surface` links to a 400x400 sized image of the Famous logo.  Its parent is the nested `fa-app`, whose size is only 200x200.
+ *
+ * The larger image content (400x400) will overflow the boundaries of its parent, the the nested `fa-app` (200x200).  Because `fa-app` has a css overflow:hidden property, it will clip the content of any of its children that is outside the 200x200 region.  Any part of the 400x400 image that reaches outside of these boundaries are ignored.  This may be useful for complex animations.
+ *
+ * Take note: declaring multiple `fa-app`s within a page is permitted, but each new one incurs a penalty for performance.  `fa-app` is similar to a Famo.us ContainerSurface, in that it creates an additional Context that the Famo.us Engine must manage.
+ *
  * ### Fa-app must be declared with a height & width
  * The element `fa-app` is declared within must have a set height and width styling, declared inline or as a css declaration in an external stylesheet.
  * ```html
@@ -1926,19 +1928,19 @@ angular.module('famous.angular')
             isolate.renderNode = new CanvasSurface({
               size: scope.$eval(attrs.faSize)
             });
-            
+
             $famousDecorator.addRole('renderable',isolate);
             isolate.show();
-            
+
             if (attrs.class) {
               isolate.renderNode.setClasses(attrs['class'].split(' '));
             }
-            
-            // Throw an exception if anyother famous scene graph element is added on fa-surface.            
+
+            // Throw an exception if anyother famous scene graph element is added on fa-surface.
             $famousDecorator.sequenceWith(scope, function(data) {
               throw new Error('Surfaces are leaf nodes of the Famo.us render tree and cannot accept rendernode children.  To include additional Famo.us content inside of a fa-surface, that content must be enclosed in an additional fa-app.');
             });
-                        
+
           },
           post: function(scope, element, attrs, ctrl, transclude){
             var isolate = $famousDecorator.ensureIsolate(scope);
@@ -1962,7 +1964,7 @@ angular.module('famous.angular')
             $famousDecorator.registerChild(scope, element, isolate, function() {
               // TODO: hook into RenderController and hide this render node
             });
-                     
+
           }
         };
       }
@@ -1989,7 +1991,7 @@ angular.module('famous.angular')
  * @example
  * ### Fa-click on an fa-surface
  * `Fa-click` can be used on an `fa-surface`.  Internally, a Famous Surface has a `.on()` method that binds a callback function to an event type handled by that Surface.
- *  The function expression bound to `fa-click` is bound to that `fa-surface`'s click eventHandler, and when the `fa-surface` is clicked, the function expression will be called. 
+ *  The function expression bound to `fa-click` is bound to that `fa-surface`'s click eventHandler, and when the `fa-surface` is clicked, the function expression will be called.
  *
  * ```html
  * <fa-modifier fa-size="[100, 100]">
@@ -2004,12 +2006,12 @@ angular.module('famous.angular')
  * ```
  * ### Fa-click on an fa-view
  * `Fa-click` may be used on an `fa-view`.  The function expression bound to `fa-click` will be bound to the `fa-view`'s internal `_eventInput`, the aggregation point of all events received by the `fa-view`.  When it receives a `click` event, it will call the function expression bound to `fa-click`.
- *  
+ *
  * In the example below, the `fa-surface` pipes its Surface events to an instantied Famous Event Handler called `myEvents`.
  * `Fa-view` pipes from `myEvents`, receiving all events piped by the `fa-surface`.
- * 
- * When a click event occurs on the `fa-surface`, it is piped to the `fa-view`.  
- * `fa-click` defines a callback function in which to handle click events, and when it receives a click event, it calls `myClickHandler()`. 
+ *
+ * When a click event occurs on the `fa-surface`, it is piped to the `fa-view`.
+ * `fa-click` defines a callback function in which to handle click events, and when it receives a click event, it calls `myClickHandler()`.
  * ```html
  * <fa-view fa-click="myClickHandler($event)" fa-pipe-from="myEvents">
  *   <fa-modifier fa-size="[100, 100]">
@@ -2022,7 +2024,7 @@ angular.module('famous.angular')
  * ```javascript
  * var EventHandler = $famous['famous/core/EventHandler'];
  * $scope.myEvents = new EventHandler();
- * 
+ *
  * $scope.myClickHandler = function($event) {
  *   console.log($event);
  *   console.log("fa-view receives the click event from the fa-surface, and calls myClickHandler defined on fa-click");
@@ -2156,7 +2158,7 @@ angular.module('famous.angular')
 
             $famousDecorator.addRole('renderable',isolate);
             isolate.show();
-            
+
             $famousDecorator.sequenceWith(scope, function(data) {
               isolate.renderNode.add(data.renderGate);
             });
@@ -2201,7 +2203,7 @@ angular.module('famous.angular')
  * `fa-drawer-layout` is a View that arranges two renderables into a drawer area with a defined size and a content area that fills up the remaining space.
  *
  * To use it, declare it in the html and nest 2 renderables.
- * 
+ *
  *
  */
 
@@ -2365,7 +2367,7 @@ angular.module('famous.angular')
             $famousDecorator.addRole('renderable',isolate);
 
             isolate.show();
-            
+
             $famousDecorator.sequenceWith(
               scope,
               function(data) {
@@ -2507,10 +2509,10 @@ angular.module('famous.angular')
       <fa-flipper>
         <fa-modifier fa-size="[200, 200]">
           <fa-surface fa-background-color="'yellow'" fa-click="flipIt()">Click me to see me flip!</fa-surface>
-        </fa-modifier>  
+        </fa-modifier>
         <fa-modifier fa-size="[200, 200]">
           <fa-surface fa-background-color="'red'" fa-click="flipIt()">Flip me again!</fa-surface>
-        </fa-modifier>  
+        </fa-modifier>
       </fa-flipper>
     </fa-app>
   </file>
@@ -2558,7 +2560,7 @@ angular.module('famous.angular')
               isolate.renderNode = new Flipper(options);
               $famousDecorator.addRole('renderable',isolate);
               isolate.show();
-           
+
               isolate.children = [];
 
               isolate.flip = function (overrideOptions) {
@@ -2799,10 +2801,10 @@ angular.module('famous.angular')
 
         <!-- header -->
         <fa-surface fa-background-color="'red'">Header</fa-surface>
-      
+
         <!-- content -->
         <fa-surface fa-background-color="'blue'">Content</fa-surface>
-      
+
         <!-- footer -->
         <fa-surface fa-background-color="'green'">Footer</fa-surface>
 
@@ -2823,10 +2825,10 @@ angular.module('famous.angular')
     }
   </file>
  </example>
- * 
+ *
  * Famo.us' `HeaderFooterLayout` defaults to a vertical orientation.
  * Specify a direction in the fa-options object to obtain a horizontal orientation.
- * 
+ *
  <example module="faHeaderFooterExampleAppA">
   <file name="index.html">
   <fa-app>
@@ -2835,10 +2837,10 @@ angular.module('famous.angular')
 
         <!-- header -->
         <fa-surface fa-background-color="'red'">Header</fa-surface>
-      
+
         <!-- content -->
         <fa-surface fa-background-color="'blue'">Content</fa-surface>
-      
+
         <!-- footer -->
         <fa-surface fa-background-color="'green'">Footer</fa-surface>
 
@@ -2899,10 +2901,10 @@ angular.module('famous.angular')
  * In the example above, 3 renderables are generated through an ng-repeat.  The header and footer `Modifier`s generated by the ng-repeat have defined sizes of `[undefined, 100]` (they will fill their parent container horizontally, and be 100 pixels vertically).  The content has a size of `[undefined, undefined]`, and it will fill the remaining heght and width of its container.
  *
  * Note:
- * 
+ *
  * - If more than 3 renderables are nested inside an `fa-header-footer-layout`, it will throw an error: `fa-header-footer-layout can accept no more than 3 children.`
  * - Furthermore, in the basic example we used the `fa-options` attribute to specify the size of the header and footer. Here we do not use modifiers on the surfaces within the header fotter layout to achieve a similar effect. Note that this approach does not work as well with vertical orientations.
- * 
+ *
  *
  */
 
@@ -3078,7 +3080,7 @@ angular.module('famous.angular')
               class: scope.$eval(attrs.class),
               properties: isolate.getProperties()
             });
-            
+
             $famousDecorator.addRole('renderable',isolate);
             isolate.show();
 
@@ -3135,11 +3137,11 @@ angular.module('famous.angular')
  *
  * `fa-scroll-view` accepts another directive called `fa-start-index` as an attribute, which determines which `fa-view` the Scroll View displays by default.
  * `Fa-start-index` will not affect the sequential order of the layout; the `fa-view` with the red background will be layed out first, followed by the one with the blue background.
- *  By setting `fa-start-index` to 1, the Scroll View will display the View with the index of 1, which is the View with the blue background color. 
+ *  By setting `fa-start-index` to 1, the Scroll View will display the View with the index of 1, which is the View with the blue background color.
  *
  <example module="faIndexExampleApp">
   <file name="index.html">
-  <fa-app ng-controller="IndexCtrl"> 
+  <fa-app ng-controller="IndexCtrl">
 
      <!-- The scroll View will start at the index of 1 -->
       <fa-scroll-view fa-pipe-from="eventHandler" fa-options="options.scrollView" fa-start-index="1">
@@ -3149,24 +3151,24 @@ angular.module('famous.angular')
 
          <fa-view fa-index="1">
             <fa-modifier fa-size="[320, 320]">
-               <fa-surface fa-pipe-to="eventHandler" 
+               <fa-surface fa-pipe-to="eventHandler"
                            fa-background-color="'blue'">
                            <p>Scroll me back!</p>
                </fa-surface>
             </fa-modifier>
          </fa-view>
-    
+
          <fa-view fa-index="0">
             <fa-modifier fa-size="[320, 320]">
-               <fa-surface fa-pipe-to="eventHandler" 
+               <fa-surface fa-pipe-to="eventHandler"
                            fa-background-color="'red'">
                            <p>Scroll me!</p>
                </fa-surface>
             </fa-modifier>
          </fa-view>
-    
-      </fa-scroll-view>   
-    </fa-app>   
+
+      </fa-scroll-view>
+    </fa-app>
   </file>
   <file name="script.js">
   angular.module('faIndexExampleApp', ['famous.angular'])
@@ -3175,7 +3177,7 @@ angular.module('famous.angular')
        var EventHandler = $famous['famous/core/EventHandler'];
        $scope.eventHandler = new EventHandler();
        $scope.list = [{content: "famous"}, {content: "angular"}, {content: "rocks!"}];
-      
+
        $scope.options = {
          scrollView: {
            direction: 0 // displays the fa-views horizontally
@@ -4608,7 +4610,7 @@ angular.module('famous.angular')
       restrict: 'A',
       scope: false,
       compile: function() {
-        return { 
+        return {
           post: function(scope, element, attrs) {
             var isolate = $famousDecorator.ensureIsolate(scope);
 
@@ -4697,7 +4699,7 @@ angular.module('famous.angular')
  *
  * In Famous, events are used to move information between widgets (such as ScrollView) and Views, and to listen to DOM events.
  * To pass information between two unrelated views, or even between a nested View to its parent, use `fa-pipe-to` and `fa-pipe-from` to pipe and receive events.
- * 
+ *
  * In the example below, even though `fa-view`, `fa-modifier`, and `fa-surface` are all nested within an `fa-scroll-view`, all of these elements' events (such as touch or scroll) do not propagate upwards towards their parent.
  *
  * Note:  This example will not work.
@@ -4713,8 +4715,8 @@ angular.module('famous.angular')
  *    </fa-view>
  * </fa-scroll-view>
  *  ```
- * 
- * In the example below, events from the `fa-surface` are piped to `myEventHandler`, a source event handler, via `fa-pipe-to`. `Fa-scroll-view` receives events from `myEventHandler`, its target event handler, via `fa-pipe-from`. 
+ *
+ * In the example below, events from the `fa-surface` are piped to `myEventHandler`, a source event handler, via `fa-pipe-to`. `Fa-scroll-view` receives events from `myEventHandler`, its target event handler, via `fa-pipe-from`.
  * `myEventHandler` refers to an instantiated Famous EventHandler declared on the scope.  Using pipes allows events to propagate between `fa-surface`s and the `fa-scroll-view`.
  *
  *
@@ -4737,7 +4739,7 @@ angular.module('famous.angular')
     <script>
       angular.module('faPipeExampleApp', ['famous.angular'])
           .controller('PipeCtrl', ['$scope', '$famous', function($scope, $famous) {
-            
+
             var EventHandler = $famous['famous/core/EventHandler'];
 
             $scope.views = [{color: 'red'}, {color: 'blue'}, {color: 'green'}, {color: 'yellow'}, {color: 'orange'}];
@@ -4759,16 +4761,16 @@ angular.module('famous.angular')
  </example>
  *
  * ##Event Handlers on the Controller
- * 
- * The example below is more in line with a "vanilla" Famous approach to event piping.  There are two Views, each with one Surface.  In the html, the second View has a`fa-pipe-from` bound to `eventHandlerB`.  
- * 
+ *
+ * The example below is more in line with a "vanilla" Famous approach to event piping.  There are two Views, each with one Surface.  In the html, the second View has a`fa-pipe-from` bound to `eventHandlerB`.
+ *
  * Two event handlers are instantiated on the controller.  `EventHandlerA` pipes to `eventHandlerB`, using: `eventHandlerA.pipe(eventHandlerB)`.
  *
  * If the fa-surface on the first View is clicked, it calls `surfaceClick()` via fa-click, which causes `eventHandlerA` to emit a custom event called `myEvent`.
- * Because `evenHandlerA` pipes to `eventHandlerB`, `eventHandlerB` receives `myEvent`.  
- * 
+ * Because `evenHandlerA` pipes to `eventHandlerB`, `eventHandlerB` receives `myEvent`.
+ *
  * An event handler for `myEvent` is declared for `eventHandlerB` using an `.on()` method.  When eventHandlerB receives a `myEvent` event, the event is handled with a callback function that translates the `fa-surface` on the second view.
- * 
+ *
  * ```html
  * <fa-view>
  *   <fa-modifier fa-size="[100, 100]">
@@ -4781,12 +4783,12 @@ angular.module('famous.angular')
  *   </fa-modifier>
  * </fa-view>
  * ```
- * 
+ *
  * ```javascript
  * var EventHandler = $famous['famous/core/EventHandler'];
  * $scope.eventHandlerA = new EventHandler();
  * $scope.eventHandlerB = new EventHandler();
- * $scope.eventHandlerA.pipe($scope.eventHandlerB); 
+ * $scope.eventHandlerA.pipe($scope.eventHandlerB);
  * // all events received by eventHandlerA wil be piped to eventHandlerB
  *
  * var Transitionable = $famous['famous/transitions/Transitionable'];
@@ -4822,21 +4824,21 @@ angular.module('famous.angular')
     <script>
       angular.module('faPipeExampleApp', ['famous.angular'])
           .controller('PipeCtrl', ['$scope', '$famous', function($scope, $famous) {
-            
+
             var EventHandler = $famous['famous/core/EventHandler'];
             $scope.eventHandlerA = new EventHandler();
             $scope.eventHandlerB = new EventHandler();
-            $scope.eventHandlerA.pipe($scope.eventHandlerB); 
+            $scope.eventHandlerA.pipe($scope.eventHandlerB);
             // all events received by eventHandlerA wil be piped to eventHandlerB
-            
+
             var Transitionable = $famous['famous/transitions/Transitionable'];
             $scope.redTrans = new Transitionable([0, 100, 0]);
-            
+
             // eventHandlerA emits 'myEvent' on click
             $scope.surfaceClick = function() {
               $scope.eventHandlerA.emit('myEvent');
             };
-            
+
             // eventHandlerA pipes all events it receives to eventHandlerB
             // This is an event handler defined on eventHandlerB for handling 'myEvent'
             $scope.eventHandlerB.on('myEvent', function() {
@@ -4859,34 +4861,34 @@ angular.module('famous.angular')
       color: #fff;
     }
   </file>
- </example> 
+ </example>
  *
  * ##Switching Pipes
- * 
+ *
  * Another feature of `fa-pipe-to` and `fa-pipe-from` is the ability to switch pipes.
- * 
+ *
  * Using fa-pipe-to & fa-pipe-from involves binding it to a reference of an event handler on the scope.
  * If the event handler bound to `fa-pipe-to/fa-pipe-from` changes, the directives unpipes from that event handler, and can pipe to another event handler.
  *
  * The Famous approach to events allows more flexibility than DOM events which are hierarchical.  The example below shows a case in which eventing to non-hierarchical eventing & switching pipes dynamically can allow more expressiveness with events than a hierarchical DOM event propagation model.
- * 
+ *
  * ### Example & Explanation
- * 
+ *
  * Touch events from a directional pad conditionally affect three different Scroll Views on a page.
  * Based on which checkboxes are checked, the scroll events on the directional pad will affect either Scroll View A, Scroll View B, or Scroll View C.
  * The pipes are databound using `fa-pipe-to` and `fa-pipe-from`, and they are swapped out using the controller.
- * 
+ *
  * There are two main `fa-view`s: the directional pad which contains a Scroll View (for input) & 3 checkboxes, and the other `fa-view` that contains 3 Scroll Views.
  * The Scroll View of the directional pad uses `fa-pipe-from` to pipe events from `mainPipe` to its Scroll View's event handler.
  * The surface within the directional pad uses `fa-pipe-to` to pipe `fa-surface` events to `mainPipe`.
- * 
- * In the second view containing 3 Scroll Views, each Scroll View pipes from `emptyPipe` by default, another instantiated EventHandler that has no events piped to it.  
- *  
+ *
+ * In the second view containing 3 Scroll Views, each Scroll View pipes from `emptyPipe` by default, another instantiated EventHandler that has no events piped to it.
+ *
  *
  * The directional pad has a list of input checkboxes created by an ng-repeated list from `$scope.inputList`.
  * If a checkbox is checked, it calls `checkBoxChange()`, passing the index of the object within the ng-repeat, the letter (such as `'A'`), and the model (such as `'checkBox.A'`) of the respective checkbox.
  * If the checkbox is checked, the model (`checkBox.A`) is assigned the value of "true", and if it is unchecked, it is assigned the value of "false".
- * 
+ *
  * In the controller, `$scope.checkBoxChange()` changes the value of the pipe of the respective Scroll View (A, B, or C) that corresponds to the checkBox.
  * If the checkbox is checked, it assigns the respective Scroll View (A, B, or C) to pipe from `$scope.mainPipe`, and if unchecked, it will continue to pipe from `$scope.emptyPipe`.
  * In short, the checkboxes act as switches to change piping events.
@@ -4908,8 +4910,8 @@ angular.module('famous.angular')
                      <label>{{input.letter}}</label>
                      <!-- checkboxes -->
                      <input type="checkbox"
-                            ng-model="input.model" 
-                            name="scrollPipeTo" 
+                            ng-model="input.model"
+                            name="scrollPipeTo"
                             ng-change="checkBoxChange($index, input.letter, input.model)"
                             ng-true-value="true"
                             ng-false-value="false">
@@ -4920,7 +4922,7 @@ angular.module('famous.angular')
          </fa-modifier>
        </fa-scroll-view>
      </fa-view>
-     
+
      <!-- view with 3 Scroll Views -->
      <fa-view>
        <!-- ng-repeat creating 3 different scroll Views -->
@@ -4936,7 +4938,7 @@ angular.module('famous.angular')
                    </fa-surface>
                  </fa-modifier>
              </fa-view>
-            </fa-scroll-view>   
+            </fa-scroll-view>
          </fa-view>
        </fa-modifier>
      </fa-view>
@@ -4948,19 +4950,19 @@ angular.module('famous.angular')
 
        // Event Handlers
        var EventHandler = $famous['famous/core/EventHandler'];
-       
+
        $scope.mainPipe = new EventHandler();
        $scope.emptyPipe = new EventHandler();
-       
+
        // items in ng-repeated list in each of the 3 Scroll Views
        $scope.list = [];
        for (var i = 0; i < 10; i++) {
          $scope.list.push({});
        };
-       
+
        // 3 inputs in the directional pad corresponding to the 3 scroll views
        $scope.inputList = [{model: "checkBox.A", letter: "A"},{model: "checkBox.B", letter: "B"}, {model: "checkBox.C", letter: "C"}];
-       
+
        // pipes that each of the 3 scroll views is binded to through fa-pipe-from
        $scope.pipes = {
          A: $scope.emptyPipe,
@@ -4970,13 +4972,13 @@ angular.module('famous.angular')
 
        // 3 scrollviews
        $scope.scrollViews = [{pipe: $scope.pipes.A, bgColor: "blue"}, {pipe: $scope.pipes.B, bgColor: "red"}, {pipe: $scope.pipes.C, bgColor: "green"}];
-       
+
        // function that is called whenever a checkbox is checked/unchecked that assigns the fa-pipe-from
        $scope.checkBoxChange = function(index, model, value) {
          if (value == 'true') {
            console.log($scope.pipes[model], + " is now pointing to mainPipe");
            $scope.scrollViews[index].pipe = $scope.mainPipe;
-         
+
          } else {
            console.log($scope.pipes[model] + " is now pointing to emptyPipe");
            $scope.scrollViews[index].pipe = $scope.emptyPipe;
@@ -5015,7 +5017,7 @@ angular.module('famous.angular')
               },
               function(newTarget, oldTarget){
                 var source;
-                if(isolate.renderNode && isolate.renderNode._isModifier) source = isolate.renderNode._object;                                         
+                if(isolate.renderNode && isolate.renderNode._isModifier) source = isolate.renderNode._object;
                 else if(isolate.renderNode) source = isolate.renderNode._eventInput || isolate.renderNode;
                 else source = Engine;
                 $famousPipe.unpipesFromTargets(source, oldTarget);
@@ -5058,7 +5060,7 @@ angular.module('famous.angular')
  *
  * In Famous, events are used to move information between widgets (such as ScrollView) and Views, and to listen to DOM events.
  * To pass information between two unrelated views, or even between a nested View to its parent, use `fa-pipe-to` and `fa-pipe-from` to pipe and receive events.
- * 
+ *
  * In the example below, even though `fa-view`, `fa-modifier`, and `fa-surface` are all nested within an `fa-scroll-view`, all of these elements' events (such as touch or scroll) do not propagate upwards towards their parent.
  *
  * Note:  This example will not work.
@@ -5074,8 +5076,8 @@ angular.module('famous.angular')
  *    </fa-view>
  * </fa-scroll-view>
  *  ```
- * 
- * In the example below, events from the `fa-surface` are piped to `myEventHandler`, a source event handler, via `fa-pipe-to`. `Fa-scroll-view` receives events from `myEventHandler`, its target event handler, via `fa-pipe-from`. 
+ *
+ * In the example below, events from the `fa-surface` are piped to `myEventHandler`, a source event handler, via `fa-pipe-to`. `Fa-scroll-view` receives events from `myEventHandler`, its target event handler, via `fa-pipe-from`.
  * `myEventHandler` refers to an instantiated Famous EventHandler declared on the scope.  Using pipes allows events to propagate between `fa-surface`s and the `fa-scroll-view`.
  *
  *
@@ -5098,7 +5100,7 @@ angular.module('famous.angular')
     <script>
       angular.module('faPipeExampleApp', ['famous.angular'])
           .controller('PipeCtrl', ['$scope', '$famous', function($scope, $famous) {
-            
+
             var EventHandler = $famous['famous/core/EventHandler'];
 
             $scope.views = [{color: 'red'}, {color: 'blue'}, {color: 'green'}, {color: 'yellow'}, {color: 'orange'}];
@@ -5120,16 +5122,16 @@ angular.module('famous.angular')
  </example>
  *
  * ##Event Handlers on the Controller
- * 
- * The example below is more in line with a "vanilla" Famous approach to event piping.  There are two Views, each with one Surface.  In the html, the second View has a`fa-pipe-from` bound to `eventHandlerB`.  
- * 
+ *
+ * The example below is more in line with a "vanilla" Famous approach to event piping.  There are two Views, each with one Surface.  In the html, the second View has a`fa-pipe-from` bound to `eventHandlerB`.
+ *
  * Two event handlers are instantiated on the controller.  `EventHandlerA` pipes to `eventHandlerB`, using: `eventHandlerA.pipe(eventHandlerB)`.
  *
  * If the fa-surface on the first View is clicked, it calls `surfaceClick()` via fa-click, which causes `eventHandlerA` to emit a custom event called `myEvent`.
- * Because `evenHandlerA` pipes to `eventHandlerB`, `eventHandlerB` receives `myEvent`.  
- * 
+ * Because `evenHandlerA` pipes to `eventHandlerB`, `eventHandlerB` receives `myEvent`.
+ *
  * An event handler for `myEvent` is declared for `eventHandlerB` using an `.on()` method.  When eventHandlerB receives a `myEvent` event, the event is handled with a callback function that translates the `fa-surface` on the second view.
- * 
+ *
  * ```html
  * <fa-view>
  *   <fa-modifier fa-size="[100, 100]">
@@ -5142,12 +5144,12 @@ angular.module('famous.angular')
  *   </fa-modifier>
  * </fa-view>
  * ```
- * 
+ *
  * ```javascript
  * var EventHandler = $famous['famous/core/EventHandler'];
  * $scope.eventHandlerA = new EventHandler();
  * $scope.eventHandlerB = new EventHandler();
- * $scope.eventHandlerA.pipe($scope.eventHandlerB); 
+ * $scope.eventHandlerA.pipe($scope.eventHandlerB);
  * // all events received by eventHandlerA wil be piped to eventHandlerB
  *
  * var Transitionable = $famous['famous/transitions/Transitionable'];
@@ -5183,21 +5185,21 @@ angular.module('famous.angular')
     <script>
       angular.module('faPipeExampleApp', ['famous.angular'])
           .controller('PipeCtrl', ['$scope', '$famous', function($scope, $famous) {
-            
+
             var EventHandler = $famous['famous/core/EventHandler'];
             $scope.eventHandlerA = new EventHandler();
             $scope.eventHandlerB = new EventHandler();
-            $scope.eventHandlerA.pipe($scope.eventHandlerB); 
+            $scope.eventHandlerA.pipe($scope.eventHandlerB);
             // all events received by eventHandlerA wil be piped to eventHandlerB
-            
+
             var Transitionable = $famous['famous/transitions/Transitionable'];
             $scope.redTrans = new Transitionable([0, 100, 0]);
-            
+
             // eventHandlerA emits 'myEvent' on click
             $scope.surfaceClick = function() {
               $scope.eventHandlerA.emit('myEvent');
             };
-            
+
             // eventHandlerA pipes all events it receives to eventHandlerB
             // This is an event handler defined on eventHandlerB for handling 'myEvent'
             $scope.eventHandlerB.on('myEvent', function() {
@@ -5220,34 +5222,34 @@ angular.module('famous.angular')
       color: #fff;
     }
   </file>
- </example> 
+ </example>
  *
  * ##Switching Pipes
- * 
+ *
  * Another feature of `fa-pipe-to` and `fa-pipe-from` is the ability to switch pipes.
- * 
+ *
  * Using fa-pipe-to & fa-pipe-from involves binding it to a reference of an event handler on the scope.
  * If the event handler bound to `fa-pipe-to/fa-pipe-from` changes, the directives unpipes from that event handler, and can pipe to another event handler.
  *
  * The Famous approach to events allows more flexibility than DOM events which are hierarchical.  The example below shows a case in which eventing to non-hierarchical eventing & switching pipes dynamically can allow more expressiveness with events than a hierarchical DOM event propagation model.
- * 
+ *
  * ### Example & Explanation
- * 
+ *
  * Touch events from a directional pad conditionally affect three different Scroll Views on a page.
  * Based on which checkboxes are checked, the scroll events on the directional pad will affect either Scroll View A, Scroll View B, or Scroll View C.
  * The pipes are databound using `fa-pipe-to` and `fa-pipe-from`, and they are swapped out using the controller.
- * 
+ *
  * There are two main `fa-view`s: the directional pad which contains a Scroll View (for input) & 3 checkboxes, and the other `fa-view` that contains 3 Scroll Views.
  * The Scroll View of the directional pad uses `fa-pipe-from` to pipe events from `mainPipe` to its Scroll View's event handler.
  * The surface within the directional pad uses `fa-pipe-to` to pipe `fa-surface` events to `mainPipe`.
- * 
- * In the second view containing 3 Scroll Views, each Scroll View pipes from `emptyPipe` by default, another instantiated EventHandler that has no events piped to it.  
- *  
+ *
+ * In the second view containing 3 Scroll Views, each Scroll View pipes from `emptyPipe` by default, another instantiated EventHandler that has no events piped to it.
+ *
  *
  * The directional pad has a list of input checkboxes created by an ng-repeated list from `$scope.inputList`.
  * If a checkbox is checked, it calls `checkBoxChange()`, passing the index of the object within the ng-repeat, the letter (such as `'A'`), and the model (such as `'checkBox.A'`) of the respective checkbox.
  * If the checkbox is checked, the model (`checkBox.A`) is assigned the value of "true", and if it is unchecked, it is assigned the value of "false".
- * 
+ *
  * In the controller, `$scope.checkBoxChange()` changes the value of the pipe of the respective Scroll View (A, B, or C) that corresponds to the checkBox.
  * If the checkbox is checked, it assigns the respective Scroll View (A, B, or C) to pipe from `$scope.mainPipe`, and if unchecked, it will continue to pipe from `$scope.emptyPipe`.
  * In short, the checkboxes act as switches to change piping events.
@@ -5269,8 +5271,8 @@ angular.module('famous.angular')
                      <label>{{input.letter}}</label>
                      <!-- checkboxes -->
                      <input type="checkbox"
-                            ng-model="input.model" 
-                            name="scrollPipeTo" 
+                            ng-model="input.model"
+                            name="scrollPipeTo"
                             ng-change="checkBoxChange($index, input.letter, input.model)"
                             ng-true-value="true"
                             ng-false-value="false">
@@ -5281,7 +5283,7 @@ angular.module('famous.angular')
          </fa-modifier>
        </fa-scroll-view>
      </fa-view>
-     
+
      <!-- view with 3 Scroll Views -->
      <fa-view>
        <!-- ng-repeat creating 3 different scroll Views -->
@@ -5297,7 +5299,7 @@ angular.module('famous.angular')
                    </fa-surface>
                  </fa-modifier>
              </fa-view>
-            </fa-scroll-view>   
+            </fa-scroll-view>
          </fa-view>
        </fa-modifier>
      </fa-view>
@@ -5309,19 +5311,19 @@ angular.module('famous.angular')
 
        // Event Handlers
        var EventHandler = $famous['famous/core/EventHandler'];
-       
+
        $scope.mainPipe = new EventHandler();
        $scope.emptyPipe = new EventHandler();
-       
+
        // items in ng-repeated list in each of the 3 Scroll Views
        $scope.list = [];
        for (var i = 0; i < 10; i++) {
          $scope.list.push({});
        };
-       
+
        // 3 inputs in the directional pad corresponding to the 3 scroll views
        $scope.inputList = [{model: "checkBox.A", letter: "A"},{model: "checkBox.B", letter: "B"}, {model: "checkBox.C", letter: "C"}];
-       
+
        // pipes that each of the 3 scroll views is binded to through fa-pipe-from
        $scope.pipes = {
          A: $scope.emptyPipe,
@@ -5331,13 +5333,13 @@ angular.module('famous.angular')
 
        // 3 scrollviews
        $scope.scrollViews = [{pipe: $scope.pipes.A, bgColor: "blue"}, {pipe: $scope.pipes.B, bgColor: "red"}, {pipe: $scope.pipes.C, bgColor: "green"}];
-       
+
        // function that is called whenever a checkbox is checked/unchecked that assigns the fa-pipe-from
        $scope.checkBoxChange = function(index, model, value) {
          if (value == 'true') {
            console.log($scope.pipes[model], + " is now pointing to mainPipe");
            $scope.scrollViews[index].pipe = $scope.mainPipe;
-         
+
          } else {
            console.log($scope.pipes[model] + " is now pointing to emptyPipe");
            $scope.scrollViews[index].pipe = $scope.emptyPipe;
@@ -5437,20 +5439,20 @@ angular.module('famous.angular')
             var Modifier = $famous['famous/core/Modifier'];
             var Surface = $famous['famous/core/Surface'];
             var Transform = $famous['famous/core/Transform'];
-            
+
             $scope.masterView = new View();
-            
+
             var _surf = new Surface({properties: {backgroundColor: 'red'}});
             _surf.setContent("I'm a surface");
-            
+
             var _mod = new Modifier();
-            
+
             var _width = 320;
             var _height = 568;
             _mod.transformFrom(function(){
               return Transform.translate(Math.random() * _width, 0, 1);
             });
-            
+
             $scope.masterView.add(_mod).add(_surf);
 
         }]);
@@ -5571,7 +5573,7 @@ angular.module('famous.angular')
     <script>
       angular.module('faScrollViewExampleApp', ['famous.angular'])
           .controller('ScrollCtrl', ['$scope', '$famous', function($scope, $famous) {
-            
+
             var EventHandler = $famous['famous/core/EventHandler'];
 
             $scope.views = [{color: 'red'}, {color: 'blue'}, {color: 'green'}, {color: 'yellow'}, {color: 'orange'}];
@@ -5614,11 +5616,11 @@ angular.module('famous.angular')
     <script>
       angular.module('faScrollViewExampleApp', ['famous.angular'])
           .controller('ScrollCtrl', ['$scope', '$famous', function($scope, $famous) {
-            
+
             var EventHandler = $famous['famous/core/EventHandler'];
             $scope.myEventHandler = new EventHandler();
             $scope.list = [{content: "Scroll", color: "red"}, {content: "horizontally", color: "blue"}, {content: "yay!", color: "green"}, {content: "woo!", color: "yellow"}];
-            
+
             $scope.options = {
               myScrollView: {
                 clipSize: 100,
@@ -5686,11 +5688,11 @@ angular.module('famous.angular')
     <script>
       angular.module('faScrollViewExampleApp', ['famous.angular'])
           .controller('ScrollCtrl', ['$scope', '$famous', function($scope, $famous) {
-            
+
             var EventHandler = $famous['famous/core/EventHandler'];
             $scope.eventHandler = new EventHandler();
             $scope.list = [{content: "famous"}, {content: "angular"}, {content: "rocks!"}];
-            
+
             $scope.options = {
               scrollViewTwo: {
                 direction: 0,
@@ -5717,7 +5719,7 @@ angular.module('famous.angular')
   <fa-app ng-controller="ScrollCtrl" style="width: 100%; height: 568px;">
       <!-- outer scroll view that scrolls horizontally between "main" view and "sidebar" view-->
       <fa-scroll-view fa-pipe-from="eventHandler" fa-options="options.scrollViewOuter">
-    
+
         <!-- sidebar view -->
         <fa-view fa-index="0">
           <fa-modifier fa-size="[200, undefined]" id="sideBarMod">
@@ -5728,7 +5730,7 @@ angular.module('famous.angular')
               </fa-surface>
             </fa-modifier>
         </fa-view>
-    
+
         <!-- main view -->
         <fa-view fa-index="1">
         <!-- inner scroll view that scrolls vertically-->
@@ -5742,14 +5744,14 @@ angular.module('famous.angular')
             </fa-view>
           </fa-scroll-view>
         </fa-view>
-    
+
       </fa-scroll-view>
     </fa-app>
 
     <script>
       angular.module('faScrollViewExampleApp', ['famous.angular'])
           .controller('ScrollCtrl', ['$scope', '$famous', function($scope, $famous) {
-            
+
             var EventHandler = $famous['famous/core/EventHandler'];
             $scope.eventHandler = new EventHandler();
             $scope.list = [{
@@ -5760,7 +5762,7 @@ angular.module('famous.angular')
               content: "Famo.us/angular rocks!"
               }
             ];
-            
+
             $scope.options = {
               scrollViewOuter: {
                 direction: 0,
@@ -5917,7 +5919,7 @@ angular.module('famous.angular')
     <script>
       angular.module('faSequentialExampleApp', ['famous.angular'])
           .controller('SequentialCtrl', ['$scope', '$famous', function($scope, $famous) {
-            
+
             $scope.sequentialOptions = {
               direction: 1, // vertical = 1 (default), horizontal = 0
             };
@@ -6165,7 +6167,7 @@ angular.module('famous.angular')
     <script>
       angular.module('faSurfaceExampleApp', ['famous.angular'])
         .controller('SurfaceCtrl', ['$scope', '$famous', function($scope, $famous) {
-            
+
             $scope.sizeForBoxFunction = function() {
                return [75, 75];
             };
@@ -6392,7 +6394,7 @@ angular.module('famous.angular')
  * ```
  * @example
  * Note: For testing purposes during development, enable mobile emulation: https://developer.chrome.com/devtools/docs/mobile-emulation
- * 
+ *
  * `Fa-tap` checks if a touchmove event fires between a touchstart and tap event.  If the touchmove event fired, (the user "dragged" their finger), a `fa-tap` event will not fire.  If the user did not "drag" their finger on touch, when releasing their finger, a tap event will fire, and fa-tap will fire.
  *
  <example module="faTapExampleApp">
@@ -6409,7 +6411,7 @@ angular.module('famous.angular')
     <script>
       angular.module('faTapExampleApp', ['famous.angular'])
         .controller('TapCtrl', ['$scope', '$famous', function($scope, $famous) {
-            
+
             $scope.tapCount = 0;
 
             $scope.tapHandler = function($event) {
@@ -6433,12 +6435,12 @@ angular.module('famous.angular')
  *
  * ### Fa-tap on an fa-view
  * `Fa-tap` may be used on an `fa-view`.  The function expression bound to `fa-tap` will be bound to the `fa-view`'s internal `_eventInput`, the aggregation point of all events received by the `fa-view`.  When it receives a `tap` event, it will call the function expression bound to `fa-tap`.
- *  
+ *
  * In the example below, the `fa-surface` pipes its Surface events to an instantied Famous Event Handler called `myEvents`.
  * `Fa-view` pipes from `myEvents`, receiving all events piped by the `fa-surface`.
- * 
- * When a tap event occurs on the `fa-surface`, it is piped to the `fa-view`.  
- * `fa-tap` defines a callback function in which to handle tap events, and when it receives a tap event, it calls `tap()`. 
+ *
+ * When a tap event occurs on the `fa-surface`, it is piped to the `fa-view`.
+ * `fa-tap` defines a callback function in which to handle tap events, and when it receives a tap event, it calls `tap()`.
  *
  <example module="faTapExampleApp">
   <file name="index.html">
@@ -6459,12 +6461,12 @@ angular.module('famous.angular')
     <script>
       angular.module('faTapExampleApp', ['famous.angular'])
         .controller('TapCtrl', ['$scope', '$famous', function($scope, $famous) {
-            
+
             var EventHandler = $famous['famous/core/EventHandler'];
             $scope.myEvents = new EventHandler();
 
             $scope.tapCount = 0;
-            
+
             $scope.tap = function($event) {
               console.log($event);
               $scope.tapCount++;
@@ -6490,7 +6492,7 @@ angular.module('famous.angular')
     return {
       restrict: 'A',
       compile: function() {
-        return { 
+        return {
           post: function(scope, element, attrs) {
             var isolate = $famousDecorator.ensureIsolate(scope);
 
@@ -6535,17 +6537,17 @@ angular.module('famous.angular')
  *
  * </ANY>
  * ```
- * 
+ *
  * Note:  For testing purposes during development, enable mobile emulation: https://developer.chrome.com/devtools/docs/mobile-emulation
- * 
+ *
  * @example
  * Upon a touchend event firing, fa-touchend will evaluate the expression bound to it.
- * 
+ *
  * Touchstart fires once upon first touch; touchend fires as the touch point is moved along a touch surface; touchend fires upon release of the touch point.
- * 
+ *
  * ### Fa-touchend on an fa-surface
  * `Fa-touchend` can be used on an `fa-surface`.  Internally, a Famous Surface has a `.on()` method that binds a callback function to an event type handled by that Surface.
- * The function expression bound to `fa-touchend` is bound to that `fa-surface`'s touchend eventHandler, and when touchend fires, the function expression will be called. 
+ * The function expression bound to `fa-touchend` is bound to that `fa-surface`'s touchend eventHandler, and when touchend fires, the function expression will be called.
  *
  <example module="faTouchEndExampleApp">
   <file name="index.html">
@@ -6561,7 +6563,7 @@ angular.module('famous.angular')
     <script>
       angular.module('faTouchEndExampleApp', ['famous.angular'])
         .controller('TouchEndCtrl', ['$scope', '$famous', function($scope, $famous) {
-            
+
             $scope.touchEndCount = 0;
 
             $scope.touchEnd = function($event) {
@@ -6585,12 +6587,12 @@ angular.module('famous.angular')
  *
  * ### Fa-touchend on an fa-view
  * `Fa-touchend` may be used on an `fa-view`.  The function expression bound to `fa-touchend` will be bound to the `fa-view`'s internal `_eventInput`, the aggregation point of all events received by the `fa-view`.  When it receives a `touchend` event, it will call the function expression bound to `fa-touchend`.
- *  
+ *
  * In the example below, the `fa-surface` pipes its Surface events to an instantied Famous Event Handler called `myEvents`.
  * `Fa-view` pipes from `myEvents`, receiving all events piped by the `fa-surface`.
- * 
- * When a touchend event occurs on the `fa-surface`, it is piped to the `fa-view`.  
- * `fa-touchend` defines a callback function in which to handle touchend events, and when it receives a touchend event, it calls `touchEnd()`. 
+ *
+ * When a touchend event occurs on the `fa-surface`, it is piped to the `fa-view`.
+ * `fa-touchend` defines a callback function in which to handle touchend events, and when it receives a touchend event, it calls `touchEnd()`.
  *
  <example module="faTouchEndExampleApp">
   <file name="index.html">
@@ -6611,12 +6613,12 @@ angular.module('famous.angular')
     <script>
       angular.module('faTouchEndExampleApp', ['famous.angular'])
         .controller('TouchEndCtrl', ['$scope', '$famous', function($scope, $famous) {
-            
+
             var EventHandler = $famous['famous/core/EventHandler'];
             $scope.myEvents = new EventHandler();
 
             $scope.touchEndCount = 0;
-            
+
             $scope.touchEnd = function($event) {
               console.log($event);
               $scope.touchEndCount++;
@@ -6645,7 +6647,7 @@ angular.module('famous.angular')
       restrict: 'A',
       scope: false,
       compile: function() {
-        return { 
+        return {
           post: function(scope, element, attrs) {
             var isolate = $famousDecorator.ensureIsolate(scope);
 
@@ -6683,17 +6685,17 @@ angular.module('famous.angular')
  * ```
  *
  * Note:  For development purposes, enable mobile emulation: https://developer.chrome.com/devtools/docs/mobile-emulation
- * 
+ *
  * @example
  * Upon a touchmove event firing, `fa-touchmove` will evaluate the expression bound to it.
- * 
+ *
  * touchmove fires once upon first touch; touchmove fires as the touch point (finger) is moved along a touch surface, until release of the touch point.
  * The rate of which touchmove events fire is implementation-defined by browser and hardware.
  * `fa-touchmove` evaluates the expression bound to it upon each firing of touchmove.
  *
  * ### Fa-touchmove on an fa-surface
  * `Fa-touchmove`can be used on an `fa-surface`.  Internally, a Famous Surface has a `.on()` method that binds a callback function to an event type handled by that Surface.
- *  The function expression bound to `fa-touchmove` is bound to that `fa-surface`'s touchmove eventHandler, and when touchmove fires, the function expression will be called. 
+ *  The function expression bound to `fa-touchmove` is bound to that `fa-surface`'s touchmove eventHandler, and when touchmove fires, the function expression will be called.
  *
  <example module="faTouchMoveExampleApp">
   <file name="index.html">
@@ -6709,7 +6711,7 @@ angular.module('famous.angular')
     <script>
       angular.module('faTouchMoveExampleApp', ['famous.angular'])
         .controller('TouchMoveCtrl', ['$scope', '$famous', function($scope, $famous) {
-            
+
             $scope.touchMoveCount = 0;
 
             $scope.touchMove = function($event) {
@@ -6734,12 +6736,12 @@ angular.module('famous.angular')
  *
  * ### Fa-touchmove on an fa-view
  * `Fa-touchmove` may be used on an `fa-view`.  The function expression bound to `fa-touchmove` will be bound to the `fa-view`'s internal `_eventInput`, the aggregation point of all events received by the `fa-view`.  When it receives a `touchmove` event, it will call the function expression bound to `fa-touchmove`.
- *  
+ *
  * In the example below, the `fa-surface` pipes its Surface events to an instantied Famous Event Handler called `myEvents`.
  * `Fa-view` pipes from `myEvents`, receiving all events piped by the `fa-surface`.
- * 
- * When a touchmove event occurs on the `fa-surface`, it is piped to the `fa-view`.  
- * `fa-touchmove` defines a callback function in which to handle touchmove events, and when it receives a touchmove event, it calls `touchMove()`. 
+ *
+ * When a touchmove event occurs on the `fa-surface`, it is piped to the `fa-view`.
+ * `fa-touchmove` defines a callback function in which to handle touchmove events, and when it receives a touchmove event, it calls `touchMove()`.
  *
  <example module="faTouchMoveExampleApp">
   <file name="index.html">
@@ -6760,12 +6762,12 @@ angular.module('famous.angular')
     <script>
       angular.module('faTouchMoveExampleApp', ['famous.angular'])
         .controller('TouchMoveCtrl', ['$scope', '$famous', function($scope, $famous) {
-            
+
             var EventHandler = $famous['famous/core/EventHandler'];
             $scope.myEvents = new EventHandler();
 
             $scope.touchMoveCount = 0;
-            
+
             $scope.touchMove = function($event) {
               console.log($event);
               $scope.touchMoveCount++;
@@ -6793,7 +6795,7 @@ angular.module('famous.angular')
       restrict: 'A',
       scope: false,
       compile: function() {
-        return { 
+        return {
           post: function(scope, element, attrs) {
             var isolate = $famousDecorator.ensureIsolate(scope);
 
@@ -6828,19 +6830,19 @@ angular.module('famous.angular')
  *
  * </ANY>
  * ```
- * 
+ *
  * Note:  For development purposes, enable mobile emulation: https://developer.chrome.com/devtools/docs/mobile-emulation
- * 
+ *
  * @example
  * Upon a `touchstart` event firing, `fa-touchstart` will evaluate the expression bound to it.
- * 
+ *
  * Touchstart fires once when a touch point (finger) is first placed upon the touch surface.
  * If the touch point moves or releases touch, it will not fire another touchstart; touchstart fires once upon the first touch.
  * If the touch point is placed upon the touch surface again, it will fire another touchstart event.
  *
  * ### Fa-touchstart on an fa-surface
  * `Fa-touchstart` can be used on an `fa-surface`.  Internally, a Famous Surface has a `.on()` method that binds a callback function to an event type handled by that Surface.
- *  The function expression bound to `fa-touchstart` is bound to that `fa-surface`'s touchstart eventHandler, and when touchstart fires, the function expression will be called. 
+ *  The function expression bound to `fa-touchstart` is bound to that `fa-surface`'s touchstart eventHandler, and when touchstart fires, the function expression will be called.
  *
  <example module="faTouchStartExampleApp">
   <file name="index.html">
@@ -6856,7 +6858,7 @@ angular.module('famous.angular')
     <script>
       angular.module('faTouchStartExampleApp', ['famous.angular'])
         .controller('TouchStartCtrl', ['$scope', '$famous', function($scope, $famous) {
-            
+
             $scope.touchStartCount = 0;
 
             $scope.touchStart = function($event) {
@@ -6881,12 +6883,12 @@ angular.module('famous.angular')
  *
  * ### Fa-touchstart on an fa-view
  * `Fa-touchstart` may be used on an `fa-view`.  The function expression bound to `fa-touchstart` will be bound to the `fa-view`'s internal `_eventInput`, the aggregation point of all events received by the `fa-view`.  When it receives a `touchstart` event, it will call the function expression bound to `fa-touchstart`.
- *  
+ *
  * In the example below, the `fa-surface` pipes its Surface events to an instantied Famous Event Handler called `myEvents`.
  * `Fa-view` pipes from `myEvents`, receiving all events piped by the `fa-surface`.
- * 
- * When a touchstart event occurs on the `fa-surface`, it is piped to the `fa-view`.  
- * `fa-touchstart` defines a callback function in which to handle touchstart events, and when it receives a touchstart event, it calls `touchStart()`. 
+ *
+ * When a touchstart event occurs on the `fa-surface`, it is piped to the `fa-view`.
+ * `fa-touchstart` defines a callback function in which to handle touchstart events, and when it receives a touchstart event, it calls `touchStart()`.
  *
  <example module="faTouchStartExampleApp">
   <file name="index.html">
@@ -6907,12 +6909,12 @@ angular.module('famous.angular')
     <script>
       angular.module('faTouchStartExampleApp', ['famous.angular'])
         .controller('TouchStartCtrl', ['$scope', '$famous', function($scope, $famous) {
-            
+
             var EventHandler = $famous['famous/core/EventHandler'];
             $scope.myEvents = new EventHandler();
 
             $scope.touchStartCount = 0;
-            
+
             $scope.touchStart = function($event) {
               console.log($event);
               $scope.touchStartCount++;
@@ -6940,7 +6942,7 @@ angular.module('famous.angular')
       restrict: 'A',
       scope: false,
       compile: function() {
-        return { 
+        return {
           post: function(scope, element, attrs) {
             var isolate = $famousDecorator.ensureIsolate(scope);
 
@@ -6983,7 +6985,7 @@ angular.module('famous.angular')
  *            fa-options="{autoplay:true}">
  * </fa-video-surface>
  * ```
- * `Fa-video-surface` accepts options via the fa-options attribute. Currently the only option supported by Famo.us is autoplay, so you will have to target other attributes for the video element like controls and loop on the renderNode after the surface deploy event fires. 
+ * `Fa-video-surface` accepts options via the fa-options attribute. Currently the only option supported by Famo.us is autoplay, so you will have to target other attributes for the video element like controls and loop on the renderNode after the surface deploy event fires.
  *
  *  var video = $famous.find('.video')[0].renderNode;
  *  video.on('deploy', function(){
@@ -6991,7 +6993,7 @@ angular.module('famous.angular')
  *     player.controls = true;
  *     player.loop = true;
  *     player.onprogress = console.log('video is downloading');
- *  });  
+ *  });
  *
  * `Fa-video-surface` can be modified via fa-modifier just like any Surface.
  *
@@ -7008,47 +7010,47 @@ angular.module('famous.angular')
             return {
               pre: function (scope, element, attrs) {
                 var isolate = $famousDecorator.ensureIsolate(scope);
-      
+
                 var VideoSurface = $famous['famous/surfaces/VideoSurface'];
-      
+
                 scope.$watch(function(){
-                
+
                   return scope.$eval(attrs.faOptions);
-                  
+
                 }, function(oldVal, newVal){
-                
+
                   isolate.renderNode.setOptions(newVal);
-                  
+
                 }, true);
-      
+
                 isolate.renderNode = new VideoSurface({
                   class: scope.$eval(attrs.class)
                 });
-                
+
                 $famousDecorator.addRole('renderable',isolate);
                 isolate.show();
-                      
+
                 if (attrs.class) {
                   isolate.renderNode.setClasses(attrs['class'].split(' '));
                 }
-                // Throw an exception if anyother famous scene graph element is added on fa-surface.            
+                // Throw an exception if anyother famous scene graph element is added on fa-surface.
                 $famousDecorator.sequenceWith(scope, function(data) {
                   throw new Error('Surfaces are leaf nodes of the Famo.us render tree and cannot accept rendernode children.  To include additional Famo.us content inside of a fa-surface, that content must be enclosed in an additional fa-app.');
-                });                
-                
+                });
+
               },
               post: function (scope, element, attrs) {
-              
+
                 var isolate = $famousDecorator.ensureIsolate(scope);
-      
+
                 var updateContent = function () {
                   isolate.renderNode.setContent(attrs.faVideoUrl);
                 };
-      
+
                 updateContent();
-      
+
                 attrs.$observe('faVideoUrl', updateContent);
-      
+
                 $famousDecorator.registerChild(scope, element, isolate);
               }
             };
@@ -7122,7 +7124,7 @@ angular.module('famous.angular')
             });
             $famousDecorator.addRole('renderable',isolate);
             isolate.show();
-            
+
             $famousDecorator.sequenceWith(scope, function(data) {
               isolate.renderNode.add(data.renderGate);
               isolate.children.push(data);
