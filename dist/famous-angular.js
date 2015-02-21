@@ -6005,7 +6005,8 @@ angular.module('famous.angular')
                   return _ch;
                 }(_children);
                 _updateSequentialLayout();
-              }
+              },
+              _updateSequentialLayout
             );
 
           },
