@@ -20,6 +20,7 @@ Using F/A, you can:
 
 ###Sample projects and generators
 * [Famo.us/Angular Starter Project](https://github.com/thomasstreet/famous-angular-starter)
+* [fa-boilerplate starter repo](https://github.com/steveblue/fa-boilerplate) *(community maintained)
 * [Famo.us/Angular CodePen template](http://codepen.io/zackbrown/pen/yyVQje)
 * [Famo.us/Angular Yeoman Generator](http://github.com/thaiat/generator-angular-famous-ionic) *(community-maintained)
 * [Flickrous](https://github.com/zackbrown) — a simple Flickr example app
