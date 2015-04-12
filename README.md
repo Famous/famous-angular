@@ -23,7 +23,7 @@ Using F/A, you can:
 * [fa-boilerplate starter repo](https://github.com/steveblue/fa-boilerplate) *(community maintained)
 * [Famo.us/Angular CodePen template](http://codepen.io/zackbrown/pen/yyVQje)
 * [Famo.us/Angular Yeoman Generator](http://github.com/thaiat/generator-angular-famous-ionic) *(community-maintained)
-* [Flickrous](https://github.com/zackbrown) — a simple Flickr example app
+* [Flickrous](https://github.com/zackbrown/flickrous) — a simple Flickr example app
 * [Famo.us/Angular Homepage Source Code](https://github.com/thomasstreet/famous-angular-docs/tree/master/app)
 
 
