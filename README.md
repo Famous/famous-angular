@@ -1,6 +1,6 @@
 # Famo.us/Angular [![Build Status](https://travis-ci.org/Famous/famous-angular.svg?branch=master)](https://travis-ci.org/Famous/famous-angular)
 
-## This integration library is no longer supported by Famo.us
+**This integration library is no longer supported by Famo.us**
 
 Add Famo.us interactions and animations to any AngularJS application and build Famo.us applications with AngularJS.
 
