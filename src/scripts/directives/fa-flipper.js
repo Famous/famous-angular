@@ -28,10 +28,10 @@
       <fa-flipper>
         <fa-modifier fa-size="[200, 200]">
           <fa-surface fa-background-color="'yellow'" fa-click="flipIt()">Click me to see me flip!</fa-surface>
-        </fa-modifier>  
+        </fa-modifier>
         <fa-modifier fa-size="[200, 200]">
           <fa-surface fa-background-color="'red'" fa-click="flipIt()">Flip me again!</fa-surface>
-        </fa-modifier>  
+        </fa-modifier>
       </fa-flipper>
     </fa-app>
   </file>
@@ -79,11 +79,21 @@ angular.module('famous.angular')
               isolate.renderNode = new Flipper(options);
               $famousDecorator.addRole('renderable',isolate);
               isolate.show();
-           
+
               isolate.children = [];
 
               isolate.flip = function (overrideOptions) {
-                isolate.renderNode.flip(overrideOptions || scope.$eval(attrs.faOptions));
+                if (overrideOptions && overrideOptions.callback) {
+                  if (overrideOptions.transition) {
+                    isolate.renderNode.flip(overrideOptions.transition, overrideOptions.callback);
+                  } else {
+                    isolate.renderNode.flip(scope.$eval(attrs.faOptions.transition), overrideOptions.callback);
+                  }
+                } else if (overrideOptions && overrideOptions.transition) {
+                  isolate.renderNode.flip(overrideOptions.transition);
+                } else {
+                  isolate.renderNode.flip(scope.$eval(attrs.faOptions.transition));
+                }
               };
 
               $famousDecorator.sequenceWith(
