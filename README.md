@@ -62,6 +62,17 @@ Famous-Angular:
 * http://code.famo.us/famous-angular/latest/famous-angular.js
 * http://code.famo.us/famous-angular/latest/famous-angular.css
 
+## CDN Dependencies
+Here are a few CDN URLs for Famo.us and Famous-angular specific dependencies just in case you are not able to use bower or node for tooling in the app.  You will still need to ensure that you have Angular 1.2.26 in your project as it is a dependency for Famous-Angular.
+
+Famo.us:
+* http://code.famo.us/famous/0.3/famous-global.js
+* http://code.famo.us/famous/0.3/famous.js
+* http://code.famo.us/famous/0.3/famous.css
+
+Famous-Angular:
+* http://code.famo.us/famous-angular/0.4.0/famous-angular.js
+* http://code.famo.us/famous-angular/0.4.0/famous-angular.css
 
 ##Support
 
