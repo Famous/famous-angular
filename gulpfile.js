@@ -254,7 +254,7 @@ gulp.task('jasmine', function() {
 });
 
 // Default task
-gulp.task('dev', ['build-to-examples'], function() {
+gulp.task('default', ['build-to-examples'], function() {
   var express = require('express');
   var app = express();
   app.use(require('connect-livereload')());
