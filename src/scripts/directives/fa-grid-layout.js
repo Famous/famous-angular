@@ -113,9 +113,6 @@ angular.module('famous.angular')
 
             var updateGridLayout = function () {
               scope.$$postDigest(function(){
-                _children.sort(function (a, b) {
-                  return a.index - b.index;
-                });
                 isolate.renderNode.sequenceFrom(function(_children) {
                   var _ch = [];
                   angular.forEach(_children, function(c, i) {
