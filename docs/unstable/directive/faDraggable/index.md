@@ -45,15 +45,12 @@ respond to touch and mouse dragging
     
 
   ```html
-  <fa-draggable>
-  ...
+  <fa-draggable fa-pipe-from="handlerInstance">
+      <fa-surface fa-background-color="'red'" fa-size="[undefined, undefined]" fa-pipe-to="handlerInstance">
+      </fa-surface>
   </fa-draggable>
   ```
-    ```html
-  <ANY>
-  ...
-  </ANY>
-  ```
+
     
   
 
