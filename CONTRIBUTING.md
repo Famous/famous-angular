@@ -4,7 +4,7 @@ Before you start, tools you will need:
 * Download and install [git](http://git-scm.com/downloads)
 * Download and install [nodeJS](http://nodejs.org/download/)
 
-####First time:
+#### First time:
 `git clone https://github.com/thomasstreet/famous-angular.git`
 
 `npm install`
@@ -12,7 +12,7 @@ Before you start, tools you will need:
 `npm install -g gulp`
 
 
-####Thereafter:
+#### Thereafter:
 Clone the submodules and install the frontend dependencies inside of your example folder.
 
 `git submodule update --init --recursive`
@@ -29,15 +29,15 @@ Npm start will use gulp to concatenate files into famous-angular.js, which is bu
 
 Then open http://localhost:4000.
 
-####To develop the library using the famous-angular-examples submodule
+#### To develop the library using the famous-angular-examples submodule
 
 `gulp dev`
 
-####To build the docs
+#### To build the docs
 
 `gulp docs`
 
-####To run tests
+#### To run tests
 Ensure that you have the [karma](http://karma-runner.github.io/0.12/intro/installation.html) command line interface installed.
 'npm install -g karma-cli'
 
