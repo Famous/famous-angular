@@ -10,17 +10,17 @@ Using F/A, you can:
 * Use HTML to declare Famo.us UIs, complete with Angular's two-way databinding.
 * Easily integrate Famo.us and AngularJS apps.
 
-###Read More
+### Read More
 [Project Site](https://famo.us/angular)
 
 
-###Download
+### Download
 [Famo.us/Angular Starter Kit](http://code.famo.us/famous-angular/latest/famous-angular-starter-kit.zip?src=github-readme)
   or
 `bower install famous-angular`
 
 
-###Sample projects and generators
+### Sample projects and generators
 * [Famo.us/Angular Starter Project](https://github.com/thomasstreet/famous-angular-starter)
 * [fa-boilerplate starter repo](https://github.com/steveblue/fa-boilerplate) *(community maintained)
 * [Famo.us/Angular CodePen template](http://codepen.io/zackbrown/pen/yyVQje)
@@ -30,14 +30,14 @@ Using F/A, you can:
 
 
 
-##Installation
+## Installation
 
-####Before you start, tools you will need:
+#### Before you start, tools you will need:
 * Download and install [git](http://git-scm.com/downloads)
 * Download and install [nodeJS](http://nodejs.org/download/)
 * Install bower `npm install -g bower`
 
-####Inside of your app:
+#### Inside of your app:
 * Run `bower install famous-angular`
 * Add the following to your index.html
 ```html
@@ -63,19 +63,19 @@ Famous-Angular:
 * http://code.famo.us/famous-angular/latest/famous-angular.css
 
 
-##Support
+## Support
 
 * Feel free reach out for support on the Famous IRC channel on Freenode.  
 * Please submit issues as Github issues.  
 * Please create a CodePen forked from [this pen](http://codepen.io/zackbrown/pen/yyVQje) for all of you code issues.
 
 
-##Contributing
+## Contributing
 
 See [CONTRIBUTING.md](https://github.com/Famous/famous-angular/blob/master/CONTRIBUTING.md) for dev environment instructions and contribution guidelines.
 
 
-##Get in touch
+## Get in touch
 
 As mentioned above, please direct support questions to GitHub Issues so that community members can help answer questions as well as benefit from answers.
 
